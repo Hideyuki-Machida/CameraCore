@@ -1,0 +1,18 @@
+kernel vec4 filterKernel(__sample baseImage, __sample mask, vec2 resolution)
+{
+	// UVの生成
+	highp vec2 textureCoordinate = destCoord();
+	highp vec2 uv = (textureCoordinate / resolution);
+
+	// ColorVec4の生成
+	//highp vec4 baseColor = sample(baseImage, uv);
+	//highp vec4 maskColor = sample(mask, uv);
+	highp vec4 baseColor = baseImage.rgba;
+	highp vec4 maskColor = mask.rgba;
+
+	// 合成
+	highp vec3 blend = baseColor.rgb * (maskColor.a);
+	highp vec4 color = vec4(blend.rgb, maskColor.a);
+
+	return color;
+}

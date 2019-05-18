@@ -10,5 +10,8 @@
    <Group
       location = "group:Modules"
       name = "Modules">
+      <FileRef
+         location = "group:MetalCanvas/MetalCanvas.xcodeproj">
+      </FileRef>
    </Group>
 </Workspace>

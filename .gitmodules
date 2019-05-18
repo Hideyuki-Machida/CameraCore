@@ -1,0 +1,3 @@
+[submodule "Modules/MetalCanvas"]
+	path = Modules/MetalCanvas
+	url = git@github.com:Hideyuki-Machida/MetalCanvas.git

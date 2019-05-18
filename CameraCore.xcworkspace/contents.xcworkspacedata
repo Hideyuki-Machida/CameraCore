@@ -7,4 +7,8 @@
    <FileRef
       location = "group:CameraCore.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:Modules"
+      name = "Modules">
+   </Group>
 </Workspace>

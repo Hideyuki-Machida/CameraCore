@@ -352,14 +352,14 @@
 		62E5CA5922904A34004D258A /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				62E5CA6022904A34004D258A /* VideoCapture */,
+				62E5CA6A22904A34004D258A /* CompositionAVPlayer */,
 				62E5CA5A22904A34004D258A /* ARVideoFormat.swift */,
 				62E5CA5B22904A34004D258A /* MetalImageRenderView.swift */,
 				62E5CA5C22904A34004D258A /* RendererNameSpace.swift */,
 				62E5CA5D22904A34004D258A /* RenderEventControllerProtocol.swift */,
 				62E5CA5E22904A34004D258A /* RenderEventProtocol.swift */,
 				62E5CA5F22904A34004D258A /* SimpleAVPlayer.swift */,
-				62E5CA6022904A34004D258A /* VideoCapture */,
-				62E5CA6A22904A34004D258A /* CompositionAVPlayer */,
 				62E5CA7122904A34004D258A /* ImageRenderView.swift */,
 			);
 			path = Renderer;
@@ -368,8 +368,8 @@
 		62E5CA6022904A34004D258A /* VideoCapture */ = {
 			isa = PBXGroup;
 			children = (
-				62E5CA6122904A34004D258A /* MetalVideoCaptureView.swift */,
 				62E5CA6222904A34004D258A /* Capture */,
+				62E5CA6122904A34004D258A /* MetalVideoCaptureView.swift */,
 				62E5CA6722904A34004D258A /* VideoCaptureViewEvent.swift */,
 				62E5CA6822904A34004D258A /* VideoCaptureView.swift */,
 				62E5CA6922904A34004D258A /* VideoCaptureViewProtocol.swift */,

@@ -1,4 +1,4 @@
-# iOS_AVModule
+# CameraCore
 iOSのAVFoundationラッパー（映像・音声）
 
 [AVFoundation プログラミングガイド](https://developer.apple.com/jp/documentation/AVFoundationPG.pdf)
@@ -6,33 +6,33 @@ iOSのAVFoundationラッパー（映像・音声）
 
 
 ## カメラ起動・Video撮影
-### VideoCaptureView（GLKitView）
+### MetalVideoCaptureView（MTKView）
 
-Class: [VideoCaptureView.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Render/VideoCapture/VideoCaptureView.swift)
+Class: [MetalVideoCaptureView.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Renderer/VideoCapture/MetalVideoCaptureView.swift)
 
-Protocol: [VideoCaptureViewProtocol.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Render/VideoCapture/VideoCaptureViewProtocol.swift)
+Protocol: [VideoCaptureViewProtocol.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Renderer/VideoCapture/VideoCaptureViewProtocol.swift)
 
-Example: [VideoCaptureViewExampleVC.swift](https://github.com/CChannel/iOS_AVModule/blob/master/Example/iOS_AVModule_Example/iOS_AVModule_Example/VideoCaptureViewExampleVC.swift)
+Example: [MetalVideoCaptureViewExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/MetalVideoCaptureViewExampleVC.swift)
 
 
 ## CompositionDataをセットし、Videoを再生
-### VideoPlaybackView（GLKitView）
+### MetalVideoPlaybackView（MTKView）
 
-Class: [VideoPlaybackView.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Render/CompositionAVPlayer/VideoPlaybackView.swift)
+Class: [MetalVideoPlaybackView.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Renderer/CompositionAVPlayer/MetalVideoPlaybackView.swift)
 
-Protocol: [CompositionAVPlayerProtocol.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Render/CompositionAVPlayer/CompositionAVPlayerProtocol.swift)
+Protocol: [CompositionAVPlayerProtocol.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Renderer/CompositionAVPlayer/CompositionAVPlayerProtocol.swift)
 
-Example: [VideoPlaybackViewExampleVC.swift](https://github.com/CChannel/iOS_AVModule/blob/master/Example/iOS_AVModule_Example/iOS_AVModule_Example/VideoPlaybackViewExampleVC.swift)
+Example: [MetalVideoPlaybackViewExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/MetalVideoPlaybackViewExampleVC.swift)
 
 
 ## CompositionDataをセットし、Video・Audioを再生
 ### CompositionAVPlayer
 
-Class: [CompositionAVPlayer.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Render/CompositionAVPlayer/CompositionAVPlayer.swift)
+Class: [MetalCompositionAVPlayer.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Renderer/CompositionAVPlayer/MetalCompositionAVPlayer.swift)
 
-Protocol: [CompositionAVPlayerProtocol.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Render/CompositionAVPlayer/CompositionAVPlayerProtocol.swift)
+Protocol: [CompositionAVPlayerProtocol.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Renderer/CompositionAVPlayer/CompositionAVPlayerProtocol.swift)
 
-Example: [CompositionAVPlayerExampleVC.swift](https://github.com/CChannel/iOS_AVModule/blob/master/Example/iOS_AVModule_Example/iOS_AVModule_Example/CompositionAVPlayerExampleVC.swift)
+Example: [CompositionAVPlayerExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/CompositionAVPlayerExampleVC.swift)
 
 
 ## ImageProcessing
@@ -40,22 +40,22 @@ Example: [CompositionAVPlayerExampleVC.swift](https://github.com/CChannel/iOS_AV
 
 ビデオのフレーム毎に画像処理をしたい場合に用いるレイヤー（PhotoShopの調整レイヤーのイメージ）
 
-Protocol: [RenderLayerProtocol.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/ImageProcessing/RenderLayerProtocol.swift)
+Protocol: [RenderLayerProtocol.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/ImageProcessing/RenderLayerProtocol.swift)
 
-Example: [RenderLayerExampleVC.swift](https://github.com/CChannel/iOS_AVModule/blob/master/Example/iOS_AVModule_Example/iOS_AVModule_Example/RenderLayerExampleVC.swift)
+Example: [RenderLayerExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/RenderLayerExampleVC.swift)
 
 
 ## コンポジションしたビデオをエンコード & 保存
 ### VideoEncoder
 
-Protocol: [VideoBitRateEncoder.swift](https://github.com/CChannel/iOS_AVModule/blob/master/iOS_AVModule/Encoder/VideoBitRateEncoder.swift)
+Protocol: [VideoBitRateEncoder.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/CameraCore/Encoder/VideoBitRateEncoder.swift)
 
-Example: [VideoBitRateEncoderExampleVC.swift](https://github.com/CChannel/iOS_AVModule/blob/master/Example/iOS_AVModule_Example/iOS_AVModule_Example/VideoBitRateEncoderExampleVC.swift)
+Example: [VideoBitRateEncoderExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/VideoBitRateEncoderExampleVC.swift)
 
 
 ## CompositionData
 
-iOS_AVModuleの基本データModel
+CameraCoreの基本データModel
 
 ```
 CompositionData

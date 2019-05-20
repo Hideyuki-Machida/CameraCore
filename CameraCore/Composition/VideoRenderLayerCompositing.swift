@@ -9,7 +9,7 @@
 import CoreImage
 import AVFoundation
 
-
+/*
 class VideoRenderLayerCompositing: NSObject, AVVideoCompositing {
 	private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.VideoRenderLayerCompositing.queue")
 	private var isCancelAllRequests: Bool = false
@@ -129,3 +129,4 @@ class VideoRenderLayerCompositing: NSObject, AVVideoCompositing {
 	}
 	
 }
+*/

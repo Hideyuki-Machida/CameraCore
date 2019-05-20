@@ -114,7 +114,7 @@ class CodableExampleVC: UIViewController {
 			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
 			
 			compositionAsset.layers = [
-				LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.dreamy.url, dimension: 64)
+				LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 			]
 			
 			try self.compositionData.updatet(asset: compositionAsset)
@@ -130,7 +130,7 @@ class CodableExampleVC: UIViewController {
 			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
 			
 			compositionAsset.layers = [
-				SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.glitter_filter.urls, blendMode: Blendmode.screen, updateFrameRate: 24)
+				SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30)
 			]
 			
 			try self.compositionData.updatet(asset: compositionAsset)
@@ -159,7 +159,7 @@ class CodableExampleVC: UIViewController {
     ///
     @IBAction func tapImageButton(_ sender: Any) {
         do {
-			let imagePath: URL = iOS_DummyAVAssets.AssetManager.SequenceImage.glitter_filter.urls[1]
+			let imagePath: URL = iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls[1]
 			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
 
 			let imageLayer: ImageLayer = ImageLayer.init(imagePath: imagePath,
@@ -186,8 +186,8 @@ class CodableExampleVC: UIViewController {
 			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
 			
 			compositionAsset.layers = [
-				SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.glitter_filter.urls, blendMode: Blendmode.screen, updateFrameRate: 24),
-				LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.dreamy.url, dimension: 64)
+				SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30),
+				LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 			]
 			
 			try self.compositionData.updatet(asset: compositionAsset)

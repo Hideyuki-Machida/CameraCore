@@ -315,9 +315,7 @@ extension CompositionDataProperty {
                 self.videoComposition?.renderSize = self.property.renderSize
                 self.videoComposition?.instructions = instructions
 				switch self.property.renderType {
-				case .openGL:
-					self.videoComposition?.customVideoCompositorClass = VideoRenderLayerCompositing.self
-				case .metal:
+				case .openGL, .metal:
 					self.videoComposition?.customVideoCompositorClass = MetalVideoRenderLayerCompositing.self
 				}
             }
@@ -346,9 +344,7 @@ extension CompositionDataProperty {
 				self.videoComposition?.renderSize = self.property.renderSize
                 self.videoComposition?.instructions = instructions
 				switch self.property.renderType {
-				case .openGL:
-					self.videoComposition?.customVideoCompositorClass = VideoRenderLayerCompositing.self
-				case .metal:
+				case .openGL, .metal:
 					self.videoComposition?.customVideoCompositorClass = MetalVideoRenderLayerCompositing.self
 				}
             } else {

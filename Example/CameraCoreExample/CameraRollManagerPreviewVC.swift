@@ -14,7 +14,7 @@ import iOS_DummyAVAssets
 class CameraRollManagerPreviewVC: UIViewController {
 
     public var compositionData: CompositionDataProtocol!
-    @IBOutlet weak var playbackView: CameraCore.VideoPlaybackView!
+    @IBOutlet weak var playbackView: CameraCore.MetalVideoPlaybackView!
     
     var onComplete: (()->Void)?
     

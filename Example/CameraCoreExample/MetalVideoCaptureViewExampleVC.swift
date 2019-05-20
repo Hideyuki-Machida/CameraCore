@@ -10,6 +10,7 @@
 import UIKit
 import AVFoundation
 import CameraCore
+import iOS_DummyAVAssets
 
 class MetalVideoCaptureViewExampleVC: UIViewController {
 	
@@ -262,7 +263,7 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		
 		let action001: UIAlertAction = UIAlertAction(title: "true", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.renderLayers = [CIColorMonochromeLayer()]
+			self.videoCaptureView.renderLayers = [LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)]
 		})
 		
 		let action002: UIAlertAction = UIAlertAction(title: "false", style: UIAlertAction.Style.default, handler:{

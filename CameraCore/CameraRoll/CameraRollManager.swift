@@ -27,7 +27,7 @@ final public class CameraRollManager: NSObject {
     fileprivate let queue: DispatchQueue = DispatchQueue(label: "AVModule.CameraRollManager.queue", attributes: .concurrent)
     
     public static var imageSize: CGSize = CGSize(width: 200, height: 200)
-    public static var albumName: String = "iOS_AVModule_Album" {
+    public static var albumName: String = "CameraCore_Album" {
         didSet {
             self._setup { (result: Result<PHAssetCollection, Error>) in
 				do {

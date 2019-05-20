@@ -658,7 +658,7 @@
                                     <action selector="closeButtonTapAction:" destination="EN9-E5-tQo" eventType="touchUpInside" id="kJ9-FE-S8g"/>
                                 </connections>
                             </button>
-                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5j-t9-S6i" customClass="VideoPlaybackView" customModule="CameraCore">
+                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5j-t9-S6i" customClass="MetalVideoPlaybackView" customModule="CameraCore">
                                 <rect key="frame" x="50.333333333333343" y="162.33333333333334" width="274.33333333333326" height="487.33333333333326"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="U5j-t9-S6i" secondAttribute="height" multiplier="9:16" id="nLy-oc-qfV"/>

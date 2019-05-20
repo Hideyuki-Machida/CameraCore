@@ -11,6 +11,16 @@ import UIKit
 import AVFoundation
 import MetalCanvas
 
+public enum VideoCaptureStatus {
+	case setup
+	case update
+	case ready
+	case play
+	case pause
+	case seek
+	case dispose
+}
+
 public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 	private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.MetalVideoCaptureView.queue")
 	

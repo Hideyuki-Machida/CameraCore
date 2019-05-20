@@ -45,13 +45,11 @@
 		62E5CAD922904A35004D258A /* VideoCaptureOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6522904A34004D258A /* VideoCaptureOutput.swift */; };
 		62E5CADA22904A35004D258A /* DeviceFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6622904A34004D258A /* DeviceFormat.swift */; };
 		62E5CADB22904A35004D258A /* VideoCaptureViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6722904A34004D258A /* VideoCaptureViewEvent.swift */; };
-		62E5CADC22904A35004D258A /* VideoCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6822904A34004D258A /* VideoCaptureView.swift */; };
 		62E5CADD22904A35004D258A /* VideoCaptureViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6922904A34004D258A /* VideoCaptureViewProtocol.swift */; };
 		62E5CADE22904A35004D258A /* MetalCompositionAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6B22904A34004D258A /* MetalCompositionAVPlayer.swift */; };
 		62E5CADF22904A35004D258A /* CompositionAVPlayerEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6C22904A34004D258A /* CompositionAVPlayerEvent.swift */; };
 		62E5CAE022904A35004D258A /* MetalVideoPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6D22904A34004D258A /* MetalVideoPlaybackView.swift */; };
 		62E5CAE122904A35004D258A /* CompositionAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6E22904A34004D258A /* CompositionAVPlayer.swift */; };
-		62E5CAE222904A35004D258A /* VideoPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6F22904A34004D258A /* VideoPlaybackView.swift */; };
 		62E5CAE322904A35004D258A /* CompositionAVPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA7022904A34004D258A /* CompositionAVPlayerProtocol.swift */; };
 		62E5CAE422904A35004D258A /* ImageRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA7122904A34004D258A /* ImageRenderView.swift */; };
 		62E5CAE522904A35004D258A /* CameraRollImportStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA7322904A34004D258A /* CameraRollImportStatus.swift */; };
@@ -166,13 +164,11 @@
 		62E5CA6522904A34004D258A /* VideoCaptureOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureOutput.swift; sourceTree = "<group>"; };
 		62E5CA6622904A34004D258A /* DeviceFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceFormat.swift; sourceTree = "<group>"; };
 		62E5CA6722904A34004D258A /* VideoCaptureViewEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewEvent.swift; sourceTree = "<group>"; };
-		62E5CA6822904A34004D258A /* VideoCaptureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureView.swift; sourceTree = "<group>"; };
 		62E5CA6922904A34004D258A /* VideoCaptureViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewProtocol.swift; sourceTree = "<group>"; };
 		62E5CA6B22904A34004D258A /* MetalCompositionAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalCompositionAVPlayer.swift; sourceTree = "<group>"; };
 		62E5CA6C22904A34004D258A /* CompositionAVPlayerEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionAVPlayerEvent.swift; sourceTree = "<group>"; };
 		62E5CA6D22904A34004D258A /* MetalVideoPlaybackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalVideoPlaybackView.swift; sourceTree = "<group>"; };
 		62E5CA6E22904A34004D258A /* CompositionAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionAVPlayer.swift; sourceTree = "<group>"; };
-		62E5CA6F22904A34004D258A /* VideoPlaybackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlaybackView.swift; sourceTree = "<group>"; };
 		62E5CA7022904A34004D258A /* CompositionAVPlayerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionAVPlayerProtocol.swift; sourceTree = "<group>"; };
 		62E5CA7122904A34004D258A /* ImageRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRenderView.swift; sourceTree = "<group>"; };
 		62E5CA7322904A34004D258A /* CameraRollImportStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollImportStatus.swift; sourceTree = "<group>"; };
@@ -371,7 +367,6 @@
 				62E5CA6222904A34004D258A /* Capture */,
 				62E5CA6122904A34004D258A /* MetalVideoCaptureView.swift */,
 				62E5CA6722904A34004D258A /* VideoCaptureViewEvent.swift */,
-				62E5CA6822904A34004D258A /* VideoCaptureView.swift */,
 				62E5CA6922904A34004D258A /* VideoCaptureViewProtocol.swift */,
 			);
 			path = VideoCapture;
@@ -395,7 +390,6 @@
 				62E5CA6C22904A34004D258A /* CompositionAVPlayerEvent.swift */,
 				62E5CA6D22904A34004D258A /* MetalVideoPlaybackView.swift */,
 				62E5CA6E22904A34004D258A /* CompositionAVPlayer.swift */,
-				62E5CA6F22904A34004D258A /* VideoPlaybackView.swift */,
 				62E5CA7022904A34004D258A /* CompositionAVPlayerProtocol.swift */,
 			);
 			path = CompositionAVPlayer;
@@ -707,7 +701,6 @@
 				62E5CAF022904A35004D258A /* Configuration.swift in Sources */,
 				62E5CADA22904A35004D258A /* DeviceFormat.swift in Sources */,
 				62E5CAD322904A35004D258A /* RenderEventControllerProtocol.swift in Sources */,
-				62E5CADC22904A35004D258A /* VideoCaptureView.swift in Sources */,
 				62E5CB1F22904A35004D258A /* CompositionVideoTrackId.swift in Sources */,
 				62E5CAD822904A35004D258A /* VideoCapture.swift in Sources */,
 				62E5CAC822904A35004D258A /* CIImage+Extended.swift in Sources */,
@@ -715,7 +708,6 @@
 				62E5CAF122904A35004D258A /* Tools.swift in Sources */,
 				62E5CADF22904A35004D258A /* CompositionAVPlayerEvent.swift in Sources */,
 				62E5CAF222904A35004D258A /* VideoEncoder.swift in Sources */,
-				62E5CAE222904A35004D258A /* VideoPlaybackView.swift in Sources */,
 				62E5CABE22904A35004D258A /* SoundPlayer.swift in Sources */,
 				62E5CAD222904A35004D258A /* RendererNameSpace.swift in Sources */,
 				62E5CABA22904A35004D258A /* AVModuleCore.swift in Sources */,

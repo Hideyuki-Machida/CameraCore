@@ -106,7 +106,7 @@ class RenderLayerExampleVC: UIViewController {
     /// Lutを適用
     @IBAction func tapLutButton(_ sender: Any) {
 		self.effectGroupLayer?.layers = [
-			LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.dreamy.url, dimension: 64)
+			LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 		]
 		self.effectGroupLayer?.blendMode = Blendmode.overlay
     }
@@ -114,7 +114,7 @@ class RenderLayerExampleVC: UIViewController {
     /// シーケンスイメージをかぶせる
     @IBAction func tapSequenceImageButton(_ sender: Any) {
 		self.effectGroupLayer?.layers = [
-			SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.glitter_filter.urls, blendMode: Blendmode.screen, updateFrameRate: 24)
+			SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30)
 		]
 		self.effectGroupLayer?.blendMode = Blendmode.alpha
     }
@@ -154,8 +154,8 @@ class RenderLayerExampleVC: UIViewController {
     /// シーケンスイメージの上にLutを適用
     @IBAction func tapLutAndSequenceImageButton(_ sender: Any) {
 		self.effectGroupLayer?.layers = [
-			SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.glitter_filter.urls, blendMode: Blendmode.screen, updateFrameRate: 24),
-			LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.dreamy.url, dimension: 64)
+			SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30),
+			LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 		]
 		self.effectGroupLayer?.blendMode = Blendmode.overlay
     }

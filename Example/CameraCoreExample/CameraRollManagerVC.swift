@@ -22,7 +22,7 @@ class CameraRollManagerVC: UIViewController {
 		presetiFrame: Settings.PresetiFrame.p1920x1080,
 		renderSize: Settings.PresetiFrame.p1920x1080.size(),
 		renderScale: 1.0,
-		renderType: Settings.RenderType.openGL
+		renderType: Settings.RenderType.metal
 	)
 
     

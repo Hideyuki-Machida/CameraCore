@@ -1,7 +1,20 @@
 # CameraCore
-iOSのAVFoundationラッパー（映像・音声）
 
-[AVFoundation プログラミングガイド](https://developer.apple.com/jp/documentation/AVFoundationPG.pdf)
+[![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
+[![Xcode 10.2+](https://img.shields.io/badge/Xcode-10.2+-blue.svg?style=flat)](https://developer.apple.com/swift/)
+
+
+## 概要
+
+このフレームワークは、映像や音声を少ない手続き・インターフェースで使えることを目指しています。
+
+少ないコードで 動画の 撮影・再生・編集・エンコード を行うことができます。
+
+
+#### 参考
+
+* [AVFoundation プログラミングガイド](https://developer.apple.com/jp/documentation/AVFoundationPG.pdf)
 
 
 

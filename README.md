@@ -92,8 +92,8 @@ CompositionAssetProtocol (CompositionVideoAsset, CompositionAudioAsset)
 * 下記の図のように、動画編集ソフトのタイムラインのように扱います。<br>
 * 一つのTrackには、複数のAssetの配置が可能です。<br>
 * TrackにAssetを配置するには、下記を指定します。<br>
- * atTime: Track内のAssetスタート時間<br>
- * TrimTimeRange: Assetの再生レンジ
+	* atTime: Track内のAssetスタート時間<br>
+	* TrimTimeRange: Assetの再生レンジ
 
 ![画像](./timeline.png)
 Example: [CompositionAVPlayerExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/CompositionAVPlayerExampleVC.swift)

@@ -17,6 +17,11 @@
 * [AVFoundation プログラミングガイド](https://developer.apple.com/jp/documentation/AVFoundationPG.pdf)
 
 
+#### 依存ライブラリ
+CameraCoreは[MetalCanvas](https://github.com/Hideyuki-Machida/MetalCanvas)に依存しています。
+
+
+
 
 ## カメラ起動・Video撮影
 ### MetalVideoCaptureView（MTKView）

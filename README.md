@@ -76,3 +76,13 @@ CompositionTrackProtocol (CompositionVideoTrack, CompositionAudioTrack)
 CompositionAssetProtocol (CompositionVideoAsset, CompositionAudioAsset)
 ```
 
+|Data|Track|Asset|
+|:---|:---|:---|
+|CompositionData|CompositionVideoTrack {n個}|CompositionVideoAsset {n個}|
+||CompositionAudioTrack {n個}|CompositionAudioAsset {n個}|
+
+編集結果のパラメータを持つ CompositionData は<br>
+複数のTrack、さらに複数のAssetで構成されます。<br>
+※ 下記の図のように、動画編集ソフトのタイムラインのように扱います。
+
+![画像](./timeline.png)

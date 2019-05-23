@@ -14,7 +14,7 @@ import Vision
 extension Renderer.ARRenderer {
 	public class FaceMetaDataRenderer {
 
-		let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.iOS_AVModule.ARVideoCaptureView.FaceMetaDataRendererQueue")
+		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.FaceMetaDataRendererQueue")
 
 		fileprivate var canvas: MCCanvas?
 		public fileprivate(set) var texture: MCTexture?

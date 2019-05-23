@@ -3,7 +3,7 @@
 //  VideoPlayer
 //
 //  Created by machidahideyuki on 2017/04/21.
-//  Copyright © 2017年 com.cchannel. All rights reserved.
+//  Copyright © 2018 町田 秀行. All rights reserved.
 //
 
 import UIKit

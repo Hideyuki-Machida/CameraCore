@@ -16,7 +16,7 @@ final class CaptureAudioSession: NSObject {
 	
 	let fileType: String = AVFileTypeCoreAudioFormat
 	
-	let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.Soda.camera_capture_audio_session.queue")
+	let queue: DispatchQueue = DispatchQueue(label: "CameraCore.camera_capture_audio_session.queue")
 	
 	fileprivate var session : AVCaptureSession?
 	

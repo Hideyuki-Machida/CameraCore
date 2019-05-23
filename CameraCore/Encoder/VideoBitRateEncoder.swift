@@ -38,7 +38,7 @@ final public class VideoBitRateEncoder {
     fileprivate static var exportPath: URL?
     fileprivate static var audioOutput: AVAssetReaderAudioMixOutput?
 	fileprivate static var assetTimerange: CMTimeRange = CMTimeRange.zero
-    fileprivate static let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.VideoBitRateEncoder.queue")
+    fileprivate static let queue: DispatchQueue = DispatchQueue(label: "CameraCore.VideoBitRateEncoder.queue")
     
 	public static func setup(property: VideoEncorderProperty) throws {
         do {

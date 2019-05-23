@@ -27,7 +27,7 @@ public class MetalVideoPlaybackView: MetalImageRenderView, CompositionAVPlayerPr
 	public typealias PlayerStatus = CompositionAVPlayerStatus
 	public typealias ErrorType = CompositionAVPlayerErrorType
 	
-	fileprivate let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.VideoPlayback.queue")
+	fileprivate let queue: DispatchQueue = DispatchQueue(label: "CameraCore.VideoPlayback.queue")
 	fileprivate var compositionAVPlayer: Renderer.CompositionAVPlayer = Renderer.CompositionAVPlayer()
 	
 	public var event: Renderer.CompositionAVPlayerEvent? {

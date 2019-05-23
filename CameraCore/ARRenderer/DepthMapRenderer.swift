@@ -15,7 +15,7 @@ import MetalCanvas
 extension Renderer.ARRenderer {
 
 	class DepthMapRenderer {
-		let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.iOS_AVModule.ARVideoCaptureView.depthDataMapUpdateQueue")
+		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.depthDataMapUpdateQueue")
 		
 		public fileprivate(set) var texture: MCTexture?
 		

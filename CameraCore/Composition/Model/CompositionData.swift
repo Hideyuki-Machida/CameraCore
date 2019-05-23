@@ -11,7 +11,6 @@ import AVFoundation
 
 public struct CompositionData: CompositionDataProtocol {
     public var __property: CompositionDataProperty
-    //private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.VideoCompositor")
 
     public init(videoTracks: [CompositionVideoTrackProtocol], audioTracks: [CompositionAudioTrackProtocol], property: VideoCompositionProperty) {
         self.__property = CompositionDataProperty.init(

@@ -13,7 +13,7 @@ import MetalCanvas
 @available(iOS 11.0, *)
 extension Renderer.ARRenderer {
 	class ARFaceGeometryRenderer {
-		let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.iOS_AVModule.Renderer.ARRendererARFaceGeometryRenderer")
+		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.Renderer.ARRendererARFaceGeometryRenderer")
 		fileprivate(set) var texture: MCTexture?
 
 		fileprivate var renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()

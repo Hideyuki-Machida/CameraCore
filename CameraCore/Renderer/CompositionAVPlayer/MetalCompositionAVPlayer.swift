@@ -37,7 +37,7 @@ extension Renderer {
 			
 		}
 		
-		fileprivate let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.CompositionAVPlayer.queue")
+		fileprivate let queue: DispatchQueue = DispatchQueue(label: "CameraCore.CompositionAVPlayer.queue")
 		public var player: AVPlayer?
 		fileprivate var output: AVPlayerItemVideoOutput?
 		fileprivate var isRepeat: Bool = false

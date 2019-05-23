@@ -12,7 +12,7 @@ import MetalCanvas
 
 public class ImageCapture {
 
-	fileprivate static let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.ImageCapture")
+	fileprivate static let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ImageCapture")
 	fileprivate static let textureCache: CVMetalTextureCache? = MCCore.createTextureCache()
 	
 	public enum ErrorType: Error {

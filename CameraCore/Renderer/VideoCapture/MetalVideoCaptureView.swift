@@ -51,6 +51,8 @@ public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol 
 	}
 	
 	fileprivate var counter: CMTimeValue = 0
+	fileprivate var depthMapRenderer: Renderer.ARRenderer.DepthMapRenderer = Renderer.ARRenderer.DepthMapRenderer.init()
+	fileprivate var depthMapToHumanSegmentationTexture: MCVision.Depth.HumanSegmentationTexture = MCVision.Depth.HumanSegmentationTexture.init()
 	fileprivate var currentOrientation: AVCaptureVideoOrientation = AVCaptureVideoOrientation.portrait
 	fileprivate var textureCache: CVMetalTextureCache? = MCCore.createTextureCache()
 	
@@ -79,13 +81,15 @@ public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol 
 			throw RecordingError.setupError
 		}
 
-		self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer) in
+		self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
 			guard self?.status == .play else { return }
 			self?.queue.async { [weak self] in
 				autoreleasepool() { [weak self] in
 					do {
 						try self?.updateFrame(
 							sampleBuffer: sampleBuffer,
+							depthData: depthData,
+							metadataObjects: metadataObjects,
 							position: self?.capture?.position ?? .back,
 							orientation: self?.currentOrientation ?? .portrait
 						)
@@ -179,9 +183,7 @@ extension MetalVideoCaptureView {
 }
 
 extension MetalVideoCaptureView {
-	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, position: AVCaptureDevice.Position, orientation: AVCaptureVideoOrientation) throws {
-
-	//fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position, orientation: AVCaptureVideoOrientation) throws {
+	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position, orientation: AVCaptureVideoOrientation) throws {
 		//guard let `self` = self else { return }
 		guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
 		

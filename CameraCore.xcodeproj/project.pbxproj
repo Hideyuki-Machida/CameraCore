@@ -110,6 +110,10 @@
 		62E5CB2222904A35004D258A /* SharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CAB822904A35004D258A /* SharedContext.swift */; };
 		62E5CB2422904AA0004D258A /* Shader in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CB2322904AA0004D258A /* Shader */; };
 		62E5CB4922905005004D258A /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4822905005004D258A /* MetalCanvas.framework */; };
+		62FABEC42296E5A4002672A0 /* RGBCameraRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */; };
+		62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */; };
+		62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */; };
+		62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -229,6 +233,10 @@
 		62E5CAB822904A35004D258A /* SharedContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedContext.swift; sourceTree = "<group>"; };
 		62E5CB2322904AA0004D258A /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shader; sourceTree = "<group>"; };
 		62E5CB4822905005004D258A /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBCameraRenderer.swift; sourceTree = "<group>"; };
+		62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARFaceGeometryRenderer.swift; sourceTree = "<group>"; };
+		62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceMetaDataRenderer.swift; sourceTree = "<group>"; };
+		62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthMapRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				62E5CA5922904A34004D258A /* Renderer */,
+				62FABEBF2296E5A4002672A0 /* ARRenderer */,
 				62E5CA9622904A35004D258A /* Composition */,
 				62E5CA8722904A35004D258A /* ImageProcessing */,
 				62E5CA4222904A34004D258A /* SoundPrograming */,
@@ -515,6 +524,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		62FABEBF2296E5A4002672A0 /* ARRenderer */ = {
+			isa = PBXGroup;
+			children = (
+				62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */,
+				62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */,
+				62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */,
+				62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */,
+			);
+			path = ARRenderer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -656,9 +676,11 @@
 				62E5CAC222904A35004D258A /* LUTFilterUtils.swift in Sources */,
 				62E5CAC122904A35004D258A /* GLTextureConvert.swift in Sources */,
 				62E5CB0222904A35004D258A /* RenderLayerUserInfoProtocol.swift in Sources */,
+				62FABEC42296E5A4002672A0 /* RGBCameraRenderer.swift in Sources */,
 				62E5CB1922904A35004D258A /* CompositionData.swift in Sources */,
 				62E5CAF922904A35004D258A /* ImageLayer.swift in Sources */,
 				62E5CAE122904A35004D258A /* CompositionAVPlayer.swift in Sources */,
+				62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */,
 				62E5CADD22904A35004D258A /* VideoCaptureViewProtocol.swift in Sources */,
 				62E5CAC622904A35004D258A /* SimpleSoundPlayer.swift in Sources */,
 				62E5CACB22904A35004D258A /* CMTimeRange+Codable.swift in Sources */,
@@ -672,6 +694,7 @@
 				62E5CB2122904A35004D258A /* CompositionNameSpace.swift in Sources */,
 				62E5CB0322904A35004D258A /* GroupLayer.swift in Sources */,
 				62E5CB2222904A35004D258A /* SharedContext.swift in Sources */,
+				62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */,
 				62E5CB1822904A35004D258A /* CompositionAudioAsset.swift in Sources */,
 				62E5CB1622904A35004D258A /* CompositionVideoTrackProtocol.swift in Sources */,
 				62E5CB1122904A35004D258A /* CompositionAudioAssetProtocol.swift in Sources */,
@@ -713,6 +736,7 @@
 				62E5CABA22904A35004D258A /* AVModuleCore.swift in Sources */,
 				62E5CAD522904A35004D258A /* SimpleAVPlayer.swift in Sources */,
 				62E5CB1422904A35004D258A /* CompositionAudioAssetProtocol+Operator.swift in Sources */,
+				62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */,
 				62E5CB0922904A35004D258A /* VideoCompositionProperty.swift in Sources */,
 				62E5CB0D22904A35004D258A /* CompositionAudioTrackProtocol+Operator.swift in Sources */,
 				62E5CB1722904A35004D258A /* CompositionAudioTrackProtocol.swift in Sources */,
@@ -880,7 +904,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CameraCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -908,7 +932,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CameraCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

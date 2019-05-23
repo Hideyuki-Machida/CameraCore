@@ -24,7 +24,7 @@ extension Renderer.VideoCapture {
 		var frameRate: Int32 = 30
 		var presetiFrame: Settings.PresetiFrame = Settings.PresetiFrame.p1280x720
 
-		public var onUpdate: ((_ sampleBuffer: CMSampleBuffer)->Void)? {
+		public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)? {
 			get {
 				return self.captureOutput.onUpdate
 			}
@@ -33,8 +33,7 @@ extension Renderer.VideoCapture {
 			}
 		}
 
-
-		let sessionQueue: DispatchQueue = DispatchQueue(label: "com.cchannel.CCamera.VideoCapture.Queue", attributes: .concurrent)
+		let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue", attributes: .concurrent)
 		
 		var currentVideoInput: AVCaptureDeviceInput? {
 			return self.captureSession?.inputs

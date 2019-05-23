@@ -9,13 +9,28 @@
 import UIKit
 import AVFoundation
 import CameraCore
-import iOS_DummyAVAssets
+import CCamUIComponent
 
-class ViewController: UIViewController {
+class RecordingViewController: UIViewController {
 
-    override func viewDidLoad() {
+	@IBOutlet weak var videoCaptureView: CameraCore.MetalVideoCaptureView!
+	@IBOutlet weak var recordingButton: VideoRecordingButton!
+	
+	override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+		
+		self.recordingButton.viewMode = .normal
+		/*
+		self.recordingButton.onTap = { [weak self] (viewMode: VideoRecordingButton.ViewMode) in
+			switch viewMode {
+			case .normal:
+				self?.recordingButton.viewMode = .recording
+				//self?.startTimer()
+			case .recording, .count:
+				self?.recordingButton.viewMode = .normal
+			}
+		}
+		*/
     }
 
     override func didReceiveMemoryWarning() {

@@ -95,6 +95,7 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 				let texture: MTLTexture = MCCore.texture(pixelBuffer: &sourcePixelBuffer, textureCache: &textureCache, colorPixelFormat: self.colorPixelFormat)!
 				////////////////////////////////////////////////////////////
 				
+				/*
 				////////////////////////////////////////////////////////////
 				// previewScale encode
 				let scale: Double = Double(drawable.texture.width) / Double(texture.width)
@@ -105,6 +106,46 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 					self?.filter.encode(commandBuffer: commandBuffer, sourceTexture: texture, destinationTexture: drawable.texture)
 				}
 				////////////////////////////////////////////////////////////
+				*/
+
+				do {
+					
+					////////////////////////////////////////////////////////////
+					// previewScale encode
+					var mcTexture01: MCTexture = try MCTexture.init(texture: drawable.texture)
+					let mcTexture02: MCTexture = try MCTexture.init(texture: texture)
+					let scale: Float = Float(mcTexture01.width) / Float(mcTexture02.width)
+					let canvas: MCCanvas = try MCCanvas.init(destination: &mcTexture01, orthoType: MCCanvas.OrthoType.topLeft)
+					let imageMat: MCGeom.Matrix4x4 = MCGeom.Matrix4x4.init(scaleX: scale, scaleY: scale, scaleZ: 1.0)
+					
+					try canvas.draw(commandBuffer: &commandBuffer, objects: [
+						try MCPrimitive.Image.init(
+							texture: mcTexture02,
+							ppsition: MCGeom.Vec3D.init(x: Float(mcTexture01.width) / 2.0, y: Float(mcTexture01.height) / 2.0, z: 0),
+							transform: imageMat,
+							anchorPoint: .center
+						)
+						])
+					////////////////////////////////////////////////////////////
+					
+					////////////////////////////////////////////////////////////
+					// commit
+					
+					/*
+					commandBuffer.addCompletedHandler { [weak self] (cb) in
+					//self?.draw()
+					}
+					*/
+					
+					commandBuffer.present(drawable)
+					commandBuffer.commit()
+					commandBuffer.waitUntilCompleted()
+					self.draw()
+					////////////////////////////////////////////////////////////
+					
+				} catch {
+					
+				}
 
 				////////////////////////////////////////////////////////////
 				// commit
@@ -142,10 +183,6 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 					//self?.draw()
 				}
 				*/
-				commandBuffer.present(drawable)
-				commandBuffer.commit()
-				commandBuffer.waitUntilCompleted()
-				self.draw()
 				////////////////////////////////////////////////////////////
 			}
 		}

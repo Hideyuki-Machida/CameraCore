@@ -3,7 +3,7 @@
 //  VideoPlayer
 //
 //  Created by machidahideyuki on 2017/04/21.
-//  Copyright © 2017年 com.cchannel. All rights reserved.
+//  Copyright © 2017年 町田秀行. All rights reserved.
 //
 
 import Foundation
@@ -33,7 +33,7 @@ extension Renderer.VideoCapture {
 		}
 		
 		
-		private static let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.Soda.video_exporter.queue")
+		private static let queue: DispatchQueue = DispatchQueue(label: "CameraCore.video_exporter.queue")
 		private static var videoInput: AVAssetWriterInput?
 		
 		private(set) static var recordedDuration: TimeInterval = 0.0

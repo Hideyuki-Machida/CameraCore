@@ -11,7 +11,7 @@ import AVFoundation
 
 /*
 class VideoRenderLayerCompositing: NSObject, AVVideoCompositing {
-	private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.VideoRenderLayerCompositing.queue")
+	private let queue: DispatchQueue = DispatchQueue(label: "CameraCore.VideoRenderLayerCompositing.queue")
 	private var isCancelAllRequests: Bool = false
 	private var context: AVVideoCompositionRenderContext?
 	private let ciContext: CIContext = SharedContext.ciContext

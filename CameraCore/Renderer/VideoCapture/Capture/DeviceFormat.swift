@@ -95,6 +95,7 @@ extension Renderer.VideoCapture {
 					
 					for videoSupportedFrameRateRange: Any in format.videoSupportedFrameRateRanges {
 						guard let range: AVFrameRateRange = videoSupportedFrameRateRange as? AVFrameRateRange else { continue }
+
 						if range.minFrameRate <= Float64(frameRate) &&
 							Float64(frameRate) >= range.maxFrameRate &&
 							filterColorSpaces.count >= 1 &&
@@ -108,7 +109,7 @@ extension Renderer.VideoCapture {
 							
 							return (deviceFormat: deviceFormat, depthDataFormat: nil, filterColorSpace: filterColorSpaces.first, minFrameRate: minFrameRate, maxFrameRate: maxFrameRate)
 						} else if range.minFrameRate <= Float64(frameRate) &&
-							Float64(frameRate) >= range.maxFrameRate &&
+							Float64(frameRate) <= range.maxFrameRate &&
 							//filterColorSpaces.count >= 1 &&
 							width == CGFloat(maxWidth) &&
 							height == CGFloat(maxHeight)

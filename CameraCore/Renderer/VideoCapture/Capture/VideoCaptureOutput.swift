@@ -11,9 +11,9 @@ import AVFoundation
 
 extension Renderer.VideoCapture {
 	final class VideoCaptureOutput: NSObject {
-		fileprivate let videoOutputQueue: DispatchQueue = DispatchQueue(label: "com.cchannel.CCamera.VideoCapture.VideoQueue")
-		fileprivate let audioOutputQueue: DispatchQueue = DispatchQueue(label: "com.cchannel.CCamera.VideoCapture.AudioQueue")
-		fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "com.cchannel.CCamera.VideoCapture.DepthQueue", attributes: .concurrent)
+		fileprivate let videoOutputQueue: DispatchQueue = DispatchQueue(label: "CCamera.VideoCapture.VideoQueue")
+		fileprivate let audioOutputQueue: DispatchQueue = DispatchQueue(label: "CCamera.VideoCapture.AudioQueue")
+		fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "CCamera.VideoCapture.DepthQueue", attributes: .concurrent)
 
 		var captureSession: AVCaptureSession?
 		

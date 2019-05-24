@@ -12,9 +12,7 @@ import MetalPerformanceShaders
 import MetalCanvas
 
 class MetalVideoRenderLayerCompositing: NSObject, AVVideoCompositing {
-	private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.MetalVideoRenderLayerCompositing.queue", attributes: .concurrent)
-	//private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.MetalVideoRenderLayerCompositing.queue")
-	//private let queue: DispatchQueue = DispatchQueue.main
+	private let queue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoRenderLayerCompositing.queue", attributes: .concurrent)
 	private var isCancelAllRequests: Bool = false
 	private var context: AVVideoCompositionRenderContext?
 	private var textureCache: CVMetalTextureCache? = MCCore.createTextureCache()

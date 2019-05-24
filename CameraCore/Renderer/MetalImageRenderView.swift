@@ -14,7 +14,7 @@ import MetalCanvas
 
 public class MetalImageRenderView: MTKView, MTKViewDelegate {
 
-    fileprivate let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.MetalImageRenderView.queue")
+    fileprivate let queue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalImageRenderView.queue")
 	private let rect: CGRect = CGRect(origin: CGPoint(x: 0, y: 0), size: UIScreen.main.nativeBounds.size)
 	public var drawRect: CGRect?
 	public var trimRect: CGRect?

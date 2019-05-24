@@ -3,7 +3,7 @@
 //  VideoPlayer
 //
 //  Created by machidahideyuki on 2017/04/21.
-//  Copyright © 2017年 com.cchannel. All rights reserved.
+//  Copyright © 2017年 町田秀行. All rights reserved.
 //
 
 import UIKit
@@ -34,7 +34,7 @@ extension Renderer.VideoCapture {
 		}
 
 
-		let sessionQueue: DispatchQueue = DispatchQueue(label: "com.cchannel.CCamera.VideoCapture.Queue", attributes: .concurrent)
+		let sessionQueue: DispatchQueue = DispatchQueue(label: "CCamera.VideoCapture.Queue", attributes: .concurrent)
 		
 		var currentVideoInput: AVCaptureDeviceInput? {
 			return self.captureSession?.inputs

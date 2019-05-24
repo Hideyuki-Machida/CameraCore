@@ -22,7 +22,7 @@ public enum VideoCaptureStatus {
 }
 
 public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
-	private let queue: DispatchQueue = DispatchQueue(label: "com.cchannel.CameraCore.MetalVideoCaptureView.queue")
+	private let queue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoCaptureView.queue")
 	
 	public var status: VideoCaptureStatus = .setup {
 		willSet {

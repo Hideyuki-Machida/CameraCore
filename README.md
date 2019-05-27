@@ -72,7 +72,6 @@ CompositionAssetProtocol (CompositionVideoAsset, CompositionAudioAsset)
 	* TrimTimeRange: Assetの再生レンジ
 
 ![画像](./timeline.png)
-Example: [CompositionAVPlayerExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/CompositionAVPlayerExampleVC.swift)
 
 
 ## CompositionDataをセットしAudioを再生

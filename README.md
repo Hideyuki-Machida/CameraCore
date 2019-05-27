@@ -45,7 +45,7 @@ Protocol: [CompositionAVPlayerProtocol.swift](https://github.com/Hideyuki-Machid
 Example: [MetalVideoPlaybackViewExampleVC.swift](https://github.com/Hideyuki-Machida/CameraCore/blob/master/Example/CameraCoreExample/MetalVideoPlaybackViewExampleVC.swift)
 
 <br />
-#### CompositionDataについて
+### CompositionDataについて
 
 MetalVideoPlaybackViewでは、セットされた CompositionData を基に動画を描画します。<br />
 CompositionDataは、複数のTrack、さらに複数のAssetで構成されます。<br />

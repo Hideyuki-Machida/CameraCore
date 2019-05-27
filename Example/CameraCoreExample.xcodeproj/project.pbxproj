@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
-		62E5CA2A22901A72004D258A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2922901A72004D258A /* ViewController.swift */; };
 		62E5CA2D22901A72004D258A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2B22901A72004D258A /* Main.storyboard */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
 		62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA3022901A74004D258A /* LaunchScreen.storyboard */; };
@@ -51,7 +50,6 @@
 /* Begin PBXFileReference section */
 		62E5CA2422901A72004D258A /* CameraCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2722901A72004D258A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		62E5CA2922901A72004D258A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		62E5CA2C22901A72004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		62E5CA2E22901A74004D258A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62E5CA3122901A74004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -110,7 +108,6 @@
 			isa = PBXGroup;
 			children = (
 				62E5CA2722901A72004D258A /* AppDelegate.swift */,
-				62E5CA2922901A72004D258A /* ViewController.swift */,
 				62E5CB3122904BD3004D258A /* CameraRollManagerPreviewVC.swift */,
 				62E5CB2E22904BD3004D258A /* CameraRollManagerVC.swift */,
 				62E5CB2D22904BD3004D258A /* CodableExampleVC.swift */,
@@ -215,7 +212,6 @@
 				62E5CB3622904BD3004D258A /* VideoBitRateEncoderExampleVC.swift in Sources */,
 				62E5CB3B22904BD3004D258A /* CompositionAVPlayerExampleVC.swift in Sources */,
 				62E5CB3822904BD3004D258A /* RenderLayerExampleVC.swift in Sources */,
-				62E5CA2A22901A72004D258A /* ViewController.swift in Sources */,
 				62E5CB3A22904BD3004D258A /* CameraRollManagerVC.swift in Sources */,
 				62E5CB3222904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift in Sources */,
 				62E5CB3322904BD3004D258A /* MTLCIColorMonochromeLayer.swift in Sources */,

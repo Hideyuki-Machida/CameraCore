@@ -76,3 +76,4 @@ fastlane/test_output
 ##
 *.xcworkspace/*
 !*.xcworkspace/contents.xcworkspacedata
+*/xcuserdata/*

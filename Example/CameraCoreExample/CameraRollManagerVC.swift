@@ -119,23 +119,16 @@ extension CameraRollManagerVC: UICollectionViewDataSource {
 extension CameraRollManagerVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let data: CameraRollItem = self.datas[indexPath.row]
-        switch data.mediaType {
+        let cameraRollItem: CameraRollItem = self.datas[indexPath.row]
+        switch cameraRollItem.mediaType {
         case .video:
-            data.url(
+            cameraRollItem.videoURL(
                 exportPreset: Settings.PresetiFrame.p1920x1080,
                 progressUpdate: { [weak self] (progress) in
-                    guard let `self` = self else { return }
-                    // クラウド上にある場合のダウンロードプログレス
-                    guard let indicatorVC: ProgressViewVC = self.presentedViewController as? ProgressViewVC else {
-                        self.performSegue(withIdentifier: SegueId.openProgressView.rawValue, sender: nil)
-                        return
-                    }
-                    indicatorVC.progressLabel.text = String(progress)
-                    if progress >= 1.0 {
-                        indicatorVC.dismiss(animated: true, completion: nil)
-                    }
-
+					DispatchQueue.main.async { [weak self] in
+						// クラウド上にある場合のダウンロードプログレス
+						self?.progress(progress: progress)
+					}
 			}) { [weak self] (result) in
                 guard let self = self else { return }
 				do {
@@ -161,7 +154,7 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
 						audioTracks: [],
 						property: self.videoCompositionProperty
 					)
-					self.performSegue(withIdentifier: SegueId.openPreview.rawValue, sender: compositionData)
+					self.performSegue(withIdentifier: SegueId.openVideoPreview.rawValue, sender: compositionData)
 					/////////////////////////////////////////////////
 				} catch {
 					// エラー
@@ -169,7 +162,28 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
 				}
             }
         case .image:
-            self.performSegue(withIdentifier: SegueId.openPreview.rawValue, sender: data)
+            cameraRollItem.imageURL(
+                progressUpdate: { [weak self] (progress) in
+                    guard let self = self else { return }
+                    // クラウド上にある場合のダウンロードプログレス
+					DispatchQueue.main.async { [weak self] in
+						// クラウド上にある場合のダウンロードプログレス
+						self?.progress(progress: progress)
+					}
+			}) { [weak self] (result) in
+                guard let self = self else { return }
+				do {
+					let data: Data = try result.get()
+					guard let image: UIImage = UIImage.init(data: data) else { print("UIImage 変換エラー"); return }
+					self.performSegue(withIdentifier: SegueId.openImagePreview.rawValue, sender: image)
+					/////////////////////////////////////////////////
+				} catch {
+					// エラー
+					print(error)
+				}
+
+            }
+
         default: break
         }
     }
@@ -185,13 +199,27 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
     }
 }
 
+extension CameraRollManagerVC {
+	func progress(progress: Double) {
+		guard let indicatorVC: ProgressViewVC = self.presentedViewController as? ProgressViewVC else {
+			self.performSegue(withIdentifier: SegueId.openProgressView.rawValue, sender: nil)
+			return
+		}
+		indicatorVC.progressLabel.text = String(progress)
+		if progress >= 1.0 {
+			indicatorVC.dismiss(animated: true, completion: nil)
+		}
+	}
+}
+
 
 // MARK: - Segue
 
 extension CameraRollManagerVC {
     
     public enum SegueId: String {
-        case openPreview = "openPreview"
+        case openVideoPreview = "openVideoPreview"
+        case openImagePreview = "openImagePreview"
         case openProgressView = "openProgressView"
     }
     
@@ -200,9 +228,9 @@ extension CameraRollManagerVC {
         guard let segueId: SegueId = SegueId(rawValue: identifier) else { return }
         
         switch segueId {
-        case .openPreview:
+        case .openVideoPreview:
             guard let compositionData: CompositionData = sender as? CompositionData else { return }
-            guard let vc: CameraRollManagerPreviewVC = segue.destination as? CameraRollManagerPreviewVC else { return }
+            guard let vc: CameraRollManagerVideoPreviewVC = segue.destination as? CameraRollManagerVideoPreviewVC else { return }
             vc.onComplete = { [weak self] in
                 DispatchQueue.main.async { [weak self] in
                     self?.dismiss(animated: true, completion: { [weak self] in
@@ -211,7 +239,12 @@ extension CameraRollManagerVC {
                 }
             }
             vc.compositionData = compositionData
-        case .openProgressView: break
+			case .openImagePreview:
+				guard let image: UIImage = sender as? UIImage else { return }
+				guard let vc: CameraRollManagerImagePreviewVC = segue.destination as? CameraRollManagerImagePreviewVC else { return }
+				vc.image = image
+
+		case .openProgressView: break
         }
     }
 }

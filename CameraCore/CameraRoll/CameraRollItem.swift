@@ -41,24 +41,46 @@ public class CameraRollItem {
             }
         )
     }
-    
+
+	/*
     public func url(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
         switch self.mediaType {
         case .video:
             self.queue.async { [weak self] in
                 self?.videoURL(exportPreset: exportPreset, progressUpdate: progressUpdate, complete: complete)
             }
-        case .image: break
+        case .image:
+            self.queue.async { [weak self] in
+                self?.imageURL(exportPreset: exportPreset, progressUpdate: progressUpdate, complete: complete)
+            }
         case .audio: break
         case .unknown: break
 		@unknown default: break
 		}
     }
-
+*/
+	/*
+    public func url(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
+        switch self.mediaType {
+        case .video:
+            self.queue.async { [weak self] in
+                self?.videoURL(exportPreset: exportPreset, progressUpdate: progressUpdate, complete: complete)
+            }
+        case .image:
+            self.queue.async { [weak self] in
+                self?.imageURL(exportPreset: exportPreset, progressUpdate: progressUpdate, complete: complete)
+            }
+        case .audio: break
+        case .unknown: break
+		@unknown default: break
+		}
+    }
+*/
 	
 	fileprivate static let encodeCount: Int = 500000
 	fileprivate static var count: Int = 0
 	fileprivate static var stopFlg: Bool = false
+	
 	public func url(importURL: URL, exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
 		CameraRollItem.stopFlg = false
 		switch self.mediaType {
@@ -142,13 +164,11 @@ public class CameraRollItem {
 }
 
 extension CameraRollItem {
-    private func videoURL(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
+    public func videoURL(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
         let options: PHVideoRequestOptions = PHVideoRequestOptions()
         options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
-		//options.deliveryMode = PHVideoRequestOptionsDeliveryMode.mediumQualityFormat
-        options.isNetworkAccessAllowed = true
+		options.isNetworkAccessAllowed = true
 		options.version = PHVideoRequestOptionsVersion.original
-		//options.version = PHVideoRequestOptionsVersion.current
         options.progressHandler = { (progress, error, stop, info) in
             progressUpdate?(progress)
         }
@@ -163,20 +183,23 @@ extension CameraRollItem {
         })
     }
 
-    private func imageURL(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
-        let options = PHImageRequestOptions()
+    public func imageURL(progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<Data, Error>)->Void)?) {
+        let options: PHImageRequestOptions = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
-        options.isSynchronous = false
+        //options.isSynchronous = false
         options.isNetworkAccessAllowed = true
         options.progressHandler = {  (progress, error, stop, info) in
             progressUpdate?(progress)
         }
-        
-        /*
-         PHImageManager.default().requestImage(for: self.asset, targetSize: exportPreset.size(), contentMode: PHImageContentMode.aspectFill, options: options, resultHandler: { [weak self] (image: UIImage?, info: [AnyHashable: Any]?) in
-         print(info)
-         })
-         */
+
+		PHImageManager.default().requestImageData(for: self.asset, options: options) { (data: Data?, st: String?, orientation: UIImage.Orientation, info: [AnyHashable : Any]?) in
+			if let data: Data = data {
+				complete?(.success(data))
+			} else {
+				complete?(.failure(ErrorType.exportSession))
+			}
+
+		}
     }
 }
 
@@ -184,10 +207,8 @@ extension CameraRollItem {
 	private func importVideoAsset(importURL: URL, exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: @escaping ((_ status: CameraRollImportStatus, _ asset: AVURLAsset?)->Void)) {
 		let options: PHVideoRequestOptions = PHVideoRequestOptions()
 		options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
-		//options.deliveryMode = PHVideoRequestOptionsDeliveryMode.fastFormat
 		options.isNetworkAccessAllowed = true
 		options.version = PHVideoRequestOptionsVersion.original
-		//options.version = PHVideoRequestOptionsVersion.current
 		options.progressHandler = {  (progress, error, stop, info) in
 			progressUpdate?(progress)
 		}
@@ -208,5 +229,3 @@ extension CameraRollItem {
 		})
 	}
 }
-
-

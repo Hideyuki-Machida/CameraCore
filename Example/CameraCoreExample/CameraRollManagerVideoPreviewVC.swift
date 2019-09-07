@@ -1,5 +1,5 @@
 //
-//  CameraRollManagerOverViewVC.swift
+//  CameraRollManagerVideoPreviewVC.swift
 //  CameraCore_Example
 //
 //  Created by hideyuki machida on 2018/08/27.
@@ -11,7 +11,7 @@ import AVFoundation
 import CameraCore
 import iOS_DummyAVAssets
 
-class CameraRollManagerPreviewVC: UIViewController {
+class CameraRollManagerVideoPreviewVC: UIViewController {
 
     public var compositionData: CompositionDataProtocol!
     @IBOutlet weak var playbackView: CameraCore.MetalVideoPlaybackView!
@@ -99,7 +99,7 @@ class CameraRollManagerPreviewVC: UIViewController {
 
 //MARK: - Segue
 
-extension CameraRollManagerPreviewVC {
+extension CameraRollManagerVideoPreviewVC {
     enum SegueId: String {
         case openProgressView = "openProgressView"
     }

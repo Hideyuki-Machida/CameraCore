@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6281813F2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281813E2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift */; };
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
-		62E5CA2A22901A72004D258A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2922901A72004D258A /* ViewController.swift */; };
 		62E5CA2D22901A72004D258A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2B22901A72004D258A /* Main.storyboard */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
 		62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA3022901A74004D258A /* LaunchScreen.storyboard */; };
@@ -23,7 +23,7 @@
 		62E5CB3A22904BD3004D258A /* CameraRollManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2E22904BD3004D258A /* CameraRollManagerVC.swift */; };
 		62E5CB3B22904BD3004D258A /* CompositionAVPlayerExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2F22904BD3004D258A /* CompositionAVPlayerExampleVC.swift */; };
 		62E5CB3C22904BD3004D258A /* ImageCaptureExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB3022904BD3004D258A /* ImageCaptureExampleVC.swift */; };
-		62E5CB3D22904BD3004D258A /* CameraRollManagerPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB3122904BD3004D258A /* CameraRollManagerPreviewVC.swift */; };
+		62E5CB3D22904BD3004D258A /* CameraRollManagerVideoPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB3122904BD3004D258A /* CameraRollManagerVideoPreviewVC.swift */; };
 		62E5CB3F22904DB7004D258A /* iOS_DummyAVAssets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */; };
 		62E5CB4022904DB7004D258A /* iOS_DummyAVAssets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62E5CB4222904DEB004D258A /* CameraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4122904DEB004D258A /* CameraCore.framework */; };
@@ -49,9 +49,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6281813E2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraRollManagerImagePreviewVC.swift; sourceTree = "<group>"; };
 		62E5CA2422901A72004D258A /* CameraCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2722901A72004D258A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		62E5CA2922901A72004D258A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		62E5CA2C22901A72004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		62E5CA2E22901A74004D258A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62E5CA3122901A74004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -67,7 +67,7 @@
 		62E5CB2E22904BD3004D258A /* CameraRollManagerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVC.swift; sourceTree = "<group>"; };
 		62E5CB2F22904BD3004D258A /* CompositionAVPlayerExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionAVPlayerExampleVC.swift; sourceTree = "<group>"; };
 		62E5CB3022904BD3004D258A /* ImageCaptureExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCaptureExampleVC.swift; sourceTree = "<group>"; };
-		62E5CB3122904BD3004D258A /* CameraRollManagerPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerPreviewVC.swift; sourceTree = "<group>"; };
+		62E5CB3122904BD3004D258A /* CameraRollManagerVideoPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVideoPreviewVC.swift; sourceTree = "<group>"; };
 		62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
 		62E5CB4122904DEB004D258A /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CB4422904DEB004D258A /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,8 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				62E5CA2722901A72004D258A /* AppDelegate.swift */,
-				62E5CA2922901A72004D258A /* ViewController.swift */,
-				62E5CB3122904BD3004D258A /* CameraRollManagerPreviewVC.swift */,
+				62E5CB3122904BD3004D258A /* CameraRollManagerVideoPreviewVC.swift */,
+				6281813E2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift */,
 				62E5CB2E22904BD3004D258A /* CameraRollManagerVC.swift */,
 				62E5CB2D22904BD3004D258A /* CodableExampleVC.swift */,
 				62E5CB2F22904BD3004D258A /* CompositionAVPlayerExampleVC.swift */,
@@ -215,11 +215,11 @@
 				62E5CB3622904BD3004D258A /* VideoBitRateEncoderExampleVC.swift in Sources */,
 				62E5CB3B22904BD3004D258A /* CompositionAVPlayerExampleVC.swift in Sources */,
 				62E5CB3822904BD3004D258A /* RenderLayerExampleVC.swift in Sources */,
-				62E5CA2A22901A72004D258A /* ViewController.swift in Sources */,
 				62E5CB3A22904BD3004D258A /* CameraRollManagerVC.swift in Sources */,
 				62E5CB3222904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift in Sources */,
 				62E5CB3322904BD3004D258A /* MTLCIColorMonochromeLayer.swift in Sources */,
-				62E5CB3D22904BD3004D258A /* CameraRollManagerPreviewVC.swift in Sources */,
+				6281813F2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift in Sources */,
+				62E5CB3D22904BD3004D258A /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
 				62E5CB3422904BD3004D258A /* CIColorMonochromeLayer.swift in Sources */,
 				62E5CB3C22904BD3004D258A /* ImageCaptureExampleVC.swift in Sources */,

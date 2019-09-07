@@ -38,24 +38,6 @@ class ImageCaptureExampleVC: UIViewController {
 			contentMode: .scaleAspectFill
 		)
 
-		/*
-		do {
-			try iOS_AVModule.ImageCapture.capture(
-				url: videoURLAsset.url,
-				size: Settings.PresetiFrame.p1280x720.size(),
-				compositionAsset: compositionVideoAsset,
-				at: CMTime.zero
-			)
-			{ (image: CGImage?) in
-				DispatchQueue.main.async { [weak self] in
-					self?.imageView.image = UIImage.init(cgImage: image!)
-				}
-			}
-
-		} catch {
-			
-		}
-*/
 		do {
 			var compositionData: CompositionData = CompositionData(
 				videoTracks: [

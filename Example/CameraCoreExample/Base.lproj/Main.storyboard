@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -636,18 +634,19 @@
                     <navigationItem key="navigationItem" title="カメラロール操作（CameraRollManager）" id="rW7-Dm-9LR"/>
                     <connections>
                         <outlet property="collectionView" destination="jEO-NK-wia" id="LXD-H3-ih7"/>
-                        <segue destination="EN9-E5-tQo" kind="presentation" identifier="openPreview" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="N5M-vs-QmO"/>
-                        <segue destination="0kl-eF-rd4" kind="presentation" identifier="openProgressView" modalPresentationStyle="overFullScreen" modalTransitionStyle="coverVertical" id="TIf-G9-RqD"/>
+                        <segue destination="EN9-E5-tQo" kind="presentation" identifier="openVideoPreview" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="N5M-vs-QmO"/>
+                        <segue destination="0kl-eF-rd4" kind="presentation" identifier="openProgressView" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="TIf-G9-RqD"/>
+                        <segue destination="hjk-SO-BHy" kind="presentation" identifier="openImagePreview" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="XZy-By-h6f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wYN-GY-hce" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="958" y="1518"/>
         </scene>
-        <!--Camera Roll Manager PreviewVC-->
+        <!--Camera Roll Manager Video PreviewVC-->
         <scene sceneID="woq-Dn-PJ5">
             <objects>
-                <viewController id="EN9-E5-tQo" customClass="CameraRollManagerPreviewVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="EN9-E5-tQo" customClass="CameraRollManagerVideoPreviewVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bua-OQ-0Qe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -675,7 +674,6 @@
                                 </state>
                                 <connections>
                                     <action selector="saveButtonTapAction:" destination="EN9-E5-tQo" eventType="touchUpInside" id="Is3-3W-pOP"/>
-                                    <action selector="tap001:" destination="aFl-ax-lAP" eventType="touchUpInside" id="mfS-GR-UKU"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -696,7 +694,7 @@
                     </view>
                     <connections>
                         <outlet property="playbackView" destination="U5j-t9-S6i" id="3er-ZY-7gG"/>
-                        <segue destination="0kl-eF-rd4" kind="presentation" identifier="openProgressView" id="au6-13-CIs"/>
+                        <segue destination="0kl-eF-rd4" kind="presentation" identifier="openProgressView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="au6-13-CIs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mwr-7f-PSd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1005,10 +1003,68 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="giE-5X-zvx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="238" y="3752"/>
+            <point key="canvasLocation" x="238" y="2972"/>
+        </scene>
+        <!--Camera Roll Manager Image PreviewVC-->
+        <scene sceneID="rG6-df-gJz">
+            <objects>
+                <viewController id="hjk-SO-BHy" customClass="CameraRollManagerImagePreviewVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aPg-aG-l3y">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fg7-6p-Qos">
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                                <connections>
+                                    <action selector="closeButtonTapAction:" destination="hjk-SO-BHy" eventType="touchUpInside" id="ydM-fQ-4kT"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zPP-3u-LMc">
+                                <rect key="frame" x="50.333333333333343" y="162.33333333333334" width="274.33333333333326" height="487.33333333333326"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="zPP-3u-LMc" secondAttribute="height" multiplier="9:16" id="Ijb-2S-wKD"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAe-o0-5UI">
+                                <rect key="frame" x="20" y="669.66666666666663" width="335" height="60"/>
+                                <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="cOn-3q-ois"/>
+                                </constraints>
+                                <state key="normal" title="閉じる">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeButtonTapAction:" destination="hjk-SO-BHy" eventType="touchUpInside" id="EJm-fN-p28"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="zPP-3u-LMc" firstAttribute="centerY" secondItem="aPg-aG-l3y" secondAttribute="centerY" id="C24-gw-03V"/>
+                            <constraint firstItem="w7j-JP-7b0" firstAttribute="trailing" secondItem="xAe-o0-5UI" secondAttribute="trailing" constant="20" id="F26-SX-Rsa"/>
+                            <constraint firstItem="zPP-3u-LMc" firstAttribute="height" secondItem="aPg-aG-l3y" secondAttribute="height" multiplier="0.6" id="Jrc-QK-qjq"/>
+                            <constraint firstItem="Fg7-6p-Qos" firstAttribute="top" secondItem="w7j-JP-7b0" secondAttribute="top" id="Yjh-A5-9zS"/>
+                            <constraint firstItem="zPP-3u-LMc" firstAttribute="centerX" secondItem="aPg-aG-l3y" secondAttribute="centerX" id="ZO4-1J-ewl"/>
+                            <constraint firstItem="w7j-JP-7b0" firstAttribute="bottom" secondItem="Fg7-6p-Qos" secondAttribute="bottom" id="dBP-ps-gzn"/>
+                            <constraint firstItem="w7j-JP-7b0" firstAttribute="trailing" secondItem="Fg7-6p-Qos" secondAttribute="trailing" id="i9X-Dm-dE2"/>
+                            <constraint firstItem="Fg7-6p-Qos" firstAttribute="leading" secondItem="w7j-JP-7b0" secondAttribute="leading" id="knW-L6-VFJ"/>
+                            <constraint firstItem="xAe-o0-5UI" firstAttribute="leading" secondItem="w7j-JP-7b0" secondAttribute="leading" constant="20" id="unT-Q2-MEb"/>
+                            <constraint firstItem="xAe-o0-5UI" firstAttribute="top" secondItem="zPP-3u-LMc" secondAttribute="bottom" constant="20" id="zph-6v-kMM"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="w7j-JP-7b0"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="IMO-0V-bsf"/>
+                    <connections>
+                        <outlet property="imageView" destination="zPP-3u-LMc" id="VJJ-rI-0rj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kLM-Vf-nUP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1681" y="2189"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="au6-13-CIs"/>
+        <segue reference="TIf-G9-RqD"/>
     </inferredMetricsTieBreakers>
 </document>

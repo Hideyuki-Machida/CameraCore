@@ -164,7 +164,7 @@ public class CameraRollItem {
 }
 
 extension CameraRollItem {
-    public func videoURL(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
+    public func getVideoURL(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
         let options: PHVideoRequestOptions = PHVideoRequestOptions()
         options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
 		options.isNetworkAccessAllowed = true
@@ -183,7 +183,7 @@ extension CameraRollItem {
         })
     }
 
-    public func imageURL(progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<Data, Error>)->Void)?) {
+    public func getImageData(progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<Data, Error>)->Void)?) {
         let options: PHImageRequestOptions = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
         //options.isSynchronous = false

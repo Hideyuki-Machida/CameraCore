@@ -122,7 +122,7 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
         let cameraRollItem: CameraRollItem = self.datas[indexPath.row]
         switch cameraRollItem.mediaType {
         case .video:
-            cameraRollItem.videoURL(
+            cameraRollItem.getVideoURL(
                 exportPreset: Settings.PresetiFrame.p1920x1080,
                 progressUpdate: { [weak self] (progress) in
 					DispatchQueue.main.async { [weak self] in
@@ -162,8 +162,8 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
 				}
             }
         case .image:
-            cameraRollItem.imageURL(
-                progressUpdate: { [weak self] (progress) in
+            cameraRollItem.getImageData(
+				progressUpdate: { [weak self] (progress: Double) in
                     guard let self = self else { return }
                     // クラウド上にある場合のダウンロードプログレス
 					DispatchQueue.main.async { [weak self] in

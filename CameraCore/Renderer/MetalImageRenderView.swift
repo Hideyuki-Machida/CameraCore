@@ -25,13 +25,13 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 	
 	private var _mathScale: CGSize = CGSize(width: 0, height: 0)
 	
-	private var filter: MPSImageLanczosScale!
+	//private var filter: MPSImageLanczosScale!
 	
 	public override func awakeFromNib() {
 		super.awakeFromNib()
 		self.delegate = self
 		self.device = MCCore.device
-		self.filter = MPSImageLanczosScale(device: self.device!)
+		//self.filter = MPSImageLanczosScale(device: self.device!)
 		//self.ciContext = CIContext(mtlDevice: self.device!)
 		//self.ciContext = CIContext(mtlDevice: RuntimeVars.device, options: SharedContext.options)
 		//self.ciContext = CIContext(mtlDevice: self.device!, options: SharedContext.options)

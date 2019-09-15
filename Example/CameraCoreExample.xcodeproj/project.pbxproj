@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6281813F2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281813E2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift */; };
+		62E34193232E9D2E005E96A7 /* MetalCanvasExample.app in Resources */ = {isa = PBXBuildFile; fileRef = 62E34192232E9D2E005E96A7 /* MetalCanvasExample.app */; };
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
 		62E5CA2D22901A72004D258A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2B22901A72004D258A /* Main.storyboard */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		6281813E2323B0EF00D9879D /* CameraRollManagerImagePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraRollManagerImagePreviewVC.swift; sourceTree = "<group>"; };
+		62E34192232E9D2E005E96A7 /* MetalCanvasExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = MetalCanvasExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2422901A72004D258A /* CameraCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2722901A72004D258A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62E5CA2C22901A72004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -87,6 +89,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		62E34191232E9D2E005E96A7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				62E34192232E9D2E005E96A7 /* MetalCanvasExample.app */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		62E5CA1B22901A72004D258A = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +105,7 @@
 				62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */,
 				62E5CA2622901A72004D258A /* CameraCoreExample */,
 				62E5CA2522901A72004D258A /* Products */,
+				62E34191232E9D2E005E96A7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -198,6 +209,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62E34193232E9D2E005E96A7 /* MetalCanvasExample.app in Resources */,
 				62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */,
 				62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */,
 				62E5CA2D22901A72004D258A /* Main.storyboard in Resources */,

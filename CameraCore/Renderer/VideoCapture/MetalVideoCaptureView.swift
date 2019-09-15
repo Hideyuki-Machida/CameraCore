@@ -205,7 +205,7 @@ extension MetalVideoCaptureView {
 		let height: Int = CVPixelBufferGetHeight(originalPixelBuffer)
 		let renderSize: CGSize = CGSize.init(width: width, height: height)
 		//////////////////////////////////////////////////////////
-		
+		/*
 		//////////////////////////////////////////////////////////
 		// rgbPixelBuffer
 		guard var rgbPixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: renderSize) else { return }
@@ -227,7 +227,7 @@ extension MetalVideoCaptureView {
 		blitEncoder?.endEncoding()
 		commandBuffer0.commit()
 		//////////////////////////////////////////////////////////
-		
+		*/
 		do {
 			///////////////////////////////////////////////////////////////////////////////////////////////////
 			// renderLayerCompositionInfo
@@ -249,32 +249,33 @@ extension MetalVideoCaptureView {
 			for (index, _) in self.renderLayers.enumerated() {
 				if var renderLayer: MetalRenderLayerProtocol = self.renderLayers[index] as? MetalRenderLayerProtocol {
 					do {
-						try self.processingMetalRenderLayer(renderLayer: &renderLayer, commandBuffer: &commandBuffer, pixelBuffer: &rgbPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+						try self.processingMetalRenderLayer(renderLayer: &renderLayer, commandBuffer: &commandBuffer, pixelBuffer: &originalPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 					} catch {
 						Debug.ErrorLog(error)
 					}
 				} else if var renderLayer: CVPixelBufferRenderLayerProtocol = self.renderLayers[index] as? CVPixelBufferRenderLayerProtocol {
 					do {
-						try renderLayer.processing(commandBuffer: &commandBuffer, pixelBuffer: &rgbPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+						try renderLayer.processing(commandBuffer: &commandBuffer, pixelBuffer: &originalPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 					} catch {
 						Debug.ErrorLog(error)
 					}
 				}
 			}
-			commandBuffer.commit()
+			//commandBuffer.commit()
 			///////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			//////////////////////////////////////////////////////////
 			// renderSize
-			let rgbTexture: MCTexture = try MCTexture.init(pixelBuffer: &rgbPixelBuffer, planeIndex: 0)
+			guard let rgbTexture: MTLTexture = MCCore.texture(pixelBuffer: &originalPixelBuffer, colorPixelFormat: self.colorPixelFormat) else { return }
+			//let rgbTexture: MCTexture = try MCTexture.init(pixelBuffer: &originalPixelBuffer, planeIndex: 0)
 			DispatchQueue.main.async {
 				self.event?.onPreviewUpdate?(sampleBuffer)
 			}
 			//////////////////////////////////////////////////////////
 
-			guard var commandBuffer002: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-			var texture: MTLTexture = rgbTexture.texture
-			self.update(commandBuffer: &commandBuffer002, texture: &texture, renderSize: renderSize, queue: nil)
+			//guard var commandBuffer002: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
+			//var texture: MTLTexture = rgbTexture.texture
+			self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
 		} catch {
 			return
 		}

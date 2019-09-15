@@ -38,6 +38,7 @@ class MetalVideoPlaybackViewExampleVC: UIViewController {
 	)
 */
 	deinit {
+		NotificationCenter.default.removeObserver(self)
 		self.playbackView.pause()
 		self.playbackView.dispose()
 	}
@@ -122,9 +123,16 @@ class MetalVideoPlaybackViewExampleVC: UIViewController {
 		}
 		
 		/////////////////////////////////////////////////
+		NotificationCenter.default.addObserver(self, selector: #selector(viewDidEnterBackground(notification:)), name: UIApplication.willResignActiveNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(viewDidEnterBackground(notification:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(viewDidBecomeActive(notification:)), name: UIApplication.didBecomeActiveNotification, object: nil)
 	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
+
+    @objc func viewDidBecomeActive(notification: Notification) {
+		self.playbackView.play(isRepeat: true)
+	}
+
+	@objc func viewDidEnterBackground(notification: Notification) {
+		self.playbackView.pause()
 	}
 }

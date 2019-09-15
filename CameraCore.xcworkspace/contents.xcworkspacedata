@@ -11,6 +11,9 @@
       location = "group:Modules"
       name = "Modules">
       <FileRef
+         location = "group:MetalCanvas/Example/MetalCanvasExample.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MetalCanvas/MetalCanvas.xcodeproj">
       </FileRef>
    </Group>

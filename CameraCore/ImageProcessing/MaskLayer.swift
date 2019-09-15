@@ -65,12 +65,12 @@ extension MaskLayer: CIImageRenderLayerProtocol {
 }
 
 extension MaskLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard let image: CIImage = CIImage.init(mtlTexture: sourceTexture, options: nil) else { throw RenderLayerErrorType.setupError }
+	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+		guard let image: CIImage = CIImage.init(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.setupError }
 		
 		let colorSpace: CGColorSpace = image.colorSpace ?? CGColorSpaceCreateDeviceRGB()
 		let outImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		MCCore.ciContext.render(outImage, to: destinationTexture, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
+		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
 }
 

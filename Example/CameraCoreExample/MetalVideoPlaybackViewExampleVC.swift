@@ -19,10 +19,10 @@ class MetalVideoPlaybackViewExampleVC: UIViewController {
 
 	private let videoCompositionProperty: VideoCompositionProperty = VideoCompositionProperty.init(
 		frameRate: 30,
-		//presetiFrame: Settings.PresetiFrame.p1280x720,
-		presetiFrame: Settings.PresetiFrame.p1920x1080,
-		//renderSize: Settings.PresetiFrame.p1280x720.size(),
-		renderSize: Settings.PresetiFrame.p1920x1080.size(),
+		presetiFrame: Settings.PresetiFrame.p1280x720,
+		//presetiFrame: Settings.PresetiFrame.p1920x1080,
+		renderSize: Settings.PresetiFrame.p1280x720.size(),
+		//renderSize: Settings.PresetiFrame.p1920x1080.size(),
 		//renderSize: CGSize.init(w: 1080, h: 1080),
 		//renderSize: CGSize.init(w: 720, h: 720),
 		renderScale: 1.0,

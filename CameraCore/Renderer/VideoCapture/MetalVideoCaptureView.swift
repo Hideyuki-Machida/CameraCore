@@ -284,6 +284,6 @@ extension MetalVideoCaptureView {
 		guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
 		guard let sourceTexture: MTLTexture = MCCore.texture(pixelBuffer: &pixelBuffer, textureCache: &textureCache, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else { throw RecordingError.render }
 		guard var destinationTexture: MTLTexture = sourceTexture.makeTextureView(pixelFormat: sourceTexture.pixelFormat) else { throw RecordingError.render }
-		try renderLayer.processing(commandBuffer: &commandBuffer, sourceTexture: sourceTexture, destinationTexture: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+		try renderLayer.processing(commandBuffer: &commandBuffer, source: sourceTexture, destination: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 	}
 }

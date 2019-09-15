@@ -30,11 +30,11 @@ public struct MTLCIColorMonochromeLayer: RenderLayerProtocol {
 }
 
 extension MTLCIColorMonochromeLayer: MetalRenderLayerProtocol {
-	public mutating func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard let image: CIImage = CIImage(mtlTexture: sourceTexture, options: nil) else { return }
+	public mutating func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+		guard let image: CIImage = CIImage(mtlTexture: source, options: nil) else { return }
 		self.filter.setValue(image, forKey: kCIInputImageKey)
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
-		MCCore.ciContext.render(self.filter.outputImage!, to: destinationTexture, commandBuffer: commandBuffer, bounds: self.filter.outputImage!.extent, colorSpace: colorSpace)
+		MCCore.ciContext.render(self.filter.outputImage!, to: destination, commandBuffer: commandBuffer, bounds: self.filter.outputImage!.extent, colorSpace: colorSpace)
 	}
 	
 }

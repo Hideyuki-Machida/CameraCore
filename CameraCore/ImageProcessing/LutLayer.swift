@@ -62,41 +62,17 @@ extension LutLayer: CIImageRenderLayerProtocol {
 	}
 }
 
-/*
-extension LutLayer: CameraCore.CVPixelBufferRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> Void {
-		var inputImage: CIImage = CIImage.init(cvPixelBuffer: pixelBuffer)
-		inputImage = try processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		MCCore.ciContext.render(inputImage, to: pixelBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
-	}
-}
-*/
-
 extension LutLayer: CameraCore.MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var inputImage: CIImage = CIImage(mtlTexture: sourceTexture, options: nil) else { throw RenderLayerErrorType.renderingError }
+	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+		guard var inputImage: CIImage = CIImage(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.renderingError }
 		inputImage = try processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
 		guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		MCCore.ciContext.render(inputImage, to: destinationTexture, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
+		MCCore.ciContext.render(inputImage, to: destination, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
 		commandBuffer.commit()
 	}
 }
 
-/*
-extension LutLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard let image: CIImage = CIImage.init(mtlTexture: sourceTexture, options: nil) else { throw RenderLayerErrorType.setupError }
-		let colorSpace: CGColorSpace = image.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		let outImage: CIImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-
-		guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		MCCore.ciContext.render(outImage, to: destinationTexture, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
-		commandBuffer.commit()
-	}
-}
-*/
 extension LutLayer {
     public func toJsonData() throws -> Data {
         return try JSONEncoder().encode(self)

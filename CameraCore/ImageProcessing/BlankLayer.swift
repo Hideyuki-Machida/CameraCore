@@ -33,7 +33,7 @@ extension BlankLayer: CIImageRenderLayerProtocol {
 	}
 }
 extension BlankLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
+	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
 }
 
 extension BlankLayer {

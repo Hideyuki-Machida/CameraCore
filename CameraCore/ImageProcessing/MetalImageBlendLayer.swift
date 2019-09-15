@@ -43,7 +43,7 @@ final public class MetalImageBlendLayer: RenderLayerProtocol {
 }
 
 extension MetalImageBlendLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
+	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
 	public func processing(commandBuffer: inout MTLCommandBuffer, originalTexture: inout MTLTexture, overTexture: inout MTLTexture, destinationTexture: inout MTLTexture, renderSize: CGSize) throws {
 		let threadsPerGrid: MTLSize = MTLSize(width: destinationTexture.width, height: destinationTexture.height, depth: 1)
 

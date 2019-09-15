@@ -152,12 +152,12 @@ extension ImageLayer: CameraCore.CVPixelBufferRenderLayerProtocol {
 */
 
 extension ImageLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var inputImage: CIImage = CIImage(mtlTexture: sourceTexture, options: nil) else { throw RenderLayerErrorType.renderingError }
+	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+		guard var inputImage: CIImage = CIImage(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.renderingError }
 		inputImage = try self.processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
 		guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		MCCore.ciContext.render(inputImage, to: destinationTexture, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
+		MCCore.ciContext.render(inputImage, to: destination, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
 		commandBuffer.commit()
 	}
 

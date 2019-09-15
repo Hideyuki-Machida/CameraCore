@@ -98,7 +98,7 @@ public protocol CIImageRenderLayerProtocol: RenderLayerProtocol {
 }
 
 public protocol MetalRenderLayerProtocol: RenderLayerProtocol {
-	mutating func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> Void
+	mutating func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> Void
 }
 
 public protocol OpenGLRenderLayerProtocol: RenderLayerProtocol {

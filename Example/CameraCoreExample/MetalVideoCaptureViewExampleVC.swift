@@ -40,8 +40,8 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		do {
 			try self.videoCaptureView.setup(
 				frameRate: 30,
-				//presetiFrame: Settings.PresetiFrame.p1280x720,
-				presetiFrame: Settings.PresetiFrame.p1920x1080,
+				presetiFrame: Settings.PresetiFrame.p1280x720,
+				//presetiFrame: Settings.PresetiFrame.p1920x1080,
 				//position: AVCaptureDevice.Position.front
 				position: AVCaptureDevice.Position.back
 			)

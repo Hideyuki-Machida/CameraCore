@@ -179,7 +179,7 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 			} else if var renderLayer: MetalRenderLayerProtocol = renderLayer as? MetalRenderLayerProtocol {
 				let sourceTexture: MTLTexture = MCCore.texture(pixelBuffer: &sourcePixelBuffer, textureCache: &textureCache, colorPixelFormat: self.colorPixelFormat)!
 				var destinationTexture: MTLTexture = MCCore.texture(pixelBuffer: &destinationPixelBuffer, textureCache: &textureCache, colorPixelFormat: self.colorPixelFormat)!
-				try renderLayer.processing(commandBuffer: &commandBuffer, sourceTexture: sourceTexture, destinationTexture: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+				try renderLayer.processing(commandBuffer: &commandBuffer, source: sourceTexture, destination: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 				
 				let blitEncoder: MTLBlitCommandEncoder? = commandBuffer.makeBlitCommandEncoder()
 				blitEncoder?.copy(from: destinationTexture,

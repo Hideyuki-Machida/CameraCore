@@ -277,8 +277,8 @@ extension MetalVideoRenderLayerCompositing {
 		
 		guard var destinationTexture: MTLTexture = sourceTexture.makeTextureView(pixelFormat: sourceTexture.pixelFormat) else { throw ErrorType.render }
 		try renderLayer.processing(commandBuffer: &commandBuffer,
-								   sourceTexture: newSourceTexture,
-								   destinationTexture: &destinationTexture,
+								   source: newSourceTexture,
+								   destination: &destinationTexture,
 								   renderLayerCompositionInfo: &renderLayerCompositionInfo
 		)
 		

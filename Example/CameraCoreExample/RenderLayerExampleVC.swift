@@ -14,19 +14,23 @@ import iOS_DummyAVAssets
 class RenderLayerExampleVC: UIViewController {
     
     @IBOutlet weak var playbackView: CameraCore.MetalVideoPlaybackView!
-
+	@IBOutlet weak var lutIntensitySlider: UISlider!
+	
 	private let videoCompositionProperty: VideoCompositionProperty = VideoCompositionProperty.init(
 		frameRate: 30,
-		presetiFrame: Settings.PresetiFrame.p1920x1080,
-		renderSize: Settings.PresetiFrame.p1920x1080.size(),
+		//presetiFrame: Settings.PresetiFrame.p1920x1080,
+		presetiFrame: Settings.PresetiFrame.p1280x720,
+		renderSize: Settings.PresetiFrame.p1280x720.size(),
 		renderScale: 1.0,
 		renderType: Settings.RenderType.metal
 	)
 
     private var compositionData: CompositionData!
     private var compositionAssetId: CompositionVideoAssetId!
-	
-	private var effectGroupLayer: GroupLayer!
+
+	private var lutLayer: LutLayer!
+	private var sequenceImageLayer: SequenceImageLayer!
+	private var transformLayer: TransformLayer!
 	
 	
     deinit {
@@ -37,12 +41,17 @@ class RenderLayerExampleVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.effectGroupLayer = GroupLayer.init(
-			layers: [],
-			alpha: 1.0,
-			blendMode: Blendmode.alpha
-		)
-		
+        do {
+			self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
+			self.lutLayer.intensity = self.lutIntensitySlider.value
+			
+			self.sequenceImageLayer = SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.alpha, updateFrameRate: 30)
+			
+			self.transformLayer = TransformLayer.init(transform: CGAffineTransform.identity.rotated(by: 1.0).translatedBy(x: 500, y: -500), backgroundColor: UIColor.gray)
+        } catch {
+            print(error)
+        }
+
         /////////////////////////////////////////////////
         // Create: AVURLAsset & CMTimeRange
         let videoURLAsset001: AVURLAsset = iOS_DummyAVAssets.AssetManager.VideoAsset.portrait002.urlAsset
@@ -54,14 +63,14 @@ class RenderLayerExampleVC: UIViewController {
         // Create: CompositionData
         let compositionVideoAsset001: CompositionVideoAsset = CompositionVideoAsset.init(
             avAsset: videoURLAsset001,
-            layers: [self.effectGroupLayer],
+            layers: [],
             atTime: videoTimeRange001.start,
 			contentMode: .scaleAspectFill
         )
         self.compositionAssetId = compositionVideoAsset001.id
         
         do {
-            self.compositionData = CompositionData(
+			self.compositionData = CompositionData(
 				videoTracks: [
 					try CompositionVideoTrack.init(assets: [compositionVideoAsset001])
                 ],
@@ -105,18 +114,32 @@ class RenderLayerExampleVC: UIViewController {
 
     /// Lutを適用
     @IBAction func tapLutButton(_ sender: Any) {
-		self.effectGroupLayer?.layers = [
-			LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
-		]
-		self.effectGroupLayer?.blendMode = Blendmode.overlay
+		do {
+			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
+			
+			compositionAsset.layers = [ self.lutLayer ]
+
+			try self.compositionData.updatet(asset: compositionAsset)
+            try self.compositionData.setup()
+            try self.playbackView.updateRenderLayer(compositionData: self.compositionData)
+		} catch {
+			
+		}
     }
 
     /// シーケンスイメージをかぶせる
     @IBAction func tapSequenceImageButton(_ sender: Any) {
-		self.effectGroupLayer?.layers = [
-			SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30)
-		]
-		self.effectGroupLayer?.blendMode = Blendmode.alpha
+		do {
+			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
+			
+			compositionAsset.layers = [ self.sequenceImageLayer ]
+
+			try self.compositionData.updatet(asset: compositionAsset)
+            try self.compositionData.setup()
+            try self.playbackView.updateRenderLayer(compositionData: self.compositionData)
+		} catch {
+			
+		}
     }
 
     /// トランスフォームを適用
@@ -124,9 +147,7 @@ class RenderLayerExampleVC: UIViewController {
 		do {
 			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
 			
-			compositionAsset.layers = [
-				TransformLayer.init(transform: CGAffineTransform.identity.rotated(by: 1.0).translatedBy(x: 500, y: -500), backgroundColor: UIColor.gray)
-			]
+			compositionAsset.layers = [ self.transformLayer ]
 
 			try self.compositionData.updatet(asset: compositionAsset)
             try self.compositionData.setup()
@@ -153,39 +174,24 @@ class RenderLayerExampleVC: UIViewController {
 
     /// シーケンスイメージの上にLutを適用
     @IBAction func tapLutAndSequenceImageButton(_ sender: Any) {
-		self.effectGroupLayer?.layers = [
-			SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30),
-			LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
-		]
-		self.effectGroupLayer?.blendMode = Blendmode.overlay
+        do {
+			var compositionAsset: CompositionVideoAsset = try self.compositionData.get(assetId: self.compositionAssetId) as! CompositionVideoAsset
+			
+			compositionAsset.layers = [
+				self.sequenceImageLayer,
+				self.lutLayer
+			]
+
+			try self.compositionData.updatet(asset: compositionAsset)
+            try self.compositionData.setup()
+            try self.playbackView.updateRenderLayer(compositionData: self.compositionData)
+        } catch {
+        }
     }
 
 	
 	@IBAction func updateSlider(_ sender: UISlider) {
-		self.effectGroupLayer?.alpha = sender.value
-		/*
-		//DispatchQueue.global().async {
-			do {
-				var compositionAsset: CompositionVideoAsset = try self.compositionData.get(assetId: self.compositionAssetId) as! CompositionVideoAsset
-		
-				compositionAsset.layers = [
-					GroupLayer.init(
-						layers: [
-							LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.dreamy.url, dimension: 64)
-						],
-						alpha: sender.value,
-						blendMode: Blendmode.overlay
-					)
-				]
-
-				try self.compositionData.updatet(asset: compositionAsset)
-				try self.compositionData.setup()
-				try self.playbackView.updateRenderLayer(compositionData: self.compositionData)
-			} catch {
-			}
-
-		//}
-*/
+		self.lutLayer.intensity = sender.value
 	}
 	
 }

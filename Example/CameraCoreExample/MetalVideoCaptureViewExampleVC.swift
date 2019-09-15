@@ -17,6 +17,8 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 	@IBOutlet weak var videoCaptureView: CameraCore.MetalVideoCaptureView!
 	@IBOutlet weak var recordingButton: UIButton!
 	
+	var lutLayer: LutLayer!
+	
 	deinit {
 		self.videoCaptureView.pause()
 		self.videoCaptureView.dispose()
@@ -38,6 +40,8 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		}
 		self.videoCaptureView.event = event
 		do {
+			self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
+			
 			try self.videoCaptureView.setup(
 				frameRate: 30,
 				presetiFrame: Settings.PresetiFrame.p1280x720,
@@ -264,7 +268,7 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		
 		let action001: UIAlertAction = UIAlertAction(title: "true", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.renderLayers = [LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)]
+			self.videoCaptureView.renderLayers = [ self.lutLayer ]
 		})
 		
 		let action002: UIAlertAction = UIAlertAction(title: "false", style: UIAlertAction.Style.default, handler:{

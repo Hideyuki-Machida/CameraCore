@@ -138,7 +138,7 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
 					let compositionVideoAsset001: CompositionVideoAsset = CompositionVideoAsset.init(
 						avAsset: urlAsset,
 						layers: [
-							LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
+							try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 						],
 						atTime: CMTime.init(value: 0, timescale: 44100),
 						contentMode: .scaleAspectFill

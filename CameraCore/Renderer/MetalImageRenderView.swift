@@ -79,6 +79,7 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 				
 				////////////////////////////////////////////////////////////
 				//
+				self.drawableSize = renderSize
 				guard let drawable: CAMetalDrawable = self.currentDrawable else { return }
 				guard var textureCache: CVMetalTextureCache = self.textureCache else { return }
 				guard var commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
@@ -95,6 +96,19 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 				let texture: MTLTexture = MCCore.texture(pixelBuffer: &sourcePixelBuffer, textureCache: &textureCache, colorPixelFormat: self.colorPixelFormat)!
 				////////////////////////////////////////////////////////////
 				
+				
+				let blitEncoder: MTLBlitCommandEncoder? = commandBuffer.makeBlitCommandEncoder()
+				blitEncoder?.copy(from: texture,
+								  sourceSlice: 0,
+								  sourceLevel: 0,
+								  sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+								  sourceSize: MTLSizeMake(drawable.texture.width, drawable.texture.height, drawable.texture.depth),
+								  to: drawable.texture,
+								  destinationSlice: 0,
+								  destinationLevel: 0,
+								  destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
+				blitEncoder?.endEncoding()
+/*
 				////////////////////////////////////////////////////////////
 				// previewScale encode
 				let scale: Double = Double(drawable.texture.width) / Double(texture.width)
@@ -105,7 +119,7 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 					self?.filter.encode(commandBuffer: commandBuffer, sourceTexture: texture, destinationTexture: drawable.texture)
 				}
 				////////////////////////////////////////////////////////////
-
+*/
 				////////////////////////////////////////////////////////////
 				// commit
 				/*
@@ -144,7 +158,7 @@ public class MetalImageRenderView: MTKView, MTKViewDelegate {
 				*/
 				commandBuffer.present(drawable)
 				commandBuffer.commit()
-				commandBuffer.waitUntilCompleted()
+				//commandBuffer.waitUntilCompleted()
 				self.draw()
 				////////////////////////////////////////////////////////////
 			}

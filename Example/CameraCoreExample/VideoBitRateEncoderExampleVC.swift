@@ -17,8 +17,8 @@ class VideoBitRateEncoderExampleVC: UIViewController {
     
 	private let videoCompositionProperty: VideoCompositionProperty = VideoCompositionProperty.init(
 		frameRate: 30,
-		presetiFrame: Settings.PresetiFrame.p1920x1080,
-		renderSize: Settings.PresetiFrame.p1920x1080.size(),
+		presetiFrame: Settings.PresetiFrame.p1280x720,
+		renderSize: Settings.PresetiFrame.p1280x720.size(),
 		renderScale: 1.0,
 		renderType: Settings.RenderType.metal
 	)

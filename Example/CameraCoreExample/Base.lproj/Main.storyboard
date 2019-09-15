@@ -125,12 +125,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQZ-qG-2xD" customClass="MetalVideoPlaybackView" customModule="CameraCore">
-                                <rect key="frame" x="0.0" y="72.666666666666686" width="375" height="666.66666666666652"/>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-5e-kT9" customClass="MetalVideoPlaybackView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="rQZ-qG-2xD" secondAttribute="height" multiplier="9:16" id="3r8-bJ-W6k"/>
+                                    <constraint firstAttribute="width" secondItem="tiK-5e-kT9" secondAttribute="height" multiplier="9:16" id="XLA-vQ-3aq"/>
                                 </constraints>
-                            </glkView>
+                            </mtkView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ewj-Co-QJx">
                                 <rect key="frame" x="265" y="98" width="100" height="610"/>
                                 <subviews>
@@ -207,10 +207,10 @@
                                 <rect key="frame" x="0.0" y="508" width="255" height="200"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CTh-ra-XOx">
-                                        <rect key="frame" x="0.0" y="20" width="255" height="180"/>
+                                        <rect key="frame" x="40" y="20" width="215" height="180"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="フィルター濃度" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iB0-7l-6zD">
-                                                <rect key="frame" x="0.0" y="0.0" width="255" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="215" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="aVy-ac-8HY"/>
                                                 </constraints>
@@ -218,8 +218,8 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="duC-sZ-y0K">
-                                                <rect key="frame" x="-2" y="20" width="259" height="41"/>
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="duC-sZ-y0K">
+                                                <rect key="frame" x="-2" y="20" width="219" height="41"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="3TO-9k-vP0"/>
                                                 </constraints>
@@ -228,7 +228,7 @@
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="自然な彩度" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o3K-Cv-fZu">
-                                                <rect key="frame" x="0.0" y="60" width="255" height="20"/>
+                                                <rect key="frame" x="0.0" y="60" width="215" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="hyV-2k-UQs"/>
                                                 </constraints>
@@ -237,13 +237,13 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2mh-La-tyM">
-                                                <rect key="frame" x="-2" y="80" width="259" height="41"/>
+                                                <rect key="frame" x="-2" y="80" width="219" height="41"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="cCB-z8-X7e"/>
                                                 </constraints>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ガンマ" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="klc-Wg-8Ky">
-                                                <rect key="frame" x="0.0" y="120" width="255" height="20"/>
+                                                <rect key="frame" x="0.0" y="120" width="215" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="32M-pl-WMb"/>
                                                 </constraints>
@@ -252,7 +252,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="acF-Bh-l09">
-                                                <rect key="frame" x="-2" y="140" width="259" height="41"/>
+                                                <rect key="frame" x="-2" y="140" width="219" height="41"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="nGp-hB-e7N"/>
                                                 </constraints>
@@ -265,7 +265,7 @@
                                     <constraint firstAttribute="bottom" secondItem="CTh-ra-XOx" secondAttribute="bottom" id="BXy-cr-CHi"/>
                                     <constraint firstAttribute="height" constant="200" id="Nhp-jh-Ljm"/>
                                     <constraint firstAttribute="trailing" secondItem="CTh-ra-XOx" secondAttribute="trailing" id="cmG-X4-zJn"/>
-                                    <constraint firstItem="CTh-ra-XOx" firstAttribute="leading" secondItem="kPU-2u-Ggm" secondAttribute="leading" id="mBY-hr-dq2"/>
+                                    <constraint firstItem="CTh-ra-XOx" firstAttribute="leading" secondItem="kPU-2u-Ggm" secondAttribute="leading" constant="40" id="mBY-hr-dq2"/>
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AjS-UR-iIH">
@@ -277,6 +277,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="veA-6A-lVg" firstAttribute="bottom" secondItem="tiK-5e-kT9" secondAttribute="bottom" id="ELQ-aR-96P"/>
                             <constraint firstItem="AjS-UR-iIH" firstAttribute="top" secondItem="kPU-2u-Ggm" secondAttribute="bottom" constant="10" id="Fmb-hU-ZW8"/>
                             <constraint firstItem="veA-6A-lVg" firstAttribute="trailing" secondItem="AjS-UR-iIH" secondAttribute="trailing" constant="10" id="I3d-hK-A7X"/>
                             <constraint firstItem="AjS-UR-iIH" firstAttribute="top" secondItem="ewj-Co-QJx" secondAttribute="bottom" constant="10" id="LXp-68-C8o"/>
@@ -284,17 +285,17 @@
                             <constraint firstItem="veA-6A-lVg" firstAttribute="bottom" secondItem="AjS-UR-iIH" secondAttribute="bottom" constant="10" id="VYI-MG-oWu"/>
                             <constraint firstItem="veA-6A-lVg" firstAttribute="trailing" secondItem="ewj-Co-QJx" secondAttribute="trailing" constant="10" id="ZvC-lV-Ykz"/>
                             <constraint firstItem="ewj-Co-QJx" firstAttribute="top" secondItem="veA-6A-lVg" secondAttribute="top" constant="10" id="afJ-jA-ky4"/>
-                            <constraint firstItem="rQZ-qG-2xD" firstAttribute="leading" secondItem="veA-6A-lVg" secondAttribute="leading" id="nqW-MA-5Uc"/>
+                            <constraint firstItem="tiK-5e-kT9" firstAttribute="trailing" secondItem="veA-6A-lVg" secondAttribute="trailing" id="m3E-sg-pcO"/>
+                            <constraint firstItem="tiK-5e-kT9" firstAttribute="leading" secondItem="veA-6A-lVg" secondAttribute="leading" id="opX-fo-Toc"/>
                             <constraint firstItem="kPU-2u-Ggm" firstAttribute="leading" secondItem="veA-6A-lVg" secondAttribute="leading" id="wMn-RK-GxU"/>
                             <constraint firstItem="AjS-UR-iIH" firstAttribute="leading" secondItem="veA-6A-lVg" secondAttribute="leading" constant="10" id="yAc-fs-6ES"/>
-                            <constraint firstItem="rQZ-qG-2xD" firstAttribute="centerY" secondItem="6ua-Ie-46A" secondAttribute="centerY" id="zAG-VL-Eb2"/>
-                            <constraint firstItem="rQZ-qG-2xD" firstAttribute="trailing" secondItem="veA-6A-lVg" secondAttribute="trailing" id="zGt-wM-skN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="veA-6A-lVg"/>
                     </view>
                     <navigationItem key="navigationItem" title="画像処理（RenderLayer）" id="ijo-mi-K9F"/>
                     <connections>
-                        <outlet property="playbackView" destination="rQZ-qG-2xD" id="3ZG-9j-oOU"/>
+                        <outlet property="lutIntensitySlider" destination="duC-sZ-y0K" id="9wV-6j-sjv"/>
+                        <outlet property="playbackView" destination="tiK-5e-kT9" id="Msz-nW-fYN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mjt-Pj-Xbd" sceneMemberID="firstResponder"/>
@@ -316,7 +317,7 @@
                                 </constraints>
                             </mtkView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="coz-r6-4sc" firstAttribute="leading" secondItem="Wpc-HJ-Cpx" secondAttribute="leading" id="BW3-bc-MML"/>
                             <constraint firstItem="coz-r6-4sc" firstAttribute="trailing" secondItem="Wpc-HJ-Cpx" secondAttribute="trailing" id="YtK-Fv-YFb"/>
@@ -341,12 +342,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu8-q2-jXd" customClass="MetalVideoPlaybackView" customModule="CameraCore">
-                                <rect key="frame" x="0.0" y="72.666666666666686" width="375" height="666.66666666666652"/>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="XLQ-XJ-Axo" customClass="MetalVideoPlaybackView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="Xu8-q2-jXd" secondAttribute="height" multiplier="9:16" id="TJS-H0-MFh"/>
+                                    <constraint firstAttribute="width" secondItem="XLQ-XJ-Axo" secondAttribute="height" multiplier="9:16" id="yMs-JS-gOf"/>
                                 </constraints>
-                            </glkView>
+                            </mtkView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="OZR-Tk-a3e">
                                 <rect key="frame" x="265" y="98" width="100" height="610"/>
                                 <subviews>
@@ -458,14 +459,15 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="gme-GY-HfB" firstAttribute="trailing" secondItem="7es-cD-Stb" secondAttribute="trailing" constant="10" id="1xk-Ka-Oy8"/>
-                            <constraint firstItem="Xu8-q2-jXd" firstAttribute="trailing" secondItem="gme-GY-HfB" secondAttribute="trailing" id="G7c-0Y-au9"/>
-                            <constraint firstItem="Xu8-q2-jXd" firstAttribute="centerY" secondItem="Jzo-QV-gtr" secondAttribute="centerY" id="Gqo-EP-uCx"/>
+                            <constraint firstAttribute="trailing" secondItem="XLQ-XJ-Axo" secondAttribute="trailing" id="Ecd-VG-SmW"/>
+                            <constraint firstItem="gme-GY-HfB" firstAttribute="bottom" secondItem="XLQ-XJ-Axo" secondAttribute="bottom" id="MKb-c5-R6e"/>
                             <constraint firstItem="7es-cD-Stb" firstAttribute="top" secondItem="OZR-Tk-a3e" secondAttribute="bottom" constant="10" id="UoH-cD-2Os"/>
                             <constraint firstItem="gme-GY-HfB" firstAttribute="trailing" secondItem="OZR-Tk-a3e" secondAttribute="trailing" constant="10" id="XQP-Dm-Y5F"/>
                             <constraint firstItem="OZR-Tk-a3e" firstAttribute="top" secondItem="gme-GY-HfB" secondAttribute="top" constant="10" id="gJS-1k-ep9"/>
+                            <constraint firstItem="XLQ-XJ-Axo" firstAttribute="leading" secondItem="gme-GY-HfB" secondAttribute="leading" id="ian-cI-w3x"/>
                             <constraint firstItem="20R-5X-7yj" firstAttribute="leading" secondItem="gme-GY-HfB" secondAttribute="leading" constant="10" id="m6N-qy-geA"/>
                             <constraint firstItem="gme-GY-HfB" firstAttribute="bottom" secondItem="7es-cD-Stb" secondAttribute="bottom" constant="10" id="n7s-vi-3pz"/>
-                            <constraint firstItem="Xu8-q2-jXd" firstAttribute="leading" secondItem="gme-GY-HfB" secondAttribute="leading" id="o74-sL-pMP"/>
+                            <constraint firstItem="XLQ-XJ-Axo" firstAttribute="width" secondItem="XLQ-XJ-Axo" secondAttribute="height" multiplier="9:16" id="s7J-8w-uGD"/>
                             <constraint firstItem="7es-cD-Stb" firstAttribute="top" secondItem="20R-5X-7yj" secondAttribute="bottom" constant="10" id="sB4-re-VNa"/>
                             <constraint firstItem="7es-cD-Stb" firstAttribute="leading" secondItem="gme-GY-HfB" secondAttribute="leading" constant="10" id="zwj-Ev-IGx"/>
                         </constraints>
@@ -473,7 +475,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="データ保存（Codable）" id="vdR-z5-xyE"/>
                     <connections>
-                        <outlet property="playbackView" destination="Xu8-q2-jXd" id="ofx-PM-dSn"/>
+                        <outlet property="playbackView" destination="XLQ-XJ-Axo" id="r6J-gb-nuW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cJM-dC-yuk" sceneMemberID="firstResponder"/>
@@ -725,12 +727,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxB-wf-b7a" customClass="MetalVideoPlaybackView" customModule="CameraCore">
-                                <rect key="frame" x="0.0" y="72.666666666666686" width="375" height="666.66666666666652"/>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="eIn-X8-Txw" customClass="MetalVideoCaptureView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="PxB-wf-b7a" secondAttribute="height" multiplier="9:16" id="iZM-DN-qsr"/>
+                                    <constraint firstAttribute="width" secondItem="eIn-X8-Txw" secondAttribute="height" multiplier="16:9" id="CKM-Cq-iLF"/>
+                                    <constraint firstAttribute="width" secondItem="eIn-X8-Txw" secondAttribute="height" multiplier="9:16" id="Ps1-nC-EuN"/>
                                 </constraints>
-                            </glkView>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Ps1-nC-EuN"/>
+                                        <exclude reference="CKM-Cq-iLF"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="CKM-Cq-iLF"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Ps1-nC-EuN"/>
+                                    </mask>
+                                </variation>
+                            </mtkView>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Dt-NQ-Kbb">
                                 <rect key="frame" x="20" y="698" width="335" height="60"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
@@ -748,18 +767,19 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="PxB-wf-b7a" firstAttribute="leading" secondItem="hwE-qQ-kUq" secondAttribute="leading" id="RLj-HK-DNU"/>
+                            <constraint firstAttribute="trailing" secondItem="eIn-X8-Txw" secondAttribute="trailing" id="0Ho-Bw-6sV"/>
+                            <constraint firstItem="hwE-qQ-kUq" firstAttribute="bottom" secondItem="eIn-X8-Txw" secondAttribute="bottom" id="Dit-UN-CIl"/>
+                            <constraint firstItem="eIn-X8-Txw" firstAttribute="width" secondItem="eIn-X8-Txw" secondAttribute="height" multiplier="9:16" id="I26-GI-TFM"/>
                             <constraint firstItem="hwE-qQ-kUq" firstAttribute="trailing" secondItem="5Dt-NQ-Kbb" secondAttribute="trailing" constant="20" id="Rdx-ga-w2s"/>
                             <constraint firstItem="5Dt-NQ-Kbb" firstAttribute="leading" secondItem="hwE-qQ-kUq" secondAttribute="leading" constant="20" id="f5F-mH-nHD"/>
-                            <constraint firstItem="PxB-wf-b7a" firstAttribute="centerY" secondItem="AWZ-pE-5Gt" secondAttribute="centerY" id="iga-az-ZSi"/>
+                            <constraint firstItem="eIn-X8-Txw" firstAttribute="leading" secondItem="hwE-qQ-kUq" secondAttribute="leading" id="ibl-15-rbi"/>
                             <constraint firstItem="hwE-qQ-kUq" firstAttribute="bottom" secondItem="5Dt-NQ-Kbb" secondAttribute="bottom" constant="20" id="mDc-xl-q4r"/>
-                            <constraint firstItem="PxB-wf-b7a" firstAttribute="trailing" secondItem="hwE-qQ-kUq" secondAttribute="trailing" id="zMq-VP-W6t"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hwE-qQ-kUq"/>
                     </view>
                     <navigationItem key="navigationItem" title="編集動画の保存（VideoBitRateEncoder）" id="0gX-sT-UdB"/>
                     <connections>
-                        <outlet property="playbackView" destination="PxB-wf-b7a" id="qeo-3m-hAp"/>
+                        <outlet property="playbackView" destination="eIn-X8-Txw" id="pvf-gk-LYX"/>
                         <segue destination="0kl-eF-rd4" kind="presentation" identifier="openProgressView" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="EQQ-qR-cCU"/>
                     </connections>
                 </viewController>
@@ -923,7 +943,7 @@
                                 </constraints>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="0.2000165582" green="0.1999846995" blue="0.2000256181" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="7nP-uY-LfV" firstAttribute="leading" secondItem="Tal-zV-BPs" secondAttribute="trailing" constant="10" id="2jn-dg-C1E"/>
                             <constraint firstItem="kwp-Sn-9aa" firstAttribute="top" secondItem="lQK-Fj-8Zh" secondAttribute="top" id="3Ju-Kw-xQ7"/>
@@ -1065,6 +1085,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="TIf-G9-RqD"/>
+        <segue reference="EQQ-qR-cCU"/>
     </inferredMetricsTieBreakers>
 </document>

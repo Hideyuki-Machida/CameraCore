@@ -14,22 +14,30 @@ final public class LutLayer: RenderLayerProtocol {
     public var id: RenderLayerId
     public let customIndex: Int = 0
     private let lutImageURL: URL
+    private var lutFilter: MCFilter.ColorProcessing.Lut3DFilter
     private var cubeData: NSData?
     private let dimension: Int
-    private var filter: CIFilter? = CIFilter(name: "CIColorCube")
 	
-    public init(lutImageURL: URL, dimension: Int) {
+	public var intensity: Float = 1.0 {
+		willSet {
+			self.lutFilter.intensity = newValue
+		}
+	}
+	
+    public init(lutImageURL: URL, dimension: Int) throws {
         self.id = RenderLayerId()
         self.dimension = dimension
         self.lutImageURL = lutImageURL
-        self.generateLutCube()
+		self.lutFilter = MCFilter.ColorProcessing.Lut3DFilter.init(lutImageTexture: try MCTexture.init(URL: lutImageURL))
+		self.lutFilter.intensity = self.intensity
     }
 
-	fileprivate init(id: RenderLayerId, lutImageURL: URL, dimension: Int) {
+	fileprivate init(id: RenderLayerId, lutImageURL: URL, dimension: Int) throws {
 		self.id = id
 		self.dimension = dimension
 		self.lutImageURL = lutImageURL
-		self.generateLutCube()
+		self.lutFilter = MCFilter.ColorProcessing.Lut3DFilter.init(lutImageTexture: try MCTexture.init(URL: lutImageURL))
+		self.lutFilter.intensity = self.intensity
 	}
 
     public func setup(assetData: CompositionVideoAsset) {
@@ -38,38 +46,15 @@ final public class LutLayer: RenderLayerProtocol {
     
     /// キャッシュを消去
     public func dispose() {
-        self.filter = nil
+
     }
-}
-
-extension LutLayer: CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-		guard let _ = self.cubeData else {
-			if let img: CIImage = self.filter?.outputImage {
-				return img
-			} else {
-				throw Renderer.ErrorType.rendering
-			}
-		}
-
-		self.filter?.setValue(image, forKey: kCIInputImageKey)
-
-		if let img: CIImage = self.filter?.outputImage {
-			return img
-		} else {
-			throw Renderer.ErrorType.rendering
-		}
-	}
 }
 
 extension LutLayer: CameraCore.MetalRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var inputImage: CIImage = CIImage(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.renderingError }
-		inputImage = try processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		MCCore.ciContext.render(inputImage, to: destination, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
-		commandBuffer.commit()
+		let imageTexture: MCTexture = try MCTexture.init(texture: source)
+		var destination: MCTexture = try MCTexture.init(texture: destination)
+		try self.lutFilter.processing(commandBuffer: &commandBuffer, imageTexture: imageTexture, destinationTexture: &destination)
 	}
 }
 
@@ -79,16 +64,6 @@ extension LutLayer {
     }
     public static func decode(to: Data) throws -> RenderLayerProtocol {
         return try JSONDecoder().decode(LutLayer.self, from: to)
-    }
-}
-
-extension LutLayer {
-    private func generateLutCube() {
-        let lutImage: UIImage = UIImage.init(contentsOfFile: lutImageURL.relativePath)!
-        self.cubeData = LUTFilterUtils.generateLUTFilterCubeData(lutImage: lutImage, dimension: self.dimension)
-        guard let cubeData: NSData = self.cubeData else { return }
-        self.filter?.setValue(self.dimension, forKey: "inputCubeDimension")
-        self.filter?.setValue(cubeData, forKey: "inputCubeData")
     }
 }
 
@@ -115,6 +90,6 @@ extension LutLayer: Decodable {
 		let id: RenderLayerId = try values.decode(RenderLayerId.self, forKey: .id)
 		let dimension: Int = try values.decode(Int.self, forKey: .dimension)
 		let lutImagePath: CodableURL = try values.decode(CodableURL.self, forKey: .lutImageURL)
-		self.init(id: id, lutImageURL: lutImagePath.url, dimension: dimension)
+		try self.init(id: id, lutImageURL: lutImagePath.url, dimension: dimension)
     }
 }

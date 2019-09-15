@@ -18,8 +18,8 @@ class CodableExampleVC: UIViewController {
     private let path: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/data.json"
 	private let videoCompositionProperty: VideoCompositionProperty = VideoCompositionProperty.init(
 		frameRate: 1,
-		presetiFrame: Settings.PresetiFrame.p1920x1080,
-		renderSize: Settings.PresetiFrame.p1920x1080.size(),
+		presetiFrame: Settings.PresetiFrame.p1280x720,
+		renderSize: Settings.PresetiFrame.p1280x720.size(),
 		renderScale: 1.0,
 		renderType: Settings.RenderType.metal
 	)
@@ -114,7 +114,7 @@ class CodableExampleVC: UIViewController {
 			var compositionAsset: CompositionVideoAssetProtocol = try self.compositionData.get(assetId: self.compositionAssetId)
 			
 			compositionAsset.layers = [
-				LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
+				try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 			]
 			
 			try self.compositionData.updatet(asset: compositionAsset)
@@ -187,7 +187,7 @@ class CodableExampleVC: UIViewController {
 			
 			compositionAsset.layers = [
 				SequenceImageLayer.init(imagePaths: iOS_DummyAVAssets.AssetManager.SequenceImage.sample001.urls, blendMode: Blendmode.screen, updateFrameRate: 30),
-				LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
+				try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 			]
 			
 			try self.compositionData.updatet(asset: compositionAsset)

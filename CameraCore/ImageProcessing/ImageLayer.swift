@@ -63,7 +63,7 @@ final public class ImageLayer: RenderLayerProtocol {
 	}
 
 	
-    public func setup(assetData: CompositionVideoAsset) { }
+    //public func setup(assetData: CompositionVideoAsset) { }
     
     /// キャッシュを消去
 	public func dispose() {

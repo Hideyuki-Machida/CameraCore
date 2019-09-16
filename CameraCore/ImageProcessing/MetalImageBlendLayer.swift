@@ -35,7 +35,7 @@ final public class MetalImageBlendLayer: RenderLayerProtocol {
 
 	}
 	
-	public func setup(assetData: CompositionVideoAsset) { }
+	//public func setup(assetData: CompositionVideoAsset) { }
 	
 	public func dispose() {
 		

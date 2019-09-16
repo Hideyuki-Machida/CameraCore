@@ -296,12 +296,12 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 
 			do {
 				try self.videoCaptureView.recordingStart(
-					Renderer.VideoCapture.CaptureWriter.Paramator.init(
+					CCRenderer.VideoCapture.CaptureWriter.Paramator.init(
 						outputFilePath: URL.init(fileURLWithPath: filePath),
-						presetiFrame: Settings.PresetiFrame.p1920x1080,
+						presetiFrame: Settings.PresetiFrame.p1280x720,
 						frameRate: 30,
 						devicePosition: AVCaptureDevice.Position.back,
-						croppingRect: CGRect.init(origin: CGPoint.init(), size: Settings.PresetiFrame.p1920x1080.size()),
+						croppingRect: CGRect.init(origin: CGPoint.init(), size: Settings.PresetiFrame.p1280x720.size()),
 						fileType: AVFileType.mp4,
 						videoCodecType: Settings.VideoCodec.hevc
 						//videoCodecType: Settings.VideoCodec.h264

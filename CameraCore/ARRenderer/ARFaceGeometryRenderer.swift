@@ -11,7 +11,7 @@ import ARKit
 import MetalCanvas
 
 @available(iOS 11.0, *)
-extension Renderer.ARRenderer {
+extension CCRenderer.ARRenderer {
 	class ARFaceGeometryRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.Renderer.ARRendererARFaceGeometryRenderer")
 		fileprivate(set) var texture: MCTexture?

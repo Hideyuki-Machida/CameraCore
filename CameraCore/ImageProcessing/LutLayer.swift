@@ -40,10 +40,11 @@ final public class LutLayer: RenderLayerProtocol {
 		self.lutFilter.intensity = self.intensity
 	}
 
+	/*
     public func setup(assetData: CompositionVideoAsset) {
         //self.preferredTransform = trackData.preferredTransform
     }
-    
+    */
     /// キャッシュを消去
     public func dispose() {
 

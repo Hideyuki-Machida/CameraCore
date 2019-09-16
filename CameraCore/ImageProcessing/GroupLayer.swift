@@ -27,7 +27,7 @@ final public class GroupLayer: RenderLayerProtocol {
 		self.blendMode = blendMode
 	}
 
-	public func setup(assetData: CompositionVideoAsset) { }
+	//public func setup(assetData: CompositionVideoAsset) { }
 	
 	public func dispose() {
 

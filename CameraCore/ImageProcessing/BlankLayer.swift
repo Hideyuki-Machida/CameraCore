@@ -20,7 +20,7 @@ final public class BlankLayer: RenderLayerProtocol {
 		self.id = id
 	}
 
-    public func setup(assetData: CompositionVideoAsset) { }
+    //public func setup(assetData: CompositionVideoAsset) { }
 	
     /// キャッシュを消去
     public func dispose() {

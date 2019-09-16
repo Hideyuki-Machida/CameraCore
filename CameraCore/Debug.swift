@@ -8,14 +8,14 @@
 
 import Foundation
 
-class Debug {
-    static let ESCAPE = "\u{001b}["
+public class Debug {
+    public static let ESCAPE = "\u{001b}["
     
-    static let RESET_FG = ESCAPE + "fg;" // Clear any foreground color
-    static let RESET_BG = ESCAPE + "bg;" // Clear any background color
-    static let RESET = ESCAPE + ";"   // Clear any foreground or background color
+    public static let RESET_FG = ESCAPE + "fg;" // Clear any foreground color
+    public static let RESET_BG = ESCAPE + "bg;" // Clear any background color
+    public static let RESET = ESCAPE + ";"   // Clear any foreground or background color
     
-    static func NetworkRequestLog<T>(_ object: T) {
+    public static func NetworkRequestLog<T>(_ object: T) {
         func log<T>(_ object: T) {
             print("\(ESCAPE)fg0,255,0;\(object)\(RESET)")
         }
@@ -24,7 +24,7 @@ class Debug {
             log(object)
         #endif
     }
-    static func SuccessLog<T>(_ object: T) {
+    public static func SuccessLog<T>(_ object: T) {
         func log<T>(_ object: T) {
             print("\(ESCAPE)fg0,255,255;\(object)\(RESET)")
         }
@@ -33,7 +33,7 @@ class Debug {
             log(object)
         #endif
     }
-    static func ErrorLog<T>(_ object: T) {
+    public static func ErrorLog<T>(_ object: T) {
         func log<T>(_ object: T) {
             print("\(ESCAPE)fg255,0,0;\(object)\(RESET)")
         }
@@ -42,7 +42,7 @@ class Debug {
             log(object)
         #endif
     }
-    static func ActionLog<T>(_ object: T) {
+    public static func ActionLog<T>(_ object: T) {
         func log<T>(_ object: T) {
             print("\(ESCAPE)fg255,165,0;\(object)\(RESET)")
         }
@@ -51,7 +51,7 @@ class Debug {
             log(object)
         #endif
     }
-    static func DeinitLog<T>(_ object: T) {
+    public static func DeinitLog<T>(_ object: T) {
         func log<T>(_ object: T) {
             print("\(ESCAPE)fg0,255,255;deinit: \(type(of: object))\(RESET)")
         }

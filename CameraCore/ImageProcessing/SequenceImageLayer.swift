@@ -41,7 +41,7 @@ final public class SequenceImageLayer: RenderLayerProtocol {
 		self.resize = resize
 	}
 	
-    public func setup(assetData: CompositionVideoAsset) {}
+    //public func setup(assetData: CompositionVideoAsset) {}
     
 	/// キャッシュを消去
 	public func dispose() {

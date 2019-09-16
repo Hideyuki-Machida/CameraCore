@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="QIQ-6g-3gu">
+            <objects>
+                <viewController id="Y4C-oh-Qop" customClass="ViewController" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5zh-bd-sPS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uEF-Lu-UHi">
+                                <rect key="frame" x="20" y="108" width="335" height="650"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVS-AO-cUS">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="650"/>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Video撮影（MetalVideoCaptureView）">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="MlT-fR-0eq" kind="show" id="iit-eg-iK7"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="uEF-Lu-UHi" secondAttribute="trailing" constant="20" id="Djl-SA-egM"/>
+                            <constraint firstItem="uEF-Lu-UHi" firstAttribute="top" secondItem="pId-j8-BKM" secondAttribute="top" constant="20" id="OmT-P3-l7Q"/>
+                            <constraint firstItem="uEF-Lu-UHi" firstAttribute="leading" secondItem="pId-j8-BKM" secondAttribute="leading" constant="20" id="f7J-j8-u3b"/>
+                            <constraint firstItem="uEF-Lu-UHi" firstAttribute="bottom" secondItem="pId-j8-BKM" secondAttribute="bottom" constant="-20" id="gtq-Dh-71I"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="pId-j8-BKM"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="JlX-Wy-Scc"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YaE-6U-pdL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-629.60000000000002" y="133.74384236453201"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="cY6-ma-swO">
+            <objects>
+                <navigationController id="6jT-SE-80k" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YKS-RV-aIX">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Y4C-oh-Qop" kind="relationship" relationship="rootViewController" id="clx-m7-ost"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cZV-j0-MKI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1316" y="134"/>
+        </scene>
+        <!--Video撮影（MetalVideoCaptureView）-->
+        <scene sceneID="xuJ-3b-NMG">
+            <objects>
+                <viewController id="MlT-fR-0eq" customClass="MetalVideoCaptureViewExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Cig-nP-HsL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="kwp-Sn-9aa" customClass="MetalVideoCaptureView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="kwp-Sn-9aa" secondAttribute="height" multiplier="9:16" id="3qD-mS-Umi"/>
+                                    <constraint firstAttribute="width" secondItem="kwp-Sn-9aa" secondAttribute="height" multiplier="16:9" id="yy1-kH-o5z"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="3qD-mS-Umi"/>
+                                        <exclude reference="yy1-kH-o5z"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="yy1-kH-o5z"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="3qD-mS-Umi"/>
+                                    </mask>
+                                </variation>
+                            </mtkView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tal-zV-BPs">
+                                <rect key="frame" x="10" y="698" width="245" height="60"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="elT-dm-yWV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="撮影開始">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="recordingTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="l4e-5f-nrc"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="7nP-uY-LfV">
+                                <rect key="frame" x="265" y="98" width="100" height="660"/>
+                                <subviews>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-6v-576">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="101.66666666666667"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="FPS設定">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setFPSBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="aKD-qC-R2g"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RMG-9r-rLy">
+                                        <rect key="frame" x="0.0" y="111.66666666666666" width="100" height="101.66666666666666"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="解像度設定">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setPresetiFrameBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="L39-h7-anK"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gd0-tn-yRO">
+                                        <rect key="frame" x="0.0" y="223.33333333333329" width="100" height="101.66666666666666"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Touch設定">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setTouchBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="c1k-Te-GhR"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6Q-Tk-2Ca">
+                                        <rect key="frame" x="0.0" y="335" width="100" height="101.66666666666669"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Position設定">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setPositionBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="3b1-TD-hPf"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-Za-qHI">
+                                        <rect key="frame" x="0.0" y="446.66666666666663" width="100" height="101.66666666666663"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="DepthData設定">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setDepthDataBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="8BL-Pu-HbT"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUe-4O-Grt">
+                                        <rect key="frame" x="0.0" y="558.33333333333337" width="100" height="101.66666666666663"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="Filter設定">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setFilterBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="RWO-0b-1Ke"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="7c4-bQ-t0D"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UeD-ZU-yiq">
+                                <rect key="frame" x="10" y="768" width="355" height="0.0"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="XEk-W6-LMC"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="7nP-uY-LfV" firstAttribute="leading" secondItem="Tal-zV-BPs" secondAttribute="trailing" constant="10" id="2jn-dg-C1E"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="top" secondItem="lQK-Fj-8Zh" secondAttribute="top" id="3Ju-Kw-xQ7"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="trailing" secondItem="lQK-Fj-8Zh" secondAttribute="trailing" id="3xI-db-JqX"/>
+                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="bottom" secondItem="kwp-Sn-9aa" secondAttribute="bottom" id="739-B1-f5P"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="centerX" secondItem="lQK-Fj-8Zh" secondAttribute="centerX" id="DuI-w6-aWW"/>
+                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="bottom" secondItem="UeD-ZU-yiq" secondAttribute="bottom" constant="10" id="I2p-N5-luh"/>
+                            <constraint firstItem="UeD-ZU-yiq" firstAttribute="leading" secondItem="lQK-Fj-8Zh" secondAttribute="leading" constant="10" id="Ry5-Ex-akT"/>
+                            <constraint firstItem="UeD-ZU-yiq" firstAttribute="top" secondItem="Tal-zV-BPs" secondAttribute="bottom" constant="10" id="SOx-1a-IET"/>
+                            <constraint firstItem="7nP-uY-LfV" firstAttribute="top" secondItem="lQK-Fj-8Zh" secondAttribute="top" constant="10" id="Suf-lZ-zsC"/>
+                            <constraint firstItem="UeD-ZU-yiq" firstAttribute="top" secondItem="7nP-uY-LfV" secondAttribute="bottom" constant="10" id="YFz-c2-9Ni"/>
+                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="trailing" secondItem="7nP-uY-LfV" secondAttribute="trailing" constant="10" id="Zr2-QI-owd"/>
+                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="trailing" secondItem="UeD-ZU-yiq" secondAttribute="trailing" constant="10" id="ham-VM-7Ym"/>
+                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="bottom" secondItem="kwp-Sn-9aa" secondAttribute="bottom" id="jD5-En-FRq"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="leading" secondItem="lQK-Fj-8Zh" secondAttribute="leading" id="lJ8-cP-1tT"/>
+                            <constraint firstItem="Tal-zV-BPs" firstAttribute="leading" secondItem="lQK-Fj-8Zh" secondAttribute="leading" constant="10" id="n0P-3P-puS"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="lQK-Fj-8Zh"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="jD5-En-FRq"/>
+                                <exclude reference="3Ju-Kw-xQ7"/>
+                                <exclude reference="3xI-db-JqX"/>
+                                <exclude reference="DuI-w6-aWW"/>
+                                <exclude reference="lJ8-cP-1tT"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="jD5-En-FRq"/>
+                                <include reference="3Ju-Kw-xQ7"/>
+                                <include reference="DuI-w6-aWW"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="3xI-db-JqX"/>
+                                <include reference="lJ8-cP-1tT"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="Video撮影（MetalVideoCaptureView）" id="hes-Ms-JKG"/>
+                    <connections>
+                        <outlet property="recordingButton" destination="Tal-zV-BPs" id="s8l-Bl-YYz"/>
+                        <outlet property="videoCaptureView" destination="kwp-Sn-9aa" id="2G7-JY-71E"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BCt-gE-dbJ" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="238" y="134"/>
+        </scene>
+    </scenes>
+</document>

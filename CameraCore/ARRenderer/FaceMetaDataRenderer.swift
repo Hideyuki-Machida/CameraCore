@@ -11,7 +11,7 @@ import ARKit
 import MetalCanvas
 import Vision
 
-extension Renderer.ARRenderer {
+extension CCRenderer.ARRenderer {
 	public class FaceMetaDataRenderer {
 
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.FaceMetaDataRendererQueue")

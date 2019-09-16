@@ -42,7 +42,7 @@ final public class ColorOverlayLayer: RenderLayerProtocol {
 		self.offset = offset
 	}
 	
-	public func setup(assetData: CompositionVideoAsset) { }
+	//public func setup(assetData: CompositionVideoAsset) { }
 	
 	public func update(offset: Float) {
 		self.offset = offset
@@ -65,7 +65,7 @@ extension ColorOverlayLayer: CIImageRenderLayerProtocol {
 		if let img: CIImage = img {
 			return img
 		} else {
-			throw Renderer.ErrorType.rendering
+			throw CCRenderer.ErrorType.rendering
 		}
 	}
 	/*

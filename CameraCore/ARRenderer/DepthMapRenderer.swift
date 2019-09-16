@@ -12,7 +12,7 @@ import ARKit
 import MetalCanvas
 
 @available(iOS 11.0, *)
-extension Renderer.ARRenderer {
+extension CCRenderer.ARRenderer {
 
 	class DepthMapRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.depthDataMapUpdateQueue")

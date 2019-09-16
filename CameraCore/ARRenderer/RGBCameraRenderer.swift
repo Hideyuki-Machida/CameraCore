@@ -10,7 +10,7 @@ import Foundation
 import ARKit
 import MetalCanvas
 
-extension Renderer.ARRenderer {
+extension CCRenderer.ARRenderer {
 	class RGBCameraRenderer {
 		fileprivate(set) var texture: MCTexture?
 		

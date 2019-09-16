@@ -83,7 +83,7 @@ public protocol RenderLayerProtocol {
 	var id: RenderLayerId { get }
     var type: RenderLayerType { get }
     var customIndex: Int { get }
-    mutating func setup(assetData: CompositionVideoAsset)
+    //mutating func setup(assetData: CompositionVideoAsset)
 	
 	/*
 	mutating func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: inout MTLTexture, destinationTexture: inout MTLTexture, sourcePixelBuffer: inout CVPixelBuffer, destinationPixelBuffer: inout CVPixelBuffer, renderSize: CGSize) -> Void

@@ -34,7 +34,7 @@ final public class MaskLayer: RenderLayerProtocol {
 		self.mask = mask
 	}
 	
-	public func setup(assetData: CompositionVideoAsset) { }
+	//public func setup(assetData: CompositionVideoAsset) { }
 	
 	/// キャッシュを消去
 	public func dispose() {

@@ -32,10 +32,11 @@ final public class TransformLayer: RenderLayerProtocol {
 		self.backgroundColor = backgroundColor
 	}
 
+	/*
     public func setup(assetData: CompositionVideoAsset) {
         //self.preferredTransform = trackData.preferredTransform
     }
-    
+    */
     /// キャッシュを消去
     public func dispose() {
     }

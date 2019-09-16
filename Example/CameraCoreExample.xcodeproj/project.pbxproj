@@ -13,6 +13,10 @@
 		62926254232FE8CF00D47CF0 /* MetalCanvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62926250232FE8CF00D47CF0 /* MetalCanvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62926256232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */; };
 		62926257232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */; };
+		62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926264232FEB8400D47CF0 /* ProgressViewVC.swift */; };
+		62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */; };
+		6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */; };
 		62A27093232F95B4007CCA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62A27092232F95B4007CCA7C /* Main.storyboard */; };
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
@@ -40,6 +44,10 @@
 		6292624F232FE8CF00D47CF0 /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926250232FE8CF00D47CF0 /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
+		62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerImagePreviewVC.swift; sourceTree = "<group>"; };
+		62926264232FEB8400D47CF0 /* ProgressViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewVC.swift; sourceTree = "<group>"; };
+		62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVideoPreviewVC.swift; sourceTree = "<group>"; };
+		62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVC.swift; sourceTree = "<group>"; };
 		62A27092232F95B4007CCA7C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		62E5CA2422901A72004D258A /* CameraCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2722901A72004D258A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +103,10 @@
 			children = (
 				62E5CA2722901A72004D258A /* AppDelegate.swift */,
 				62E5CB2522904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift */,
+				62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */,
+				62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */,
+				62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */,
+				62926264232FEB8400D47CF0 /* ProgressViewVC.swift */,
 				62A27092232F95B4007CCA7C /* Main.storyboard */,
 				62E5CA2E22901A74004D258A /* Assets.xcassets */,
 				62E5CA3022901A74004D258A /* LaunchScreen.storyboard */,
@@ -175,8 +187,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
+				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
 				62E5CB3222904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift in Sources */,
+				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
+				62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

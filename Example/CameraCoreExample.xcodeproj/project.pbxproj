@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; };
+		62926252232FE8CF00D47CF0 /* CameraCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		62926253232FE8CF00D47CF0 /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62926250232FE8CF00D47CF0 /* MetalCanvas.framework */; };
+		62926254232FE8CF00D47CF0 /* MetalCanvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62926250232FE8CF00D47CF0 /* MetalCanvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		62926256232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */; };
+		62926257232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62A27093232F95B4007CCA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62A27092232F95B4007CCA7C /* Main.storyboard */; };
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
 		62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA3022901A74004D258A /* LaunchScreen.storyboard */; };
 		62E5CB3222904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift */; };
-		62E5CB3F22904DB7004D258A /* iOS_DummyAVAssets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */; };
-		62E5CB4022904DB7004D258A /* iOS_DummyAVAssets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		62E5CB4222904DEB004D258A /* CameraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4122904DEB004D258A /* CameraCore.framework */; };
-		62E5CB4322904DEB004D258A /* CameraCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4122904DEB004D258A /* CameraCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		62E5CB4522904DEB004D258A /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4422904DEB004D258A /* MetalCanvas.framework */; };
-		62E5CB4622904DEB004D258A /* MetalCanvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4422904DEB004D258A /* MetalCanvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,9 +27,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				62E5CB4622904DEB004D258A /* MetalCanvas.framework in Embed Frameworks */,
-				62E5CB4322904DEB004D258A /* CameraCore.framework in Embed Frameworks */,
-				62E5CB4022904DB7004D258A /* iOS_DummyAVAssets.framework in Embed Frameworks */,
+				62926254232FE8CF00D47CF0 /* MetalCanvas.framework in Embed Frameworks */,
+				62926257232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Embed Frameworks */,
+				62926252232FE8CF00D47CF0 /* CameraCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,6 +37,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6292624F232FE8CF00D47CF0 /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62926250232FE8CF00D47CF0 /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
 		62A27092232F95B4007CCA7C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		62E5CA2422901A72004D258A /* CameraCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2722901A72004D258A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,9 +47,6 @@
 		62E5CA3122901A74004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62E5CA3322901A74004D258A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		62E5CB2522904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalVideoCaptureViewExampleVC.swift; sourceTree = "<group>"; };
-		62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
-		62E5CB4122904DEB004D258A /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		62E5CB4422904DEB004D258A /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,9 +54,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62E5CB4522904DEB004D258A /* MetalCanvas.framework in Frameworks */,
-				62E5CB4222904DEB004D258A /* CameraCore.framework in Frameworks */,
-				62E5CB3F22904DB7004D258A /* iOS_DummyAVAssets.framework in Frameworks */,
+				62926253232FE8CF00D47CF0 /* MetalCanvas.framework in Frameworks */,
+				62926256232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Frameworks */,
+				62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +66,9 @@
 		62E34191232E9D2E005E96A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */,
+				6292624F232FE8CF00D47CF0 /* CameraCore.framework */,
+				62926250232FE8CF00D47CF0 /* MetalCanvas.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -73,9 +76,6 @@
 		62E5CA1B22901A72004D258A = {
 			isa = PBXGroup;
 			children = (
-				62E5CB4422904DEB004D258A /* MetalCanvas.framework */,
-				62E5CB4122904DEB004D258A /* CameraCore.framework */,
-				62E5CB3E22904DB7004D258A /* iOS_DummyAVAssets.framework */,
 				62E5CA2622901A72004D258A /* CameraCoreExample */,
 				62E5CA2522901A72004D258A /* Products */,
 				62E34191232E9D2E005E96A7 /* Frameworks */,

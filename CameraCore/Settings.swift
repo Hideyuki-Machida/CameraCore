@@ -60,15 +60,15 @@ public class Settings {
         case proRes4444
         case jpg
         */
-        public var val: String {
+        public var val: AVVideoCodecType {
             get {
                 switch self {
-                case .h264: return AVVideoCodecH264
+				case .h264: return AVVideoCodecType.h264
                 case .hevc:
                     if #available(iOS 11.0, *), CameraCore.Tools.hasHEVCHardwareEncoder == true {
-                        return AVVideoCodecHEVC
+						return AVVideoCodecType.hevc
                     } else {
-                        return AVVideoCodecH264
+						return AVVideoCodecType.h264
                     }
                 }
             }

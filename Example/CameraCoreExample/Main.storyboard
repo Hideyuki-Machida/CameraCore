@@ -389,7 +389,6 @@
                     </view>
                     <connections>
                         <outlet property="screen" destination="Zk9-mm-wtW" id="CUu-Ec-qiL"/>
-                        <segue destination="8w7-NH-1we" kind="presentation" identifier="openProgressView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Q2M-YV-IBQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CSv-3c-Ma4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -428,7 +427,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z90-t7-nMU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1641" y="-553"/>
+            <point key="canvasLocation" x="958" y="134"/>
         </scene>
         <!--Camera Roll Manager Image PreviewVC-->
         <scene sceneID="fCT-7b-Lll">
@@ -489,7 +488,4 @@
             <point key="canvasLocation" x="959" y="1503"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="Q2M-YV-IBQ"/>
-    </inferredMetricsTieBreakers>
 </document>

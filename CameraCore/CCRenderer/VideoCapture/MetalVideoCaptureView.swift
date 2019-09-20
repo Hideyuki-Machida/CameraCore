@@ -68,8 +68,7 @@ public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol 
 	
 	public func setup(frameRate: Int32, presetiFrame: Settings.PresetiFrame, position: AVCaptureDevice.Position) throws {
 		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.setup - frameRate: \(frameRate), presetiFrame: \(presetiFrame)")
-		//self.setup()
-		
+        
 		Configuration.captureSize = presetiFrame
 		
 		do {
@@ -185,7 +184,7 @@ extension MetalVideoCaptureView {
 extension MetalVideoCaptureView {
 	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position, orientation: AVCaptureVideoOrientation) throws {
 		//guard let `self` = self else { return }
-		guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
+		//guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
 		
 		//////////////////////////////////////////////////////////
 		// renderSize
@@ -232,7 +231,7 @@ extension MetalVideoCaptureView {
 			///////////////////////////////////////////////////////////////////////////////////////////////////
 			// renderLayerCompositionInfo
 			var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo.init(
-				compositionTime: CMTime(value: self.counter, timescale: 24),
+				compositionTime: CMTime(value: self.counter, timescale: self.frameRate),
 				timeRange: CMTimeRange.zero,
 				percentComplete: 0.0,
 				renderSize: renderSize,
@@ -268,14 +267,17 @@ extension MetalVideoCaptureView {
 			// renderSize
 			guard let rgbTexture: MTLTexture = MCCore.texture(pixelBuffer: &originalPixelBuffer, colorPixelFormat: self.colorPixelFormat) else { return }
 			//let rgbTexture: MCTexture = try MCTexture.init(pixelBuffer: &originalPixelBuffer, planeIndex: 0)
-			DispatchQueue.main.async {
-				self.event?.onPreviewUpdate?(sampleBuffer)
-			}
 			//////////////////////////////////////////////////////////
 
 			//guard var commandBuffer002: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
 			//var texture: MTLTexture = rgbTexture.texture
-			self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
+            commandBuffer.addCompletedHandler { [weak self] cb in
+                DispatchQueue.main.async { [weak self] in
+                    self?.event?.onPreviewUpdate?(sampleBuffer)
+                }
+            }
+
+            self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
 		} catch {
 			return
 		}

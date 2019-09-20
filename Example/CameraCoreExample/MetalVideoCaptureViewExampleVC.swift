@@ -38,7 +38,11 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 			} else {
 			}
 		}
-		self.videoCaptureView.event = event
+        event.onPreviewUpdate = { [weak self] (sampleBuffer: CMSampleBuffer) in
+            print(sampleBuffer)
+        }
+
+        self.videoCaptureView.event = event
 		do {
 			self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 			

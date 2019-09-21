@@ -27,7 +27,7 @@ public protocol VideoCaptureViewProtocol {
     
     /////////////////////////////////////////////////
     // Set
-    func setup(frameRate: Int32, presetiFrame: Settings.PresetiFrame, position: AVCaptureDevice.Position) throws
+    func setup(_ paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws
     
     /////////////////////////////////////////////////
     // Capture Control

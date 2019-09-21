@@ -21,7 +21,8 @@ public enum VideoCaptureStatus {
 	case dispose
 }
 
-public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
+public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
+	
 	private let queue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoCaptureView.queue")
 	
 	public var status: VideoCaptureStatus = .setup {
@@ -66,14 +67,15 @@ public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol 
 		NotificationCenter.default.removeObserver(self)
 	}
 	
-	public func setup(frameRate: Int32, presetiFrame: Settings.PresetiFrame, position: AVCaptureDevice.Position) throws {
-		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.setup - frameRate: \(frameRate), presetiFrame: \(presetiFrame)")
-        
+	public func setup(_ paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
+		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.setup - frameRate: \(paramator.frameRate), presetiFrame: \(paramator.presetiFrame)")
+
+		self.status = .setup
 		Configuration.captureSize = presetiFrame
 		
 		do {
 			//
-			self.capture = try CCRenderer.VideoCapture.VideoCapture(frameRate: frameRate, presetiFrame: presetiFrame, position: position)
+			self.capture = try CCRenderer.VideoCapture.VideoCapture(paramator: paramator)
 			//
 		} catch {
 			self.capture = nil
@@ -124,14 +126,14 @@ public class MetalVideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol 
 	}
 }
 
-extension MetalVideoCaptureView {
+extension VideoCaptureView {
 	@objc
 	func onOrientationDidChange(notification: NSNotification) {
 		self.currentOrientation = AVCaptureVideoOrientation.init(ui: UIApplication.shared.statusBarOrientation)
 	}
 }
 
-extension MetalVideoCaptureView {
+extension VideoCaptureView {
 	public func recordingStart(_ paramator: CCRenderer.VideoCapture.CaptureWriter.Paramator) throws {
 		try self.capture?.addAudioDataOutput()
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -158,7 +160,7 @@ extension MetalVideoCaptureView {
 	}
 }
 
-extension MetalVideoCaptureView {
+extension VideoCaptureView {
 	fileprivate func crip(pixelBuffer: CVPixelBuffer, rect: CGRect) -> CIImage {
 		let tempImage: CIImage = CIImage(cvPixelBuffer: pixelBuffer)
 		let cropFilter = CIFilter(name: "CICrop")
@@ -168,10 +170,10 @@ extension MetalVideoCaptureView {
 	}
 }
 
-extension MetalVideoCaptureView {
+extension VideoCaptureView {
 	// MARK: -
-	public var frameRate: Int32 { return self.capture?.frameRate ?? 30 }
-	public var presetiFrame: Settings.PresetiFrame { return self.capture?.presetiFrame ?? Settings.PresetiFrame.p1280x720 }
+	public var frameRate: Int32 { return self.capture?.paramator.frameRate ?? 30 }
+	public var presetiFrame: Settings.PresetiFrame { return self.capture?.paramator.presetiFrame ?? Settings.PresetiFrame.p1280x720 }
 	//public var position: Settings.PresetiFrame { return self._videoCapture?.presetiFrame ?? Settings.PresetiFrame.p1920x1080 }
 	
 	/// フォーカスポイントを設定
@@ -181,7 +183,7 @@ extension MetalVideoCaptureView {
 	}
 }
 
-extension MetalVideoCaptureView {
+extension VideoCaptureView {
 	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position, orientation: AVCaptureVideoOrientation) throws {
 		//guard let `self` = self else { return }
 		//guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
@@ -272,9 +274,7 @@ extension MetalVideoCaptureView {
 			//guard var commandBuffer002: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
 			//var texture: MTLTexture = rgbTexture.texture
             commandBuffer.addCompletedHandler { [weak self] cb in
-                DispatchQueue.main.async { [weak self] in
-                    self?.event?.onPreviewUpdate?(sampleBuffer)
-                }
+				self?.event?.onPreviewUpdate?(sampleBuffer)
             }
 
             self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)

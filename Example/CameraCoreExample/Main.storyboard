@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -76,12 +76,12 @@
         <!--Video撮影（MetalVideoCaptureView）-->
         <scene sceneID="xuJ-3b-NMG">
             <objects>
-                <viewController id="MlT-fR-0eq" customClass="MetalVideoCaptureViewExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="MlT-fR-0eq" customClass="VideoCaptureViewExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Cig-nP-HsL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="kwp-Sn-9aa" customClass="MetalVideoCaptureView" customModule="CameraCore">
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="kwp-Sn-9aa" customClass="VideoCaptureView" customModule="CameraCore">
                                 <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="kwp-Sn-9aa" secondAttribute="height" multiplier="9:16" id="3qD-mS-Umi"/>

@@ -21,8 +21,13 @@ extension CCRenderer.VideoCapture {
 		
 		var captureSession: AVCaptureSession?
 		var videoDevice: AVCaptureDevice?
-		var frameRate: Int32 = 30
-		var presetiFrame: Settings.PresetiFrame = Settings.PresetiFrame.p1280x720
+
+		var paramator: CCRenderer.VideoCapture.VideoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
+			presetiFrame: Settings.PresetiFrame.p1280x720,
+			frameRate: 30,
+			devicePosition: AVCaptureDevice.Position.front,
+			isDepth: false
+		)
 
 		public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)? {
 			get {
@@ -49,21 +54,20 @@ extension CCRenderer.VideoCapture {
 			case audioDataOutput
 		}
 		
-		public init(frameRate: Int32, presetiFrame: Settings.PresetiFrame, position: AVCaptureDevice.Position, isDepth: Bool = false) throws {
+		public init(paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
 			super.init()
 			
-			self.frameRate = frameRate
-			self.presetiFrame = presetiFrame
+			self.paramator = paramator
 			
 			// AVCaptureSessionを生成
 			self.captureSession?.stopRunning()
 			self.captureSession = AVCaptureSession()
 			self.captureSession?.beginConfiguration()
-			self.captureSession?.sessionPreset = AVCaptureSession.Preset(rawValue: presetiFrame.aVCaptureSessionPreset())
+			self.captureSession?.sessionPreset = AVCaptureSession.Preset(rawValue: paramator.presetiFrame.aVCaptureSessionPreset())
 			
 			do {
 				// AVCaptureDeviceを生成
-				let videoDevice: AVCaptureDevice = try self._getAVCaptureDevice(position: position)
+				let videoDevice: AVCaptureDevice = try self._getAVCaptureDevice(position: paramator.devicePosition)
 				self.videoDevice = videoDevice
 				// AVCaptureDeviceInputを生成
 				let videoCaptureDeviceInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
@@ -83,22 +87,22 @@ extension CCRenderer.VideoCapture {
 				}
 				
 
-				let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, frameRate: frameRate, presetiFrame: self.presetiFrame)
+				let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, paramator: paramator)
 				guard let format: AVCaptureDevice.Format = captureDeviceFormat.deviceFormat else { throw ErrorType.setupError }
 				
 				videoDevice.activeFormat = format
 				if let filterColorSpace: AVCaptureColorSpace = captureDeviceFormat.filterColorSpace {
 					videoDevice.activeColorSpace = filterColorSpace
 				}
-				videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
-				videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
+				videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: paramator.frameRate)
+				videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: paramator.frameRate)
 				
 				videoDevice.unlockForConfiguration()
 				
 				self.captureOutput.captureSession = self.captureSession
-				try self.captureOutput.set(position: position)
+				try self.captureOutput.set(paramator: paramator)
 				
-				self._updateVideoConnection(videoDataOutput: self.captureOutput.videoDataOutput!, position: position)
+				self._updateVideoConnection(videoDataOutput: self.captureOutput.videoDataOutput!, position: paramator.devicePosition)
 				
 				self.captureSession?.commitConfiguration()
 				
@@ -279,7 +283,8 @@ extension CCRenderer.VideoCapture.VideoCapture {
             let videoDevice: AVCaptureDevice = try self._getAVCaptureDevice(position: position)
             self.videoDevice = videoDevice
 
-			let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, frameRate: frameRate, presetiFrame: self.presetiFrame)
+			self.paramator.devicePosition = position
+			let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, paramator: self.paramator)
 			guard let format: AVCaptureDevice.Format = captureDeviceFormat.deviceFormat else { return }
 
 			// AVCaptureDeviceInputを生成
@@ -310,8 +315,8 @@ extension CCRenderer.VideoCapture.VideoCapture {
 			if let filterColorSpace: AVCaptureColorSpace = captureDeviceFormat.filterColorSpace {
 				videoDevice.activeColorSpace = filterColorSpace
 			}
-			videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
-			videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
+			videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: self.paramator.frameRate)
+			videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: self.paramator.frameRate)
             
             videoDevice.unlockForConfiguration()
         } catch {
@@ -337,7 +342,7 @@ extension CCRenderer.VideoCapture.VideoCapture {
         self.sessionQueue.async { [weak self] in
             guard let `self` = self else { return }
             do {
-                let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, frameRate: frameRate, presetiFrame: self.presetiFrame)
+				let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, paramator: self.paramator)
                 guard let format: AVCaptureDevice.Format = captureDeviceFormat.deviceFormat else { return }
                 // deviceをロックして設定
                 try videoDevice.lockForConfiguration()

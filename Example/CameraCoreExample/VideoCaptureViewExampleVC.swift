@@ -12,12 +12,20 @@ import AVFoundation
 import CameraCore
 import iOS_DummyAVAssets
 
-class MetalVideoCaptureViewExampleVC: UIViewController {
+class VideoCaptureViewExampleVC: UIViewController {
 	
-	@IBOutlet weak var videoCaptureView: CameraCore.MetalVideoCaptureView!
+	@IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
 	@IBOutlet weak var recordingButton: UIButton!
 	
 	var lutLayer: LutLayer!
+	
+	var videoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
+		presetiFrame: Settings.PresetiFrame.p1280x720,
+		frameRate: 30,
+		devicePosition: AVCaptureDevice.Position.back,
+		isDepth: false
+	)
+
 	
 	deinit {
 		self.videoCaptureView.pause()
@@ -39,20 +47,14 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 			}
 		}
         event.onPreviewUpdate = { [weak self] (sampleBuffer: CMSampleBuffer) in
-            print(sampleBuffer)
+            //print(sampleBuffer)
         }
 
         self.videoCaptureView.event = event
 		do {
 			self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
 			
-			try self.videoCaptureView.setup(
-				frameRate: 30,
-				presetiFrame: Settings.PresetiFrame.p1280x720,
-				//presetiFrame: Settings.PresetiFrame.p1920x1080,
-				//position: AVCaptureDevice.Position.front
-				position: AVCaptureDevice.Position.back
-			)
+			try self.videoCaptureView.setup(self.videoCaputureParamator)
 			
 			self.videoCaptureView.renderLayers = [
 				//DepthMapLayer(),
@@ -87,27 +89,32 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		
 		let action001: UIAlertAction = UIAlertAction(title: "24 FPS", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.capture!.switchFPS(frameRate: 24)
+			self.videoCaputureParamator.frameRate = 24
+			self.videoCaptureView.capture!.switchFPS(frameRate: self.videoCaputureParamator.frameRate)
 		})
 		
 		let action002: UIAlertAction = UIAlertAction(title: "30 FPS", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.capture!.switchFPS(frameRate: 30)
+			self.videoCaputureParamator.frameRate = 30
+			self.videoCaptureView.capture!.switchFPS(frameRate: self.videoCaputureParamator.frameRate)
 		})
 		
 		let action003: UIAlertAction = UIAlertAction(title: "60 FPS", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.capture!.switchFPS(frameRate: 60)
+			self.videoCaputureParamator.frameRate = 60
+			self.videoCaptureView.capture!.switchFPS(frameRate: self.videoCaputureParamator.frameRate)
 		})
 		
 		let action004: UIAlertAction = UIAlertAction(title: "90 FPS", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.capture!.switchFPS(frameRate: 90)
+			self.videoCaputureParamator.frameRate = 90
+			self.videoCaptureView.capture!.switchFPS(frameRate: self.videoCaputureParamator.frameRate)
 		})
 		
 		let action005: UIAlertAction = UIAlertAction(title: "120 FPS", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
-			self.videoCaptureView.capture!.switchFPS(frameRate: 120)
+			self.videoCaputureParamator.frameRate = 120
+			self.videoCaptureView.capture!.switchFPS(frameRate: self.videoCaputureParamator.frameRate)
 		})
 		
 		let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
@@ -132,7 +139,8 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		let action001: UIAlertAction = UIAlertAction(title: "p960x540", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 			do {
-				try self.videoCaptureView.capture!.setPresetiFrame(presetiFrame: .p960x540)
+				self.videoCaputureParamator.presetiFrame = .p960x540
+				try self.videoCaptureView.capture!.setPresetiFrame(presetiFrame: self.videoCaputureParamator.presetiFrame)
 			} catch {
 				print("@@@@")
 			}
@@ -141,7 +149,8 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		let action002: UIAlertAction = UIAlertAction(title: "p1280x720", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 			do {
-				try self.videoCaptureView.capture!.setPresetiFrame(presetiFrame: .p1280x720)
+				self.videoCaputureParamator.presetiFrame = .p1280x720
+				try self.videoCaptureView.capture!.setPresetiFrame(presetiFrame: self.videoCaputureParamator.presetiFrame)
 			} catch {
 				print("@@@@")
 			}
@@ -150,7 +159,8 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		let action003: UIAlertAction = UIAlertAction(title: "p1920x1080", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 			do {
-				try self.videoCaptureView.capture!.setPresetiFrame(presetiFrame: .p1920x1080)
+				self.videoCaputureParamator.presetiFrame = .p1920x1080
+				try self.videoCaptureView.capture!.setPresetiFrame(presetiFrame: self.videoCaputureParamator.presetiFrame)
 			} catch {
 				print("@@@@")
 			}
@@ -231,11 +241,24 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		let action001: UIAlertAction = UIAlertAction(title: "DepthMap", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 
+			self.videoCaputureParamator.isDepth = true
+			do {
+				try self.videoCaptureView.setup(self.videoCaputureParamator)
+				self.videoCaptureView.play()
+			} catch {
+			}
 		})
 
 		let action002: UIAlertAction = UIAlertAction(title: "DepthMap Normalize", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 			
+			self.videoCaputureParamator.isDepth = true
+			do {
+				try self.videoCaptureView.setup(self.videoCaputureParamator)
+				self.videoCaptureView.play()
+			} catch {
+			}
+
 			/*
 			self.videoCaptureView.renderLayers = [
 				DepthMapLayer(),
@@ -247,6 +270,13 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		let action003: UIAlertAction = UIAlertAction(title: "DepthMap Thresholding（顔をもとに２値化）", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 
+			self.videoCaputureParamator.isDepth = true
+			do {
+				try self.videoCaptureView.setup(self.videoCaputureParamator)
+				self.videoCaptureView.play()
+			} catch {
+			}
+
 			/*
 			self.videoCaptureView.renderLayers = [
 				iOSHumanSegmentationLayer(),
@@ -254,6 +284,19 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 			]
 */
 		})
+
+		
+		let action004: UIAlertAction = UIAlertAction(title: "OFF", style: UIAlertAction.Style.default, handler:{
+			(action: UIAlertAction!) -> Void in
+
+			self.videoCaputureParamator.isDepth = false
+			do {
+				try self.videoCaptureView.setup(self.videoCaputureParamator)
+				self.videoCaptureView.play()
+			} catch {
+			}
+		})
+
 		
 		let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
 			(action: UIAlertAction!) -> Void in
@@ -262,6 +305,7 @@ class MetalVideoCaptureViewExampleVC: UIViewController {
 		action.addAction(action001)
 		action.addAction(action002)
 		action.addAction(action003)
+		action.addAction(action004)
 		action.addAction(cancel)
 		
 		self.present(action, animated: true, completion: nil)

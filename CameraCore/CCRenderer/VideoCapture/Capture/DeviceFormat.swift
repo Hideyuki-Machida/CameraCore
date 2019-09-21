@@ -13,9 +13,9 @@ extension CCRenderer.VideoCapture {
 	final class DeviceFormat {
 		var onUpdate: ((_ deviceFormat: AVCaptureDevice.Format?)->Void)?
 		
-		func get(videoDevice: AVCaptureDevice, frameRate: Int32, presetiFrame: Settings.PresetiFrame) -> (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) {
-			let width: CGFloat = presetiFrame.size().height
-			let height: CGFloat = presetiFrame.size().width
+		func get(videoDevice: AVCaptureDevice, paramator: CCRenderer.VideoCapture.VideoCaputureParamator) -> (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) {
+			let width: CGFloat = paramator.presetiFrame.size().height
+			let height: CGFloat = paramator.presetiFrame.size().width
 
 			var deviceFormat: AVCaptureDevice.Format?
 			var minFrameRate: Int32 = 0
@@ -38,14 +38,14 @@ extension CCRenderer.VideoCapture {
 					
 					for videoSupportedFrameRateRange: Any in format.videoSupportedFrameRateRanges {
 						guard let range: AVFrameRateRange = videoSupportedFrameRateRange as? AVFrameRateRange else { continue }
-						if range.minFrameRate <= Float64(frameRate) &&
-							Float64(frameRate) <= range.maxFrameRate &&
+						if range.minFrameRate <= Float64(paramator.frameRate) &&
+							Float64(paramator.frameRate) <= range.maxFrameRate &&
 							depth32formats.count >= 1 &&
 							filterColorSpaces.count >= 1 &&
 							width == CGFloat(maxWidth) &&
 							height == CGFloat(maxHeight)
 						{
-							guard Float64(frameRate) <= range.maxFrameRate else { continue }
+							guard Float64(paramator.frameRate) <= range.maxFrameRate else { continue }
 							deviceFormat = format
 							minFrameRate = Int32(range.minFrameRate)
 							maxFrameRate = Int32(range.maxFrameRate)
@@ -57,14 +57,14 @@ extension CCRenderer.VideoCapture {
 							})!
 							
 							return (deviceFormat: deviceFormat, depthDataFormat: selectedDepthFormat, filterColorSpace: filterColorSpaces.first, minFrameRate: minFrameRate, maxFrameRate: maxFrameRate)
-						} else if range.minFrameRate <= Float64(frameRate) &&
-							Float64(frameRate) >= range.maxFrameRate &&
+						} else if range.minFrameRate <= Float64(paramator.frameRate) &&
+							Float64(paramator.frameRate) >= range.maxFrameRate &&
 							depth32formats.count >= 1 &&
 							//filterColorSpaces.count >= 1 &&
 							width == CGFloat(maxWidth) &&
 							height == CGFloat(maxHeight)
 						{
-							guard Float64(frameRate) <= range.maxFrameRate else { continue }
+							guard Float64(paramator.frameRate) <= range.maxFrameRate else { continue }
 							
 							//print(item.supportedDepthDataFormats)
 							
@@ -80,8 +80,8 @@ extension CCRenderer.VideoCapture {
 							
 							return (deviceFormat: deviceFormat, depthDataFormat: selectedDepthFormat, filterColorSpace: filterColorSpaces.first, minFrameRate: minFrameRate, maxFrameRate: maxFrameRate)
 						}
-						else if range.minFrameRate <= Float64(frameRate) && Float64(frameRate) <= range.maxFrameRate {
-							guard Float64(frameRate) <= range.maxFrameRate else { continue }
+						else if range.minFrameRate <= Float64(paramator.frameRate) && Float64(paramator.frameRate) <= range.maxFrameRate {
+							guard Float64(paramator.frameRate) <= range.maxFrameRate else { continue }
 							guard width >= CGFloat(maxWidth) else { continue }
 							guard height >= CGFloat(maxHeight) else { continue }
 							
@@ -95,25 +95,25 @@ extension CCRenderer.VideoCapture {
 					
 					for videoSupportedFrameRateRange: Any in format.videoSupportedFrameRateRanges {
 						guard let range: AVFrameRateRange = videoSupportedFrameRateRange as? AVFrameRateRange else { continue }
-						if range.minFrameRate <= Float64(frameRate) &&
-							Float64(frameRate) >= range.maxFrameRate &&
+						if range.minFrameRate <= Float64(paramator.frameRate) &&
+							Float64(paramator.frameRate) >= range.maxFrameRate &&
 							filterColorSpaces.count >= 1 &&
 							width == CGFloat(maxWidth) &&
 							height == CGFloat(maxHeight)
 						{
-							guard Float64(frameRate) <= range.maxFrameRate else { continue }
+							guard Float64(paramator.frameRate) <= range.maxFrameRate else { continue }
 							deviceFormat = format
 							minFrameRate = Int32(range.minFrameRate)
 							maxFrameRate = Int32(range.maxFrameRate)
 							
 							return (deviceFormat: deviceFormat, depthDataFormat: nil, filterColorSpace: filterColorSpaces.first, minFrameRate: minFrameRate, maxFrameRate: maxFrameRate)
-						} else if range.minFrameRate <= Float64(frameRate) &&
-							Float64(frameRate) >= range.maxFrameRate &&
+						} else if range.minFrameRate <= Float64(paramator.frameRate) &&
+							Float64(paramator.frameRate) >= range.maxFrameRate &&
 							//filterColorSpaces.count >= 1 &&
 							width == CGFloat(maxWidth) &&
 							height == CGFloat(maxHeight)
 						{
-							guard Float64(frameRate) <= range.maxFrameRate else { continue }
+							guard Float64(paramator.frameRate) <= range.maxFrameRate else { continue }
 							
 							//print(item.supportedDepthDataFormats)
 							
@@ -123,8 +123,8 @@ extension CCRenderer.VideoCapture {
 							
 							return (deviceFormat: deviceFormat, depthDataFormat: nil, filterColorSpace: filterColorSpaces.first, minFrameRate: minFrameRate, maxFrameRate: maxFrameRate)
 						}
-						else if range.minFrameRate <= Float64(frameRate) && Float64(frameRate) >= range.maxFrameRate {
-							guard Float64(frameRate) <= range.maxFrameRate else { continue }
+						else if range.minFrameRate <= Float64(paramator.frameRate) && Float64(paramator.frameRate) >= range.maxFrameRate {
+							guard Float64(paramator.frameRate) <= range.maxFrameRate else { continue }
 							guard width >= CGFloat(maxWidth) else { continue }
 							guard height >= CGFloat(maxHeight) else { continue }
 							

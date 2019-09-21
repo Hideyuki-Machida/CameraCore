@@ -13,16 +13,16 @@ extension CCRenderer.VideoCapture {
 	final class VideoCaptureOutput: NSObject {
 		fileprivate let videoOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.VideoQueue")
 		fileprivate let audioOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.AudioQueue")
-		//fileprivate let depthOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
-		//fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue", attributes: .concurrent)
+		fileprivate let depthOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
+		fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue", attributes: .concurrent)
 
 		var captureSession: AVCaptureSession?
 		
 		fileprivate(set) var videoDataOutput: AVCaptureVideoDataOutput?
 		fileprivate(set) var audioDataOutput: AVCaptureAudioDataOutput?
-		//fileprivate(set) var videoDepthDataOutput: AVCaptureDepthDataOutput?
-		//fileprivate(set) var metadataOutput: AVCaptureMetadataOutput?
-		//fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
+		fileprivate(set) var videoDepthDataOutput: AVCaptureDepthDataOutput?
+		fileprivate(set) var metadataOutput: AVCaptureMetadataOutput?
+		fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
 		fileprivate(set) var currentOrientation: AVCaptureVideoOrientation = AVCaptureVideoOrientation.portrait
 
 		var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)?
@@ -36,7 +36,7 @@ extension CCRenderer.VideoCapture {
 			NotificationCenter.default.removeObserver(self)
 		}
 		
-		internal func set(position: AVCaptureDevice.Position) throws {
+		internal func set(paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
 			guard self.captureSession != nil else { throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError }
 
 			let orienation: AVCaptureVideoOrientation = currentOrientation
@@ -50,7 +50,7 @@ extension CCRenderer.VideoCapture {
 				self.captureSession?.addOutput(videoDataOutput)
 				if let connection: AVCaptureConnection = videoDataOutput.connection(with: .video) {
 					connection.isEnabled = true
-					connection.isVideoMirrored = position == .front ? true : false
+					connection.isVideoMirrored = paramator.devicePosition == .front ? true : false
 					connection.videoOrientation = orienation
 
 					self.videoDataOutput = videoDataOutput
@@ -77,67 +77,73 @@ extension CCRenderer.VideoCapture {
 			}
 			//////////////////////////////////////////////////////////
 			/**/
-			/*
-			//////////////////////////////////////////////////////////
-			// AVCaptureDepthDataOutput
-			let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
-			if self.captureSession!.canAddOutput(videoDepthDataOutput) {
-				self.captureSession?.addOutput(videoDepthDataOutput)
-				videoDepthDataOutput.isFilteringEnabled = true
-				videoDepthDataOutput.setDelegate(self, callbackQueue: self.depthOutputQueue)
-				if let connection: AVCaptureConnection = videoDepthDataOutput.connection(with: .depthData) {
-					print("isVideoOrientationSupported")
-					print(connection.isVideoOrientationSupported)
-					connection.isEnabled = true
-					/*
-					if position == .front {
-					//connection.videoOrientation = orienation
+
+			if paramator.isDepth {
+				//////////////////////////////////////////////////////////
+				// AVCaptureDepthDataOutput
+				let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
+				if self.captureSession!.canAddOutput(videoDepthDataOutput) {
+					self.captureSession?.addOutput(videoDepthDataOutput)
+					videoDepthDataOutput.isFilteringEnabled = true
+					videoDepthDataOutput.setDelegate(self, callbackQueue: self.depthOutputQueue)
+					if let connection: AVCaptureConnection = videoDepthDataOutput.connection(with: .depthData) {
+						print("isVideoOrientationSupported")
+						print(connection.isVideoOrientationSupported)
+						connection.isEnabled = true
+						/*
+						if position == .front {
+						//connection.videoOrientation = orienation
+						}
+						*/
+						//connection.isVideoMirrored = position == .front ? true : false
+						//connection.videoOrientation = orienation
+						//connection.videoOrientation = .portraitUpsideDown
+						//connection.isVideoMirrored = true
+						self.videoDepthDataOutput = videoDepthDataOutput
+						dataOutputs.append(self.videoDepthDataOutput!)
+					} else {
+						print("No AVCaptureDepthDataOutputConnection")
 					}
-					*/
-					//connection.isVideoMirrored = position == .front ? true : false
-					//connection.videoOrientation = orienation
-					//connection.videoOrientation = .portraitUpsideDown
-					//connection.isVideoMirrored = true
-					self.videoDepthDataOutput = videoDepthDataOutput
-					dataOutputs.append(self.videoDepthDataOutput!)
-				} else {
-					print("No AVCaptureDepthDataOutputConnection")
 				}
-			}
-			//////////////////////////////////////////////////////////
-			
-			//////////////////////////////////////////////////////////
-			// AVCaptureMetadataOutput
-			let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
-			if self.captureSession!.canAddOutput(metadataOutput) {
-				self.captureSession?.addOutput(metadataOutput)
-				if metadataOutput.availableMetadataObjectTypes.contains(.face) {
+				//////////////////////////////////////////////////////////
+				
+				//////////////////////////////////////////////////////////
+				// AVCaptureMetadataOutput
+				let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
+				if self.captureSession!.canAddOutput(metadataOutput) {
+					self.captureSession?.addOutput(metadataOutput)
+					if metadataOutput.availableMetadataObjectTypes.contains(.face) {
+						metadataOutput.metadataObjectTypes = [.face]
+						self.metadataOutput = metadataOutput
+						dataOutputs.append(self.metadataOutput!)
+					} else {
+						print("No AVCaptureMetadataOutputConnection")
+					}
+					
+					/*
 					metadataOutput.metadataObjectTypes = [.face]
+					if let connection: AVCaptureConnection = metadataOutput.connection(with: .metadata) {
+					connection.isEnabled = true
+					connection.isVideoMirrored = position == .front ? true : false
+					connection.videoOrientation = orienation
+					
 					self.metadataOutput = metadataOutput
 					dataOutputs.append(self.metadataOutput!)
-				} else {
+					} else {
 					print("No AVCaptureMetadataOutputConnection")
+					}
+					*/
 				}
-				
-				/*
-				metadataOutput.metadataObjectTypes = [.face]
-				if let connection: AVCaptureConnection = metadataOutput.connection(with: .metadata) {
-				connection.isEnabled = true
-				connection.isVideoMirrored = position == .front ? true : false
-				connection.videoOrientation = orienation
-				
-				self.metadataOutput = metadataOutput
-				dataOutputs.append(self.metadataOutput!)
-				} else {
-				print("No AVCaptureMetadataOutputConnection")
-				}
-				*/
-			}
-			//////////////////////////////////////////////////////////
+				//////////////////////////////////////////////////////////
 
-			self.outputSynchronizer = AVCaptureDataOutputSynchronizer.init(dataOutputs: dataOutputs)
-			self.outputSynchronizer!.setDelegate(self, queue: self.depthOutputQueue)
-*/
+				self.outputSynchronizer = AVCaptureDataOutputSynchronizer.init(dataOutputs: dataOutputs)
+				self.outputSynchronizer!.setDelegate(self, queue: self.depthOutputQueue)
+			} else {
+				self.videoDepthDataOutput = nil
+				self.metadataOutput = nil
+				self.outputSynchronizer = nil
+			}
+
 			self.captureSession?.commitConfiguration()
 		}
 		
@@ -200,7 +206,7 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDe
 	}
 	*/
 }
-/*
+
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchronizerDelegate {
 	func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
 		var depthData: AVDepthData?
@@ -240,4 +246,3 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchro
 		
 	}
 }
-*/

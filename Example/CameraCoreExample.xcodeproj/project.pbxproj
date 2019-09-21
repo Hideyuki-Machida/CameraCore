@@ -21,7 +21,7 @@
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
 		62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA3022901A74004D258A /* LaunchScreen.storyboard */; };
-		62E5CB3222904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift */; };
+		62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,7 +54,7 @@
 		62E5CA2E22901A74004D258A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62E5CA3122901A74004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62E5CA3322901A74004D258A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62E5CB2522904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalVideoCaptureViewExampleVC.swift; sourceTree = "<group>"; };
+		62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewExampleVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				62E5CA2722901A72004D258A /* AppDelegate.swift */,
-				62E5CB2522904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift */,
+				62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */,
 				62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */,
 				62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */,
 				62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */,
@@ -189,7 +189,7 @@
 			files = (
 				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
-				62E5CB3222904BD3004D258A /* MetalVideoCaptureViewExampleVC.swift in Sources */,
+				62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */,
 				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
 				62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */,

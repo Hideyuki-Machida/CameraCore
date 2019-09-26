@@ -189,7 +189,7 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput {
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-		self.onUpdate?(sampleBuffer, nil, nil)
+        self.onUpdate?(sampleBuffer, nil, nil)
     }
 }
 

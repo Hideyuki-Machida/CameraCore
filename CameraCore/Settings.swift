@@ -44,11 +44,27 @@ public class Settings {
 		}
 		
 		public func size() -> CGSize  {
-			switch self {
-			case .p1920x1080: return CGSize(width: 1080, height: 1920)
-			case .p1280x720: return CGSize(width: 720, height: 1280)
-			case .p960x540: return CGSize(width: 540, height: 960)
-			}
+            let currentOrientation: AVCaptureVideoOrientation = Settings.captureVideoOrientation
+            switch currentOrientation {
+            case .portrait, .portraitUpsideDown:
+                switch self {
+                case .p1920x1080: return CGSize(width: 1080, height: 1920)
+                case .p1280x720: return CGSize(width: 720, height: 1280)
+                case .p960x540: return CGSize(width: 540, height: 960)
+                }
+            case .landscapeLeft, .landscapeRight:
+                switch self {
+                case .p1920x1080: return CGSize(width: 1920, height: 1080)
+                case .p1280x720: return CGSize(width: 1280, height: 720)
+                case .p960x540: return CGSize(width: 960, height: 540)
+                }
+            @unknown default:
+                switch self {
+                case .p1920x1080: return CGSize(width: 1080, height: 1920)
+                case .p1280x720: return CGSize(width: 720, height: 1280)
+                case .p960x540: return CGSize(width: 540, height: 960)
+                }
+            }
 		}
 	}
     
@@ -80,4 +96,8 @@ public class Settings {
 		case metal = 1
 	}
 	
+    public static var captureVideoOrientation: AVCaptureVideoOrientation {
+        let rawValue: Int = UIDevice.current.orientation.rawValue
+        return AVCaptureVideoOrientation.init(rawValue: rawValue) ?? AVCaptureVideoOrientation.portrait
+    }
 }

@@ -98,8 +98,7 @@ public class Settings {
 	
     public static var captureVideoOrientation: AVCaptureVideoOrientation {
         let rawValue: Int = UIDevice.current.orientation.rawValue
-        guard 0...4 ~= rawValue else { return AVCaptureVideoOrientation.portrait }
-        print("AVCaptureVideoOrientation: ", rawValue)
+        guard 1...4 ~= rawValue else { return AVCaptureVideoOrientation.portrait }
         return AVCaptureVideoOrientation.init(rawValue: rawValue) ?? AVCaptureVideoOrientation.portrait
     }
 }

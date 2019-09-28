@@ -181,6 +181,16 @@
 			path = CameraRoll;
 			sourceTree = "<group>";
 		};
+		62CE222123376C9E00F3AB3A /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				62E5CA9022904A35004D258A /* RenderLayerProtocol.swift */,
+				62E5CA8E22904A35004D258A /* RenderLayerCompositionInfoProtocol.swift */,
+				62E5CA9422904A35004D258A /* RenderLayerUserInfoProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		62E5C9F722901A2A004D258A = {
 			isa = PBXGroup;
 			children = (
@@ -309,17 +319,15 @@
 			isa = PBXGroup;
 			children = (
 				62E5CA9122904A35004D258A /* Id */,
+				62CE222123376C9E00F3AB3A /* Protocol */,
 				62E5CA8822904A35004D258A /* BlankLayer.swift */,
 				62E5CA8922904A35004D258A /* MaskLayer.swift */,
 				62E5CA8A22904A35004D258A /* ImageLayer.swift */,
 				62E5CA8B22904A35004D258A /* LutLayer.swift */,
 				62E5CA8C22904A35004D258A /* ColorOverlayLayer.swift */,
 				62E5CA8D22904A35004D258A /* MetalImageBlendLayer.swift */,
-				62E5CA8E22904A35004D258A /* RenderLayerCompositionInfoProtocol.swift */,
 				62E5CA8F22904A35004D258A /* SequenceImageLayer.swift */,
-				62E5CA9022904A35004D258A /* RenderLayerProtocol.swift */,
 				62E5CA9322904A35004D258A /* TransformLayer.swift */,
-				62E5CA9422904A35004D258A /* RenderLayerUserInfoProtocol.swift */,
 				62E5CA9522904A35004D258A /* GroupLayer.swift */,
 			);
 			path = ImageProcessing;

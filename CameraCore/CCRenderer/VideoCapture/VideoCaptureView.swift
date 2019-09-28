@@ -229,6 +229,7 @@ extension VideoCaptureView {
 		commandBuffer0.commit()
 		//////////////////////////////////////////////////////////
 		*/
+
 		do {
 			///////////////////////////////////////////////////////////////////////////////////////////////////
 			// renderLayerCompositionInfo
@@ -237,8 +238,8 @@ extension VideoCaptureView {
 				timeRange: CMTimeRange.zero,
 				percentComplete: 0.0,
 				renderSize: renderSize,
-				//metadataObjects: metadataObjects ?? [],
-				//depthData: depthData,
+				metadataObjects: metadataObjects ?? [],
+				depthData: depthData,
 				queue: self.queue
 			)
 			self.counter += 1

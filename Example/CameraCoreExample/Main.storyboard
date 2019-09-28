@@ -102,7 +102,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="kwp-Sn-9aa" customClass="VideoCaptureView" customModule="CameraCore">
-                                <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
+                                <rect key="frame" x="-41" y="0.0" width="457" height="812"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="kwp-Sn-9aa" secondAttribute="height" multiplier="9:16" id="3qD-mS-Umi"/>
                                     <constraint firstAttribute="width" secondItem="kwp-Sn-9aa" secondAttribute="height" multiplier="16:9" id="yy1-kH-o5z"/>
@@ -218,42 +218,40 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="7nP-uY-LfV" firstAttribute="leading" secondItem="Tal-zV-BPs" secondAttribute="trailing" constant="10" id="2jn-dg-C1E"/>
-                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="top" secondItem="lQK-Fj-8Zh" secondAttribute="top" id="3Ju-Kw-xQ7"/>
-                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="trailing" secondItem="lQK-Fj-8Zh" secondAttribute="trailing" id="3xI-db-JqX"/>
-                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="bottom" secondItem="kwp-Sn-9aa" secondAttribute="bottom" id="739-B1-f5P"/>
-                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="centerX" secondItem="lQK-Fj-8Zh" secondAttribute="centerX" id="DuI-w6-aWW"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="leading" secondItem="Cig-nP-HsL" secondAttribute="leading" id="Agw-b2-GvV"/>
                             <constraint firstItem="lQK-Fj-8Zh" firstAttribute="bottom" secondItem="UeD-ZU-yiq" secondAttribute="bottom" constant="10" id="I2p-N5-luh"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="top" secondItem="Cig-nP-HsL" secondAttribute="top" id="Q6z-Y8-OrR"/>
                             <constraint firstItem="UeD-ZU-yiq" firstAttribute="leading" secondItem="lQK-Fj-8Zh" secondAttribute="leading" constant="10" id="Ry5-Ex-akT"/>
                             <constraint firstItem="UeD-ZU-yiq" firstAttribute="top" secondItem="Tal-zV-BPs" secondAttribute="bottom" constant="10" id="SOx-1a-IET"/>
                             <constraint firstItem="7nP-uY-LfV" firstAttribute="top" secondItem="lQK-Fj-8Zh" secondAttribute="top" constant="10" id="Suf-lZ-zsC"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="centerX" secondItem="Cig-nP-HsL" secondAttribute="centerX" id="UEn-17-Ote"/>
                             <constraint firstItem="UeD-ZU-yiq" firstAttribute="top" secondItem="7nP-uY-LfV" secondAttribute="bottom" constant="10" id="YFz-c2-9Ni"/>
                             <constraint firstItem="lQK-Fj-8Zh" firstAttribute="trailing" secondItem="7nP-uY-LfV" secondAttribute="trailing" constant="10" id="Zr2-QI-owd"/>
+                            <constraint firstAttribute="bottom" secondItem="kwp-Sn-9aa" secondAttribute="bottom" id="dGr-rr-5yP"/>
+                            <constraint firstAttribute="trailing" secondItem="kwp-Sn-9aa" secondAttribute="trailing" id="gzH-5h-4O2"/>
                             <constraint firstItem="lQK-Fj-8Zh" firstAttribute="trailing" secondItem="UeD-ZU-yiq" secondAttribute="trailing" constant="10" id="ham-VM-7Ym"/>
-                            <constraint firstItem="lQK-Fj-8Zh" firstAttribute="bottom" secondItem="kwp-Sn-9aa" secondAttribute="bottom" id="jD5-En-FRq"/>
-                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="leading" secondItem="lQK-Fj-8Zh" secondAttribute="leading" id="lJ8-cP-1tT"/>
                             <constraint firstItem="Tal-zV-BPs" firstAttribute="leading" secondItem="lQK-Fj-8Zh" secondAttribute="leading" constant="10" id="n0P-3P-puS"/>
+                            <constraint firstItem="kwp-Sn-9aa" firstAttribute="centerY" secondItem="Cig-nP-HsL" secondAttribute="centerY" id="nxn-M4-kE0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="lQK-Fj-8Zh"/>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="jD5-En-FRq"/>
-                                <exclude reference="3Ju-Kw-xQ7"/>
-                                <exclude reference="3xI-db-JqX"/>
-                                <exclude reference="DuI-w6-aWW"/>
-                                <exclude reference="lJ8-cP-1tT"/>
+                                <exclude reference="Agw-b2-GvV"/>
+                                <exclude reference="Q6z-Y8-OrR"/>
+                                <exclude reference="gzH-5h-4O2"/>
+                                <exclude reference="dGr-rr-5yP"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=compact-widthClass=compact">
                             <mask key="constraints">
-                                <include reference="jD5-En-FRq"/>
-                                <include reference="3Ju-Kw-xQ7"/>
-                                <include reference="DuI-w6-aWW"/>
+                                <include reference="Agw-b2-GvV"/>
+                                <include reference="gzH-5h-4O2"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="constraints">
-                                <include reference="3xI-db-JqX"/>
-                                <include reference="lJ8-cP-1tT"/>
+                                <include reference="Q6z-Y8-OrR"/>
+                                <include reference="dGr-rr-5yP"/>
                             </mask>
                         </variation>
                     </view>
@@ -385,7 +383,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zk9-mm-wtW">
-                                <rect key="frame" x="50.333333333333343" y="162.33333333333334" width="274.33333333333326" height="487.33333333333326"/>
+                                <rect key="frame" x="50.333333333333314" y="162.33333333333334" width="274.33333333333326" height="487.33333333333326"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Zk9-mm-wtW" secondAttribute="height" multiplier="9:16" id="8RE-Zu-TOh"/>
@@ -464,7 +462,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eZu-Aq-61y">
-                                <rect key="frame" x="50.333333333333343" y="162.33333333333334" width="274.33333333333326" height="487.33333333333326"/>
+                                <rect key="frame" x="50.333333333333314" y="162.33333333333334" width="274.33333333333326" height="487.33333333333326"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="eZu-Aq-61y" secondAttribute="height" multiplier="9:16" id="hpX-jS-P1g"/>
                                 </constraints>

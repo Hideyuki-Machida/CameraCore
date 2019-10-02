@@ -11,10 +11,9 @@ import Foundation
 import ARKit
 import MetalCanvas
 
-@available(iOS 11.0, *)
 extension CCRenderer.ARRenderer {
 
-	class DepthMapRenderer {
+	public class DepthMapRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.depthDataMapUpdateQueue")
 		
 		public fileprivate(set) var texture: MCTexture?
@@ -23,26 +22,26 @@ extension CCRenderer.ARRenderer {
 		fileprivate var renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
 		fileprivate var image: MCPrimitive.Image?
 		
-		init() {
+		public init() {
 			self.renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
 			self.renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
 		}
 		
-		func update(commandBuffer: inout MTLCommandBuffer, depthData: AVDepthData, renderSize: CGSize) throws {
+		public func update(commandBuffer: inout MTLCommandBuffer, depthData: AVDepthData, renderSize: CGSize) throws {
 			var depthDataMap: CVPixelBuffer = depthData.depthDataMap
-			let depthDataMapTexture: MCTexture = try MCTexture.init(pixelBuffer: &depthDataMap, colorPixelFormat: .bgra8Unorm, planeIndex: 0)
-			
-			print("kCVPixelFormatType_DisparityFloat16: \(depthData.depthDataType == kCVPixelFormatType_DisparityFloat16)")
-			print("kCVPixelFormatType_DisparityFloat32: \(depthData.depthDataType == kCVPixelFormatType_DisparityFloat32)")
-			print("kCVPixelFormatType_DepthFloat16: \(depthData.depthDataType == kCVPixelFormatType_DepthFloat16)")
-			print("kCVPixelFormatType_DepthFloat32: \(depthData.depthDataType == kCVPixelFormatType_DepthFloat32)")
-
+			print(depthDataMap)
 			let width: Int = CVPixelBufferGetWidth(depthDataMap)
 			let height: Int = CVPixelBufferGetHeight(depthDataMap)
 			
 			print(width)
 			print(height)
+			print("kCVPixelFormatType_DisparityFloat16: \(depthData.depthDataType == kCVPixelFormatType_DisparityFloat16)")
+			print("kCVPixelFormatType_DisparityFloat32: \(depthData.depthDataType == kCVPixelFormatType_DisparityFloat32)")
+			print("kCVPixelFormatType_DepthFloat16: \(depthData.depthDataType == kCVPixelFormatType_DepthFloat16)")
+			print("kCVPixelFormatType_DepthFloat32: \(depthData.depthDataType == kCVPixelFormatType_DepthFloat32)")
 
+			let depthDataMapTexture: MCTexture = try MCTexture.init(pixelBuffer: &depthDataMap, colorPixelFormat: .bgra8Unorm, planeIndex: 0)
+			
 			//////////////////////////////////////////////////////////
 			// outTexture canvas 生成
 			var outTexture: MCTexture
@@ -87,5 +86,5 @@ extension CCRenderer.ARRenderer {
 
 		}
 	}
-	
+
 }

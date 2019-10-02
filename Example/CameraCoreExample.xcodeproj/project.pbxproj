@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */; };
+		621FDAF82338A7AA0034A1D9 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */; };
+		624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */; };
+		624BC1132338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1122338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel */; };
+		624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */; };
+		624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */; };
+		624BC11B2338F35900A2D8F0 /* ObjectDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 624BC11A2338F35900A2D8F0 /* ObjectDetector.mlmodel */; };
 		62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; };
 		62926252232FE8CF00D47CF0 /* CameraCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62926253232FE8CF00D47CF0 /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62926250232FE8CF00D47CF0 /* MetalCanvas.framework */; };
@@ -18,6 +25,7 @@
 		62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */; };
 		6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */; };
 		62A27093232F95B4007CCA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62A27092232F95B4007CCA7C /* Main.storyboard */; };
+		62CE222323376E5D00F3AB3A /* DepthMapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE222223376E5D00F3AB3A /* DepthMapLayer.swift */; };
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
 		62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA3022901A74004D258A /* LaunchScreen.storyboard */; };
@@ -41,6 +49,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLExampleVC.swift; sourceTree = "<group>"; };
+		621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
+		624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLMobileNetV2Layer.swift; sourceTree = "<group>"; };
+		624BC1122338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3Tiny.mlmodel; sourceTree = "<group>"; };
+		624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLYOLOv3TinyExampleVC.swift; sourceTree = "<group>"; };
+		624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLYOLOv3TinyLayer.swift; sourceTree = "<group>"; };
+		624BC11A2338F35900A2D8F0 /* ObjectDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ObjectDetector.mlmodel; sourceTree = "<group>"; };
 		6292624F232FE8CF00D47CF0 /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926250232FE8CF00D47CF0 /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
@@ -49,6 +64,7 @@
 		62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVideoPreviewVC.swift; sourceTree = "<group>"; };
 		62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVC.swift; sourceTree = "<group>"; };
 		62A27092232F95B4007CCA7C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		62CE222223376E5D00F3AB3A /* DepthMapLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthMapLayer.swift; sourceTree = "<group>"; };
 		62E5CA2422901A72004D258A /* CameraCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E5CA2722901A72004D258A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62E5CA2E22901A74004D258A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,6 +87,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		621FDAF62338A7AA0034A1D9 /* CoreMLModels */ = {
+			isa = PBXGroup;
+			children = (
+				624BC1122338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel */,
+				624BC11A2338F35900A2D8F0 /* ObjectDetector.mlmodel */,
+				621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */,
+			);
+			path = CoreMLModels;
+			sourceTree = "<group>";
+		};
+		624BC10C2338B70400A2D8F0 /* UseCoreMLExample */ = {
+			isa = PBXGroup;
+			children = (
+				621FDAF62338A7AA0034A1D9 /* CoreMLModels */,
+				621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */,
+				624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */,
+				624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */,
+				624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */,
+			);
+			path = UseCoreMLExample;
+			sourceTree = "<group>";
+		};
+		624BC10D2338B71900A2D8F0 /* VideoCaptureViewExample */ = {
+			isa = PBXGroup;
+			children = (
+				62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */,
+				62CE222223376E5D00F3AB3A /* DepthMapLayer.swift */,
+			);
+			path = VideoCaptureViewExample;
+			sourceTree = "<group>";
+		};
+		624BC10E2338B74200A2D8F0 /* CameraRollManagerExample */ = {
+			isa = PBXGroup;
+			children = (
+				62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */,
+				62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */,
+				62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */,
+			);
+			path = CameraRollManagerExample;
+			sourceTree = "<group>";
+		};
 		62E34191232E9D2E005E96A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -102,10 +159,9 @@
 			isa = PBXGroup;
 			children = (
 				62E5CA2722901A72004D258A /* AppDelegate.swift */,
-				62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */,
-				62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */,
-				62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */,
-				62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */,
+				624BC10D2338B71900A2D8F0 /* VideoCaptureViewExample */,
+				624BC10C2338B70400A2D8F0 /* UseCoreMLExample */,
+				624BC10E2338B74200A2D8F0 /* CameraRollManagerExample */,
 				62926264232FEB8400D47CF0 /* ProgressViewVC.swift */,
 				62A27092232F95B4007CCA7C /* Main.storyboard */,
 				62E5CA2E22901A74004D258A /* Assets.xcassets */,
@@ -187,12 +243,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				621FDAF82338A7AA0034A1D9 /* MobileNetV2.mlmodel in Sources */,
+				624BC1132338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel in Sources */,
 				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
+				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,
+				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
 				62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */,
+				624BC11B2338F35900A2D8F0 /* ObjectDetector.mlmodel in Sources */,
 				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
+				62CE222323376E5D00F3AB3A /* DepthMapLayer.swift in Sources */,
+				624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */,
 				62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */,
+				621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,7 +325,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -316,7 +380,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -331,7 +395,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UETCN89GVG;
+				DEVELOPMENT_TEAM = G9427V36B7;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS";
 				INFOPLIST_FILE = CameraCoreExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -351,7 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UETCN89GVG;
+				DEVELOPMENT_TEAM = G9427V36B7;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS";
 				INFOPLIST_FILE = CameraCoreExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

@@ -151,7 +151,8 @@ extension CCRenderer.VideoCapture.VideoCapture {
                 guard let port: AVCaptureInput.Port = port as? AVCaptureInput.Port else { continue }
 				if port.mediaType == AVMediaType.video {
 					if connection.isVideoOrientationSupported {
-						connection.videoOrientation = .portrait
+                        let currentOrientation: AVCaptureVideoOrientation = Settings.captureVideoOrientation
+                        connection.videoOrientation = currentOrientation
 						if position == .front {
 							connection.isVideoMirrored = true
 						} else {

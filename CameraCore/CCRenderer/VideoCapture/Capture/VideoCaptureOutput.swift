@@ -23,7 +23,6 @@ extension CCRenderer.VideoCapture {
 		fileprivate(set) var videoDepthDataOutput: AVCaptureDepthDataOutput?
 		fileprivate(set) var metadataOutput: AVCaptureMetadataOutput?
 		fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
-		fileprivate(set) var currentOrientation: AVCaptureVideoOrientation = AVCaptureVideoOrientation.portrait
 
 		var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)?
 		
@@ -39,7 +38,6 @@ extension CCRenderer.VideoCapture {
 		internal func set(paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
 			guard self.captureSession != nil else { throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError }
 
-			let orienation: AVCaptureVideoOrientation = currentOrientation
 			var dataOutputs: [AVCaptureOutput] = []
 			
 			//////////////////////////////////////////////////////////
@@ -51,7 +49,7 @@ extension CCRenderer.VideoCapture {
 				if let connection: AVCaptureConnection = videoDataOutput.connection(with: .video) {
 					connection.isEnabled = true
 					connection.isVideoMirrored = paramator.devicePosition == .front ? true : false
-					connection.videoOrientation = orienation
+					connection.videoOrientation = Settings.captureVideoOrientation
 
 					self.videoDataOutput = videoDataOutput
 					dataOutputs.append(self.videoDataOutput!)
@@ -145,6 +143,7 @@ extension CCRenderer.VideoCapture {
 			}
 
 			self.captureSession?.commitConfiguration()
+            NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationDidChange(notification:)), name: UIDevice.orientationDidChangeNotification, object: nil)
 		}
 		
 	}
@@ -153,7 +152,8 @@ extension CCRenderer.VideoCapture {
 extension CCRenderer.VideoCapture.VideoCaptureOutput {
 	@objc
 	func onOrientationDidChange(notification: NSNotification) {
-		self.currentOrientation = AVCaptureVideoOrientation.init(ui: UIApplication.shared.statusBarOrientation)
+        guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
+        connection.videoOrientation = Settings.captureVideoOrientation
 	}
 }
 
@@ -189,7 +189,7 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput {
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-		self.onUpdate?(sampleBuffer, nil, nil)
+        self.onUpdate?(sampleBuffer, nil, nil)
     }
 }
 

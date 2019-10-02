@@ -54,12 +54,10 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 	fileprivate var counter: CMTimeValue = 0
 	fileprivate var depthMapRenderer: CCRenderer.ARRenderer.DepthMapRenderer = CCRenderer.ARRenderer.DepthMapRenderer.init()
 	fileprivate var depthMapToHumanSegmentationTexture: MCVision.Depth.HumanSegmentationTexture = MCVision.Depth.HumanSegmentationTexture.init()
-	fileprivate var currentOrientation: AVCaptureVideoOrientation = AVCaptureVideoOrientation.portrait
 	fileprivate var textureCache: CVMetalTextureCache? = MCCore.createTextureCache()
 	
 	public override func awakeFromNib() {
 		super.awakeFromNib()
-		//NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationDidChange(notification:)), name: UIDevice.orientationDidChangeNotification, object: nil)
 	}
 
 	deinit {
@@ -91,8 +89,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 							sampleBuffer: sampleBuffer,
 							depthData: depthData,
 							metadataObjects: metadataObjects,
-							position: self?.capture?.position ?? .back,
-							orientation: self?.currentOrientation ?? .portrait
+							position: self?.capture?.position ?? .back
 						)
 					} catch {
 						
@@ -123,13 +120,6 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 		//self.isDrawable = false
 		self.status = .setup
 		self.capture = nil
-	}
-}
-
-extension VideoCaptureView {
-	@objc
-	func onOrientationDidChange(notification: NSNotification) {
-		self.currentOrientation = AVCaptureVideoOrientation.init(ui: UIApplication.shared.statusBarOrientation)
 	}
 }
 
@@ -184,7 +174,7 @@ extension VideoCaptureView {
 }
 
 extension VideoCaptureView {
-	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position, orientation: AVCaptureVideoOrientation) throws {
+	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position) throws {
 		//guard let `self` = self else { return }
 		//guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
 		
@@ -229,6 +219,7 @@ extension VideoCaptureView {
 		commandBuffer0.commit()
 		//////////////////////////////////////////////////////////
 		*/
+
 		do {
 			///////////////////////////////////////////////////////////////////////////////////////////////////
 			// renderLayerCompositionInfo
@@ -237,8 +228,8 @@ extension VideoCaptureView {
 				timeRange: CMTimeRange.zero,
 				percentComplete: 0.0,
 				renderSize: renderSize,
-				//metadataObjects: metadataObjects ?? [],
-				//depthData: depthData,
+				metadataObjects: metadataObjects ?? [],
+				depthData: depthData,
 				queue: self.queue
 			)
 			self.counter += 1

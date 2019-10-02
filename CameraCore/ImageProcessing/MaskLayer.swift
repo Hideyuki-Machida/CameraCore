@@ -41,29 +41,6 @@ final public class MaskLayer: RenderLayerProtocol {
 	}
 }
 
-extension MaskLayer: CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-		let image: CIImage = self.maskShader.apply(extent: image.extent, arguments: [
-			image,
-			self.mask,
-			CIVector(x: image.extent.width, y: image.extent.height),
-			])!
-		
-		return image
-	}
-
-	/*
-	public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
-		let image: CIImage = self.maskShader.apply(extent: image.extent, arguments: [
-			image,
-			self.mask,
-			CIVector(x: image.extent.width, y: image.extent.height),
-			])!
-		return image
-	}
-	*/
-}
-
 extension MaskLayer: MetalRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
 		guard let image: CIImage = CIImage.init(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.setupError }
@@ -72,6 +49,17 @@ extension MaskLayer: MetalRenderLayerProtocol {
 		let outImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
+    
+    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+        let image: CIImage = self.maskShader.apply(extent: image.extent, arguments: [
+            image,
+            self.mask,
+            CIVector(x: image.extent.width, y: image.extent.height),
+            ])!
+        
+        return image
+    }
+
 }
 
 extension MaskLayer {

@@ -93,10 +93,6 @@ public protocol RenderLayerProtocol {
     //static func decode(to: Data) throws -> RenderLayerProtocol
 }
 
-public protocol CIImageRenderLayerProtocol: RenderLayerProtocol {
-	mutating func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage
-}
-
 public protocol MetalRenderLayerProtocol: RenderLayerProtocol {
 	mutating func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> Void
 }

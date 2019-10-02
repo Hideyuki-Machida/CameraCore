@@ -71,75 +71,6 @@ final public class ImageLayer: RenderLayerProtocol {
     }	
 }
 
-extension ImageLayer: CameraCore.CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-	//public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
-		
-		// フィルターイメージ生成
-		if self._image != nil {
-			
-			// フィルター合成
-			let result: CIFilter = CIFilter(name: self.blendMode.CIFilterName())!
-			result.setValue(image, forKey: kCIInputBackgroundImageKey)
-			result.setValue(self._image!, forKey: kCIInputImageKey)
-			
-			return result.outputImage ?? image
-		} else {
-			// フィルターイメージ作成
-			guard var effect: CIImage = CIImage(contentsOf: self.imagePath) else { throw RenderLayerErrorType.renderingError }
-			
-			// 上下反転
-			effect = effect.transformed(by: CGAffineTransform(scaleX: 1, y: -1.0).translatedBy(x: 0, y: -CGFloat(effect.extent.height)))
-
-			if self.contentModeTransform == nil {
-				let imageSize: CGSize = effect.extent.size
-				self.contentModeTransform = self.contentMode.transform(imageSize: imageSize, renderSize: self.renderSize)
-			}
-			
-			let colorMatrixfilter: CIFilter = CIFilter(name:"CIColorMatrix")!
-			colorMatrixfilter.setValue(effect, forKey: kCIInputImageKey)
-			colorMatrixfilter.setValue(CIVector(x: 0.0, y: 0.0, z: 0.0, w: self.alpha), forKey: "inputAVector")
-			
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-			// まずcontentModeの設定を反映
-			guard let alphaImage: CIImage = colorMatrixfilter.outputImage else { throw RenderLayerErrorType.renderingError }
-			guard let contentModeTransformFilter: CIFilter = CIFilter(name: "CIAffineTransform") else { throw RenderLayerErrorType.renderingError }
-			contentModeTransformFilter.setValue(alphaImage, forKey: kCIInputImageKey)
-			contentModeTransformFilter.setValue(NSValue(cgAffineTransform: self.contentModeTransform!), forKey: "inputTransform")
-			let contentModeTransformImage: CIImage = contentModeTransformFilter.outputImage!
-			//contentModeTransformImage = contentModeTransformImage.cropped(to: CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: self.renderSize))
-			//let contentModeCropImage: CIImage = contentModeTransformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-			// まずcontentModeの設定を反映
-			let transform: CGAffineTransform = TransformUtils.convertTransformSKToCI(
-				userTransform: self.transform,
-				videoSize: image.extent.size,
-				renderSize: renderSize,
-				preferredTransform: CGAffineTransform.identity
-			)
-			
-			guard let transformFilter: CIFilter = CIFilter(name: "CIAffineTransform") else { throw RenderLayerErrorType.renderingError }
-			transformFilter.setValue(contentModeTransformImage, forKey: kCIInputImageKey)
-			transformFilter.setValue(NSValue(cgAffineTransform: transform), forKey: "inputTransform")
-			var transformImage: CIImage = transformFilter.outputImage!
-			transformImage = transformImage.cropped(to: CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: self.renderSize))
-			//let cropImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-			
-			self._image = transformImage
-			
-			// フィルター合成
-			let result: CIFilter = CIFilter(name: self.blendMode.CIFilterName())!
-			
-			result.setValue(image, forKey: kCIInputBackgroundImageKey)
-			result.setValue(transformImage, forKey: kCIInputImageKey)
-			return result.outputImage ?? image
-		}
-	}
-}
-
 /*
 extension ImageLayer: CameraCore.CVPixelBufferRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> Void {
@@ -171,6 +102,73 @@ extension ImageLayer: MetalRenderLayerProtocol {
 		//commandBuffer.commit()
 	}
 	*/
+    
+    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+        //public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
+        
+        // フィルターイメージ生成
+        if self._image != nil {
+            
+            // フィルター合成
+            let result: CIFilter = CIFilter(name: self.blendMode.CIFilterName())!
+            result.setValue(image, forKey: kCIInputBackgroundImageKey)
+            result.setValue(self._image!, forKey: kCIInputImageKey)
+            
+            return result.outputImage ?? image
+        } else {
+            // フィルターイメージ作成
+            guard var effect: CIImage = CIImage(contentsOf: self.imagePath) else { throw RenderLayerErrorType.renderingError }
+            
+            // 上下反転
+            effect = effect.transformed(by: CGAffineTransform(scaleX: 1, y: -1.0).translatedBy(x: 0, y: -CGFloat(effect.extent.height)))
+            
+            if self.contentModeTransform == nil {
+                let imageSize: CGSize = effect.extent.size
+                self.contentModeTransform = self.contentMode.transform(imageSize: imageSize, renderSize: self.renderSize)
+            }
+            
+            let colorMatrixfilter: CIFilter = CIFilter(name:"CIColorMatrix")!
+            colorMatrixfilter.setValue(effect, forKey: kCIInputImageKey)
+            colorMatrixfilter.setValue(CIVector(x: 0.0, y: 0.0, z: 0.0, w: self.alpha), forKey: "inputAVector")
+            
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // まずcontentModeの設定を反映
+            guard let alphaImage: CIImage = colorMatrixfilter.outputImage else { throw RenderLayerErrorType.renderingError }
+            guard let contentModeTransformFilter: CIFilter = CIFilter(name: "CIAffineTransform") else { throw RenderLayerErrorType.renderingError }
+            contentModeTransformFilter.setValue(alphaImage, forKey: kCIInputImageKey)
+            contentModeTransformFilter.setValue(NSValue(cgAffineTransform: self.contentModeTransform!), forKey: "inputTransform")
+            let contentModeTransformImage: CIImage = contentModeTransformFilter.outputImage!
+            //contentModeTransformImage = contentModeTransformImage.cropped(to: CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: self.renderSize))
+            //let contentModeCropImage: CIImage = contentModeTransformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // まずcontentModeの設定を反映
+            let transform: CGAffineTransform = TransformUtils.convertTransformSKToCI(
+                userTransform: self.transform,
+                videoSize: image.extent.size,
+                renderSize: renderSize,
+                preferredTransform: CGAffineTransform.identity
+            )
+            
+            guard let transformFilter: CIFilter = CIFilter(name: "CIAffineTransform") else { throw RenderLayerErrorType.renderingError }
+            transformFilter.setValue(contentModeTransformImage, forKey: kCIInputImageKey)
+            transformFilter.setValue(NSValue(cgAffineTransform: transform), forKey: "inputTransform")
+            var transformImage: CIImage = transformFilter.outputImage!
+            transformImage = transformImage.cropped(to: CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: self.renderSize))
+            //let cropImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            self._image = transformImage
+            
+            // フィルター合成
+            let result: CIFilter = CIFilter(name: self.blendMode.CIFilterName())!
+            
+            result.setValue(image, forKey: kCIInputBackgroundImageKey)
+            result.setValue(transformImage, forKey: kCIInputImageKey)
+            return result.outputImage ?? image
+        }
+    }
 }
 
 /*

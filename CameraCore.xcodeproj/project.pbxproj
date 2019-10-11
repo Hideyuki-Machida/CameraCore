@@ -69,6 +69,8 @@
 		62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */; };
 		62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */; };
 		62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */; };
+		9AD7F66D235034C500F475C8 /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD7F66C235034C500F475C8 /* MetalCanvas.framework */; };
+		9AD7F66E235034C500F475C8 /* MetalCanvas.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD7F66C235034C500F475C8 /* MetalCanvas.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,20 @@
 			remoteInfo = CameraCore;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9AD7F66F235034C500F475C8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9AD7F66E235034C500F475C8 /* MetalCanvas.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollImportStatus.swift; sourceTree = "<group>"; };
@@ -147,6 +163,7 @@
 		62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARFaceGeometryRenderer.swift; sourceTree = "<group>"; };
 		62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceMetaDataRenderer.swift; sourceTree = "<group>"; };
 		62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthMapRenderer.swift; sourceTree = "<group>"; };
+		9AD7F66C235034C500F475C8 /* MetalCanvas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalCanvas.framework; path = Carthage/Build/iOS/MetalCanvas.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AD7F66D235034C500F475C8 /* MetalCanvas.framework in Frameworks */,
 				62E5CB4922905005004D258A /* MetalCanvas.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +362,7 @@
 		62E5CB4722905005004D258A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9AD7F66C235034C500F475C8 /* MetalCanvas.framework */,
 				62E5CB4822905005004D258A /* MetalCanvas.framework */,
 			);
 			name = Frameworks;
@@ -382,6 +401,7 @@
 				62E5C9FD22901A2A004D258A /* Sources */,
 				62E5C9FE22901A2A004D258A /* Frameworks */,
 				62E5C9FF22901A2A004D258A /* Resources */,
+				9AD7F66F235034C500F475C8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

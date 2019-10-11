@@ -10,13 +10,19 @@ import AVFoundation
 import MetalCanvas
 
 final public class LutLayer: RenderLayerProtocol {
+
+    public enum Dimension: Int, Codable {
+        case d1 = 16
+        case d3 = 64
+    }
+
     public let type: RenderLayerType = RenderLayerType.lut
     public var id: RenderLayerId
     public let customIndex: Int = 0
     private let lutImageURL: URL
     private var lutFilter: MCFilter.ColorProcessing.Lut3DFilter
     private var cubeData: NSData?
-    private let dimension: Int
+    private let dimension: Dimension
 	
 	public var intensity: Float = 1.0 {
 		willSet {
@@ -24,7 +30,7 @@ final public class LutLayer: RenderLayerProtocol {
 		}
 	}
 	
-    public init(lutImageURL: URL, dimension: Int) throws {
+    public init(lutImageURL: URL, dimension: Dimension) throws {
         self.id = RenderLayerId()
         self.dimension = dimension
         self.lutImageURL = lutImageURL
@@ -32,7 +38,7 @@ final public class LutLayer: RenderLayerProtocol {
 		self.lutFilter.intensity = self.intensity
     }
 
-	fileprivate init(id: RenderLayerId, lutImageURL: URL, dimension: Int) throws {
+	fileprivate init(id: RenderLayerId, lutImageURL: URL, dimension: Dimension) throws {
 		self.id = id
 		self.dimension = dimension
 		self.lutImageURL = lutImageURL
@@ -89,7 +95,7 @@ extension LutLayer: Decodable {
 	public convenience init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 		let id: RenderLayerId = try values.decode(RenderLayerId.self, forKey: .id)
-		let dimension: Int = try values.decode(Int.self, forKey: .dimension)
+		let dimension: Dimension = try values.decode(Dimension.self, forKey: .dimension)
 		let lutImagePath: CodableURL = try values.decode(CodableURL.self, forKey: .lutImageURL)
 		try self.init(id: id, lutImageURL: lutImagePath.url, dimension: dimension)
     }

@@ -2,19 +2,19 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:CameraCoreExample.xcodeproj">
+      location = "group:Example/CameraCoreExample.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../CameraCore.xcodeproj">
+      location = "group:CameraCore.xcodeproj">
    </FileRef>
    <Group
       location = "group:Modules"
       name = "Modules">
       <FileRef
-         location = "group:../../Modules/MetalCanvas/Example/MetalCanvasExample.xcodeproj">
+         location = "group:MetalCanvas/Example/MetalCanvasExample.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../../Modules/MetalCanvas/MetalCanvas.xcodeproj">
+         location = "group:MetalCanvas/MetalCanvas.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>

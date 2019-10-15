@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		620E8B01233F4BE400168140 /* FCRN.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 620E8B00233F4BE400168140 /* FCRN.mlmodel */; };
-		620E8B03233F4C6D00168140 /* UseCoreMLFCRNExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E8B02233F4C6D00168140 /* UseCoreMLFCRNExampleVC.swift */; };
-		620E8B05233F4C9100168140 /* CoreMLFCRMLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E8B04233F4C9100168140 /* CoreMLFCRMLayer.swift */; };
 		620E8B07233F6DD300168140 /* CoreMLHelpers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 620E8B06233F6DD300168140 /* CoreMLHelpers.framework */; };
 		620E8B08233F6DD300168140 /* CoreMLHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 620E8B06233F6DD300168140 /* CoreMLHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */; };
@@ -57,9 +54,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		620E8B00233F4BE400168140 /* FCRN.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = FCRN.mlmodel; sourceTree = "<group>"; };
-		620E8B02233F4C6D00168140 /* UseCoreMLFCRNExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLFCRNExampleVC.swift; sourceTree = "<group>"; };
-		620E8B04233F4C9100168140 /* CoreMLFCRMLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLFCRMLayer.swift; sourceTree = "<group>"; };
 		620E8B06233F6DD300168140 /* CoreMLHelpers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreMLHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLExampleVC.swift; sourceTree = "<group>"; };
 		621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
@@ -107,7 +101,6 @@
 			children = (
 				624BC1122338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel */,
 				621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */,
-				620E8B00233F4BE400168140 /* FCRN.mlmodel */,
 				6249747B2349D26800325650 /* DeepLabV3.mlmodel */,
 			);
 			path = CoreMLModels;
@@ -121,8 +114,6 @@
 				624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */,
 				624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */,
 				624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */,
-				620E8B02233F4C6D00168140 /* UseCoreMLFCRNExampleVC.swift */,
-				620E8B04233F4C9100168140 /* CoreMLFCRMLayer.swift */,
 				6249747D2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift */,
 				6249747F2349D2EF00325650 /* CoreMLDeeplabV3Layer.swift */,
 			);
@@ -267,11 +258,8 @@
 				621FDAF82338A7AA0034A1D9 /* MobileNetV2.mlmodel in Sources */,
 				624BC1132338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel in Sources */,
 				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
-				620E8B01233F4BE400168140 /* FCRN.mlmodel in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
 				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,
-				620E8B03233F4C6D00168140 /* UseCoreMLFCRNExampleVC.swift in Sources */,
-				620E8B05233F4C9100168140 /* CoreMLFCRMLayer.swift in Sources */,
 				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
 				6249747C2349D26800325650 /* DeepLabV3.mlmodel in Sources */,
 				62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */,

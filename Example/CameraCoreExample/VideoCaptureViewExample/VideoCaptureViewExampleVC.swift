@@ -52,7 +52,7 @@ class VideoCaptureViewExampleVC: UIViewController {
 
         self.videoCaptureView.event = event
 		do {
-			self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: 64)
+            self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: LutLayer.Dimension.d3)
 			
 			try self.videoCaptureView.setup(self.videoCaputureParamator)
 			

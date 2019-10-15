@@ -20,7 +20,7 @@
                                 <rect key="frame" x="20" y="108" width="335" height="650"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVS-AO-cUS">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video撮影（VideoCaptureView）">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -30,7 +30,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8X4-MO-T4T">
-                                        <rect key="frame" x="0.0" y="110" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="132" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="CoreML使用サンプル（MobileNetV2）">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,7 +40,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Qf-Kk-lDy">
-                                        <rect key="frame" x="0.0" y="220" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="264" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="CoreML使用サンプル（YOLOv3Tiny）">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -49,18 +49,8 @@
                                             <segue destination="Vm3-3h-hqg" kind="show" id="obJ-kW-7jT"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDf-JK-GRc">
-                                        <rect key="frame" x="0.0" y="330" width="335" height="100"/>
-                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="CoreML使用サンプル（FCRN）">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="7wi-92-002" kind="show" id="UH0-by-WsN"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R8O-GG-rRh">
-                                        <rect key="frame" x="0.0" y="440" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="396" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="CoreML使用サンプル（DeeplabV3）">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -70,7 +60,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4B-kh-CMo">
-                                        <rect key="frame" x="0.0" y="550" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="528" width="335" height="122"/>
                                         <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
                                         <state key="normal" title="カメラロール操作（CameraRollManager）">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -683,80 +673,6 @@
             </objects>
             <point key="canvasLocation" x="958" y="2286"/>
         </scene>
-        <!--CoreML使用サンプル（FCRN）-->
-        <scene sceneID="cpv-z3-5xk">
-            <objects>
-                <viewController id="7wi-92-002" customClass="UseCoreMLFCRNExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="GSc-Sn-Cax">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="GsH-uM-OwK" customClass="VideoCaptureView" customModule="CameraCore">
-                                <rect key="frame" x="0.0" y="111.33333333333331" width="375" height="666.66666666666674"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="GsH-uM-OwK" secondAttribute="height" multiplier="16:9" id="Cen-af-bRf"/>
-                                    <constraint firstAttribute="width" secondItem="GsH-uM-OwK" secondAttribute="height" multiplier="9:16" id="dCf-Nv-kH8"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="Cen-af-bRf"/>
-                                        <exclude reference="dCf-Nv-kH8"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="Cen-af-bRf"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="dCf-Nv-kH8"/>
-                                    </mask>
-                                </variation>
-                            </mtkView>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="GsH-uM-OwK" firstAttribute="trailing" secondItem="5fk-el-yLZ" secondAttribute="trailing" id="EOC-J8-8dM"/>
-                            <constraint firstItem="GsH-uM-OwK" firstAttribute="leading" secondItem="5fk-el-yLZ" secondAttribute="leading" id="EVx-az-0cm"/>
-                            <constraint firstItem="GsH-uM-OwK" firstAttribute="centerX" secondItem="5fk-el-yLZ" secondAttribute="centerX" id="LsZ-Uw-xri"/>
-                            <constraint firstItem="GsH-uM-OwK" firstAttribute="top" secondItem="5fk-el-yLZ" secondAttribute="top" id="keA-iO-Rb2"/>
-                            <constraint firstItem="5fk-el-yLZ" firstAttribute="bottom" secondItem="GsH-uM-OwK" secondAttribute="bottom" id="o9u-96-6Mb"/>
-                            <constraint firstItem="5fk-el-yLZ" firstAttribute="bottom" secondItem="GsH-uM-OwK" secondAttribute="bottom" id="ugi-GL-yds"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="5fk-el-yLZ"/>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="ugi-GL-yds"/>
-                                <exclude reference="EOC-J8-8dM"/>
-                                <exclude reference="EVx-az-0cm"/>
-                                <exclude reference="LsZ-Uw-xri"/>
-                                <exclude reference="keA-iO-Rb2"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=compact-widthClass=compact">
-                            <mask key="constraints">
-                                <include reference="ugi-GL-yds"/>
-                                <include reference="LsZ-Uw-xri"/>
-                                <include reference="keA-iO-Rb2"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="constraints">
-                                <include reference="EOC-J8-8dM"/>
-                                <include reference="EVx-az-0cm"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <navigationItem key="navigationItem" title="CoreML使用サンプル（FCRN）" id="Nk8-X8-aTc"/>
-                    <connections>
-                        <outlet property="videoCaptureView" destination="GsH-uM-OwK" id="eqB-LH-zh8"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lK8-y0-wwW" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1690" y="2285"/>
-        </scene>
         <!--CoreML使用サンプル（DeeplabV3）-->
         <scene sceneID="Z55-Os-ewM">
             <objects>
@@ -802,9 +718,9 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="apM-he-Q8A"/>
-                                <exclude reference="Unw-5A-pzy"/>
                                 <exclude reference="2ep-QO-bqy"/>
                                 <exclude reference="DBB-NY-K0h"/>
+                                <exclude reference="Unw-5A-pzy"/>
                                 <exclude reference="yCs-67-cj1"/>
                             </mask>
                         </variation>
@@ -817,8 +733,8 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="constraints">
-                                <include reference="Unw-5A-pzy"/>
                                 <include reference="2ep-QO-bqy"/>
+                                <include reference="Unw-5A-pzy"/>
                             </mask>
                         </variation>
                     </view>
@@ -829,7 +745,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tss-Kx-ahf" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2431" y="2285"/>
+            <point key="canvasLocation" x="1670" y="2285"/>
         </scene>
     </scenes>
 </document>

@@ -27,11 +27,6 @@ final public class BlankLayer: RenderLayerProtocol {
     }
 }
 
-extension BlankLayer: CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-		return image
-	}
-}
 extension BlankLayer: MetalRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
 }

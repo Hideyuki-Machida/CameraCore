@@ -43,27 +43,6 @@ final public class TransformLayer: RenderLayerProtocol {
     
 }
 
-extension TransformLayer: CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-		let transformImage: CIImage = image.transformed(by: self.transform)
-		let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderLayerCompositionInfo.renderSize))
-		let result: CIFilter = CIFilter(name: Blendmode.alpha.CIFilterName())!
-		result.setValue(CIImage(color: CIColor(cgColor: self.backgroundColor.cgColor)), forKey: kCIInputBackgroundImageKey)
-		result.setValue(croppingImage, forKey: kCIInputImageKey)
-		let croppingImage002: CIImage = result.outputImage!.cropped(to: CGRect(origin: CGPoint.zero, size: renderLayerCompositionInfo.renderSize))
-		return croppingImage002
-	}
-
-	public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
-		let transformImage: CIImage = image.transformed(by: self.transform)
-		let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
-		let result: CIFilter = CIFilter(name: Blendmode.alpha.CIFilterName())!
-		result.setValue(CIImage(color: CIColor(cgColor: self.backgroundColor.cgColor)), forKey: kCIInputBackgroundImageKey)
-		result.setValue(croppingImage, forKey: kCIInputImageKey)
-		let croppingImage002: CIImage = result.outputImage!.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
-		return croppingImage002
-	}
-}
 extension TransformLayer: MetalRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
 		guard let image: CIImage = CIImage.init(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.setupError }
@@ -71,6 +50,16 @@ extension TransformLayer: MetalRenderLayerProtocol {
 		guard let outImage = self.processing(image: image, compositionTime: renderLayerCompositionInfo.compositionTime, timeRange: renderLayerCompositionInfo.timeRange, percentComplete: Float(renderLayerCompositionInfo.percentComplete), renderSize: renderLayerCompositionInfo.renderSize) else { throw RenderLayerErrorType.setupError }
 		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
+    
+    private func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
+        let transformImage: CIImage = image.transformed(by: self.transform)
+        let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
+        let result: CIFilter = CIFilter(name: Blendmode.alpha.CIFilterName())!
+        result.setValue(CIImage(color: CIColor(cgColor: self.backgroundColor.cgColor)), forKey: kCIInputBackgroundImageKey)
+        result.setValue(croppingImage, forKey: kCIInputImageKey)
+        let croppingImage002: CIImage = result.outputImage!.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
+        return croppingImage002
+    }
 }
 
 extension TransformLayer {

@@ -34,34 +34,6 @@ final public class GroupLayer: RenderLayerProtocol {
 	}
 }
 
-extension GroupLayer: CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-	//public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
-		var effectImage: CIImage = image
-		for (index, _) in self.layers.enumerated() {
-			if var layers: CIImageRenderLayerProtocol = self.layers[index] as? CIImageRenderLayerProtocol {
-				effectImage = try layers.processing(image: effectImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-			}
-		}
-		
-		if self.alpha < 1.0 {
-			// アルファ
-			let filter: CIFilter? = CIFilter(name: "CIColorClamp")
-			filter?.setValue(effectImage, forKey: kCIInputImageKey)
-			filter?.setValue(CIVector(x: 1, y: 1, z: 1, w: CGFloat(self.alpha)), forKey: "inputMaxComponents")
-			filter?.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputMinComponents")
-			effectImage = filter?.outputImage ?? effectImage
-		}
-		
-		let result: CIFilter? = CIFilter(name: self.blendMode.CIFilterName())
-		result?.setValue(image, forKey: kCIInputBackgroundImageKey)
-		result?.setValue(effectImage, forKey: kCIInputImageKey)
-		effectImage = result?.outputImage ?? effectImage
-		
-		return effectImage
-	}	
-}
-
 extension GroupLayer: MetalRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
 		guard let image: CIImage = CIImage.init(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.setupError }
@@ -69,4 +41,26 @@ extension GroupLayer: MetalRenderLayerProtocol {
 		let outImage: CIImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
+    
+    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+        //public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
+        var effectImage: CIImage = image
+        
+        if self.alpha < 1.0 {
+            // アルファ
+            let filter: CIFilter? = CIFilter(name: "CIColorClamp")
+            filter?.setValue(effectImage, forKey: kCIInputImageKey)
+            filter?.setValue(CIVector(x: 1, y: 1, z: 1, w: CGFloat(self.alpha)), forKey: "inputMaxComponents")
+            filter?.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputMinComponents")
+            effectImage = filter?.outputImage ?? effectImage
+        }
+        
+        let result: CIFilter? = CIFilter(name: self.blendMode.CIFilterName())
+        result?.setValue(image, forKey: kCIInputBackgroundImageKey)
+        result?.setValue(effectImage, forKey: kCIInputImageKey)
+        effectImage = result?.outputImage ?? effectImage
+        
+        return effectImage
+    }
+
 }

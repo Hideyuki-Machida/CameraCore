@@ -69,6 +69,7 @@
 		62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */; };
 		62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */; };
 		62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */; };
+		9AD7F66D235034C500F475C8 /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD7F66C235034C500F475C8 /* MetalCanvas.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,7 @@
 		62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARFaceGeometryRenderer.swift; sourceTree = "<group>"; };
 		62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceMetaDataRenderer.swift; sourceTree = "<group>"; };
 		62FABEC32296E5A4002672A0 /* DepthMapRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthMapRenderer.swift; sourceTree = "<group>"; };
+		9AD7F66C235034C500F475C8 /* MetalCanvas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalCanvas.framework; path = Carthage/Build/iOS/MetalCanvas.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AD7F66D235034C500F475C8 /* MetalCanvas.framework in Frameworks */,
 				62E5CB4922905005004D258A /* MetalCanvas.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +347,7 @@
 		62E5CB4722905005004D258A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9AD7F66C235034C500F475C8 /* MetalCanvas.framework */,
 				62E5CB4822905005004D258A /* MetalCanvas.framework */,
 			);
 			name = Frameworks;
@@ -683,6 +687,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				INFOPLIST_FILE = CameraCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -694,9 +699,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hideyuki.machida.CameraCore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -711,6 +717,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				INFOPLIST_FILE = CameraCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -722,8 +729,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hideyuki.machida.CameraCore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

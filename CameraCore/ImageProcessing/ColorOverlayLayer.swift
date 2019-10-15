@@ -53,35 +53,6 @@ final public class ColorOverlayLayer: RenderLayerProtocol {
 	}
 }
 
-extension ColorOverlayLayer: CIImageRenderLayerProtocol {
-	public func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-		let img: CIImage? = self._fragmentShader!.apply(extent: image.extent, arguments: [
-			image,
-			CIVector(x: image.extent.width, y: image.extent.height),
-			self.color,
-			NSNumber(value: self.offset)
-			])
-
-		if let img: CIImage = img {
-			return img
-		} else {
-			throw CCRenderer.ErrorType.rendering
-		}
-	}
-	/*
-	public func processing(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) -> CIImage? {
-		let img: CIImage? = self._fragmentShader!.apply(extent: image.extent, arguments: [
-			image,
-			CIVector(x: image.extent.width, y: image.extent.height),
-			self.color,
-			NSNumber(value: self.offset)
-			])
-		
-		return img
-	}
-	*/
-}
-
 extension ColorOverlayLayer: MetalRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
 		guard let image: CIImage = CIImage.init(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.setupError }
@@ -89,6 +60,22 @@ extension ColorOverlayLayer: MetalRenderLayerProtocol {
 		let outImage: CIImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
+    
+    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+        let img: CIImage? = self._fragmentShader!.apply(extent: image.extent, arguments: [
+            image,
+            CIVector(x: image.extent.width, y: image.extent.height),
+            self.color,
+            NSNumber(value: self.offset)
+            ])
+        
+        if let img: CIImage = img {
+            return img
+        } else {
+            throw CCRenderer.ErrorType.rendering
+        }
+    }
+
 }
 
 extension ColorOverlayLayer {

@@ -266,6 +266,7 @@ extension VideoCaptureView {
 			//var texture: MTLTexture = rgbTexture.texture
             commandBuffer.addCompletedHandler { [weak self] cb in
 				self?.event?.onPreviewUpdate?(sampleBuffer)
+                self?.event?.onPixelUpdate?(originalPixelBuffer)
             }
 
             self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)

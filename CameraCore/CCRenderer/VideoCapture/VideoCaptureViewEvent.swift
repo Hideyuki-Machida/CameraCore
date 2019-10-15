@@ -14,4 +14,5 @@ public class VideoCaptureViewEvent: NSObject {
     public var onPreviewUpdate: ((_ sampleBuffer: CMSampleBuffer)->Void)?
     public var onRecodingUpdate: ((_ recordedDuration: TimeInterval)->Void)?
     public var onRecodingComplete: ((_ result: Bool, _ filePath: URL)->Void)?
+    public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer)->Void)?
 }

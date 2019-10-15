@@ -18,7 +18,7 @@ class UseCoreMLYOLOv3TinyExampleVC: UIViewController {
 	
     private var detectionOverlay: CALayer! = nil
     private var videoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
-		presetiFrame: Settings.PresetiFrame.p1280x720,
+		presetiFrame: Settings.PresetiFrame.p960x540,
 		frameRate: 30,
 		devicePosition: AVCaptureDevice.Position.back,
 		isDepth: false

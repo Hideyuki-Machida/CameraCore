@@ -15,7 +15,9 @@ final public class CoreMLMobileNetV2Layer: RenderLayerProtocol {
 	public let customIndex: Int = 0
 	public var request: VNCoreMLRequest?
 	public var onProcessClassifications: ((_ descriptions: [String])->Void)?
-	
+
+    fileprivate var isDetecting: Bool = false
+    
 	public init() throws {
 		self.id = RenderLayerId()
 		let model = try VNCoreMLModel(for: MobileNetV2().model)
@@ -33,19 +35,22 @@ final public class CoreMLMobileNetV2Layer: RenderLayerProtocol {
 
 extension CoreMLMobileNetV2Layer: CVPixelBufferRenderLayerProtocol {
 	public func processing(commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		let pixelBuffer = pixelBuffer
-        DispatchQueue.global(qos: .userInitiated).async {
-			let handler = VNImageRequestHandler.init(cvPixelBuffer: pixelBuffer, options: [:])
+        guard !self.isDetecting else { return }
+        self.isDetecting = true
+        let pixelBuffer = pixelBuffer
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard
+                let self = self,
+                let request = self.request
+            else { return }
+
+            let handler = VNImageRequestHandler.init(cvPixelBuffer: pixelBuffer, options: [:])
             do {
-                try handler.perform([self.request!])
+                try handler.perform([request])
             } catch {
-                /*
-                 This handler catches general image processing errors. The `classificationRequest`'s
-                 completion handler `processClassifications(_:error:)` catches errors specific
-                 to processing that request.
-                 */
-                print("Failed to perform classification.\n\(error.localizedDescription)")
+                
             }
+
         }
 		
 	}
@@ -53,7 +58,8 @@ extension CoreMLMobileNetV2Layer: CVPixelBufferRenderLayerProtocol {
 
 extension CoreMLMobileNetV2Layer {
     func processClassifications(for request: VNRequest, error: Error?) {
-		guard let results = request.results else {
+        self.isDetecting = false
+        guard let results = request.results else {
 			self.onProcessClassifications?(["Unable to classify image."])
 			return
 		}

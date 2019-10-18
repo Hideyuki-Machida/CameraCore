@@ -21,7 +21,8 @@ class UseCoreMLYOLOv3TinyExampleVC: UIViewController {
 		presetiFrame: Settings.PresetiFrame.p960x540,
 		frameRate: 30,
 		devicePosition: AVCaptureDevice.Position.back,
-		isDepth: false
+        isAudioDataOutput: true,
+        isDepthDataOutput: false
 	)
 
 	

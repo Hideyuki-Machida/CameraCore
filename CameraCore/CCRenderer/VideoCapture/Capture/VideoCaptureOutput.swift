@@ -31,9 +31,9 @@ extension CCRenderer.VideoCapture {
 		}
 		
 		deinit {
-			Debug.DeinitLog(self)
 			NotificationCenter.default.removeObserver(self)
-		}
+            Debug.DeinitLog(self)
+        }
 		
 		internal func set(paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
 			guard self.captureSession != nil else { throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError }
@@ -54,29 +54,30 @@ extension CCRenderer.VideoCapture {
 					self.videoDataOutput = videoDataOutput
 					dataOutputs.append(self.videoDataOutput!)
 				} else {
-					Debug.ActionLog("No AVCaptureVideoDataOutputConnection")
+                    Debug.ErrorLog("No AVCaptureVideoDataOutputConnection")
 				}
 			}
 			//////////////////////////////////////////////////////////
 			
-			/**/
-			//////////////////////////////////////////////////////////
-			// AVCaptureAudioDataOutput
-			let audioDataOutput: AVCaptureAudioDataOutput = try self._getAudioDataOutput()
-			if self.captureSession!.canAddOutput(audioDataOutput) {
-				audioDataOutput.setSampleBufferDelegate(self, queue: self.audioOutputQueue)
-				self.captureSession?.addOutput(audioDataOutput)
-				if let connection: AVCaptureConnection = audioDataOutput.connection(with: .audio) {
-					connection.isEnabled = true
-				} else {
-					Debug.ActionLog("No AVCaptureAudioDataOutputConnection")
-				}
-				self.audioDataOutput = audioDataOutput
-			}
-			//////////////////////////////////////////////////////////
-			/**/
+            if paramator.isAudioDataOutput {
+                //////////////////////////////////////////////////////////
+                // AVCaptureAudioDataOutput
+                let audioDataOutput: AVCaptureAudioDataOutput = try self._getAudioDataOutput()
+                if self.captureSession!.canAddOutput(audioDataOutput) {
+                    audioDataOutput.setSampleBufferDelegate(self, queue: self.audioOutputQueue)
+                    self.captureSession?.addOutput(audioDataOutput)
+                    if let connection: AVCaptureConnection = audioDataOutput.connection(with: .audio) {
+                        connection.isEnabled = true
+                        self.audioDataOutput = audioDataOutput
+                        dataOutputs.append(self.videoDataOutput!)
+                    } else {
+                        Debug.ErrorLog("No AVCaptureAudioDataOutputConnection")
+                    }
+                }
+                //////////////////////////////////////////////////////////
+            }
 
-			if paramator.isDepth {
+            if paramator.isDepthDataOutput {
 				//////////////////////////////////////////////////////////
 				// AVCaptureDepthDataOutput
 				let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
@@ -88,19 +89,10 @@ extension CCRenderer.VideoCapture {
 						print("isVideoOrientationSupported")
 						print(connection.isVideoOrientationSupported)
 						connection.isEnabled = true
-						/*
-						if position == .front {
-						//connection.videoOrientation = orienation
-						}
-						*/
-						//connection.isVideoMirrored = position == .front ? true : false
-						//connection.videoOrientation = orienation
-						//connection.videoOrientation = .portraitUpsideDown
-						//connection.isVideoMirrored = true
 						self.videoDepthDataOutput = videoDepthDataOutput
 						dataOutputs.append(self.videoDepthDataOutput!)
 					} else {
-						print("No AVCaptureDepthDataOutputConnection")
+						Debug.ErrorLog("No AVCaptureDepthDataOutputConnection")
 					}
 				}
 				//////////////////////////////////////////////////////////
@@ -115,22 +107,8 @@ extension CCRenderer.VideoCapture {
 						self.metadataOutput = metadataOutput
 						dataOutputs.append(self.metadataOutput!)
 					} else {
-						print("No AVCaptureMetadataOutputConnection")
+						Debug.ErrorLog("No AVCaptureMetadataOutputConnection")
 					}
-					
-					/*
-					metadataOutput.metadataObjectTypes = [.face]
-					if let connection: AVCaptureConnection = metadataOutput.connection(with: .metadata) {
-					connection.isEnabled = true
-					connection.isVideoMirrored = position == .front ? true : false
-					connection.videoOrientation = orienation
-					
-					self.metadataOutput = metadataOutput
-					dataOutputs.append(self.metadataOutput!)
-					} else {
-					print("No AVCaptureMetadataOutputConnection")
-					}
-					*/
 				}
 				//////////////////////////////////////////////////////////
 
@@ -194,17 +172,10 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSa
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDelegate {
-	@available(iOS 11.0, *)
 	func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
 		print("AVCaptureDepthDataOutput")
 		print(depthData)
 	}
-	
-	/*
-	func depthDataOutput(_ output: AVCaptureDepthDataOutput, didDrop depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection, reason: AVCaptureOutput.DataDroppedReason) {
-	
-	}
-	*/
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchronizerDelegate {

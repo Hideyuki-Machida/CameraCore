@@ -14,12 +14,14 @@ extension CCRenderer.VideoCapture {
 		public var presetiFrame: Settings.PresetiFrame
 		public var frameRate: Int32
 		public var devicePosition: AVCaptureDevice.Position
-		public var isDepth: Bool
-		public init (presetiFrame: Settings.PresetiFrame, frameRate: Int32, devicePosition: AVCaptureDevice.Position, isDepth: Bool) {
+        public var isAudioDataOutput: Bool
+		public var isDepthDataOutput: Bool
+        public init (presetiFrame: Settings.PresetiFrame, frameRate: Int32, devicePosition: AVCaptureDevice.Position, isAudioDataOutput: Bool = true, isDepthDataOutput: Bool = false) {
 			self.presetiFrame = presetiFrame
 			self.frameRate = frameRate
 			self.devicePosition = devicePosition
-			self.isDepth = isDepth
+            self.isAudioDataOutput = isAudioDataOutput
+			self.isDepthDataOutput = isDepthDataOutput
 		}
 	}
 }

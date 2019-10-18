@@ -23,15 +23,17 @@ class VideoCaptureViewExampleVC: UIViewController {
 		presetiFrame: Settings.PresetiFrame.p1280x720,
 		frameRate: 30,
 		devicePosition: AVCaptureDevice.Position.back,
-		isDepth: false
+        isAudioDataOutput: true,
+        isDepthDataOutput: false
 	)
 
 	
 	deinit {
 		self.videoCaptureView.pause()
 		self.videoCaptureView.dispose()
-	}
-	
+        Debug.DeinitLog(self)
+    }
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -241,7 +243,7 @@ class VideoCaptureViewExampleVC: UIViewController {
 		let action001: UIAlertAction = UIAlertAction(title: "DepthMap", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 
-			self.videoCaputureParamator.isDepth = true
+            self.videoCaputureParamator.isDepthDataOutput = true
 			do {
 				try self.videoCaptureView.setup(self.videoCaputureParamator)
 				self.videoCaptureView.play()
@@ -252,7 +254,7 @@ class VideoCaptureViewExampleVC: UIViewController {
 		let action002: UIAlertAction = UIAlertAction(title: "DepthMap Normalize", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 			
-			self.videoCaputureParamator.isDepth = true
+			self.videoCaputureParamator.isDepthDataOutput = true
 			do {
 				try self.videoCaptureView.setup(self.videoCaputureParamator)
 				self.videoCaptureView.play()
@@ -270,7 +272,7 @@ class VideoCaptureViewExampleVC: UIViewController {
 		let action003: UIAlertAction = UIAlertAction(title: "DepthMap Thresholding（顔をもとに２値化）", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 
-			self.videoCaputureParamator.isDepth = true
+			self.videoCaputureParamator.isDepthDataOutput = true
 			do {
 				try self.videoCaptureView.setup(self.videoCaputureParamator)
 				self.videoCaptureView.play()
@@ -289,7 +291,7 @@ class VideoCaptureViewExampleVC: UIViewController {
 		let action004: UIAlertAction = UIAlertAction(title: "OFF", style: UIAlertAction.Style.default, handler:{
 			(action: UIAlertAction!) -> Void in
 
-			self.videoCaputureParamator.isDepth = false
+			self.videoCaputureParamator.isDepthDataOutput = false
 			do {
 				try self.videoCaptureView.setup(self.videoCaputureParamator)
 				self.videoCaptureView.play()

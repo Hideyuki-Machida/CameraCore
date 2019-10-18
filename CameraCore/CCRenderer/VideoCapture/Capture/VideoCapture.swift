@@ -26,7 +26,8 @@ extension CCRenderer.VideoCapture {
 			presetiFrame: Settings.PresetiFrame.p1280x720,
 			frameRate: 30,
 			devicePosition: AVCaptureDevice.Position.front,
-			isDepth: false
+            isAudioDataOutput: true,
+			isDepthDataOutput: false
 		)
 
 		public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)? {

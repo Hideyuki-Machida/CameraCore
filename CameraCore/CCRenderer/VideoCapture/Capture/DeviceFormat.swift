@@ -146,5 +146,10 @@ extension CCRenderer.VideoCapture {
 			self.onUpdate?(deviceFormat)
 			return (deviceFormat: deviceFormat, depthDataFormat: nil, filterColorSpace: nil, minFrameRate: minFrameRate, maxFrameRate: maxFrameRate)
 		}
+        
+        deinit {
+            Debug.DeinitLog(self)
+        }
+
 	}
 }

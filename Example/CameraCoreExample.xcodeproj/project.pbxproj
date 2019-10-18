@@ -18,6 +18,8 @@
 		624BC1132338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1122338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel */; };
 		624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */; };
 		624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */; };
+		624D06D42355C64100B203A5 /* VideoCaptureView002ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D06D32355C64100B203A5 /* VideoCaptureView002ExampleVC.swift */; };
+		624D06D62355C90400B203A5 /* FaceLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D06D52355C90400B203A5 /* FaceLayer.swift */; };
 		62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; };
 		62926252232FE8CF00D47CF0 /* CameraCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62926253232FE8CF00D47CF0 /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62926250232FE8CF00D47CF0 /* MetalCanvas.framework */; };
@@ -64,6 +66,8 @@
 		624BC1122338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3Tiny.mlmodel; sourceTree = "<group>"; };
 		624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLYOLOv3TinyExampleVC.swift; sourceTree = "<group>"; };
 		624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLYOLOv3TinyLayer.swift; sourceTree = "<group>"; };
+		624D06D32355C64100B203A5 /* VideoCaptureView002ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureView002ExampleVC.swift; sourceTree = "<group>"; };
+		624D06D52355C90400B203A5 /* FaceLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceLayer.swift; sourceTree = "<group>"; };
 		6292624F232FE8CF00D47CF0 /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926250232FE8CF00D47CF0 /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
@@ -124,7 +128,9 @@
 			isa = PBXGroup;
 			children = (
 				62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */,
+				624D06D32355C64100B203A5 /* VideoCaptureView002ExampleVC.swift */,
 				62CE222223376E5D00F3AB3A /* DepthMapLayer.swift */,
+				624D06D52355C90400B203A5 /* FaceLayer.swift */,
 			);
 			path = VideoCaptureViewExample;
 			sourceTree = "<group>";
@@ -255,12 +261,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				624D06D62355C90400B203A5 /* FaceLayer.swift in Sources */,
 				621FDAF82338A7AA0034A1D9 /* MobileNetV2.mlmodel in Sources */,
 				624BC1132338B8E600A2D8F0 /* YOLOv3Tiny.mlmodel in Sources */,
 				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
 				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,
 				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
+				624D06D42355C64100B203A5 /* VideoCaptureView002ExampleVC.swift in Sources */,
 				6249747C2349D26800325650 /* DeepLabV3.mlmodel in Sources */,
 				62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */,
 				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,

@@ -42,15 +42,13 @@ extension CCRenderer.VideoCapture {
 		}
 
 		let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue", attributes: .concurrent)
-		
+
 		var currentVideoInput: AVCaptureDeviceInput? {
 			return self.captureSession?.inputs
 				.compactMap { $0 as? AVCaptureDeviceInput }
 				.filter { $0.device.hasMediaType(AVMediaType.video) }.first
 		}
-		
-		
-		
+
 		internal enum VideoSettingError: Error {
 			case captureSetting
 			case videoDataOutput
@@ -91,9 +89,7 @@ extension CCRenderer.VideoCapture {
 			if videoDevice.isSmoothAutoFocusSupported {
 				videoDevice.isSmoothAutoFocusEnabled = self.propertys.info.isSmoothAutoFocusEnabled
 			}
-			
-			print("@@@")
-			print(videoDevice.automaticallyEnablesLowLightBoostWhenAvailable)
+
 			videoDevice.activeColorSpace = self.propertys.info.colorSpace
 			videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
 			videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: frameRate)

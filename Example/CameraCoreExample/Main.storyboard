@@ -26,17 +26,17 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="MlT-fR-0eq" kind="show" id="iit-eg-iK7"/>
+                                            <segue destination="ogz-Ai-zNg" kind="show" id="idL-xG-3Td"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kKS-Da-nrL">
                                         <rect key="frame" x="0.0" y="110" width="335" height="100"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="Video撮影（VideoCaptureView）">
+                                        <state key="normal" title="Video撮影-設定（VideoCaptureView）">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="ogz-Ai-zNg" kind="show" id="rZ2-Ll-8ka"/>
+                                            <segue destination="MlT-fR-0eq" kind="show" id="DMm-Ja-87h"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8X4-MO-T4T">
@@ -113,10 +113,10 @@
             </objects>
             <point key="canvasLocation" x="-1316" y="134"/>
         </scene>
-        <!--Video撮影（MetalVideoCaptureView）-->
+        <!--Video撮影-設定（VideoCaptureView）-->
         <scene sceneID="xuJ-3b-NMG">
             <objects>
-                <viewController id="MlT-fR-0eq" customClass="VideoCaptureViewExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="MlT-fR-0eq" customClass="VideoCaptureView002ExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Cig-nP-HsL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -167,7 +167,7 @@
                                 <rect key="frame" x="265" y="98" width="100" height="660"/>
                                 <subviews>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-6v-576">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="101.66666666666667"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="124"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="FPS設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -177,7 +177,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RMG-9r-rLy">
-                                        <rect key="frame" x="0.0" y="111.66666666666666" width="100" height="101.66666666666666"/>
+                                        <rect key="frame" x="0.0" y="134" width="100" height="124"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="解像度設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -187,7 +187,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gd0-tn-yRO">
-                                        <rect key="frame" x="0.0" y="223.33333333333329" width="100" height="101.66666666666666"/>
+                                        <rect key="frame" x="0.0" y="268" width="100" height="124"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Touch設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -197,7 +197,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6Q-Tk-2Ca">
-                                        <rect key="frame" x="0.0" y="335" width="100" height="101.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="402" width="100" height="124"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Position設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -206,19 +206,8 @@
                                             <action selector="setPositionBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="3b1-TD-hPf"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jMo-Za-qHI">
-                                        <rect key="frame" x="0.0" y="446.66666666666663" width="100" height="101.66666666666663"/>
-                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="DepthData設定">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="setDepthDataBtnTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="8BL-Pu-HbT"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUe-4O-Grt">
-                                        <rect key="frame" x="0.0" y="558.33333333333337" width="100" height="101.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="536" width="100" height="124"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <state key="normal" title="Filter設定">
@@ -286,7 +275,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Video撮影（MetalVideoCaptureView）" id="hes-Ms-JKG"/>
+                    <navigationItem key="navigationItem" title="Video撮影-設定（VideoCaptureView）" id="hes-Ms-JKG"/>
                     <connections>
                         <outlet property="recordingButton" destination="Tal-zV-BPs" id="s8l-Bl-YYz"/>
                         <outlet property="videoCaptureView" destination="kwp-Sn-9aa" id="2G7-JY-71E"/>
@@ -629,10 +618,10 @@
             </objects>
             <point key="canvasLocation" x="238" y="2285"/>
         </scene>
-        <!--CoreML使用サンプル（MobileNetV2）-->
+        <!--Video撮影（VideoCaptureView）-->
         <scene sceneID="YCw-gE-5hj">
             <objects>
-                <viewController id="ogz-Ai-zNg" customClass="VideoCaptureView002ExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ogz-Ai-zNg" customClass="VideoCaptureView001ExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2jm-Vg-Aye">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -665,14 +654,32 @@
                                     </mask>
                                 </variation>
                             </mtkView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v33-8l-37t">
+                                <rect key="frame" x="10" y="708" width="355" height="60"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="w0l-Lv-uKy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="撮影開始">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="recordingTapAction:" destination="ogz-Ai-zNg" eventType="touchUpInside" id="Of6-Dg-PJG"/>
+                                    <action selector="recordingTapAction:" destination="MlT-fR-0eq" eventType="touchUpInside" id="U9w-hP-D7f"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="tKj-zH-Vgt" firstAttribute="trailing" secondItem="v33-8l-37t" secondAttribute="trailing" constant="10" id="15g-eG-aWn"/>
+                            <constraint firstItem="v33-8l-37t" firstAttribute="leading" secondItem="tKj-zH-Vgt" secondAttribute="leading" constant="10" id="7PL-xg-gWB"/>
                             <constraint firstAttribute="trailing" secondItem="b6L-6w-eVa" secondAttribute="trailing" id="Asn-zN-n12"/>
                             <constraint firstAttribute="bottom" secondItem="b6L-6w-eVa" secondAttribute="bottom" id="GD3-eW-FBI"/>
                             <constraint firstItem="b6L-6w-eVa" firstAttribute="top" secondItem="2jm-Vg-Aye" secondAttribute="top" id="MuL-AO-gbg"/>
                             <constraint firstItem="b6L-6w-eVa" firstAttribute="leading" secondItem="2jm-Vg-Aye" secondAttribute="leading" id="UmG-XF-n0p"/>
                             <constraint firstItem="b6L-6w-eVa" firstAttribute="centerY" secondItem="2jm-Vg-Aye" secondAttribute="centerY" id="Vv3-56-Cjc"/>
+                            <constraint firstItem="tKj-zH-Vgt" firstAttribute="bottom" secondItem="v33-8l-37t" secondAttribute="bottom" constant="10" id="kAg-Ua-0t8"/>
                             <constraint firstItem="b6L-6w-eVa" firstAttribute="centerX" secondItem="2jm-Vg-Aye" secondAttribute="centerX" id="w10-0W-3wN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tKj-zH-Vgt"/>
@@ -703,14 +710,15 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="CoreML使用サンプル（MobileNetV2）" id="7ig-6h-GQZ"/>
+                    <navigationItem key="navigationItem" title="Video撮影（VideoCaptureView）" id="7ig-6h-GQZ"/>
                     <connections>
+                        <outlet property="recordingButton" destination="v33-8l-37t" id="LeP-We-CQ1"/>
                         <outlet property="videoCaptureView" destination="b6L-6w-eVa" id="sQI-i7-U2k"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cQm-Pp-xI0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-482.39999999999998" y="2284.729064039409"/>
+            <point key="canvasLocation" x="238" y="-625"/>
         </scene>
         <!--CoreML使用サンプル（YOLOv3Tiny）-->
         <scene sceneID="hm7-fV-UoT">

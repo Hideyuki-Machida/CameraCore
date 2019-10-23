@@ -65,6 +65,19 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 		NotificationCenter.default.removeObserver(self)
 	}
 	
+	public override func setup() throws {
+		try super.setup()
+		let propertys: CCRenderer.VideoCapture.Propertys = CCRenderer.VideoCapture.Propertys.init(
+			devicePosition: AVCaptureDevice.Position.back,
+			deviceType: AVCaptureDevice.DeviceType.builtInDualCamera,
+			option: [
+				.captureSize(Settings.PresetSize.p1280x720),
+				.frameRate(Settings.PresetFrameRate.fr30)
+			]
+		)
+		try self.setup(propertys)
+	}
+
 	public func setup(_ propertys: CCRenderer.VideoCapture.Propertys) throws {
 		self.status = .setup
 

@@ -9,8 +9,8 @@
 import Foundation
 
 extension CCRenderer.VideoCapture {
-    public enum ErrorType: Error {
-        case setupError
-        case render
-    }
+	public enum ErrorType: Error {
+		case setupError
+		case render
+	}
 }

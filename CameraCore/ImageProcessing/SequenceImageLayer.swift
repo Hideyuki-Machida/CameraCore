@@ -10,39 +10,39 @@ import AVFoundation
 import MetalCanvas
 
 final public class SequenceImageLayer: RenderLayerProtocol {
-    public let type: RenderLayerType = RenderLayerType.sequenceImage
-    public var id: RenderLayerId
-    public let customIndex: Int = 0
-    private let imagePaths: [URL]
+	public let type: RenderLayerType = RenderLayerType.sequenceImage
+	public var id: RenderLayerId
+	public let customIndex: Int = 0
+	private let imagePaths: [URL]
 	//private var overImages: [Int: MCTexture] = [:]
-    private let blendMode: Blendmode
-    private let alpha: CGFloat
-    private let updateFrameRate: TimeInterval
-    private let resize: Bool
-	
+	private let blendMode: Blendmode
+	private let alpha: CGFloat
+	private let updateFrameRate: TimeInterval
+	private let resize: Bool
+
 	private var _filterCashImageList: [Int: CIImage] = [:] // エフェクトフィルターキャッシュ
 
-	
-    public init(imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: Int32 = 30, resize: Bool = true) {
-        self.id = RenderLayerId()
+
+	public init(imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: Int32 = 30, resize: Bool = true) {
+		self.id = RenderLayerId()
 		self.imagePaths = imagePaths.sorted(by: {$0.lastPathComponent < $1.lastPathComponent})
-        self.blendMode = blendMode
-        self.alpha = alpha
-        self.updateFrameRate = TimeInterval(updateFrameRate)
-        self.resize = resize
-    }
+		self.blendMode = blendMode
+		self.alpha = alpha
+		self.updateFrameRate = TimeInterval(updateFrameRate)
+		self.resize = resize
+	}
 
 	fileprivate init(id: RenderLayerId, imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: TimeInterval = 30, resize: Bool = true) {
-        self.id = id
+		self.id = id
 		self.imagePaths = imagePaths.sorted(by: {$0.lastPathComponent < $1.lastPathComponent})
 		self.blendMode = blendMode
 		self.alpha = alpha
 		self.updateFrameRate = updateFrameRate
 		self.resize = resize
 	}
-	
-    //public func setup(assetData: CompositionVideoAsset) {}
-    
+
+	//public func setup(assetData: CompositionVideoAsset) {}
+
 	/// キャッシュを消去
 	public func dispose() {
 		self._filterCashImageList.removeAll()

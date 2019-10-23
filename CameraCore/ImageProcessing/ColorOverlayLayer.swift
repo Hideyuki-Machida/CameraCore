@@ -60,21 +60,21 @@ extension ColorOverlayLayer: MetalRenderLayerProtocol {
 		let outImage: CIImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
-    
-    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-        let img: CIImage? = self._fragmentShader!.apply(extent: image.extent, arguments: [
-            image,
-            CIVector(x: image.extent.width, y: image.extent.height),
-            self.color,
-            NSNumber(value: self.offset)
-            ])
-        
-        if let img: CIImage = img {
-            return img
-        } else {
-            throw CCRenderer.ErrorType.rendering
-        }
-    }
+
+	fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+		let img: CIImage? = self._fragmentShader!.apply(extent: image.extent, arguments: [
+			image,
+			CIVector(x: image.extent.width, y: image.extent.height),
+			self.color,
+			NSNumber(value: self.offset)
+			])
+		
+		if let img: CIImage = img {
+			return img
+		} else {
+			throw CCRenderer.ErrorType.rendering
+		}
+	}
 
 }
 

@@ -11,8 +11,8 @@ import Foundation
 
 public struct CCRenderer {
 	public enum ErrorType: Error {
-        case deviceFormat
-        case rendering
+		case deviceFormat
+		case rendering
 	}
 	public struct VideoCapture {}
 	public struct ARRenderer {}

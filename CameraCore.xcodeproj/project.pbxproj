@@ -48,7 +48,6 @@
 		62E5CAD722904A35004D258A /* CaptureWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6322904A34004D258A /* CaptureWriter.swift */; };
 		62E5CAD822904A35004D258A /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6422904A34004D258A /* VideoCapture.swift */; };
 		62E5CAD922904A35004D258A /* VideoCaptureOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6522904A34004D258A /* VideoCaptureOutput.swift */; };
-		62E5CADA22904A35004D258A /* DeviceFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6622904A34004D258A /* DeviceFormat.swift */; };
 		62E5CADB22904A35004D258A /* VideoCaptureViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6722904A34004D258A /* VideoCaptureViewEvent.swift */; };
 		62E5CADD22904A35004D258A /* VideoCaptureViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA6922904A34004D258A /* VideoCaptureViewProtocol.swift */; };
 		62E5CAF022904A35004D258A /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA7F22904A34004D258A /* Configuration.swift */; };
@@ -130,7 +129,6 @@
 		62E5CA6322904A34004D258A /* CaptureWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureWriter.swift; sourceTree = "<group>"; };
 		62E5CA6422904A34004D258A /* VideoCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		62E5CA6522904A34004D258A /* VideoCaptureOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureOutput.swift; sourceTree = "<group>"; };
-		62E5CA6622904A34004D258A /* DeviceFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceFormat.swift; sourceTree = "<group>"; };
 		62E5CA6722904A34004D258A /* VideoCaptureViewEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewEvent.swift; sourceTree = "<group>"; };
 		62E5CA6922904A34004D258A /* VideoCaptureViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewProtocol.swift; sourceTree = "<group>"; };
 		62E5CA7F22904A34004D258A /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -322,7 +320,6 @@
 				62E5CA6322904A34004D258A /* CaptureWriter.swift */,
 				62E5CA6422904A34004D258A /* VideoCapture.swift */,
 				62E5CA6522904A34004D258A /* VideoCaptureOutput.swift */,
-				62E5CA6622904A34004D258A /* DeviceFormat.swift */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -527,7 +524,6 @@
 				6292627F232FEC2600D47CF0 /* CameraRollManager.swift in Sources */,
 				62E5CAD922904A35004D258A /* VideoCaptureOutput.swift in Sources */,
 				62E5CAF022904A35004D258A /* Configuration.swift in Sources */,
-				62E5CADA22904A35004D258A /* DeviceFormat.swift in Sources */,
 				62E5CAD322904A35004D258A /* RenderEventControllerProtocol.swift in Sources */,
 				623B924E2360406A00EE0B84 /* AVCaptureColorSpace+Extended.swift in Sources */,
 				62E5CAD822904A35004D258A /* VideoCapture.swift in Sources */,

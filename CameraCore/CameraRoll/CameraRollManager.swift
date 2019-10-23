@@ -12,33 +12,33 @@ import Photos
 
 final public class CameraRollManager: NSObject {
 	
-    public enum ErrorType: Error {
-        case authorizeError
-        case move
-        case createAlbum
-        case save
-    }
-    
-    public enum SaveType {
-        case copy
-        case move
-    }
-    
-    fileprivate let queue: DispatchQueue = DispatchQueue(label: "AVModule.CameraRollManager.queue", attributes: .concurrent)
-    
-    public static var imageSize: CGSize = CGSize(width: 200, height: 200)
-    public static var albumName: String = "CameraCore_Album" {
-        didSet {
-            self._setup { (result: Result<PHAssetCollection, Error>) in
+	public enum ErrorType: Error {
+		case authorizeError
+		case move
+		case createAlbum
+		case save
+	}
+
+	public enum SaveType {
+		case copy
+		case move
+	}
+
+	fileprivate let queue: DispatchQueue = DispatchQueue(label: "AVModule.CameraRollManager.queue", attributes: .concurrent)
+
+	public static var imageSize: CGSize = CGSize(width: 200, height: 200)
+	public static var albumName: String = "CameraCore_Album" {
+		didSet {
+			self._setup { (result: Result<PHAssetCollection, Error>) in
 				do {
-                	Debug.ActionLog(try result.get())
+					Debug.ActionLog(try result.get())
 				} catch {
 					
 				}
-            }
-        }
-    }
-    
+			}
+		}
+	}
+
 	fileprivate static let udKey: String = "AVModule.CameraRollManager_album_localIdentifier"
 	fileprivate static var album: PHAssetCollection?
 	
@@ -46,7 +46,7 @@ final public class CameraRollManager: NSObject {
 		//self._setup {_ in }
 	}
 	
-    public static func save(videoFileURL: URL, type: SaveType = .copy, completion: @escaping (Result<URL, Error>) -> Void) {
+	public static func save(videoFileURL: URL, type: SaveType = .copy, completion: @escaping (Result<URL, Error>) -> Void) {
 		self.authorization { (result: Bool) in
 			if result == true {
 				// アクセス許可有り
@@ -69,23 +69,23 @@ final public class CameraRollManager: NSObject {
 					
 				}, completionHandler: { (success, err) in
 					if success == true {
-                        Debug.SuccessLog("保存成功！")
+						Debug.SuccessLog("保存成功！")
 						let assets  = PHAsset.fetchAssets(withLocalIdentifiers: [identifier!], options: nil)
 						let options: PHVideoRequestOptions = PHVideoRequestOptions()
 						PHImageManager.default().requestAVAsset(forVideo: assets.firstObject!, options: options, resultHandler: { (item: AVAsset?, audio: AVAudioMix?, AnyHashable: [AnyHashable : Any]?) in
 							let ass: AVURLAsset = item as! AVURLAsset
 
-                            switch type {
-                            case .copy:
+							switch type {
+							case .copy:
 								completion(.success(ass.url))
-                            case .move:
-                                do {
-                                    try FileManager.default.removeItem(at: videoFileURL)
+							case .move:
+								do {
+									try FileManager.default.removeItem(at: videoFileURL)
 									completion(.success(ass.url))
-                                } catch {
+								} catch {
 									completion(.failure(ErrorType.save))
-                                }
-                            }
+								}
+							}
 						})
 					} else {
 						Debug.ErrorLog("保存失敗！ \(String(describing: err)) \(String(describing: err?.localizedDescription))")
@@ -125,11 +125,11 @@ final public class CameraRollManager: NSObject {
 			// アクセス許可されていない
 			Debug.ErrorLog("アクセス許可されていない")
 			PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) in
-                if status == .authorized {
-                    completion(true)
-                } else {
-                    completion(false)
-                }
+				if status == .authorized {
+					completion(true)
+				} else {
+					completion(false)
+				}
 			})
 		@unknown default:
 			completion(false)
@@ -214,57 +214,57 @@ final public class CameraRollManager: NSObject {
 
 extension CameraRollManager {
 	/// カメラロールからアセット一式を取得
-    public static func fetchPHAssetData(completion: @escaping ((_ items: [CameraRollItem])->Void)) {
-        
-        var resultItem: [CameraRollItem] = []
-        self._getAssetItem(mediaType: CameraRollAssetType.image) { (item: [CameraRollItem]) in
-            resultItem += item
-            self._getAssetItem(mediaType: CameraRollAssetType.video) { (item: [CameraRollItem]) in
-                resultItem += item
-                resultItem.sort { (lhs: CameraRollItem, rhs: CameraRollItem) -> Bool in
-                    return lhs.creationDate > rhs.creationDate
-                }
-                DispatchQueue.main.async {
-                    completion(resultItem)
-                }
-            }
-        }
-    }
+	public static func fetchPHAssetData(completion: @escaping ((_ items: [CameraRollItem])->Void)) {
+		
+		var resultItem: [CameraRollItem] = []
+		self._getAssetItem(mediaType: CameraRollAssetType.image) { (item: [CameraRollItem]) in
+			resultItem += item
+			self._getAssetItem(mediaType: CameraRollAssetType.video) { (item: [CameraRollItem]) in
+				resultItem += item
+				resultItem.sort { (lhs: CameraRollItem, rhs: CameraRollItem) -> Bool in
+					return lhs.creationDate > rhs.creationDate
+				}
+				DispatchQueue.main.async {
+					completion(resultItem)
+				}
+			}
+		}
+	}
 
-    /// カメラロールからVideoアセット一式を取得
-    public static func fetchPHAssetData(mediaType: CameraRollAssetType, completion: @escaping ((_ items: [CameraRollItem])->Void)) {
-        
-        var resultItem: [CameraRollItem] = []
-        self._getAssetItem(mediaType: mediaType) { (item: [CameraRollItem]) in
-            resultItem += item
-            resultItem.sort { (lhs: CameraRollItem, rhs: CameraRollItem) -> Bool in
-                return lhs.creationDate > rhs.creationDate
-            }
-            DispatchQueue.main.async {
-                completion(resultItem)
-            }
-        }
-    }
+	/// カメラロールからVideoアセット一式を取得
+	public static func fetchPHAssetData(mediaType: CameraRollAssetType, completion: @escaping ((_ items: [CameraRollItem])->Void)) {
+		
+		var resultItem: [CameraRollItem] = []
+		self._getAssetItem(mediaType: mediaType) { (item: [CameraRollItem]) in
+			resultItem += item
+			resultItem.sort { (lhs: CameraRollItem, rhs: CameraRollItem) -> Bool in
+				return lhs.creationDate > rhs.creationDate
+			}
+			DispatchQueue.main.async {
+				completion(resultItem)
+			}
+		}
+	}
 }
 
 extension CameraRollManager {
-    private static func _getAssetItem(mediaType: CameraRollAssetType, completion: @escaping ((_ items: [CameraRollItem])->Void)) {
-        DispatchQueue.global(qos: .utility).async {
-            var items: [CameraRollItem] = []
-            let options: PHFetchOptions = PHFetchOptions()
-            options.sortDescriptors = [
-                NSSortDescriptor(key: "creationDate", ascending: false)
-            ]
-            
-            let result: PHFetchResult = PHAsset.fetchAssets(with: mediaType.phAssetMediaType, options: options)
-            var count: Int = 0
-            result.enumerateObjects(options: []) { (phAsset: PHAsset, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-                items.append(CameraRollItem(asset: phAsset, mediaType: mediaType.phAssetMediaType, creationDate: phAsset.creationDate!))
-                count += 1
-                if count >= result.count {
-                    completion(items)
-                }
-            }
-        }
-    }
+	private static func _getAssetItem(mediaType: CameraRollAssetType, completion: @escaping ((_ items: [CameraRollItem])->Void)) {
+		DispatchQueue.global(qos: .utility).async {
+			var items: [CameraRollItem] = []
+			let options: PHFetchOptions = PHFetchOptions()
+			options.sortDescriptors = [
+				NSSortDescriptor(key: "creationDate", ascending: false)
+			]
+			
+			let result: PHFetchResult = PHAsset.fetchAssets(with: mediaType.phAssetMediaType, options: options)
+			var count: Int = 0
+			result.enumerateObjects(options: []) { (phAsset: PHAsset, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+				items.append(CameraRollItem(asset: phAsset, mediaType: mediaType.phAssetMediaType, creationDate: phAsset.creationDate!))
+				count += 1
+				if count >= result.count {
+					completion(items)
+				}
+			}
+		}
+	}
 }

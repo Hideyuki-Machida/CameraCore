@@ -49,16 +49,16 @@ extension MaskLayer: MetalRenderLayerProtocol {
 		let outImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
 		MCCore.ciContext.render(outImage, to: destination, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
 	}
-    
-    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
-        let image: CIImage = self.maskShader.apply(extent: image.extent, arguments: [
-            image,
-            self.mask,
-            CIVector(x: image.extent.width, y: image.extent.height),
-            ])!
-        
-        return image
-    }
+
+	fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+		let image: CIImage = self.maskShader.apply(extent: image.extent, arguments: [
+			image,
+			self.mask,
+			CIVector(x: image.extent.width, y: image.extent.height),
+			])!
+		
+		return image
+	}
 
 }
 

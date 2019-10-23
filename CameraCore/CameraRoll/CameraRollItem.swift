@@ -164,33 +164,33 @@ public class CameraRollItem {
 }
 
 extension CameraRollItem {
-    public func getVideoURL(exportPreset: Settings.PresetSize, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
-        let options: PHVideoRequestOptions = PHVideoRequestOptions()
-        options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
+	public func getVideoURL(exportPreset: Settings.PresetSize, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
+		let options: PHVideoRequestOptions = PHVideoRequestOptions()
+		options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
 		options.isNetworkAccessAllowed = true
 		options.version = PHVideoRequestOptionsVersion.original
-        options.progressHandler = { (progress, error, stop, info) in
-            progressUpdate?(progress)
-        }
+		options.progressHandler = { (progress, error, stop, info) in
+			progressUpdate?(progress)
+		}
 		
-        PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset(), resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
+		PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset(), resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
 			
 			if let asset: AVURLAsset = session?.asset as? AVURLAsset {
 				complete?(.success(asset))
 			} else {
 				complete?(.failure(ErrorType.exportSession))
 			}
-        })
-    }
+		})
+	}
 
-    public func getImageData(progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<Data, Error>)->Void)?) {
-        let options: PHImageRequestOptions = PHImageRequestOptions()
-        options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
-        //options.isSynchronous = false
-        options.isNetworkAccessAllowed = true
-        options.progressHandler = {  (progress, error, stop, info) in
-            progressUpdate?(progress)
-        }
+	public func getImageData(progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<Data, Error>)->Void)?) {
+		let options: PHImageRequestOptions = PHImageRequestOptions()
+		options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
+		//options.isSynchronous = false
+		options.isNetworkAccessAllowed = true
+		options.progressHandler = {  (progress, error, stop, info) in
+			progressUpdate?(progress)
+		}
 
 		PHImageManager.default().requestImageData(for: self.asset, options: options) { (data: Data?, st: String?, orientation: UIImage.Orientation, info: [AnyHashable : Any]?) in
 			if let data: Data = data {
@@ -200,7 +200,7 @@ extension CameraRollItem {
 			}
 
 		}
-    }
+	}
 }
 
 extension CameraRollItem {

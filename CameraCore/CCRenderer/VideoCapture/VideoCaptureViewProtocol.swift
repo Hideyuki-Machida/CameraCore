@@ -10,34 +10,34 @@ import Foundation
 import AVFoundation
 
 public protocol VideoCaptureViewProtocol {
-    var status: VideoCaptureStatus { get }
-    var capture: CCRenderer.VideoCapture.VideoCapture? { get }
-    var isRecording: Bool  { get }
+	var status: VideoCaptureStatus { get }
+	var capture: CCRenderer.VideoCapture.VideoCapture? { get }
+	var isRecording: Bool  { get }
 
-    var croppingRect: CGRect? { get set }
-    var renderSize: CGSize? { get set }
-    
-    /////////////////////////////////////////////////
-    // Event
-    var event: VideoCaptureViewEvent? { get set }
+	var croppingRect: CGRect? { get set }
+	var renderSize: CGSize? { get set }
 
-    /////////////////////////////////////////////////
-    // RenderLayers
-    var renderLayers: [RenderLayerProtocol]  { get set }
-    
-    /////////////////////////////////////////////////
-    // Set
-    func setup(_ paramator: CCRenderer.VideoCapture.Propertys) throws
-    
-    /////////////////////////////////////////////////
-    // Capture Control
-    func play()
-    func pause()
-    func dispose()
+	/////////////////////////////////////////////////
+	// Event
+	var event: VideoCaptureViewEvent? { get set }
 
-    /////////////////////////////////////////////////
-    // Recording Control
-    func recordingStart(_ paramator: CCRenderer.VideoCapture.CaptureWriter.Paramator) throws
-    func recordingStop()
-    func recordingCancelled()
+	/////////////////////////////////////////////////
+	// RenderLayers
+	var renderLayers: [RenderLayerProtocol]  { get set }
+
+	/////////////////////////////////////////////////
+	// Set
+	func setup(_ paramator: CCRenderer.VideoCapture.Propertys) throws
+
+	/////////////////////////////////////////////////
+	// Capture Control
+	func play()
+	func pause()
+	func dispose()
+
+	/////////////////////////////////////////////////
+	// Recording Control
+	func recordingStart(_ paramator: CCRenderer.VideoCapture.CaptureWriter.Paramator) throws
+	func recordingStop()
+	func recordingCancelled()
 }

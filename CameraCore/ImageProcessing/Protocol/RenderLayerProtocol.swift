@@ -29,30 +29,30 @@ public enum RenderLayerType: Int, Codable {
 	case transformLayer = 1
 	case image = 2
 	case lut = 3
-    case sequenceImage = 4
-    case mask = 5
-    case colorOverlay = 6
+	case sequenceImage = 4
+	case mask = 5
+	case colorOverlay = 6
 
-    case metalImageBlend = 100
+	case metalImageBlend = 100
 	
 	case group = 1000
 	
-    case custom = 9999
+	case custom = 9999
 
-    public func type() -> RenderLayerProtocol.Type? {
-        switch self {
-        case .blank: return BlankLayer.self
-        case .transformLayer: return TransformLayer.self
-        case .image: return ImageLayer.self
-        case .lut: return LutLayer.self
-        case .sequenceImage: return SequenceImageLayer.self
-        case .mask: return MaskLayer.self
-        case .colorOverlay: return ColorOverlayLayer.self
+	public func type() -> RenderLayerProtocol.Type? {
+		switch self {
+		case .blank: return BlankLayer.self
+		case .transformLayer: return TransformLayer.self
+		case .image: return ImageLayer.self
+		case .lut: return LutLayer.self
+		case .sequenceImage: return SequenceImageLayer.self
+		case .mask: return MaskLayer.self
+		case .colorOverlay: return ColorOverlayLayer.self
 		case .group: return GroupLayer.self
-        case .custom: return nil
+		case .custom: return nil
 		case .metalImageBlend: return MetalImageBlendLayer.self
 		}
-    }
+	}
 }
 
 // MARK: レンダリングブレンドモード
@@ -81,16 +81,16 @@ public enum Blendmode: String, Codable {
 // MARK: レンダリングレイヤー protocol
 public protocol RenderLayerProtocol {
 	var id: RenderLayerId { get }
-    var type: RenderLayerType { get }
-    var customIndex: Int { get }
-    //mutating func setup(assetData: CompositionVideoAsset)
+	var type: RenderLayerType { get }
+	var customIndex: Int { get }
+	//mutating func setup(assetData: CompositionVideoAsset)
 	
 	/*
 	mutating func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: inout MTLTexture, destinationTexture: inout MTLTexture, sourcePixelBuffer: inout CVPixelBuffer, destinationPixelBuffer: inout CVPixelBuffer, renderSize: CGSize) -> Void
 */
 	mutating func dispose()
-    //func toJsonData() throws -> Data
-    //static func decode(to: Data) throws -> RenderLayerProtocol
+	//func toJsonData() throws -> Data
+	//static func decode(to: Data) throws -> RenderLayerProtocol
 }
 
 public protocol MetalRenderLayerProtocol: RenderLayerProtocol {

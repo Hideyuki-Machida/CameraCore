@@ -44,17 +44,17 @@ class VideoCaptureView002ExampleVC: UIViewController {
 		super.viewDidLoad()
 
 		let event: VideoCaptureViewEvent = VideoCaptureViewEvent()
-		event.onRecodingUpdate = { [weak self] (recordedDuration: TimeInterval) in
+		event.onRecodingUpdate = { (recordedDuration: TimeInterval) in
 			print(recordedDuration)
 		}
-		event.onRecodingComplete = { [weak self] (result: Bool, filePath: URL) in
+		event.onRecodingComplete = { (result: Bool, filePath: URL) in
 			print(result)
 			print(filePath)
 			if result {
 			} else {
 			}
 		}
-		event.onPreviewUpdate = { [weak self] (sampleBuffer: CMSampleBuffer) in
+		event.onPreviewUpdate = { (sampleBuffer: CMSampleBuffer) in
 			//print(sampleBuffer)
 		}
 

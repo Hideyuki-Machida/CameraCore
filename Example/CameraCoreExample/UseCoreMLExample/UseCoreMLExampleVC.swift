@@ -13,7 +13,7 @@ import CameraCore
 class UseCoreMLExampleVC: UIViewController {
 
 	@IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
-    @IBOutlet weak var classificationLabel: UILabel!
+	@IBOutlet weak var classificationLabel: UILabel!
 	
 	var videoCaputurePropertys = CCRenderer.VideoCapture.Propertys.init(
 		devicePosition: AVCaptureDevice.Position.back,

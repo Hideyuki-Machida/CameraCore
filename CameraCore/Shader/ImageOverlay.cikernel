@@ -1,0 +1,16 @@
+kernel vec4 filterKernel(sampler image, vec2 resolution, __sample overImage, float alpha)
+{
+	// UVの生成
+	highp vec2 textureCoordinate = destCoord();
+	highp vec2 uv = (textureCoordinate / resolution);
+
+	// ColorVec4の生成
+	//highp vec4 baseColor = sample(image, uv);
+	//highp vec4 overColor = sample(overImage, uv);
+	highp vec4 baseColor = image.rgba;
+	highp vec4 overColor = overImagea.rgba;
+
+	// Overlay合成
+	highp vec3 resultColor = (baseColor.rgb * (1.0 - alpha)) + (overColor.rgb * alpha);
+	return vec4(resultColor.rgb, 1.0);
+}

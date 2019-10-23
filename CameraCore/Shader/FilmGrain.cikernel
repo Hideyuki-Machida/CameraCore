@@ -1,0 +1,10 @@
+kernel vec4 filterKernel(__sample image, vec2 resolution, float strength, float time)
+{
+	highp vec2 textureCoordinate = destCoord();
+	highp vec2 uv = textureCoordinate / resolution;
+	//highp vec4 color = sample(image, uv);
+	highp vec4 color = image.rgba;
+	highp float x = (uv.x + 4.0 ) * (uv.y + 4.0 ) * (time * 10.0);
+	highp vec4 grain = vec4(mod((mod(x, 13.0) + 1.0) * (mod(x, 123.0) + 1.0), 0.01) - 0.005) * strength;
+	return color + grain;
+}

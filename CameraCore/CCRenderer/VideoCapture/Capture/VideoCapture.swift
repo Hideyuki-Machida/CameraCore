@@ -10,26 +10,28 @@ import UIKit
 import AVFoundation
 
 extension CCRenderer.VideoCapture {
-	public final class VideoCapture: NSObject {
+	public final class VideoCapture {
 		
 		internal enum ErrorType: Error {
 			case setupError
 		}
 		
 		let captureOutput: VideoCaptureOutput = VideoCaptureOutput()
-		let deviceFormat: DeviceFormat = DeviceFormat()
+		//let deviceFormat: DeviceFormat = DeviceFormat()
 		
 		var captureSession: AVCaptureSession?
 		var videoDevice: AVCaptureDevice?
 
-		var paramator: CCRenderer.VideoCapture.VideoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
-			presetiFrame: Settings.PresetiFrame.p1280x720,
-			frameRate: 30,
-			devicePosition: AVCaptureDevice.Position.front,
-            isAudioDataOutput: true,
-			isDepthDataOutput: false
+		var propertys = CCRenderer.VideoCapture.Propertys.init(
+			devicePosition: AVCaptureDevice.Position.back,
+			deviceType: AVCaptureDevice.DeviceType.builtInDualCamera,
+			option: [
+				.captureSize(Settings.PresetSize.p1280x720),
+				.frameRate(Settings.PresetFrameRate.fr30)
+			]
 		)
 
+		
 		public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)? {
 			get {
 				return self.captureOutput.onUpdate
@@ -55,63 +57,57 @@ extension CCRenderer.VideoCapture {
 			case audioDataOutput
 		}
 		
-		public init(paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
-			super.init()
-			
-			self.paramator = paramator
+		public init(propertys: CCRenderer.VideoCapture.Propertys) throws {
+			try self.setup(propertys: propertys)
+		}
+
+		func setup(propertys: CCRenderer.VideoCapture.Propertys) throws {
+			self.propertys = propertys
 			
 			// AVCaptureSessionを生成
 			self.captureSession?.stopRunning()
 			self.captureSession = AVCaptureSession()
 			self.captureSession?.beginConfiguration()
-			self.captureSession?.sessionPreset = AVCaptureSession.Preset(rawValue: paramator.presetiFrame.aVCaptureSessionPreset())
-			
-			do {
-				// AVCaptureDeviceを生成
-				let videoDevice: AVCaptureDevice = try self._getAVCaptureDevice(position: paramator.devicePosition)
-				self.videoDevice = videoDevice
-				// AVCaptureDeviceInputを生成
-				let videoCaptureDeviceInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-				
-				// AVCaptureVideoDataOutputを登録
-				self.captureSession?.addInput(videoCaptureDeviceInput)
-				
-				// deviceをロックして設定
-				try videoDevice.lockForConfiguration()
-				
-				// フォーカスモード設定
-				if videoDevice.isSmoothAutoFocusSupported {
-					videoDevice.isSmoothAutoFocusEnabled = true
-				}
-				if videoDevice.isAutoFocusRangeRestrictionSupported {
-					videoDevice.focusMode = .continuousAutoFocus
-				}
-				
 
-				let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, paramator: paramator)
-				guard let format: AVCaptureDevice.Format = captureDeviceFormat.deviceFormat else { throw ErrorType.setupError }
-				
-				videoDevice.activeFormat = format
-				if let filterColorSpace: AVCaptureColorSpace = captureDeviceFormat.filterColorSpace {
-					videoDevice.activeColorSpace = filterColorSpace
-				}
-				videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: paramator.frameRate)
-				videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: paramator.frameRate)
-				
-				videoDevice.unlockForConfiguration()
-				
-				self.captureOutput.captureSession = self.captureSession
-				try self.captureOutput.set(paramator: paramator)
-				
-				self._updateVideoConnection(videoDataOutput: self.captureOutput.videoDataOutput!, position: paramator.devicePosition)
-				
-				self.captureSession?.commitConfiguration()
-				
-			} catch {
-				throw ErrorType.setupError
+			self.captureSession?.sessionPreset = AVCaptureSession.Preset(rawValue: propertys.info.presetSize.aVCaptureSessionPreset())
+			try self.propertys.setup()
+			
+			// AVCaptureDeviceを生成
+			guard let videoDevice: AVCaptureDevice = self.propertys.info.device else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+			guard let format: AVCaptureDevice.Format = self.propertys.info.deviceFormat else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+			let frameRate: Int32 = self.propertys.info.frameRate
+
+			// AVCaptureDeviceInputを生成
+			let videoCaptureDeviceInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+			
+			// AVCaptureVideoDataOutputを登録
+			self.captureSession?.addInput(videoCaptureDeviceInput)
+			
+			// deviceをロックして設定
+			try videoDevice.lockForConfiguration()
+			videoDevice.activeFormat = format
+			
+			// フォーカスモード設定
+			if videoDevice.isSmoothAutoFocusSupported {
+				videoDevice.isSmoothAutoFocusEnabled = self.propertys.info.isSmoothAutoFocusEnabled
 			}
+			
+			print("@@@")
+			print(videoDevice.automaticallyEnablesLowLightBoostWhenAvailable)
+			videoDevice.activeColorSpace = self.propertys.info.colorSpace
+			videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
+			videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
+
+			videoDevice.unlockForConfiguration()
+			
+			self.captureOutput.captureSession = self.captureSession
+			try self.captureOutput.set(propertys: propertys)
+			
+			self.captureSession?.commitConfiguration()
+			
+			self.videoDevice = videoDevice
 		}
-		
+
 		deinit {
 			Debug.DeinitLog(self)
 		}
@@ -132,6 +128,11 @@ extension CCRenderer.VideoCapture {
 	}
 }
 
+extension CCRenderer.VideoCapture.VideoCapture {
+	public func update(propertys: CCRenderer.VideoCapture.Propertys) throws {
+		try self.setup(propertys: propertys)
+	}
+}
 
 extension CCRenderer.VideoCapture.VideoCapture {
 	public func addAudioDataOutput() throws {
@@ -141,63 +142,6 @@ extension CCRenderer.VideoCapture.VideoCapture {
 	public func removeAudioDataOutput() throws {
 		//try self.captureOutput.removeAudioDataOutput()
 	}
-}
-
-extension CCRenderer.VideoCapture.VideoCapture {
-
-    fileprivate func _updateVideoConnection(videoDataOutput: AVCaptureVideoDataOutput, position: AVCaptureDevice.Position) {
-		for connection: Any in videoDataOutput.connections {
-			guard let connection: AVCaptureConnection = connection as? AVCaptureConnection else { continue }
-			for port: Any in connection.inputPorts {
-                guard let port: AVCaptureInput.Port = port as? AVCaptureInput.Port else { continue }
-				if port.mediaType == AVMediaType.video {
-					if connection.isVideoOrientationSupported {
-                        let currentOrientation: AVCaptureVideoOrientation = Settings.captureVideoOrientation
-                        connection.videoOrientation = currentOrientation
-						if position == .front {
-							connection.isVideoMirrored = true
-						} else {
-							connection.isVideoMirrored = false
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/// AVCaptureDeviceを生成
-    fileprivate func _getAVCaptureDevice(position: AVCaptureDevice.Position) throws -> AVCaptureDevice {
-		switch position {
-		case .front:
-			if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: position) {
-				Debug.ActionLog("device builtInWideAngleCamera: \(device)")
-				return device
-			}
-		case .back:
-			if #available(iOS 10.2, *) {
-				if let device = AVCaptureDevice.default(.builtInDualCamera, for: AVMediaType.video, position: position) {
-					Debug.ActionLog("device builtInDuoCamera: \(device)")
-					return device
-				}
-			} else {
-				if let device = AVCaptureDevice.default(.builtInDuoCamera, for: AVMediaType.video, position: position) {
-					Debug.ActionLog("device builtInDuoCamera: \(device)")
-					return device
-				}
-			}
-		case .unspecified:
-        	throw VideoSettingError.videoDataOutput
-		@unknown default: break
-
-		}
-
-		if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: position) {
-			Debug.ActionLog("device builtInWideAngleCamera: \(device)")
-			return device
-		}
-        throw VideoSettingError.videoDataOutput
-	}
-	
 }
 
 extension CCRenderer.VideoCapture.VideoCapture {
@@ -223,157 +167,39 @@ extension CCRenderer.VideoCapture.VideoCapture {
 
 
 extension CCRenderer.VideoCapture.VideoCapture {
-    
-    // ビデオHDR設定
-    public var isVideoHDREnabled: Bool {
-        get {
-            guard let device = self.videoDevice else { return false }
-            return device.isVideoHDREnabled
-        }
-    }
 
-    // ビデオHDR設定
-    public var isTouchActive: Bool {
-        get {
-            guard let device = self.videoDevice else { return false }
-            return device.isTorchActive
-        }
-        set {
-            guard let device = self.videoDevice else { return }
-            do {
-                try device.lockForConfiguration()
-                device.torchMode = newValue ? .on : .off
-                device.unlockForConfiguration()
-            } catch {
-                return
-            }
-        }
-    }
-    
-    public var zoom: CGFloat {
-        get {
-            guard let device = self.videoDevice else { return 0 }
-            return device.videoZoomFactor
-        }
-        set {
-            do {
-                try self.videoDevice?.lockForConfiguration()
-                self.videoDevice?.videoZoomFactor = newValue
-                self.videoDevice?.unlockForConfiguration()
-            } catch {
-                return
-            }
-        }
-    }
-    
-    public var position: AVCaptureDevice.Position? {
-        return self.videoDevice?.position
-    }
-
-    public func setPresetiFrame(presetiFrame: Settings.PresetiFrame) throws {
-        self.captureSession?.sessionPreset = AVCaptureSession.Preset(rawValue: presetiFrame.aVCaptureSessionPreset())
-    }
-    
-    public func setPosition(_ position: AVCaptureDevice.Position) throws {
-        guard let session: AVCaptureSession = self.captureSession else { throw VideoSettingError.captureSetting }
-        guard let input: AVCaptureDeviceInput = self.currentVideoInput else { throw VideoSettingError.captureSetting }
-        session.beginConfiguration()
-        session.removeInput(input)
-        
-        do {
-			// AVCaptureDeviceを生成
-            let videoDevice: AVCaptureDevice = try self._getAVCaptureDevice(position: position)
-            self.videoDevice = videoDevice
-
-			self.paramator.devicePosition = position
-			let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, paramator: self.paramator)
-			guard let format: AVCaptureDevice.Format = captureDeviceFormat.deviceFormat else { return }
-
-			// AVCaptureDeviceInputを生成
-            let videoCaptureDeviceInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-            
-            // AVCaptureVideoDataOutputを登録
-            if session.canAddInput(videoCaptureDeviceInput) {
-                session.addInput(videoCaptureDeviceInput)
-            }
-            
-            // deviceをロックして設定
-            try videoDevice.lockForConfiguration()
-            
-            // フォーカスモード設定
-            if videoDevice.isAutoFocusRangeRestrictionSupported == true {
-                videoDevice.isSmoothAutoFocusEnabled = true
-            }
-            if videoDevice.isAutoFocusRangeRestrictionSupported {
-                videoDevice.focusMode = .continuousAutoFocus
-            }
-			
-			videoDevice.activeFormat = format
-			/*
-			if let depthDataFormat: AVCaptureDevice.Format = captureDeviceFormat.depthDataFormat {
-				videoDevice.activeDepthDataFormat = depthDataFormat
+	// ビデオHDR設定
+	public var isTouchActive: Bool {
+		get {
+			guard let device = self.videoDevice else { return false }
+			return device.isTorchActive
+		}
+		set {
+			guard let device = self.videoDevice else { return }
+			do {
+				try device.lockForConfiguration()
+				device.torchMode = newValue ? .on : .off
+				device.unlockForConfiguration()
+			} catch {
+				return
 			}
-*/
-			if let filterColorSpace: AVCaptureColorSpace = captureDeviceFormat.filterColorSpace {
-				videoDevice.activeColorSpace = filterColorSpace
+		}
+	}
+	
+	public var zoom: CGFloat {
+		get {
+			guard let device = self.videoDevice else { return 0 }
+			return device.videoZoomFactor
+		}
+		set {
+			do {
+				try self.videoDevice?.lockForConfiguration()
+				self.videoDevice?.videoZoomFactor = newValue
+				self.videoDevice?.unlockForConfiguration()
+			} catch {
+				return
 			}
-			videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: self.paramator.frameRate)
-			videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: self.paramator.frameRate)
-            
-            videoDevice.unlockForConfiguration()
-        } catch {
-            session.commitConfiguration()
-            throw VideoSettingError.captureSetting
-        }
-        
-        let videoDataOutputs: [Any] = session.outputs
-        let videoDataOutput: AVCaptureVideoDataOutput = videoDataOutputs.compactMap { $0 as? AVCaptureVideoDataOutput }.first!
-        self._updateVideoConnection(videoDataOutput: videoDataOutput, position: position)
-        session.commitConfiguration()
-    }
-    
-    public func switchFPS(frameRate: Int32) {
-        self._switchFPS(frameRate: frameRate)
-    }
-}
+		}
+	}
 
-
-extension CCRenderer.VideoCapture.VideoCapture {
-    private func _switchFPS(frameRate: Int32) {
-        guard let videoDevice: AVCaptureDevice = self.videoDevice else { return }
-        self.sessionQueue.async { [weak self] in
-            guard let `self` = self else { return }
-            do {
-				let captureDeviceFormat: (deviceFormat: AVCaptureDevice.Format?, depthDataFormat: AVCaptureDevice.Format?, filterColorSpace: AVCaptureColorSpace?, minFrameRate: Int32, maxFrameRate: Int32) = self.deviceFormat.get(videoDevice: videoDevice, paramator: self.paramator)
-                guard let format: AVCaptureDevice.Format = captureDeviceFormat.deviceFormat else { return }
-                // deviceをロックして設定
-                try videoDevice.lockForConfiguration()
-                
-                // フォーカスモード設定
-                if videoDevice.isAutoFocusRangeRestrictionSupported == true {
-                    videoDevice.isSmoothAutoFocusEnabled = true
-                }
-                if videoDevice.isAutoFocusRangeRestrictionSupported {
-                    videoDevice.focusMode = .continuousAutoFocus
-                }
-
-                videoDevice.activeFormat = format
-				/*
-				if let depthDataFormat: AVCaptureDevice.Format = captureDeviceFormat.depthDataFormat {
-					videoDevice.activeDepthDataFormat = depthDataFormat
-				}
-				*/	
-				if let filterColorSpace: AVCaptureColorSpace = captureDeviceFormat.filterColorSpace {
-					videoDevice.activeColorSpace = filterColorSpace
-				}
-				videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
-				videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: frameRate)
-                
-                videoDevice.unlockForConfiguration()
-				self.captureSession?.commitConfiguration()
-				//try self.captureOutput.set()
-            } catch {
-            }
-        }
-    }
 }

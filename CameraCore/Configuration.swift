@@ -11,7 +11,7 @@ import AVFoundation
 
 public struct Configuration {
 	//public static var captureSize: Settings.PresetiFrame = .p1920x1080
-	public static var captureSize: Settings.PresetiFrame = .p1280x720
+	public static var captureSize: Settings.PresetSize = .p1280x720
 	public static var captureFramerate: Int32 = 30
 	public static var compositionFramerate: Int32 = 30
 	public static var timeScale: Int32 = 44100

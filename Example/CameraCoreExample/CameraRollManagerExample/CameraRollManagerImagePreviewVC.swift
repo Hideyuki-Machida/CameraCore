@@ -15,7 +15,11 @@ class CameraRollManagerImagePreviewVC: UIViewController {
 
 	public var image: UIImage!
 	@IBOutlet weak var imageView: UIImageView!
-	
+	    
+    deinit {
+        Debug.DeinitLog(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.imageView.image = self.image

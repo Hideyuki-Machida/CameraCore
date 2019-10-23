@@ -17,6 +17,10 @@ class CameraRollManagerVideoPreviewVC: UIViewController {
     @IBOutlet weak var screen: UIView!
 	private var player : AVPlayer! = AVPlayer()
 
+    deinit {
+        Debug.DeinitLog(self)
+    }
+    
 	override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 

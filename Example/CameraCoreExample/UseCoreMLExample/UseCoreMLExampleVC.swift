@@ -15,12 +15,14 @@ class UseCoreMLExampleVC: UIViewController {
 	@IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
     @IBOutlet weak var classificationLabel: UILabel!
 	
-	var videoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
-		presetiFrame: Settings.PresetiFrame.p960x540,
-		frameRate: 30,
+	var videoCaputurePropertys = CCRenderer.VideoCapture.Propertys.init(
 		devicePosition: AVCaptureDevice.Position.back,
-        isAudioDataOutput: true,
-        isDepthDataOutput: false
+		isAudioDataOutput: true,
+		required: [
+			.captureSize(Settings.PresetSize.p1280x720),
+			.frameRate(Settings.PresetFrameRate.fr30)
+		],
+		option: []
 	)
 
 	
@@ -33,7 +35,7 @@ class UseCoreMLExampleVC: UIViewController {
 		super.viewDidLoad()
 		
 		do {
-			try self.videoCaptureView.setup(self.videoCaputureParamator)
+			try self.videoCaptureView.setup(self.videoCaputurePropertys)
 			let coreMLLayer = try CoreMLMobileNetV2Layer()
 			coreMLLayer.onProcessClassifications = { [weak self] (descriptions: [String]) in
 				DispatchQueue.main.async { [weak self] in

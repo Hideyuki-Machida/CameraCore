@@ -17,13 +17,16 @@ class UseCoreMLDeeplabV3ExampleVC: UIViewController {
     @IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
     
     private var detectionOverlay: CALayer! = nil
-    private var videoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
-        presetiFrame: Settings.PresetiFrame.p960x540,
-        frameRate: 30,
-        devicePosition: AVCaptureDevice.Position.back,
-        isAudioDataOutput: true,
-        isDepthDataOutput: false
-    )
+	var videoCaputurePropertys = CCRenderer.VideoCapture.Propertys.init(
+		devicePosition: AVCaptureDevice.Position.back,
+		//deviceType: AVCaptureDevice.DeviceType.builtInDualCamera,
+		isAudioDataOutput: true,
+		required: [
+			.captureSize(Settings.PresetSize.p960x540),
+			.frameRate(Settings.PresetFrameRate.fr30)
+		],
+		option: []
+	)
 
     
     deinit {
@@ -38,7 +41,7 @@ class UseCoreMLDeeplabV3ExampleVC: UIViewController {
 
         self.rootLayer = self.videoCaptureView.layer
         do {
-            try self.videoCaptureView.setup(self.videoCaputureParamator)
+            try self.videoCaptureView.setup(self.videoCaputurePropertys)
             let coreMLLayer = try CoreMLDeeplabV3Layer()
             self.videoCaptureView.renderLayers = [ coreMLLayer ]
         } catch {

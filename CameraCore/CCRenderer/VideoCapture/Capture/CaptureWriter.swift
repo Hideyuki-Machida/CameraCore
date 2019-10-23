@@ -16,13 +16,13 @@ extension CCRenderer.VideoCapture {
 		
 		public struct Paramator {
 			public let outputFilePath: URL
-			public let presetiFrame: Settings.PresetiFrame
+			public let presetiFrame: Settings.PresetSize
 			public let frameRate: Int32
 			public let devicePosition: AVCaptureDevice.Position
 			public let croppingRect: CGRect?
 			public let fileType: AVFileType
 			public let videoCodecType: Settings.VideoCodec
-			public init (outputFilePath: URL, presetiFrame: Settings.PresetiFrame, frameRate: Int32, devicePosition: AVCaptureDevice.Position, croppingRect: CGRect?, fileType: AVFileType = AVFileType.mp4, videoCodecType: Settings.VideoCodec = .h264) {
+			public init (outputFilePath: URL, presetiFrame: Settings.PresetSize, frameRate: Int32, devicePosition: AVCaptureDevice.Position, croppingRect: CGRect?, fileType: AVFileType = AVFileType.mp4, videoCodecType: Settings.VideoCodec = .h264) {
 				self.outputFilePath = outputFilePath
 				self.presetiFrame = presetiFrame
 				self.frameRate = frameRate

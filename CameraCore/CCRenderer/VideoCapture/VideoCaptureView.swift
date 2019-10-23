@@ -65,16 +65,11 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 		NotificationCenter.default.removeObserver(self)
 	}
 	
-	public func setup(_ paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
-		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.setup - frameRate: \(paramator.frameRate), presetiFrame: \(paramator.presetiFrame)")
-
+	public func setup(_ propertys: CCRenderer.VideoCapture.Propertys) throws {
 		self.status = .setup
-		Configuration.captureSize = presetiFrame
-		
+
 		do {
-			//
-			self.capture = try CCRenderer.VideoCapture.VideoCapture(paramator: paramator)
-			//
+			self.capture = try CCRenderer.VideoCapture.VideoCapture(propertys: propertys)
 		} catch {
 			self.capture = nil
 			throw RecordingError.setupError
@@ -82,6 +77,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 
 		self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
 			guard self?.status == .play else { return }
+
 			self?.queue.async { [weak self] in
 				autoreleasepool() { [weak self] in
 					do {
@@ -89,22 +85,21 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 							sampleBuffer: sampleBuffer,
 							depthData: depthData,
 							metadataObjects: metadataObjects,
-							position: self?.capture?.position ?? .back
+							position: self?.capture?.propertys.info.devicePosition ?? .back
 						)
 					} catch {
-						
+
 					}
 				}
 			}
 		}
 
 	}
-	
+
 	public func play() {
 		guard self.status != .play else { return }
 		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.play")
 		self.capture?.play()
-		//self.isDrawable = true
 		self.status = .play
 	}
 	
@@ -117,9 +112,17 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 	public func dispose() {
 		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.dispose")
 		self.capture?.stop()
-		//self.isDrawable = false
 		self.status = .setup
 		self.capture = nil
+	}
+}
+
+extension VideoCaptureView {
+	public func update(propertys: CCRenderer.VideoCapture.Propertys) throws {
+		self.capture?.stop()
+		try self.capture?.update(propertys: propertys)
+		guard self.status == .play else { return }
+		self.capture?.play()
 	}
 }
 
@@ -161,11 +164,6 @@ extension VideoCaptureView {
 }
 
 extension VideoCaptureView {
-	// MARK: -
-	public var frameRate: Int32 { return self.capture?.paramator.frameRate ?? 30 }
-	public var presetiFrame: Settings.PresetiFrame { return self.capture?.paramator.presetiFrame ?? Settings.PresetiFrame.p1280x720 }
-	//public var position: Settings.PresetiFrame { return self._videoCapture?.presetiFrame ?? Settings.PresetiFrame.p1920x1080 }
-	
 	/// フォーカスポイントを設定
 	public func focus(atPoint: CGPoint) -> Bool {
 		guard let videoCapture: CCRenderer.VideoCapture.VideoCapture = self.capture else { return false }
@@ -178,6 +176,7 @@ extension VideoCaptureView {
 		//guard let `self` = self else { return }
 		//guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
 		
+		guard let frameRate: Int32 = self.capture?.propertys.info.frameRate else { return }
 		//////////////////////////////////////////////////////////
 		// renderSize
 		if CCRenderer.VideoCapture.CaptureWriter.isWritng == true {
@@ -224,7 +223,7 @@ extension VideoCaptureView {
 			///////////////////////////////////////////////////////////////////////////////////////////////////
 			// renderLayerCompositionInfo
 			var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo.init(
-				compositionTime: CMTime(value: self.counter, timescale: self.frameRate),
+				compositionTime: CMTime(value: self.counter, timescale: frameRate),
 				timeRange: CMTimeRange.zero,
 				percentComplete: 0.0,
 				renderSize: renderSize,
@@ -264,12 +263,12 @@ extension VideoCaptureView {
 
 			//guard var commandBuffer002: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
 			//var texture: MTLTexture = rgbTexture.texture
-            commandBuffer.addCompletedHandler { [weak self] cb in
+			commandBuffer.addCompletedHandler { [weak self] cb in
 				self?.event?.onPreviewUpdate?(sampleBuffer)
-                self?.event?.onPixelUpdate?(originalPixelBuffer)
-            }
+				self?.event?.onPixelUpdate?(originalPixelBuffer)
+			}
 
-            self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
+			self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
 		} catch {
 			return
 		}

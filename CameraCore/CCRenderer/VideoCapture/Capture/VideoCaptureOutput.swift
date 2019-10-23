@@ -25,19 +25,21 @@ extension CCRenderer.VideoCapture {
 		fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
 
 		var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)?
-		
+
 		override init () {
 			super.init()
 		}
 		
 		deinit {
 			NotificationCenter.default.removeObserver(self)
-            Debug.DeinitLog(self)
-        }
+				Debug.DeinitLog(self)
+			}
 		
-		internal func set(paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
-			guard self.captureSession != nil else { throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError }
 
+		internal func set(propertys: CCRenderer.VideoCapture.Propertys) throws {
+			guard self.captureSession != nil else { throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError }
+			let devicePosition: AVCaptureDevice.Position = propertys.info.devicePosition
+			
 			var dataOutputs: [AVCaptureOutput] = []
 			
 			//////////////////////////////////////////////////////////
@@ -48,36 +50,38 @@ extension CCRenderer.VideoCapture {
 				self.captureSession?.addOutput(videoDataOutput)
 				if let connection: AVCaptureConnection = videoDataOutput.connection(with: .video) {
 					connection.isEnabled = true
-					connection.isVideoMirrored = paramator.devicePosition == .front ? true : false
+					connection.isVideoMirrored = devicePosition == .front ? true : false
 					connection.videoOrientation = Settings.captureVideoOrientation
 
 					self.videoDataOutput = videoDataOutput
 					dataOutputs.append(self.videoDataOutput!)
 				} else {
-                    Debug.ErrorLog("No AVCaptureVideoDataOutputConnection")
+					Debug.ErrorLog("No AVCaptureVideoDataOutputConnection")
+					throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError
 				}
 			}
 			//////////////////////////////////////////////////////////
-			
-            if paramator.isAudioDataOutput {
-                //////////////////////////////////////////////////////////
-                // AVCaptureAudioDataOutput
-                let audioDataOutput: AVCaptureAudioDataOutput = try self._getAudioDataOutput()
-                if self.captureSession!.canAddOutput(audioDataOutput) {
-                    audioDataOutput.setSampleBufferDelegate(self, queue: self.audioOutputQueue)
-                    self.captureSession?.addOutput(audioDataOutput)
-                    if let connection: AVCaptureConnection = audioDataOutput.connection(with: .audio) {
-                        connection.isEnabled = true
-                        self.audioDataOutput = audioDataOutput
-                        dataOutputs.append(self.videoDataOutput!)
-                    } else {
-                        Debug.ErrorLog("No AVCaptureAudioDataOutputConnection")
-                    }
-                }
-                //////////////////////////////////////////////////////////
-            }
 
-            if paramator.isDepthDataOutput {
+			if propertys.isAudioDataOutput {
+				//////////////////////////////////////////////////////////
+				// AVCaptureAudioDataOutput
+				let audioDataOutput: AVCaptureAudioDataOutput = try self._getAudioDataOutput()
+				if self.captureSession!.canAddOutput(audioDataOutput) {
+					audioDataOutput.setSampleBufferDelegate(self, queue: self.audioOutputQueue)
+					self.captureSession?.addOutput(audioDataOutput)
+					if let connection: AVCaptureConnection = audioDataOutput.connection(with: .audio) {
+						connection.isEnabled = true
+						self.audioDataOutput = audioDataOutput
+						dataOutputs.append(self.videoDataOutput!)
+					} else {
+						Debug.ErrorLog("No AVCaptureAudioDataOutputConnection")
+						throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError
+					}
+				}
+				//////////////////////////////////////////////////////////
+			}
+
+			if let isDepthDataOut: Bool = propertys.info.depthDataOut, isDepthDataOut {
 				//////////////////////////////////////////////////////////
 				// AVCaptureDepthDataOutput
 				let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
@@ -86,8 +90,6 @@ extension CCRenderer.VideoCapture {
 					videoDepthDataOutput.isFilteringEnabled = true
 					videoDepthDataOutput.setDelegate(self, callbackQueue: self.depthOutputQueue)
 					if let connection: AVCaptureConnection = videoDepthDataOutput.connection(with: .depthData) {
-						print("isVideoOrientationSupported")
-						print(connection.isVideoOrientationSupported)
 						connection.isEnabled = true
 						self.videoDepthDataOutput = videoDepthDataOutput
 						dataOutputs.append(self.videoDepthDataOutput!)
@@ -121,54 +123,52 @@ extension CCRenderer.VideoCapture {
 			}
 
 			self.captureSession?.commitConfiguration()
-            NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationDidChange(notification:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+			NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationDidChange(notification:)), name: UIDevice.orientationDidChangeNotification, object: nil)
 		}
-		
 	}
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput {
 	@objc
 	func onOrientationDidChange(notification: NSNotification) {
-        guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
-        connection.videoOrientation = Settings.captureVideoOrientation
+		guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
+		connection.videoOrientation = Settings.captureVideoOrientation
 	}
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput {
-    /// AVCaptureVideoDataOutputを生成
-    fileprivate func _getVideoDataOutput() throws -> AVCaptureVideoDataOutput {
-        let videoDataOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
-        videoDataOutput.alwaysDiscardsLateVideoFrames = true
-        videoDataOutput.videoSettings = [
-            kCVPixelBufferPixelFormatTypeKey as String: Configuration.outputPixelBufferPixelFormatTypeKey
-        ]
-        
-        return videoDataOutput
-    }
-    
-    /// AVCaptureAudioDataOutputを生成
-    fileprivate func _getAudioDataOutput() throws -> AVCaptureAudioDataOutput {
-        do {
-            let audioDevice: AVCaptureDevice = AVCaptureDevice.default(for: AVMediaType.audio)!
-            let audioInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: audioDevice)
+		/// AVCaptureVideoDataOutputを生成
+	fileprivate func _getVideoDataOutput() throws -> AVCaptureVideoDataOutput {
+		let videoDataOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
+		videoDataOutput.alwaysDiscardsLateVideoFrames = true
+		videoDataOutput.videoSettings = [
+			kCVPixelBufferPixelFormatTypeKey as String: Configuration.outputPixelBufferPixelFormatTypeKey
+		]
+
+		return videoDataOutput
+	}
+	
+	/// AVCaptureAudioDataOutputを生成
+	fileprivate func _getAudioDataOutput() throws -> AVCaptureAudioDataOutput {
+		do {
+			let audioDevice: AVCaptureDevice = AVCaptureDevice.default(for: AVMediaType.audio)!
+			let audioInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: audioDevice)
 			if self.captureSession!.canAddInput(audioInput) {
 				self.captureSession?.addInput(audioInput)
 			}
-			
-            let audioDataOutput: AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
-            return audioDataOutput
-        } catch {
-            throw CCRenderer.VideoCapture.VideoCapture.VideoSettingError.audioDataOutput
-        }
-        
-    }
+	
+			let audioDataOutput: AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
+			return audioDataOutput
+		} catch {
+			throw CCRenderer.VideoCapture.VideoCapture.VideoSettingError.audioDataOutput
+		}
+	}
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        self.onUpdate?(sampleBuffer, nil, nil)
-    }
+	func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+		self.onUpdate?(sampleBuffer, nil, nil)
+	}
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDelegate {

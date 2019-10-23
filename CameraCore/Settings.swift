@@ -11,7 +11,7 @@ import AVFoundation
 import UIKit
 
 public class Settings {
-    public enum PresetiFrame: Int, Codable {
+    public enum PresetSize: Int, Codable {
 		case p1920x1080 = 0
 		case p1280x720 = 1
 		case p960x540 = 2
@@ -32,12 +32,7 @@ public class Settings {
 		}
 		public func aVAssetExportSessionHEVCPreset() -> String  {
 			switch self {
-			case .p1920x1080:
-				if #available(iOS 11.0, *) {
-					return AVAssetExportPresetHEVC1920x1080
-				} else {
-					return AVAssetExportPreset1920x1080
-				}
+			case .p1920x1080: return AVAssetExportPresetHEVC1920x1080
 			case .p1280x720: return AVAssetExportPreset1280x720
 			case .p960x540: return AVAssetExportPreset960x540
 			}
@@ -67,6 +62,15 @@ public class Settings {
             }
 		}
 	}
+    
+    public enum PresetFrameRate: Int32 {
+        case fr15 = 15
+        case fr24 = 24
+        case fr30 = 30
+        case fr60 = 60
+        case fr90 = 90
+        case fr120 = 120
+    }
     
     public enum VideoCodec {
         case h264

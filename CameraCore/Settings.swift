@@ -16,6 +16,15 @@ public class Settings {
 		case p1280x720 = 1
 		case p960x540 = 2
 		
+		public func aVCaptureSessionPreset() -> AVCaptureSession.Preset  {
+			switch self {
+			case .p1920x1080: return AVCaptureSession.Preset.hd1920x1080
+			case .p1280x720: return AVCaptureSession.Preset.iFrame1280x720
+			case .p960x540: return AVCaptureSession.Preset.iFrame960x540
+			}
+		}
+
+		/*
 		public func aVCaptureSessionPreset() -> String  {
 			switch self {
 			case .p1920x1080: return AVCaptureSession.Preset.hd1920x1080.rawValue
@@ -23,6 +32,7 @@ public class Settings {
 			case .p960x540: return AVCaptureSession.Preset.iFrame960x540.rawValue
 			}
 		}
+*/
 		public func aVAssetExportSessionPreset() -> String  {
 			switch self {
 			case .p1920x1080: return AVAssetExportPreset1920x1080

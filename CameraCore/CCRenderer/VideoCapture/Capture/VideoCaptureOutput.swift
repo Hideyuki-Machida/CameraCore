@@ -81,7 +81,7 @@ extension CCRenderer.VideoCapture {
 				//////////////////////////////////////////////////////////
 			}
 
-			if let isDepthDataOut: Bool = propertys.info.depthDataOut, isDepthDataOut {
+			if propertys.info.depthDataOut {
 				//////////////////////////////////////////////////////////
 				// AVCaptureDepthDataOutput
 				let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()

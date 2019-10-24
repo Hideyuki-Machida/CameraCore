@@ -128,33 +128,36 @@ extension CCRenderer.VideoCapture {
 
 extension CCRenderer.VideoCapture.Propertys {
 	func getDevice(position: AVCaptureDevice.Position, deviceType: AVCaptureDevice.DeviceType, mediaType: AVMediaType = AVMediaType.video) throws -> AVCaptureDevice {
+		func setDeviceInfo(device: AVCaptureDevice) {
+			self.info.device = device
+			self.info.devicePosition = device.position
+			self.info.deviceType = device.deviceType
+		}
+		
 		switch position {
 		case .front:
 			if let device: AVCaptureDevice = AVCaptureDevice.default(deviceType, for: mediaType, position: position) {
-				self.info.device = device
-				self.info.devicePosition = .front
-				self.info.deviceType = deviceType
+				setDeviceInfo(device: device)
 				return device
 			}
 		case .back:
 			if let device: AVCaptureDevice = AVCaptureDevice.default(deviceType, for: mediaType, position: position) {
-				self.info.device = device
-				self.info.devicePosition = .back
-				self.info.deviceType = deviceType
+				setDeviceInfo(device: device)
 				return device
 			}
 		case .unspecified:
 			throw CCRenderer.VideoCapture.ErrorType.setupError
 		@unknown default: break
-
 		}
 
 		if let device: AVCaptureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: mediaType, position: position) {
-			self.info.device = device
-			self.info.devicePosition = position
-			self.info.deviceType = .builtInWideAngleCamera
+			setDeviceInfo(device: device)
+			return device
+		} else if let device: AVCaptureDevice = AVCaptureDevice.default(for: mediaType) {
+			setDeviceInfo(device: device)
 			return device
 		}
+
 		throw CCRenderer.VideoCapture.ErrorType.setupError
 	}
 }

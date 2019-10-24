@@ -48,7 +48,7 @@ public class SimpleAVPlayer: AVPlayer {
 		guard let totalDuration: CMTime = super.currentItem?.duration else { return }
 		let s: Double = Double(totalDuration.value) / Double(totalDuration.timescale)
 		let time: Double = s * Double(percent)
-		let cmtime: CMTime = CMTime(seconds: time, preferredTimescale: totalDuration.timescale).convertScale(Configuration.compositionFramerate, method: .roundHalfAwayFromZero)
+		let cmtime: CMTime = CMTime(seconds: time, preferredTimescale: totalDuration.timescale).convertScale(30, method: .roundHalfAwayFromZero)
 		
 		super.pause()
 		super.seek(to: cmtime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)

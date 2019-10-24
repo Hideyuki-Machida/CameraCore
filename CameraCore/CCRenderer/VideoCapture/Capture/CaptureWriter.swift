@@ -248,7 +248,7 @@ extension CCRenderer.VideoCapture {
 					resultImage = fliped.transformed(by: CGAffineTransform(translationX: fliped.extent.width, y: 0.0))
 				}
 				
-				MCCore.ciContext.render(resultImage, to: buf, bounds: resultImage.extent, colorSpace: Configuration.colorSpace)
+				MCCore.ciContext.render(resultImage, to: buf, bounds: resultImage.extent, colorSpace: resultImage.colorSpace ?? Configuration.colorSpace)
 				CaptureWriter.pixelBufferAdaptor?.append(buf, withPresentationTime: timestamp)
 				CVPixelBufferUnlockBaseAddress(buf, CVPixelBufferLockFlags.readOnly)
 			}

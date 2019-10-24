@@ -17,20 +17,11 @@ extension CCRenderer.VideoCapture {
 		}
 		
 		let captureOutput: VideoCaptureOutput = VideoCaptureOutput()
-		//let deviceFormat: DeviceFormat = DeviceFormat()
 		
 		var captureSession: AVCaptureSession?
 		var videoDevice: AVCaptureDevice?
 
-		var propertys = CCRenderer.VideoCapture.Propertys.init(
-			devicePosition: AVCaptureDevice.Position.back,
-			deviceType: AVCaptureDevice.DeviceType.builtInDualCamera,
-			option: [
-				.captureSize(Settings.PresetSize.p1280x720),
-				.frameRate(Settings.PresetFrameRate.fr30)
-			]
-		)
-
+		var propertys: CCRenderer.VideoCapture.Propertys = Configuration.defaultVideoCapturePropertys
 		
 		public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)? {
 			get {
@@ -41,7 +32,7 @@ extension CCRenderer.VideoCapture {
 			}
 		}
 
-		let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue", attributes: .concurrent)
+		let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue")
 
 		var currentVideoInput: AVCaptureDeviceInput? {
 			return self.captureSession?.inputs
@@ -56,6 +47,7 @@ extension CCRenderer.VideoCapture {
 		}
 		
 		public init(propertys: CCRenderer.VideoCapture.Propertys) throws {
+			self.captureSession = AVCaptureSession()
 			try self.setup(propertys: propertys)
 		}
 
@@ -64,10 +56,12 @@ extension CCRenderer.VideoCapture {
 			
 			// AVCaptureSessionを生成
 			self.captureSession?.stopRunning()
-			self.captureSession = AVCaptureSession()
 			self.captureSession?.beginConfiguration()
 
-			self.captureSession?.sessionPreset = AVCaptureSession.Preset(rawValue: propertys.info.presetSize.aVCaptureSessionPreset())
+			if let _ : Bool = self.captureSession?.canSetSessionPreset(propertys.info.presetSize.aVCaptureSessionPreset()) {
+				self.captureSession?.sessionPreset = propertys.info.presetSize.aVCaptureSessionPreset()
+			}
+
 			try self.propertys.setup()
 			
 			// AVCaptureDeviceを生成
@@ -79,8 +73,8 @@ extension CCRenderer.VideoCapture {
 			let videoCaptureDeviceInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
 			
 			// AVCaptureVideoDataOutputを登録
+			_ = self.captureSession?.inputs.map({ self.captureSession?.removeInput($0) })
 			self.captureSession?.addInput(videoCaptureDeviceInput)
-			
 			// deviceをロックして設定
 			try videoDevice.lockForConfiguration()
 			videoDevice.activeFormat = format

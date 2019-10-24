@@ -67,15 +67,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 	
 	public override func setup() throws {
 		try super.setup()
-		let propertys: CCRenderer.VideoCapture.Propertys = CCRenderer.VideoCapture.Propertys.init(
-			devicePosition: AVCaptureDevice.Position.back,
-			deviceType: AVCaptureDevice.DeviceType.builtInDualCamera,
-			option: [
-				.captureSize(Settings.PresetSize.p1280x720),
-				.frameRate(Settings.PresetFrameRate.fr30)
-			]
-		)
-		try self.setup(propertys)
+		try self.setup(Configuration.defaultVideoCapturePropertys)
 	}
 
 	public func setup(_ propertys: CCRenderer.VideoCapture.Propertys) throws {

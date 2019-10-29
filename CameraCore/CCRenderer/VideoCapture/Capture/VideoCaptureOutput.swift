@@ -80,7 +80,7 @@ extension CCRenderer.VideoCapture {
                 //////////////////////////////////////////////////////////
             }
 
-            if propertys.info.depthDataOut {
+            if propertys.info.isDepthDataOut {
                 //////////////////////////////////////////////////////////
                 // AVCaptureDepthDataOutput
                 let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
@@ -186,19 +186,10 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchro
         var metadataObjects: [AVMetadataObject]?
         
         if let depthDataOutput: AVCaptureDepthDataOutput = self.videoDepthDataOutput, let syncedDepthData: AVCaptureSynchronizedDepthData = synchronizedDataCollection.synchronizedData(for: depthDataOutput) as? AVCaptureSynchronizedDepthData {
-            
-            print("AVCaptureDepthDataOutput")
-            print(syncedDepthData.depthDataWasDropped)
-            print(syncedDepthData.depthData)
-            
             depthData = syncedDepthData.depthData
         }
         
         if let metadataOutput: AVCaptureMetadataOutput = self.metadataOutput, let syncedMetaData: AVCaptureSynchronizedMetadataObjectData = synchronizedDataCollection.synchronizedData(for: metadataOutput) as? AVCaptureSynchronizedMetadataObjectData {
-            
-            print("AVCaptureMetadataOutput")
-            print(syncedMetaData.metadataObjects)
-            
             if let connection = self.videoDataOutput?.connection(with: AVMediaType.video), syncedMetaData.metadataObjects.count >= 1 {
                 metadataObjects = []
                 for metadataObject in syncedMetaData.metadataObjects {
@@ -211,8 +202,6 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchro
         }
         
         if let videoDataOutput: AVCaptureVideoDataOutput = self.videoDataOutput, let syncedVideoData: AVCaptureSynchronizedSampleBufferData = synchronizedDataCollection.synchronizedData(for: videoDataOutput) as?AVCaptureSynchronizedSampleBufferData {
-            
-            print("AVCaptureOutput")
             self.onUpdate?(syncedVideoData.sampleBuffer, depthData, metadataObjects)
             
         }

@@ -26,7 +26,8 @@ class VideoCaptureView002ExampleVC: UIViewController {
         isAudioDataOutput: true,
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
-            .frameRate(Settings.PresetFrameRate.fps30)
+            .frameRate(Settings.PresetFrameRate.fps30),
+            .isDepthDataOut(false)
         ],
         option: [
             .colorSpace(AVCaptureColorSpace.P3_D65)
@@ -59,6 +60,14 @@ class VideoCaptureView002ExampleVC: UIViewController {
         }
         event.onPixelUpdate = { (pixelBuffer: CVPixelBuffer) in
             //print(pixelBuffer)
+        }
+        event.onDepthDataUpdate = { (depthData: AVDepthData?) in
+            guard let depthData = depthData else { return }
+            print(depthData)
+        }
+        event.onMetadataObjectsUpdate = { (metadataObjects: [AVMetadataObject]?) in
+            guard let metadataObjects = metadataObjects else { return }
+            print(metadataObjects)
         }
 
         self.videoCaptureView.event = event
@@ -93,7 +102,6 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.setFPS()
     }
 
-    
     @IBAction func setPresetiFrameBtnTapAction(_ sender: UIButton) {
         self.setResolution()
     }
@@ -108,6 +116,10 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
     @IBAction func setFilterBtnTapAction(_ sender: UIButton) {
         self.setFilter()
+    }
+
+    @IBAction func setDepthDataOutBtnTapAction(_ sender: UIButton) {
+        self.setDepthDataOut()
     }
 
     @IBAction func recordingTapAction(_ sender: Any) {
@@ -388,7 +400,6 @@ extension VideoCaptureView002ExampleVC {
         
         self.present(action, animated: true, completion: nil)
     }
-
 }
 
 extension VideoCaptureView002ExampleVC {
@@ -464,4 +475,47 @@ extension VideoCaptureView002ExampleVC {
         self.present(action, animated: true, completion: nil)
     }
 
+}
+
+extension VideoCaptureView002ExampleVC {
+    private enum DepthLabel: String {
+        case ON = "ON"
+        case OFF = "OFF"
+    }
+
+    func setDepthDataOut() {
+        let action: UIAlertController = UIAlertController(title: "Depth設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
+        
+        let action001: UIAlertAction = UIAlertAction(title: DepthLabel.ON.rawValue, style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+            do {
+                self.videoCaputurePropertys.devicePosition = .back
+                self.videoCaputurePropertys.deviceType = DeviceType.builtInDualCamera.item()
+                try self.videoCaputurePropertys.swap(property: .isDepthDataOut(true))
+                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+            } catch {
+                MCDebug.errorLog("Depth: " + DepthLabel.ON.rawValue)
+            }
+        })
+        
+        let action002: UIAlertAction = UIAlertAction(title: DepthLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+            do {
+                try self.videoCaputurePropertys.swap(property: .isDepthDataOut(false))
+                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+            } catch {
+                MCDebug.errorLog("Depth: " + DepthLabel.OFF.rawValue)
+            }
+        })
+        
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
+            (action: UIAlertAction!) -> Void in
+        })
+        
+        action.addAction(action001)
+        action.addAction(action002)
+        action.addAction(cancel)
+        
+        self.present(action, animated: true, completion: nil)
+    }
 }

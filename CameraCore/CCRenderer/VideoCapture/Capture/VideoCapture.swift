@@ -125,6 +125,10 @@ extension CCRenderer.VideoCapture {
             try videoDevice.lockForConfiguration()
             videoDevice.activeFormat = format
 
+            if self.propertys.info.isDepthDataOut {
+                //videoDevice.activeDepthDataFormat = format
+            }
+            
             // フォーカスモード設定
             if videoDevice.isSmoothAutoFocusSupported {
                 videoDevice.isSmoothAutoFocusEnabled = self.propertys.info.isSmoothAutoFocusEnabled

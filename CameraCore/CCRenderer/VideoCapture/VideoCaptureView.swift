@@ -171,7 +171,12 @@ extension VideoCaptureView {
             }
         }
         //////////////////////////////////////////////////////////
-        
+
+        //////////////////////////////////////////////////////////
+        self.event?.onDepthDataUpdate?(depthData)
+        self.event?.onMetadataObjectsUpdate?(metadataObjects)
+        //////////////////////////////////////////////////////////
+
         //////////////////////////////////////////////////////////
         // renderSize
         guard var originalPixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }

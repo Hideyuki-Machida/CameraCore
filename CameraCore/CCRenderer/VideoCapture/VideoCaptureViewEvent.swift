@@ -15,4 +15,6 @@ public class VideoCaptureViewEvent: NSObject {
     public var onRecodingUpdate: ((_ recordedDuration: TimeInterval)->Void)?
     public var onRecodingComplete: ((_ result: Bool, _ filePath: URL)->Void)?
     public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer)->Void)?
+    public var onDepthDataUpdate: ((_ depthData: AVDepthData?)->Void)?
+    public var onMetadataObjectsUpdate: ((_ metadataObjects: [AVMetadataObject]?)->Void)?
 }

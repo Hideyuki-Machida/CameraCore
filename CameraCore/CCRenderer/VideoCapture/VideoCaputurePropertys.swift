@@ -17,6 +17,7 @@ extension CCRenderer.VideoCapture {
         case colorSpace(AVCaptureColorSpace)
         case videoHDR(Bool)
         case isSmoothAutoFocusEnabled(Bool)
+        case isDepthDataOut(Bool)
         
         public var rawValue: Int {
             switch self {
@@ -25,6 +26,7 @@ extension CCRenderer.VideoCapture {
             case .colorSpace: return 2
             case .videoHDR: return 3
             case .isSmoothAutoFocusEnabled: return 4
+            case .isDepthDataOut: return 100
             }
         }
     }
@@ -42,7 +44,7 @@ extension CCRenderer.VideoCapture {
         public var colorSpace: AVCaptureColorSpace = .sRGB
         public var videoHDR: Bool?
         public var isSmoothAutoFocusEnabled: Bool = true
-        public var depthDataOut: Bool = false
+        public var isDepthDataOut: Bool = false
         
         func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, propertyList: [Property]) {
             self.device = device
@@ -78,6 +80,9 @@ extension CCRenderer.VideoCapture {
                     self.videoHDR = deviceFormat.isVideoHDRSupported
                 case .isSmoothAutoFocusEnabled(let on):
                     self.isSmoothAutoFocusEnabled = (on && device.isSmoothAutoFocusSupported) ? true : false
+                case .isDepthDataOut(let on):
+                    let isData: Bool = (deviceFormat.supportedDepthDataFormats.filter { CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_DepthFloat32 }).count >= 1
+                    self.isDepthDataOut = (on && isData) ? true : false
                 }
             }
             
@@ -102,6 +107,7 @@ extension CCRenderer.VideoCapture {
             MCDebug.log("devicePosition: \(self.devicePosition.toString)")
             MCDebug.log("colorSpace: \(self.colorSpace.toString)")
             MCDebug.log("isSmoothAutoFocusEnabled: \(self.isSmoothAutoFocusEnabled)")
+            MCDebug.log("isDepthDataOut: \(self.isDepthDataOut)")
             MCDebug.log("----------------------------------------------------")
         }
     }
@@ -284,6 +290,15 @@ extension CCRenderer.VideoCapture.Propertys {
                 }
             }
             return formats
+
+        case .isDepthDataOut(let on):
+            if on {
+                let list: [AVCaptureDevice.Format] = formats.filter { ($0.supportedDepthDataFormats.filter { CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_DepthFloat32 }).count >= 1 }
+                guard list.count >= 1 else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+                return list
+            } else {
+                return formats
+            }
         }
     }
 }

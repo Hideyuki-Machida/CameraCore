@@ -25,7 +25,7 @@ final public class FaceLayer: RenderLayerProtocol {
 }
 
 extension FaceLayer: MetalRenderLayerProtocol {
-    public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+    public func process(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard let metadataObjects = renderLayerCompositionInfo.metadataObjects else { return }
         for metadataObject in metadataObjects {
             if let faceObject: AVMetadataFaceObject = metadataObject as? AVMetadataFaceObject {

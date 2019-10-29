@@ -16,11 +16,12 @@ extension CCRenderer.ARRenderer {
 		
 		fileprivate var renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
 		fileprivate var rgbOutTexture: MCTexture?
-		fileprivate let colorSpaceYCbCrToRGB: MCFilter.ColorSpace.YCbCrToRGB = MCFilter.ColorSpace.YCbCrToRGB()
+        fileprivate let colorSpaceYCbCrToRGB: MCFilter.ColorSpace.YCbCrToRGB
 		fileprivate var image: MCPrimitive.Image?
 		fileprivate var canvas: MCCanvas?
 		
-		init() {
+		init() throws {
+            self.colorSpaceYCbCrToRGB = try MCFilter.ColorSpace.YCbCrToRGB()
 			self.renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
 			self.renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
 		}
@@ -53,7 +54,7 @@ extension CCRenderer.ARRenderer {
 				try self.canvas?.update(destination: &outTexture)
 			}
 
-			try self.colorSpaceYCbCrToRGB.processing(
+			try self.colorSpaceYCbCrToRGB.process(
 				commandBuffer: &commandBuffer,
 				capturedImageTextureY: &capturedImageTextureY,
 				capturedImageTextureCbCr: &capturedImageTextureCbCr,
@@ -69,7 +70,7 @@ extension CCRenderer.ARRenderer {
 				var mat: MCGeom.Matrix4x4 = MCGeom.Matrix4x4.init()
 				let angle: CGFloat = 90 * CGFloat.pi / 180
 				mat.rotateAroundX(xAngleRad: 0, yAngleRad: 0.0, zAngleRad: Float(angle))
-				image = try MCPrimitive.Image.init(texture: rgbOutTexture, ppsition: MCGeom.Vec3D.init(Float(renderSize.width), 0.0, 0.0), transform: mat, anchorPoint: MCPrimitive.anchor.topLeft)
+				image = try MCPrimitive.Image.init(texture: rgbOutTexture, ppsition: SIMD3.init(Float(renderSize.width), 0.0, 0.0), transform: mat, anchorPoint: MCPrimitive.anchor.topLeft)
 				self.image = image
 			} else {
 				image = self.image!

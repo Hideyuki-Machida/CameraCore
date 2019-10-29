@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol RenderEventProtocol {
-	var id: String { get }
+    var id: String { get }
 }

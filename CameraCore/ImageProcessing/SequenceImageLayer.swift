@@ -10,67 +10,52 @@ import AVFoundation
 import MetalCanvas
 
 final public class SequenceImageLayer: RenderLayerProtocol {
-	public let type: RenderLayerType = RenderLayerType.sequenceImage
-	public var id: RenderLayerId
-	public let customIndex: Int = 0
-	private let imagePaths: [URL]
-	//private var overImages: [Int: MCTexture] = [:]
-	private let blendMode: Blendmode
-	private let alpha: CGFloat
-	private let updateFrameRate: TimeInterval
-	private let resize: Bool
+    public let type: RenderLayerType = RenderLayerType.sequenceImage
+    public var id: RenderLayerId
+    public let customIndex: Int = 0
+    private let imagePaths: [URL]
+    private let blendMode: Blendmode
+    private let alpha: CGFloat
+    private let updateFrameRate: TimeInterval
+    private let resize: Bool
 
-	private var _filterCashImageList: [Int: CIImage] = [:] // エフェクトフィルターキャッシュ
+    private var _filterCashImageList: [Int: CIImage] = [:] // エフェクトフィルターキャッシュ
 
 
-	public init(imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: Int32 = 30, resize: Bool = true) {
-		self.id = RenderLayerId()
-		self.imagePaths = imagePaths.sorted(by: {$0.lastPathComponent < $1.lastPathComponent})
-		self.blendMode = blendMode
-		self.alpha = alpha
-		self.updateFrameRate = TimeInterval(updateFrameRate)
-		self.resize = resize
-	}
+    public init(imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: Int32 = 30, resize: Bool = true) {
+        self.id = RenderLayerId()
+        self.imagePaths = imagePaths.sorted(by: {$0.lastPathComponent < $1.lastPathComponent})
+        self.blendMode = blendMode
+        self.alpha = alpha
+        self.updateFrameRate = TimeInterval(updateFrameRate)
+        self.resize = resize
+    }
 
-	fileprivate init(id: RenderLayerId, imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: TimeInterval = 30, resize: Bool = true) {
-		self.id = id
-		self.imagePaths = imagePaths.sorted(by: {$0.lastPathComponent < $1.lastPathComponent})
-		self.blendMode = blendMode
-		self.alpha = alpha
-		self.updateFrameRate = updateFrameRate
-		self.resize = resize
-	}
+    fileprivate init(id: RenderLayerId, imagePaths: [URL], blendMode: Blendmode, alpha: CGFloat = 1.0, updateFrameRate: TimeInterval = 30, resize: Bool = true) {
+        self.id = id
+        self.imagePaths = imagePaths.sorted(by: {$0.lastPathComponent < $1.lastPathComponent})
+        self.blendMode = blendMode
+        self.alpha = alpha
+        self.updateFrameRate = updateFrameRate
+        self.resize = resize
+    }
 
-	//public func setup(assetData: CompositionVideoAsset) {}
-
-	/// キャッシュを消去
-	public func dispose() {
-		self._filterCashImageList.removeAll()
-	}
+    /// キャッシュを消去
+    public func dispose() {
+        self._filterCashImageList.removeAll()
+    }
 
 }
 
-/*
-extension SequenceImageLayer: CameraCore.CVPixelBufferRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> Void {
-		var inputImage: CIImage = CIImage.init(cvPixelBuffer: pixelBuffer)
-		inputImage = try processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		MCCore.ciContext.render(inputImage, to: pixelBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
-	}
-}
-*/
 extension SequenceImageLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var inputImage: CIImage = CIImage(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.renderingError }
-		inputImage = try processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		//guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		MCCore.ciContext.render(inputImage, to: destination, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
-		//commandBuffer.commit()
-	}
+    public func process(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+        guard var inputImage: CIImage = CIImage(mtlTexture: source, options: nil) else { throw RenderLayerErrorType.renderingError }
+        inputImage = try process(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+        let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
+        MCCore.ciContext.render(inputImage, to: destination, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
+    }
     
-    fileprivate func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
+    fileprivate func process(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
         let imageCounter: Float = Float(renderLayerCompositionInfo.compositionTime.value) * Float(self.updateFrameRate) / Float(renderLayerCompositionInfo.compositionTime.timescale)
         
         // フィルターイメージ生成
@@ -127,122 +112,4 @@ extension SequenceImageLayer: MetalRenderLayerProtocol {
         }
     }
 
-}
-
-/*
-extension SequenceImageLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var inputImage: CIImage = CIImage(mtlTexture: sourceTexture, options: nil) else { throw RenderLayerErrorType.renderingError }
-		inputImage = try processing(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		
-		guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		MCCore.ciContext.render(inputImage, to: destinationTexture, commandBuffer: commandBuffer, bounds: inputImage.extent, colorSpace: colorSpace)
-		commandBuffer.commit()
-	}
-
-}
-*/
-/*
-extension SequenceImageLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, sourceTexture: MTLTexture, destinationTexture: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-
-		let sourceMCTexture: MCTexture = try MCTexture.init(texture: sourceTexture)
-		var destinationMCTexture: MCTexture = try MCTexture.init(texture: destinationTexture)
-		let canvas: MCCanvas = try MCCanvas.init(destination: &destinationMCTexture, orthoType: .topLeft)
-		let renderSize: CGSize = renderLayerCompositionInfo.renderSize
-		let compositionTime: CMTime = renderLayerCompositionInfo.compositionTime
-
-		let imageCounter: Float = Float(compositionTime.value) * Float(self.updateFrameRate) / Float(compositionTime.timescale)
-		
-		// フィルターイメージ生成
-		let counter: Int = Int(floorf(imageCounter)) % self.imagePaths.count
-		let overFilterMCTexture: MCTexture = try self._getOverMCTexture(commandBuffer: commandBuffer, count: counter, renderSize: renderSize)
-		
-
-		let sourceImage: MCPrimitive.Image = try MCPrimitive.Image.init(texture: sourceMCTexture,
-																		ppsition: MCGeom.Vec3D.init(x: Float(renderSize.width / 2.0), y: Float(renderSize.height / 2.0), z: 0),
-																		transform: MCGeom.Matrix4x4.init(scaleX: 1.0, scaleY: 1.0, scaleZ: 1.0),
-																		anchorPoint: .center
-		)
-
-		let overImage: MCPrimitive.Image = try MCPrimitive.Image.init(texture: overFilterMCTexture,
-																	  ppsition: MCGeom.Vec3D.init(x: Float(renderSize.width / 2.0), y: Float(renderSize.height / 2.0), z: 0),
-																	  transform: MCGeom.Matrix4x4.init(scaleX: Float(renderSize.width) / Float(overFilterMCTexture.width), scaleY: Float(renderSize.height) / Float(overFilterMCTexture.height), scaleZ: 1.0),
-																	  anchorPoint: .center
-		)
-
-		print(MCCore.device.currentAllocatedSize)
-		try canvas.draw(commandBuffer: &commandBuffer, objects: [sourceImage, overImage])
-		//try canvas.draw(commandBuffer: &commandBuffer, objects: [sourceImage])
-		
-		/*
-		guard let image: CIImage = CIImage.init(mtlTexture: sourceTexture, options: nil) else { throw RenderLayerErrorType.setupError }
-		let colorSpace: CGColorSpace = image.colorSpace ?? CGColorSpaceCreateDeviceRGB()
-		let outImage: CIImage = try self.processing(image: image, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-		MCCore.ciContext.render(outImage, to: destinationTexture, commandBuffer: commandBuffer, bounds: outImage.extent, colorSpace: colorSpace)
-*/
-	}
-	
-	// MARK: - Private -
-	private func _getOverMCTexture(commandBuffer: MTLCommandBuffer, count: Int, renderSize: CGSize) throws -> MCTexture {
-		// フィルターイメージ作成
-		let imagePath: URL = self.imagePaths[count]
-		
-		if let overImage: MCTexture = self.overImages[count] {
-			return overImage
-		} else {
-			//let overImage: MCTexture = try MCTexture.init(renderSize: CGSize.init(100, 100) )
-			//let overImage: MCTexture = try MCTexture.init(URL: imagePath)
-			let overImage: MCTexture = try MCTexture.init(URL: imagePath, commandBuffer: commandBuffer)
-			self.overImages[count] = overImage
-			return overImage
-		}
-	}
-
-}
-*/
-extension SequenceImageLayer {
-    public func toJsonData() throws -> Data {
-        return try JSONEncoder().encode(self)
-    }
-    public static func decode(to: Data) throws -> RenderLayerProtocol {
-        return try JSONDecoder().decode(SequenceImageLayer.self, from: to)
-    }
-}
-
-extension SequenceImageLayer {
-    enum CodingKeys: String, CodingKey {
-        case id
-        case imagePaths
-        case blendMode
-        case alpha
-        case updateFrameRate
-        case resize
-    }
-}
-
-extension SequenceImageLayer: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.id, forKey: .id)
-        try container.encode(self.imagePaths.map {CodableURL.init(url: $0)}, forKey: .imagePaths)
-        try container.encode(self.blendMode.rawValue, forKey: .blendMode)
-        try container.encode(self.alpha, forKey: .alpha)
-        try container.encode(self.updateFrameRate, forKey: .updateFrameRate)
-        try container.encode(self.resize, forKey: .resize)
-    }
-}
-
-extension SequenceImageLayer: Decodable {
-	public convenience init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-		let id: RenderLayerId = try values.decode(RenderLayerId.self, forKey: .id)
-		let imagePaths: [URL] = (try values.decode([CodableURL].self, forKey: .imagePaths)).map { $0.url }
-		let blendMode: Blendmode = Blendmode.init(rawValue: try values.decode(String.self, forKey: .blendMode))!
-		let alpha: CGFloat = try values.decode(CGFloat.self, forKey: .alpha)
-		let updateFrameRate: TimeInterval = try values.decode(TimeInterval.self, forKey: .updateFrameRate)
-		let resize: Bool = try values.decode(Bool.self, forKey: .resize)
-		self.init(id: id, imagePaths: imagePaths, blendMode: blendMode, alpha: alpha, updateFrameRate: updateFrameRate, resize: resize)
-    }
 }

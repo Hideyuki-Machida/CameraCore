@@ -10,11 +10,11 @@ import Foundation
 import AVFoundation
 
 extension AVCaptureColorSpace {
-	var toString: String {
-		switch self {
-		case .sRGB: return "sRGB"
-		case .P3_D65: return "P3_D65"
-		@unknown default: return "sRGB"
-		}
-	}
+    var toString: String {
+        switch self {
+        case .sRGB: return "sRGB"
+        case .P3_D65: return "P3_D65"
+        @unknown default: return "sRGB"
+        }
+    }
 }

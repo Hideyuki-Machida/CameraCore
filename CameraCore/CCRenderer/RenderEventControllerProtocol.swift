@@ -9,22 +9,22 @@
 import Foundation
 
 protocol RenderEventControllerProtocol {
-	var events: [RenderEventProtocol] { get set }
-	mutating func add(event: RenderEventProtocol)
-	mutating func remove(event: RenderEventProtocol)
+    var events: [RenderEventProtocol] { get set }
+    mutating func add(event: RenderEventProtocol)
+    mutating func remove(event: RenderEventProtocol)
 }
 
 extension RenderEventControllerProtocol {
-	mutating func add(event: RenderEventProtocol) {
-		self.events.append(event)
-	}
+    mutating func add(event: RenderEventProtocol) {
+        self.events.append(event)
+    }
 
-	mutating func remove(event: RenderEventProtocol) {
-		for (index, _) in self.events.enumerated() {
-			if self.events[index].id == event.id {
-				self.events.remove(at: index)
-				return
-			}
-		}
-	}
+    mutating func remove(event: RenderEventProtocol) {
+        for (index, _) in self.events.enumerated() {
+            if self.events[index].id == event.id {
+                self.events.remove(at: index)
+                return
+            }
+        }
+    }
 }

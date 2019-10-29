@@ -61,7 +61,7 @@ extension CCRenderer.ARRenderer {
 			if self.image == nil {
 				var mat: MCGeom.Matrix4x4 = MCGeom.Matrix4x4.init()
 				mat.scale(x: Float(renderSize.width) / Float(depthDataMapTexture.width), y: Float(renderSize.height) / Float(depthDataMapTexture.height), z: 1.0)
-				image = try MCPrimitive.Image.init(texture: depthDataMapTexture, ppsition: MCGeom.Vec3D.init(0.0, 0.0, 0.0), transform: mat, anchorPoint: MCPrimitive.anchor.topLeft)
+				image = try MCPrimitive.Image.init(texture: depthDataMapTexture, ppsition: SIMD3 .init(0.0, 0.0, 0.0), transform: mat, anchorPoint: MCPrimitive.anchor.topLeft)
 
 				/*
 				let angle: CGFloat = 90 * CGFloat.pi / 180

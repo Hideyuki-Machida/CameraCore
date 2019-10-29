@@ -39,7 +39,7 @@ extension CCRenderer.ARRenderer {
 
 			//////////////////////////////////////////////////////////
 			// outTexture canvas 生成
-			var faceBoundPoints: [MCGeom.Vec3D] = []
+			var faceBoundPoints: [SIMD3<Float>] = []
 			var tempFaces: [MCVision.Detection.Face.Item] = []
 			for metadataFaceObject: AVMetadataFaceObject in metadataFaceObjects {
 				print("faceID: \(metadataFaceObject.faceID)")
@@ -57,10 +57,10 @@ extension CCRenderer.ARRenderer {
 				print("---@1")
 				print(trackingBoundes)
 				
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y), 0.0))
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y), 0.0))
+				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y), 0.0))
+				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
+				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
+				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y), 0.0))
 				print("---@2")
 				print(faceBoundPoints)
 				
@@ -87,7 +87,7 @@ extension CCRenderer.ARRenderer {
 			self.faces = tempFaces
 			print("faces: \(faces)")
 			
-			var faceLandmarkPoints: [MCGeom.Vec3D] = []
+			var faceLandmarkPoints: [SIMD3<Float>] = []
 			/*
 			for face: MCVision.FaceDetection.FaceItem in self.faces {
 				if let faceContour: VNFaceLandmarkRegion2D = face.landmarks?.faceContour {

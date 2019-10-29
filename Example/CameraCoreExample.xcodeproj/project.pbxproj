@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		620E8B07233F6DD300168140 /* CoreMLHelpers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 620E8B06233F6DD300168140 /* CoreMLHelpers.framework */; };
-		620E8B08233F6DD300168140 /* CoreMLHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 620E8B06233F6DD300168140 /* CoreMLHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		624D06D42355C64100B203A5 /* VideoCaptureView001ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D06D32355C64100B203A5 /* VideoCaptureView001ExampleVC.swift */; };
 		624D06D62355C90400B203A5 /* FaceLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D06D52355C90400B203A5 /* FaceLayer.swift */; };
 		62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6292624F232FE8CF00D47CF0 /* CameraCore.framework */; };
@@ -36,7 +34,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				620E8B08233F6DD300168140 /* CoreMLHelpers.framework in Embed Frameworks */,
 				62926254232FE8CF00D47CF0 /* MetalCanvas.framework in Embed Frameworks */,
 				62926257232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Embed Frameworks */,
 				62926252232FE8CF00D47CF0 /* CameraCore.framework in Embed Frameworks */,
@@ -72,7 +69,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				620E8B07233F6DD300168140 /* CoreMLHelpers.framework in Frameworks */,
 				62926253232FE8CF00D47CF0 /* MetalCanvas.framework in Frameworks */,
 				62926256232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Frameworks */,
 				62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */,

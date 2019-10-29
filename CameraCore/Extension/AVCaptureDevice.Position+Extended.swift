@@ -10,12 +10,12 @@ import Foundation
 import AVFoundation
 
 extension AVCaptureDevice.Position {
-	var toString: String {
-		switch self {
-		case .back: return "back"
-		case .front: return "front"
-		case .unspecified: return "unspecified"
-		@unknown default: return "unspecified"
-		}
-	}
+    var toString: String {
+        switch self {
+        case .back: return "back"
+        case .front: return "front"
+        case .unspecified: return "unspecified"
+        @unknown default: return "unspecified"
+        }
+    }
 }

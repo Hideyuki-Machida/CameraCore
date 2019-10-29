@@ -31,10 +31,10 @@ final public class DepthMapLayer: RenderLayerProtocol {
 }
 
 extension DepthMapLayer: MetalRenderLayerProtocol {
-	public func processing(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var depthData = renderLayerCompositionInfo.depthData else { return }
-		print(depthData)
-		try self.depthMapRenderer.update(commandBuffer: &commandBuffer, depthData: depthData, renderSize: renderLayerCompositionInfo.renderSize)
-		destination = self.depthMapRenderer.texture!.texture
-	}
+    public func process(commandBuffer: inout MTLCommandBuffer, source: MTLTexture, destination: inout MTLTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+        guard var depthData = renderLayerCompositionInfo.depthData else { return }
+        print(depthData)
+        try self.depthMapRenderer.update(commandBuffer: &commandBuffer, depthData: depthData, renderSize: renderLayerCompositionInfo.renderSize)
+        destination = self.depthMapRenderer.texture!.texture
+    }
 }

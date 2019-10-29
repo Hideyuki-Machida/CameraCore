@@ -9,20 +9,20 @@
 import Foundation
 
 public struct RenderLayerId: Codable {
-	public let key: String
-	public init() {
-		self.key = NSUUID().uuidString
-	}
+    public let key: String
+    public init() {
+        self.key = NSUUID().uuidString
+    }
 }
 
 extension RenderLayerId: Equatable {
-	public static func ==(lhs: RenderLayerId, rhs: RenderLayerId) -> Bool{
-		return lhs.key == rhs.key
-	}
+    public static func ==(lhs: RenderLayerId, rhs: RenderLayerId) -> Bool{
+        return lhs.key == rhs.key
+    }
 }
 
 extension RenderLayerId {
-	public static func !=(lhs: RenderLayerId, rhs: RenderLayerId) -> Bool{
-		return lhs.key != rhs.key
-	}
+    public static func !=(lhs: RenderLayerId, rhs: RenderLayerId) -> Bool{
+        return lhs.key != rhs.key
+    }
 }

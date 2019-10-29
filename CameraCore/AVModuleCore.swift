@@ -10,11 +10,11 @@ import Foundation
 import MetalCanvas
 
 final public class AVModuleCore {
-	public static var isMetalCanvas: Bool = MCCore.isMetalCanvas
-	public static func setup() throws {
-		try MCCore.setup(contextPptions: [
-			CIContextOption.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
-			CIContextOption.useSoftwareRenderer : NSNumber(value: false)
-		])
-	}
+    public static var isMetalCanvas: Bool = MCCore.isMetalCanvas
+    public static func setup() throws {
+        try MCCore.setup(contextPptions: [
+            CIContextOption.workingColorSpace : CGColorSpaceCreateDeviceRGB(),
+            CIContextOption.useSoftwareRenderer : NSNumber(value: false)
+        ])
+    }
 }

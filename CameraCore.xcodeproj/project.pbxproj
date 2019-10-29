@@ -161,10 +161,10 @@
 		626659B8236838D80077DA9B /* CCRenderer */ = {
 			isa = PBXGroup;
 			children = (
+				626659BC236838D80077DA9B /* VideoCapture */,
 				626659B9236838D80077DA9B /* RendererNameSpace.swift */,
 				626659BA236838D80077DA9B /* RenderEventControllerProtocol.swift */,
 				626659BB236838D80077DA9B /* RenderEventProtocol.swift */,
-				626659BC236838D80077DA9B /* VideoCapture */,
 			);
 			path = CCRenderer;
 			sourceTree = "<group>";

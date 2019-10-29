@@ -76,9 +76,11 @@ extension CCRenderer.VideoCapture {
             //////////////////////////////////////////////////////////
             // AVCaptureSessionを生成
             let isRunning: Bool = captureSession.isRunning
+            /*
             if captureSession.isRunning {
                 captureSession.stopRunning()
             }
+             */
             //////////////////////////////////////////////////////////
 
             //////////////////////////////////////////////////////////

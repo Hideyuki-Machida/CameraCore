@@ -75,7 +75,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
                     CCRenderer.VideoCapture.CaptureWriter.Paramator.init(
                         outputFilePath: URL.init(fileURLWithPath: filePath),
                         presetiFrame: Settings.PresetSize.p1280x720,
-                        frameRate: 30,
+                        frameRate: .fps60,
                         devicePosition: AVCaptureDevice.Position.back,
                         croppingRect: CGRect.init(origin: CGPoint.init(), size: Settings.PresetSize.p1280x720.size()),
                         fileType: AVFileType.mp4,

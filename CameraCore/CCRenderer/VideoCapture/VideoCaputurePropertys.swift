@@ -26,7 +26,7 @@ extension CCRenderer.VideoCapture {
             case .colorSpace: return 2
             case .videoHDR: return 3
             case .isSmoothAutoFocusEnabled: return 4
-            case .isDepthDataOut: return 100
+            case .isDepthDataOut: return 1000
             }
         }
     }
@@ -34,21 +34,23 @@ extension CCRenderer.VideoCapture {
     public class PropertysInfo {
         let traceQueue: DispatchQueue = DispatchQueue(label: "CCRenderer.VideoCapture.PropertysInfo.Queue")
         
-        public var device: AVCaptureDevice?
-        public var deviceFormat: AVCaptureDevice.Format?
-        public var deviceType: AVCaptureDevice.DeviceType?
-        public var presetSize: Settings.PresetSize = Settings.PresetSize.p1280x720
-        public var captureSize: CGSize = Settings.PresetSize.p1280x720.size()
-        public var devicePosition: AVCaptureDevice.Position = .back
-        public var frameRate: Int32 = 30
-        public var colorSpace: AVCaptureColorSpace = .sRGB
-        public var videoHDR: Bool?
-        public var isSmoothAutoFocusEnabled: Bool = true
-        public var isDepthDataOut: Bool = false
-        
-        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, propertyList: [Property]) {
+        fileprivate(set) var device: AVCaptureDevice?
+        fileprivate(set) var deviceFormat: AVCaptureDevice.Format?
+        fileprivate(set) var deviceType: AVCaptureDevice.DeviceType?
+        fileprivate(set) var presetSize: Settings.PresetSize = Settings.PresetSize.p1280x720
+        fileprivate(set) var captureSize: CGSize = Settings.PresetSize.p1280x720.size()
+        fileprivate(set) var devicePosition: AVCaptureDevice.Position = .back
+        fileprivate(set) var frameRate: Int32 = 30
+        fileprivate(set) var colorSpace: AVCaptureColorSpace = .sRGB
+        fileprivate(set) var videoHDR: Bool?
+        fileprivate(set) var isSmoothAutoFocusEnabled: Bool = true
+        fileprivate(set) var isDepthDataOut: Bool = false
+        fileprivate(set) var metadataObjects: [AVMetadataObject.ObjectType] = []
+
+        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, metadataObjects: [AVMetadataObject.ObjectType] = [], propertyList: [Property]) {
             self.device = device
             self.deviceFormat = deviceFormat
+            self.metadataObjects = metadataObjects
             for property in propertyList {
                 switch property {
                 case .captureSize(let captureSize):
@@ -116,16 +118,18 @@ extension CCRenderer.VideoCapture {
         public var devicePosition: AVCaptureDevice.Position
         public var deviceType: AVCaptureDevice.DeviceType
         public var isAudioDataOutput: Bool
+        public var metadataObjects: [AVMetadataObject.ObjectType] = []
         public var required: [Property]
         public var option: [Property]
         public var info: PropertysInfo = PropertysInfo()
 
         fileprivate var requiredCaptureSize: CGSize? = nil
         
-        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, required: [Property] = [], option: [Property] = []) {
+        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, metadataObjects: [AVMetadataObject.ObjectType] = [], required: [Property] = [], option: [Property] = []) {
             self.devicePosition = devicePosition
             self.deviceType = deviceType
             self.isAudioDataOutput = isAudioDataOutput
+            self.metadataObjects = metadataObjects
             self.required = required
             self.option = option
         }
@@ -218,11 +222,7 @@ extension CCRenderer.VideoCapture.Propertys {
 
         //////////////////////////////////////////////////////////
         // PropertysInfoを設定
-        self.info.update(device: captureDevice, deviceFormat: resultFormat, propertyList: self.required + self.option)
-        //////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////
-        self.info.deviceFormat = resultFormat
+        self.info.update(device: captureDevice, deviceFormat: resultFormat, metadataObjects: self.metadataObjects, propertyList: self.required + self.option)
         //////////////////////////////////////////////////////////
     }
 
@@ -290,7 +290,6 @@ extension CCRenderer.VideoCapture.Propertys {
                 }
             }
             return formats
-
         case .isDepthDataOut(let on):
             if on {
                 let list: [AVCaptureDevice.Format] = formats.filter { ($0.supportedDepthDataFormats.filter { CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_DepthFloat32 }).count >= 1 }

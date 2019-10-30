@@ -118,6 +118,10 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.setFilter()
     }
 
+    @IBAction func setMetaDataOutBtnTapAction(_ sender: UIButton) {
+        self.setMetaDataOut()
+    }
+
     @IBAction func setDepthDataOutBtnTapAction(_ sender: UIButton) {
         self.setDepthDataOut()
     }
@@ -475,6 +479,47 @@ extension VideoCaptureView002ExampleVC {
         self.present(action, animated: true, completion: nil)
     }
 
+}
+
+extension VideoCaptureView002ExampleVC {
+    private enum MetaDataLabel: String {
+        case ON = "ON"
+        case OFF = "OFF"
+    }
+
+    func setMetaDataOut() {
+        let action: UIAlertController = UIAlertController(title: "MetaData(Face)設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
+        
+        let action001: UIAlertAction = UIAlertAction(title: MetaDataLabel.ON.rawValue, style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+            do {
+                self.videoCaputurePropertys.metadataObjects = [.face]
+                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+            } catch {
+                MCDebug.errorLog("MetaData: " + MetaDataLabel.ON.rawValue)
+            }
+        })
+        
+        let action002: UIAlertAction = UIAlertAction(title: MetaDataLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+            do {
+                self.videoCaputurePropertys.metadataObjects = []
+                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+            } catch {
+                MCDebug.errorLog("MetaData: " + MetaDataLabel.OFF.rawValue)
+            }
+        })
+        
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
+            (action: UIAlertAction!) -> Void in
+        })
+        
+        action.addAction(action001)
+        action.addAction(action002)
+        action.addAction(cancel)
+        
+        self.present(action, animated: true, completion: nil)
+    }
 }
 
 extension VideoCaptureView002ExampleVC {

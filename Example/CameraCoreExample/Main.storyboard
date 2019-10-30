@@ -478,7 +478,7 @@
                                 <rect key="frame" x="265" y="98" width="100" height="660"/>
                                 <subviews>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIN-Wo-kFj">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="85.666666666666671"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="73.666666666666671"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Position設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -488,7 +488,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1dY-aT-kLu">
-                                        <rect key="frame" x="0.0" y="95.666666666666657" width="100" height="85.666666666666657"/>
+                                        <rect key="frame" x="0.0" y="83.666666666666657" width="100" height="74"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                         <state key="normal" title="カメラタイプ設定">
@@ -499,7 +499,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m0o-A0-ktQ">
-                                        <rect key="frame" x="0.0" y="191.33333333333331" width="100" height="85.666666666666686"/>
+                                        <rect key="frame" x="0.0" y="167.66666666666669" width="100" height="73.666666666666686"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="解像度設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -509,7 +509,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BWd-JY-pRz">
-                                        <rect key="frame" x="0.0" y="287" width="100" height="86"/>
+                                        <rect key="frame" x="0.0" y="251.33333333333329" width="100" height="73.666666666666657"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="FPS設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -519,7 +519,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NeQ-u3-cTT">
-                                        <rect key="frame" x="0.0" y="383" width="100" height="85.666666666666686"/>
+                                        <rect key="frame" x="0.0" y="335" width="100" height="73.666666666666686"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Touch設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -529,7 +529,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ncq-pd-WcI">
-                                        <rect key="frame" x="0.0" y="478.66666666666669" width="100" height="85.666666666666686"/>
+                                        <rect key="frame" x="0.0" y="418.66666666666663" width="100" height="74"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <state key="normal" title="Filter設定">
@@ -540,14 +540,25 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ya-Td-Blo">
-                                        <rect key="frame" x="0.0" y="574.33333333333337" width="100" height="85.666666666666629"/>
+                                        <rect key="frame" x="0.0" y="502.66666666666669" width="100" height="73.666666666666686"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="Deoth">
+                                        <state key="normal" title="Metadata(Face)">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="setDepthDataOutBtnTapAction:" destination="Moq-w3-Rw8" eventType="touchUpInside" id="yga-k0-6u4"/>
+                                            <action selector="setMetaDataOutBtnTapAction:" destination="Moq-w3-Rw8" eventType="touchUpInside" id="xp9-f8-2rh"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJG-zH-EfD">
+                                        <rect key="frame" x="0.0" y="586.33333333333337" width="100" height="73.666666666666629"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="Depth">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setDepthDataOutBtnTapAction:" destination="Moq-w3-Rw8" eventType="touchUpInside" id="ZHK-I2-hJB"/>
                                         </connections>
                                     </button>
                                 </subviews>

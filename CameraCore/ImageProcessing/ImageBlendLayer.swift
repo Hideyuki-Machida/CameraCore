@@ -1,9 +1,9 @@
 //
-//  MetalImageBlendLayer.swift
+//  ImageBlendLayer.swift
 //  CameraCore
 //
-//  Created by hideyuki machida on 2018/12/29.
-//  Copyright © 2018 町田 秀行. All rights reserved.
+//  Created by hideyuki machida on 2019/11/02.
+//  Copyright © 2019 hideyuki machida. All rights reserved.
 //
 
 import AVFoundation

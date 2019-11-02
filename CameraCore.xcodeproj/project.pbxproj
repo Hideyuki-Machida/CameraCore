@@ -23,7 +23,6 @@
 		626659D9236839310077DA9B /* GLTextureConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626659D4236839310077DA9B /* GLTextureConvert.swift */; };
 		626659DA236839310077DA9B /* CodableURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626659D5236839310077DA9B /* CodableURL.swift */; };
 		626659DB236839310077DA9B /* TransformUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626659D6236839310077DA9B /* TransformUtils.swift */; };
-		626659DD23683B4E0077DA9B /* ImageBlendLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626659DC23683B4E0077DA9B /* ImageBlendLayer.swift */; };
 		6292627C232FEC2600D47CF0 /* CameraRollImportStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */; };
 		6292627D232FEC2600D47CF0 /* CameraRollAssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926278232FEC2600D47CF0 /* CameraRollAssetType.swift */; };
 		6292627E232FEC2600D47CF0 /* CameraRollItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926279232FEC2600D47CF0 /* CameraRollItem.swift */; };
@@ -58,6 +57,7 @@
 		62E5CB0122904A35004D258A /* TransformLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA9322904A35004D258A /* TransformLayer.swift */; };
 		62E5CB0222904A35004D258A /* RenderLayerUserInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA9422904A35004D258A /* RenderLayerUserInfoProtocol.swift */; };
 		62E5CB4922905005004D258A /* MetalCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E5CB4822905005004D258A /* MetalCanvas.framework */; };
+		62E6FD72236D7F1200A1FF1B /* ImageBlendLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E6FD71236D7F1200A1FF1B /* ImageBlendLayer.swift */; };
 		62FABEC42296E5A4002672A0 /* RGBCameraRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */; };
 		62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */; };
 		62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */; };
@@ -92,7 +92,6 @@
 		626659D4236839310077DA9B /* GLTextureConvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLTextureConvert.swift; sourceTree = "<group>"; };
 		626659D5236839310077DA9B /* CodableURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableURL.swift; sourceTree = "<group>"; };
 		626659D6236839310077DA9B /* TransformUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformUtils.swift; sourceTree = "<group>"; };
-		626659DC23683B4E0077DA9B /* ImageBlendLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageBlendLayer.swift; path = ../../../../../MixChannelVideoModule/Modules/CameraCore/CameraCore/ImageProcessing/ImageBlendLayer.swift; sourceTree = "<group>"; };
 		62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollImportStatus.swift; sourceTree = "<group>"; };
 		62926278232FEC2600D47CF0 /* CameraRollAssetType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollAssetType.swift; sourceTree = "<group>"; };
 		62926279232FEC2600D47CF0 /* CameraRollItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollItem.swift; sourceTree = "<group>"; };
@@ -130,6 +129,7 @@
 		62E5CA9322904A35004D258A /* TransformLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformLayer.swift; sourceTree = "<group>"; };
 		62E5CA9422904A35004D258A /* RenderLayerUserInfoProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderLayerUserInfoProtocol.swift; sourceTree = "<group>"; };
 		62E5CB4822905005004D258A /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62E6FD71236D7F1200A1FF1B /* ImageBlendLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBlendLayer.swift; sourceTree = "<group>"; };
 		62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBCameraRenderer.swift; sourceTree = "<group>"; };
 		62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARFaceGeometryRenderer.swift; sourceTree = "<group>"; };
 		62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceMetaDataRenderer.swift; sourceTree = "<group>"; };
@@ -310,7 +310,7 @@
 				62E5CA8C22904A35004D258A /* ColorOverlayLayer.swift */,
 				62E5CA8F22904A35004D258A /* SequenceImageLayer.swift */,
 				62E5CA9322904A35004D258A /* TransformLayer.swift */,
-				626659DC23683B4E0077DA9B /* ImageBlendLayer.swift */,
+				62E6FD71236D7F1200A1FF1B /* ImageBlendLayer.swift */,
 			);
 			path = ImageProcessing;
 			sourceTree = "<group>";
@@ -466,6 +466,7 @@
 				62E5CB0222904A35004D258A /* RenderLayerUserInfoProtocol.swift in Sources */,
 				626659CC236838D80077DA9B /* VideoCaptureViewEvent.swift in Sources */,
 				6292627E232FEC2600D47CF0 /* CameraRollItem.swift in Sources */,
+				62E6FD72236D7F1200A1FF1B /* ImageBlendLayer.swift in Sources */,
 				62FABEC42296E5A4002672A0 /* RGBCameraRenderer.swift in Sources */,
 				62E5CAF922904A35004D258A /* ImageLayer.swift in Sources */,
 				62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */,
@@ -478,7 +479,6 @@
 				626659CD236838D80077DA9B /* VideoCaptureView.swift in Sources */,
 				62E5CACC22904A35004D258A /* AVCaptureVideoOrientation+Extended.swift in Sources */,
 				626659D0236838D80077DA9B /* VideoCaptureErrorType.swift in Sources */,
-				626659DD23683B4E0077DA9B /* ImageBlendLayer.swift in Sources */,
 				62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */,
 				62E5CB0022904A35004D258A /* RenderLayerId.swift in Sources */,
 				62E5CAB922904A35004D258A /* AssetManager.swift in Sources */,

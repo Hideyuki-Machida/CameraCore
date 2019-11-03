@@ -154,7 +154,7 @@ extension CCRenderer.VideoCapture {
 
         deinit {
             self.onUpdate = nil
-            MCDebug.log(self)
+            MCDebug.deinitLog(self)
             guard let captureSession: AVCaptureSession = self.captureSession else { return }
             if captureSession.isRunning {
                 captureSession.stopRunning()

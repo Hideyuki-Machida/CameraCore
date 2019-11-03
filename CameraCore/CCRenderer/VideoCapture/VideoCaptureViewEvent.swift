@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import MetalCanvas
 
 public class VideoCaptureViewEvent: NSObject {
     public var onStatusChange: ((_ status: VideoCaptureStatus)->Void)?
@@ -17,4 +18,8 @@ public class VideoCaptureViewEvent: NSObject {
     public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer)->Void)?
     public var onDepthDataUpdate: ((_ depthData: AVDepthData?)->Void)?
     public var onMetadataObjectsUpdate: ((_ metadataObjects: [AVMetadataObject])->Void)?
+
+    deinit {
+        MCDebug.deinitLog(self)
+    }
 }

@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import AVFoundation
 import MetalCanvas
+import MetalKit
+import MetalPerformanceShaders
 
 public enum VideoCaptureStatus {
     case setup
@@ -23,7 +25,8 @@ public enum VideoCaptureStatus {
 
 public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
     
-    private let queue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoCaptureView.queue")
+    private let renderQueue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoCaptureView.queue")
+    private let drawQueue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoCaptureView.draw.queue")
     
     public var status: VideoCaptureStatus = .setup {
         willSet {
@@ -52,14 +55,28 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
     }
     
     fileprivate var counter: CMTimeValue = 0
+    fileprivate var drawCounter: CMTimeValue = 0
     fileprivate var textureCache: CVMetalTextureCache? = MCCore.createTextureCache()
-    
+    fileprivate var drawTexture: MTLTexture!
+    private let hasHEVCHardwareEncoder: Bool = MCTools.hasHEVCHardwareEncoder
+    private var filter: MPSImageLanczosScale!
+
     public override func awakeFromNib() {
         super.awakeFromNib()
+        self.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
+    }
+    
+    public override init(frame frameRect: CGRect, device: MTLDevice?) {
+        super.init(frame: frameRect, device: device)
+        self.isPaused = false
+    }
+    
+    required public init(coder: NSCoder) {
+        super.init(coder: coder)
+        self.isPaused = false
     }
 
     deinit {
-        MCDebug.deinitLog(self)
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -71,17 +88,25 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
     public func setup(_ propertys: CCRenderer.VideoCapture.Propertys) throws {
         self.status = .setup
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
         do {
             self.capture = try CCRenderer.VideoCapture.VideoCapture(propertys: propertys)
         } catch {
             self.capture = nil
             throw RecordingError.setupError
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        guard var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: propertys.info.presetSize.size(isOrientation: true)) else { throw RecordingError.setupError }
+        self.drawTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: self.colorPixelFormat)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
         self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
             guard self?.status == .play else { return }
 
-            self?.queue.async { [weak self] in
+            self?.renderQueue.async { [weak self] in
                 autoreleasepool() { [weak self] in
                     do {
                         try self?.updateFrame(
@@ -91,14 +116,30 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
                             position: self?.capture?.propertys.info.devicePosition ?? .back
                         )
                     } catch {
-
+                        MCDebug.errorLog("updateFrame error")
                     }
                 }
             }
         }
-
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    public override func draw(in view: MTKView) {
+        super.draw(in: view)
+        if let frameRate: Int32 = self.capture?.propertys.info.frameRate, frameRate < self.preferredFramesPerSecond {
+            guard self.counter > self.drawCounter else { return }
+        }
+        guard let drawTexture: MTLTexture = self.drawTexture else { return }
+        self.drawCounter = self.counter
+        self.drawQueue.async { [weak self] in
+            autoreleasepool() { [weak self] in
+                self?.drawUpdate(drawTexture: drawTexture)
+            }
+        }
+    }
+}
+
+extension VideoCaptureView {
     public func play() {
         guard self.status != .play else { return }
         MCDebug.log("CCamVideo.VideoRecordingPlayer.play")
@@ -123,6 +164,10 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 extension VideoCaptureView {
     public func update(propertys: CCRenderer.VideoCapture.Propertys) throws {
         try self.capture?.update(propertys: propertys)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        guard var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: propertys.info.presetSize.size(isOrientation: true)) else { throw RecordingError.setupError }
+        self.drawTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: self.colorPixelFormat)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
 
@@ -161,6 +206,13 @@ extension VideoCaptureView {
     fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject], position: AVCaptureDevice.Position) throws {
         
         guard let frameRate: Int32 = self.capture?.propertys.info.frameRate else { return }
+        guard let drawTexture: MTLTexture = self.drawTexture else { return }
+
+        ////////////////////////////////////////////////////////////
+        // drawableSizeを最適化
+        self.drawableSize = CGSize.init(CGFloat(drawTexture.width), CGFloat(drawTexture.height))
+        ////////////////////////////////////////////////////////////
+
         //////////////////////////////////////////////////////////
         // renderSize
         if CCRenderer.VideoCapture.CaptureWriter.isWritng == true {
@@ -194,7 +246,7 @@ extension VideoCaptureView {
             renderSize: renderSize,
             metadataObjects: metadataObjects,
             depthData: depthData,
-            queue: self.queue
+            queue: self.renderQueue
         )
         self.counter += 1
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,8 +281,9 @@ extension VideoCaptureView {
             self?.event?.onPreviewUpdate?(sampleBuffer)
             self?.event?.onPixelUpdate?(originalPixelBuffer)
         }
-        
-        self.update(commandBuffer: commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
+
+        super.updatePixelBuffer(commandBuffer: commandBuffer, sorce: rgbTexture, destination: drawTexture, renderSize: renderSize)
+        commandBuffer.commit()
     }
     
     private func processingMetalRenderLayer(renderLayer: inout MetalRenderLayerProtocol, commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {

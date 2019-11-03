@@ -133,6 +133,11 @@ extension CCRenderer.VideoCapture {
             self.required = required
             self.option = option
         }
+
+        deinit {
+            MCDebug.deinitLog(self)
+        }
+
     }
 }
 

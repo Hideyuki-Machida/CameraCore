@@ -92,6 +92,7 @@ public class Settings {
         case fps60 = 60
         case fps90 = 90
         case fps120 = 120
+        case fps240 = 240
     }
 
     public enum VideoCodec {

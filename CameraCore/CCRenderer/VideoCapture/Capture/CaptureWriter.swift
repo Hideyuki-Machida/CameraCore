@@ -53,7 +53,7 @@ extension CCRenderer.VideoCapture {
             if CaptureWriter.writer?.status == .writing {
                 CaptureWriter.writer?.cancelWriting()
             }
-            MCDebug.log(self)
+            MCDebug.deinitLog(self)
         }
         
         init(filePath: String, size: CGSize, frameRate: Int, onReady: (_ status: Bool) -> Void) {

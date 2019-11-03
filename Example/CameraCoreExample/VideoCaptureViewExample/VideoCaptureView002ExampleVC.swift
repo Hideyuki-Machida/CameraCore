@@ -73,7 +73,6 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.videoCaptureView.event = event
         do {
             self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: LutLayer.Dimension.d3)
-
             try self.videoCaptureView.setup(self.videoCaputurePropertys)
         } catch {
         }
@@ -165,6 +164,7 @@ extension VideoCaptureView002ExampleVC {
         case fps60 = "60 FPS"
         case fps90 = "90 FPS"
         case fps120 = "120 FPS"
+        case fps240 = "240 FPS"
     }
     
     @IBAction func setFPS() {
@@ -230,6 +230,16 @@ extension VideoCaptureView002ExampleVC {
             }
         })
 
+        let action006: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps240.rawValue, style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+            do {
+                try self.videoCaputurePropertys.swap(property: .frameRate(.fps240))
+                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+            } catch {
+                MCDebug.errorLog(FrameRateLabel.fps240.rawValue)
+            }
+        })
+
         let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
             (action: UIAlertAction!) -> Void in
         })
@@ -240,6 +250,7 @@ extension VideoCaptureView002ExampleVC {
         action.addAction(action003)
         action.addAction(action004)
         action.addAction(action005)
+        action.addAction(action006)
         action.addAction(cancel)
         
         self.present(action, animated: true, completion: nil)

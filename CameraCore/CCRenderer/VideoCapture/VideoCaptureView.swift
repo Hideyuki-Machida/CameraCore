@@ -78,7 +78,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
             throw RecordingError.setupError
         }
 
-        self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
+        self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
             guard self?.status == .play else { return }
 
             self?.queue.async { [weak self] in
@@ -158,7 +158,7 @@ extension VideoCaptureView {
 }
 
 extension VideoCaptureView {
-    fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position) throws {
+    fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject], position: AVCaptureDevice.Position) throws {
         
         guard let frameRate: Int32 = self.capture?.propertys.info.frameRate else { return }
         //////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ extension VideoCaptureView {
             timeRange: CMTimeRange.zero,
             percentComplete: 0.0,
             renderSize: renderSize,
-            metadataObjects: metadataObjects ?? [],
+            metadataObjects: metadataObjects,
             depthData: depthData,
             queue: self.queue
         )

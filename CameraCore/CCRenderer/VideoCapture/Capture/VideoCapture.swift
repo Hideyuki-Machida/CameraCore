@@ -24,7 +24,7 @@ extension CCRenderer.VideoCapture {
 
         var propertys: CCRenderer.VideoCapture.Propertys = Configuration.defaultVideoCapturePropertys
         
-        public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)? {
+        public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject])->Void)? {
             get {
                 return self.captureOutput.onUpdate
             }

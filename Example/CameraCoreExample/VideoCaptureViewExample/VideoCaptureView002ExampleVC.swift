@@ -65,8 +65,8 @@ class VideoCaptureView002ExampleVC: UIViewController {
             guard let depthData = depthData else { return }
             print(depthData)
         }
-        event.onMetadataObjectsUpdate = { (metadataObjects: [AVMetadataObject]?) in
-            guard let metadataObjects = metadataObjects else { return }
+        event.onMetadataObjectsUpdate = { (metadataObjects: [AVMetadataObject]) in
+            guard metadataObjects.count >= 1 else { return }
             print(metadataObjects)
         }
 

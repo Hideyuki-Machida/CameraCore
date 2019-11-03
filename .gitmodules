@@ -4,3 +4,6 @@
 [submodule "Modules/CoreMLHelpers"]
 	path = Modules/CoreMLHelpers
 	url = git@github.com:hollance/CoreMLHelpers.git
+[submodule "Modules/iOS_DummyAVAssets"]
+	path = Modules/iOS_DummyAVAssets
+	url = git@github.com:Hideyuki-Machida/iOS_DummyAVAssets.git

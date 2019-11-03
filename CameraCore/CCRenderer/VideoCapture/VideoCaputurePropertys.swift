@@ -213,7 +213,7 @@ extension CCRenderer.VideoCapture.Propertys {
         } else {
             // 解像度最小のもの
             guard let format: AVCaptureDevice.Format = resultFormats.min(by: { first, second in
-                CMVideoFormatDescriptionGetDimensions(first.formatDescription).width > CMVideoFormatDescriptionGetDimensions(second.formatDescription).width
+                CMVideoFormatDescriptionGetDimensions(first.formatDescription).width < CMVideoFormatDescriptionGetDimensions(second.formatDescription).width
             })
             else { throw CCRenderer.VideoCapture.ErrorType.setupError }
             resultFormat = format

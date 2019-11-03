@@ -13,7 +13,7 @@ import MetalCanvas
 extension CCRenderer.VideoCapture {
     final class VideoCaptureOutput: NSObject {
         fileprivate let videoOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.VideoQueue")
-        fileprivate let audioOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.AudioQueue")
+        fileprivate let metadataOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.metadataOutputQueue")
         fileprivate let depthOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
         fileprivate let outputSynchronizerQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.outputSynchronizerQueue")
         fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
@@ -24,7 +24,10 @@ extension CCRenderer.VideoCapture {
         fileprivate(set) var metadataOutput: AVCaptureMetadataOutput?
         fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
 
-        var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?)->Void)?
+        fileprivate(set) var depthData: AVDepthData? = nil
+        fileprivate(set) var metadataObjects: [AVMetadataObject] = []
+
+        var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject])->Void)?
 
         override init () {
             super.init()
@@ -39,13 +42,15 @@ extension CCRenderer.VideoCapture {
         internal func set(captureSession: AVCaptureSession, propertys: CCRenderer.VideoCapture.Propertys) throws {
             let devicePosition: AVCaptureDevice.Position = propertys.info.devicePosition
             
+            self.depthData = nil
+            self.metadataObjects = []
             var dataOutputs: [AVCaptureOutput] = []
             
             //////////////////////////////////////////////////////////
             // AVCaptureVideoDataOutput
             let videoDataOutput: AVCaptureVideoDataOutput = try self.getVideoDataOutput()
             if captureSession.canAddOutput(videoDataOutput) {
-                //videoDataOutput.setSampleBufferDelegate(self, queue: self.videoOutputQueue)
+                videoDataOutput.setSampleBufferDelegate(self, queue: self.videoOutputQueue)
                 captureSession.addOutput(videoDataOutput)
                 if let connection: AVCaptureConnection = videoDataOutput.connection(with: .video) {
                     connection.isEnabled = true
@@ -69,7 +74,7 @@ extension CCRenderer.VideoCapture {
                 // AVCaptureAudioDataOutput
                 let audioDataOutput: AVCaptureAudioDataOutput = try self.getAudioDataOutput(captureSession: captureSession)
                 if captureSession.canAddOutput(audioDataOutput) {
-                    //audioDataOutput.setSampleBufferDelegate(self, queue: self.audioOutputQueue)
+                    audioDataOutput.setSampleBufferDelegate(self, queue: self.videoOutputQueue)
                     captureSession.addOutput(audioDataOutput)
                     if let connection: AVCaptureConnection = audioDataOutput.connection(with: .audio) {
                         connection.isEnabled = true
@@ -93,6 +98,7 @@ extension CCRenderer.VideoCapture {
                 let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
                 if captureSession.canAddOutput(metadataOutput) {
                     captureSession.addOutput(metadataOutput)
+                    metadataOutput.setMetadataObjectsDelegate(self, queue: self.metadataOutputQueue)
                     let resultMetaDataObject: [AVMetadataObject.ObjectType] = metadataObjects.filter { metadataOutput.availableMetadataObjectTypes.contains($0) }
                     if resultMetaDataObject.count >= 1 {
                         metadataOutput.metadataObjectTypes = resultMetaDataObject
@@ -117,7 +123,7 @@ extension CCRenderer.VideoCapture {
                 if captureSession.canAddOutput(videoDepthDataOutput) {
                     captureSession.addOutput(videoDepthDataOutput)
                     videoDepthDataOutput.isFilteringEnabled = true
-                    //videoDepthDataOutput.setDelegate(self, callbackQueue: self.depthOutputQueue)
+                    videoDepthDataOutput.setDelegate(self, callbackQueue: self.depthOutputQueue)
                     if let connection: AVCaptureConnection = videoDepthDataOutput.connection(with: .depthData) {
                         connection.isEnabled = true
                         self.videoDepthDataOutput = videoDepthDataOutput
@@ -132,9 +138,6 @@ extension CCRenderer.VideoCapture {
             } else {
                 self.videoDepthDataOutput = nil
             }
-
-            self.outputSynchronizer = AVCaptureDataOutputSynchronizer.init(dataOutputs: dataOutputs)
-            self.outputSynchronizer!.setDelegate(self, queue: self.outputSynchronizerQueue)
 
             NotificationCenter.default.removeObserver(self)
             NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationDidChange(notification:)), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -180,56 +183,21 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput {
     }
 }
 
-/*
+
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        self.onUpdate?(sampleBuffer, nil, nil)
+        self.onUpdate?(sampleBuffer, nil, self.metadataObjects)
     }
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDelegate {
     func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
+        self.depthData = depthData
     }
 }
 
 extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        var list: [AVMetadataObject]?
-        if let connection = self.videoDataOutput?.connection(with: AVMediaType.video), metadataObjects.count >= 1 {
-            list = []
-            for metadataObject in metadataObjects {
-                if let face: AVMetadataObject = self.videoDataOutput?.transformedMetadataObject(for: metadataObject, connection: connection) {
-                    list?.append(face)
-                }
-            }
-        }
-    }
-}
-*/
-extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchronizerDelegate {
-    func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
-        var depthData: AVDepthData?
-        var metadataObjects: [AVMetadataObject]?
-
-        if let depthDataOutput: AVCaptureDepthDataOutput = self.videoDepthDataOutput, let syncedDepthData: AVCaptureSynchronizedDepthData = synchronizedDataCollection.synchronizedData(for: depthDataOutput) as? AVCaptureSynchronizedDepthData {
-            depthData = syncedDepthData.depthData
-        }
-
-        if let metadataOutput: AVCaptureMetadataOutput = self.metadataOutput, let syncedMetaData: AVCaptureSynchronizedMetadataObjectData = synchronizedDataCollection.synchronizedData(for: metadataOutput) as? AVCaptureSynchronizedMetadataObjectData {
-            if let connection = self.videoDataOutput?.connection(with: AVMediaType.video), syncedMetaData.metadataObjects.count >= 1 {
-                metadataObjects = []
-                for metadataObject in syncedMetaData.metadataObjects {
-                    if let face: AVMetadataObject = self.videoDataOutput?.transformedMetadataObject(for: metadataObject, connection: connection) {
-                        metadataObjects?.append(face)
-                        
-                    }
-                }
-            }
-        }
-
-        if let videoDataOutput: AVCaptureVideoDataOutput = self.videoDataOutput, let syncedVideoData: AVCaptureSynchronizedSampleBufferData = synchronizedDataCollection.synchronizedData(for: videoDataOutput) as?AVCaptureSynchronizedSampleBufferData {
-            self.onUpdate?(syncedVideoData.sampleBuffer, depthData, metadataObjects)
-        }
-
+        self.metadataObjects = metadataObjects
     }
 }

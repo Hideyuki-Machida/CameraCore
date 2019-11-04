@@ -25,11 +25,12 @@ class VideoCaptureView002ExampleVC: UIViewController {
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
         required: [
-            .captureSize(Settings.PresetSize.p1280x720),
-            .frameRate(Settings.PresetFrameRate.fps30),
+            .frameRate(Settings.PresetFrameRate.fps120),
             .isDepthDataOut(false)
         ],
         option: [
+            .captureSize(Settings.PresetSize.p1920x1080),
+
             .colorSpace(AVCaptureColorSpace.P3_D65)
         ]
     )
@@ -75,6 +76,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
             self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: LutLayer.Dimension.d3)
             try self.videoCaptureView.setup(self.videoCaputurePropertys)
         } catch {
+            MCDebug.errorLog("videoCaptureView: Setting Error")
         }
     }
 

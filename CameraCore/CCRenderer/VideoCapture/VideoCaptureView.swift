@@ -93,7 +93,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
             self.capture = try CCRenderer.VideoCapture.VideoCapture(propertys: propertys)
         } catch {
             self.capture = nil
-            throw RecordingError.setupError
+            throw CCRenderer.VideoCapture.ErrorType.setupError
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 

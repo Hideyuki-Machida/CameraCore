@@ -70,7 +70,7 @@ extension CCRenderer.ARRenderer {
 						//print(metadataFaceObject.bounds)
 						//face.landmarkDetection(pixelBuffer: &imageBuffer, observation: VNDetectedObjectObservation.init(boundingBox: boundes))
 						//face.tracking(pixelBuffer: &pixelBuffer)
-						face.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: landmarkDetectionBoundes))
+						try? face.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: landmarkDetectionBoundes))
 						tempFaces.append(face)
 						faceItemFlg = true
 						continue
@@ -81,7 +81,7 @@ extension CCRenderer.ARRenderer {
 				let newFaceItem: MCVision.Detection.Face.Item = MCVision.Detection.Face.Item.init(id: metadataFaceObject.faceID, observation: VNFaceObservation.init(boundingBox: trackingBoundes), landmarks: nil, renderSize: renderSize)
 				print("new Face: \(metadataFaceObject.faceID)")
 				//newFaceItem.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: boundes))
-				newFaceItem.tracking(pixelBuffer: &pixelBuffer)
+				try? newFaceItem.tracking(pixelBuffer: &pixelBuffer)
 				tempFaces.append(newFaceItem)
 			}
 			self.faces = tempFaces

@@ -37,7 +37,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
             } else {
             }
         }
-        event.onPreviewUpdate = { (sampleBuffer: CMSampleBuffer) in
+        event.onFrameUpdate = { (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
             //print(sampleBuffer)
         }
 

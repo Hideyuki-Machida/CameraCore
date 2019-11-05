@@ -12,12 +12,10 @@ import MetalCanvas
 
 public class VideoCaptureViewEvent: NSObject {
     public var onStatusChange: ((_ status: VideoCaptureStatus)->Void)?
-    public var onPreviewUpdate: ((_ sampleBuffer: CMSampleBuffer)->Void)?
+    public var onFrameUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject])->Void)?
+    public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject])->Void)?
     public var onRecodingUpdate: ((_ recordedDuration: TimeInterval)->Void)?
     public var onRecodingComplete: ((_ result: Bool, _ filePath: URL)->Void)?
-    public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer)->Void)?
-    public var onDepthDataUpdate: ((_ depthData: AVDepthData?)->Void)?
-    public var onMetadataObjectsUpdate: ((_ metadataObjects: [AVMetadataObject])->Void)?
 
     deinit {
         MCDebug.deinitLog(self)

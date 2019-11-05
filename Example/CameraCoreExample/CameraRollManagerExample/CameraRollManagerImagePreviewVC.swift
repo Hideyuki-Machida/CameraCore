@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import CameraCore
 import iOS_DummyAVAssets
+import MetalCanvas
 
 class CameraRollManagerImagePreviewVC: UIViewController {
 
@@ -17,7 +18,7 @@ class CameraRollManagerImagePreviewVC: UIViewController {
 	@IBOutlet weak var imageView: UIImageView!
 	    
     deinit {
-        Debug.DeinitLog(self)
+        MCDebug.deinitLog(self)
     }
 
     override func viewDidLoad() {

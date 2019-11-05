@@ -11,7 +11,6 @@ import UIKit
 import AVFoundation
 import MetalCanvas
 import MetalKit
-import MetalPerformanceShaders
 
 public enum VideoCaptureStatus {
     case setup
@@ -58,12 +57,11 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
     fileprivate var drawCounter: CMTimeValue = 0
     fileprivate var textureCache: CVMetalTextureCache? = MCCore.createTextureCache()
     fileprivate var drawTexture: MTLTexture!
-    private let hasHEVCHardwareEncoder: Bool = MCTools.hasHEVCHardwareEncoder
-    private var filter: MPSImageLanczosScale!
 
     public override func awakeFromNib() {
         super.awakeFromNib()
         self.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
+        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     public override init(frame frameRect: CGRect, device: MTLDevice?) {
@@ -98,8 +96,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        guard var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: propertys.info.presetSize.size(isOrientation: true)) else { throw RecordingError.setupError }
-        self.drawTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: self.colorPixelFormat)
+        self.updateDrawTexture()
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,8 +162,7 @@ extension VideoCaptureView {
     public func update(propertys: CCRenderer.VideoCapture.Propertys) throws {
         try self.capture?.update(propertys: propertys)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        guard var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: propertys.info.presetSize.size(isOrientation: true)) else { throw RecordingError.setupError }
-        self.drawTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: self.colorPixelFormat)
+        self.updateDrawTexture()
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
@@ -204,16 +200,15 @@ extension VideoCaptureView {
 
 extension VideoCaptureView {
     fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject], position: AVCaptureDevice.Position) throws {
+
+        self.event?.onFrameUpdate?(sampleBuffer, depthData, metadataObjects)
         
-        guard let frameRate: Int32 = self.capture?.propertys.info.frameRate else { return }
-        guard let drawTexture: MTLTexture = self.drawTexture else { return }
+        guard
+            let frameRate: Int32 = self.capture?.propertys.info.frameRate,
+            let drawTexture: MTLTexture = self.drawTexture
+        else { return }
 
-        ////////////////////////////////////////////////////////////
-        // drawableSizeを最適化
-        self.drawableSize = CGSize.init(CGFloat(drawTexture.width), CGFloat(drawTexture.height))
-        ////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
         // renderSize
         if CCRenderer.VideoCapture.CaptureWriter.isWritng == true {
             CCRenderer.VideoCapture.CaptureWriter.addCaptureSampleBuffer(sampleBuffer: sampleBuffer)
@@ -222,20 +217,20 @@ extension VideoCaptureView {
                 self.event?.onRecodingUpdate?(t)
             }
         }
-        //////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //////////////////////////////////////////////////////////
-        self.event?.onDepthDataUpdate?(depthData)
-        self.event?.onMetadataObjectsUpdate?(metadataObjects)
-        //////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
         // renderSize
         guard var originalPixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         let width: Int = CVPixelBufferGetWidth(originalPixelBuffer)
         let height: Int = CVPixelBufferGetHeight(originalPixelBuffer)
         let renderSize: CGSize = CGSize.init(width: width, height: height)
-        //////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // drawableSizeを最適化
+        self.drawableSize = renderSize
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // renderLayerCompositionInfo
@@ -272,18 +267,15 @@ extension VideoCaptureView {
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         
-        //////////////////////////////////////////////////////////
-        // renderSize
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // commandBuffer commit
         guard let rgbTexture: MTLTexture = MCCore.texture(pixelBuffer: &originalPixelBuffer, colorPixelFormat: self.colorPixelFormat) else { return }
-        //////////////////////////////////////////////////////////
-        
         commandBuffer.addCompletedHandler { [weak self] cb in
-            self?.event?.onPreviewUpdate?(sampleBuffer)
-            self?.event?.onPixelUpdate?(originalPixelBuffer)
+            self?.event?.onPixelUpdate?(originalPixelBuffer, depthData, metadataObjects)
         }
-
         super.updatePixelBuffer(commandBuffer: commandBuffer, sorce: rgbTexture, destination: drawTexture, renderSize: renderSize)
         commandBuffer.commit()
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
     
     private func processingMetalRenderLayer(renderLayer: inout MetalRenderLayerProtocol, commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
@@ -291,5 +283,28 @@ extension VideoCaptureView {
         guard let sourceTexture: MTLTexture = MCCore.texture(pixelBuffer: &pixelBuffer, textureCache: &textureCache, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else { throw RecordingError.render }
         guard var destinationTexture: MTLTexture = sourceTexture.makeTextureView(pixelFormat: sourceTexture.pixelFormat) else { throw RecordingError.render }
         try renderLayer.process(commandBuffer: &commandBuffer, source: sourceTexture, destination: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+    }
+}
+
+extension VideoCaptureView {
+    @objc func onOrientationDidChange() {
+        self.updateDrawTexture()
+    }
+    
+    fileprivate func updateDrawTexture() {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // 描画用テクスチャを生成
+        self.drawQueue.async { [weak self] in
+            autoreleasepool { [weak self] in
+                guard
+                    let self = self,
+                    let captureSize: CGSize = self.capture?.propertys.info.presetSize.size(isOrientation: true),
+                    CGFloat(self.drawTexture?.width ?? 0) != captureSize.width,
+                    var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize)
+                else { return }
+                self.drawTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: self.colorPixelFormat)
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }

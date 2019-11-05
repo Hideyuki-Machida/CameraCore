@@ -12,15 +12,20 @@ import MetalCanvas
 
 public class Settings {
     public enum PresetSize: Int, Codable {
-        case p1920x1080 = 0
-        case p1280x720 = 1
-        case p960x540 = 2
-        
+        //case p640x480 = 0
+        case p960x540 = 1
+        case p1280x720 = 2
+        case p1920x1080 = 3
+        case p3840x2160 = 4
+
+
         public func aVCaptureSessionPreset() -> AVCaptureSession.Preset  {
             switch self {
-            case .p1920x1080: return AVCaptureSession.Preset.hd1920x1080
-            case .p1280x720: return AVCaptureSession.Preset.iFrame1280x720
+            //case .p640x480: return AVCaptureSession.Preset.vga640x480
             case .p960x540: return AVCaptureSession.Preset.iFrame960x540
+            case .p1280x720: return AVCaptureSession.Preset.iFrame1280x720
+            case .p1920x1080: return AVCaptureSession.Preset.hd1920x1080
+            case .p3840x2160: return AVCaptureSession.Preset.hd4K3840x2160
             }
         }
 
@@ -35,16 +40,20 @@ public class Settings {
 */
         public func aVAssetExportSessionPreset() -> String  {
             switch self {
-            case .p1920x1080: return AVAssetExportPreset1920x1080
-            case .p1280x720: return AVAssetExportPreset1280x720
+            //case .p640x480: return AVAssetExportPreset640x480
             case .p960x540: return AVAssetExportPreset960x540
+            case .p1280x720: return AVAssetExportPreset1280x720
+            case .p1920x1080: return AVAssetExportPreset1920x1080
+            case .p3840x2160: return AVAssetExportPreset3840x2160
             }
         }
         public func aVAssetExportSessionHEVCPreset() -> String  {
             switch self {
-            case .p1920x1080: return AVAssetExportPresetHEVC1920x1080
-            case .p1280x720: return AVAssetExportPreset1280x720
+            //case .p640x480: return AVAssetExportPreset640x480
             case .p960x540: return AVAssetExportPreset960x540
+            case .p1280x720: return AVAssetExportPreset1280x720
+            case .p1920x1080: return AVAssetExportPresetHEVC1920x1080
+            case .p3840x2160: return AVAssetExportPresetHEVC3840x2160
             }
         }
         
@@ -52,21 +61,28 @@ public class Settings {
             switch orientation {
             case .portrait, .portraitUpsideDown:
                 switch self {
-                case .p1920x1080: return CGSize(width: 1080, height: 1920)
-                case .p1280x720: return CGSize(width: 720, height: 1280)
+                //case .p640x480: return CGSize(width: 480, height: 640)
                 case .p960x540: return CGSize(width: 540, height: 960)
+                case .p1280x720: return CGSize(width: 720, height: 1280)
+                case .p1920x1080: return CGSize(width: 1080, height: 1920)
+                case .p1920x1080: return CGSize(width: 1080, height: 1920)
+                case .p3840x2160: return CGSize(width: 2160, height: 3840)
                 }
             case .landscapeLeft, .landscapeRight:
                 switch self {
-                case .p1920x1080: return CGSize(width: 1920, height: 1080)
-                case .p1280x720: return CGSize(width: 1280, height: 720)
+                //case .p640x480: return CGSize(width: 640, height: 480)
                 case .p960x540: return CGSize(width: 960, height: 540)
+                case .p1280x720: return CGSize(width: 1280, height: 720)
+                case .p1920x1080: return CGSize(width: 1920, height: 1080)
+                case .p3840x2160: return CGSize(width: 3840, height: 2160)
                 }
             @unknown default:
                 switch self {
-                case .p1920x1080: return CGSize(width: 1080, height: 1920)
-                case .p1280x720: return CGSize(width: 720, height: 1280)
+                //case .p640x480: return CGSize(width: 480, height: 640)
                 case .p960x540: return CGSize(width: 540, height: 960)
+                case .p1280x720: return CGSize(width: 720, height: 1280)
+                case .p1920x1080: return CGSize(width: 1080, height: 1920)
+                case .p3840x2160: return CGSize(width: 2160, height: 3840)
                 }
             }
         }
@@ -77,9 +93,11 @@ public class Settings {
                 return size(orientation: currentOrientation)
             } else {
                 switch self {
-                case .p1920x1080: return CGSize(width: 1920, height: 1080)
-                case .p1280x720: return CGSize(width: 1280, height: 720)
+                //case .p640x480: return CGSize(width: 640, height: 480)
                 case .p960x540: return CGSize(width: 960, height: 540)
+                case .p1280x720: return CGSize(width: 1280, height: 720)
+                case .p1920x1080: return CGSize(width: 1920, height: 1080)
+                case .p3840x2160: return CGSize(width: 3840, height: 2160)
                 }
             }
         }

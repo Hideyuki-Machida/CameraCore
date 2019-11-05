@@ -105,7 +105,7 @@ extension CCRenderer.VideoCapture {
                         self.metadataOutput = metadataOutput
                         dataOutputs.append(self.metadataOutput!)
                     } else {
-                        Debug.ErrorLog("AVCaptureMetadataOutputConnection")
+                        MCDebug.errorLog("AVCaptureMetadataOutputConnection")
                         self.metadataOutput = nil
                         throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError
                     }
@@ -129,7 +129,7 @@ extension CCRenderer.VideoCapture {
                         self.videoDepthDataOutput = videoDepthDataOutput
                         dataOutputs.append(self.videoDepthDataOutput!)
                     } else {
-                        Debug.ErrorLog("AVCaptureDepthDataOutputConnection")
+                        MCDebug.errorLog("AVCaptureDepthDataOutputConnection")
                         self.videoDepthDataOutput = nil
                         throw CCRenderer.VideoCapture.VideoCapture.ErrorType.setupError
                     }

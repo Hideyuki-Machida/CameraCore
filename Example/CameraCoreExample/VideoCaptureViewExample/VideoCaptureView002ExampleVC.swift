@@ -25,12 +25,11 @@ class VideoCaptureView002ExampleVC: UIViewController {
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
         required: [
-            .frameRate(Settings.PresetFrameRate.fps120),
+            .captureSize(Settings.PresetSize.p1280x720),
+            .frameRate(Settings.PresetFrameRate.fps30),
             .isDepthDataOut(false)
         ],
         option: [
-            .captureSize(Settings.PresetSize.p1920x1080),
-
             .colorSpace(AVCaptureColorSpace.P3_D65)
         ]
     )
@@ -56,19 +55,17 @@ class VideoCaptureView002ExampleVC: UIViewController {
             } else {
             }
         }
-        event.onPreviewUpdate = { (sampleBuffer: CMSampleBuffer) in
+        event.onFrameUpdate = { (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
             //print(sampleBuffer)
         }
-        event.onPixelUpdate = { (pixelBuffer: CVPixelBuffer) in
+        event.onPixelUpdate = { (pixelBuffer: CVPixelBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
             //print(pixelBuffer)
-        }
-        event.onDepthDataUpdate = { (depthData: AVDepthData?) in
-            guard let depthData = depthData else { return }
-            print(depthData)
-        }
-        event.onMetadataObjectsUpdate = { (metadataObjects: [AVMetadataObject]) in
-            guard metadataObjects.count >= 1 else { return }
-            print(metadataObjects)
+            if let depthData = depthData {
+                print(depthData)
+            }
+            if metadataObjects.count >= 1 {
+                print(metadataObjects)
+            }
         }
 
         self.videoCaptureView.event = event
@@ -265,6 +262,7 @@ extension VideoCaptureView002ExampleVC {
         case p960x540 = "p960x540"
         case p1280x720 = "p1280x720"
         case p1920x1080 = "p1920x1080"
+        case p3840x2160 = "p3840x2160"
     }
 
     func setResolution() {
@@ -300,6 +298,16 @@ extension VideoCaptureView002ExampleVC {
             }
         })
 
+        let action004: UIAlertAction = UIAlertAction(title: ResolutionLabel.p3840x2160.rawValue, style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+            do {
+                try self.videoCaputurePropertys.swap(property: .captureSize(.p3840x2160))
+                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+            } catch {
+                MCDebug.errorLog(ResolutionLabel.p3840x2160.rawValue)
+            }
+        })
+
         let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
             (action: UIAlertAction!) -> Void in
         })
@@ -307,6 +315,7 @@ extension VideoCaptureView002ExampleVC {
         action.addAction(action001)
         action.addAction(action002)
         action.addAction(action003)
+        action.addAction(action004)
         action.addAction(cancel)
         
         self.present(action, animated: true, completion: nil)

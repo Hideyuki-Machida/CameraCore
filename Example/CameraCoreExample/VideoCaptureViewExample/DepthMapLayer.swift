@@ -22,7 +22,7 @@ final public class DepthMapLayer: RenderLayerProtocol {
 	}
 	
     deinit {
-        Debug.DeinitLog(self)
+        MCDebug.deinitLog(self)
     }
 
 	/// キャッシュを消去

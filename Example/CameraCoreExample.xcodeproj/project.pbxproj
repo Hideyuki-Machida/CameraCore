@@ -25,6 +25,7 @@
 		62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */; };
 		62E6FD74236D842200A1FF1B /* iOS_DummyAVAssets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E6FD73236D842200A1FF1B /* iOS_DummyAVAssets.framework */; };
 		62E6FD75236D842200A1FF1B /* iOS_DummyAVAssets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62E6FD73236D842200A1FF1B /* iOS_DummyAVAssets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		62F4506823700679008392FD /* VideoCaptureView003ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F4506723700679008392FD /* VideoCaptureView003ExampleVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +64,7 @@
 		62E5CA3322901A74004D258A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureView002ExampleVC.swift; sourceTree = "<group>"; };
 		62E6FD73236D842200A1FF1B /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOS_DummyAVAssets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62F4506723700679008392FD /* VideoCaptureView003ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureView003ExampleVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			children = (
 				624D06D32355C64100B203A5 /* VideoCaptureView001ExampleVC.swift */,
 				62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */,
+				62F4506723700679008392FD /* VideoCaptureView003ExampleVC.swift */,
 				62CE222223376E5D00F3AB3A /* DepthMapLayer.swift */,
 				624D06D52355C90400B203A5 /* FaceLayer.swift */,
 			);
@@ -223,6 +226,7 @@
 				62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */,
 				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
+				62F4506823700679008392FD /* VideoCaptureView003ExampleVC.swift in Sources */,
 				62CE222323376E5D00F3AB3A /* DepthMapLayer.swift in Sources */,
 				62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */,
 			);
@@ -363,7 +367,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UETCN89GVG;
+				DEVELOPMENT_TEAM = G9427V36B7;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = CameraCoreExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
@@ -374,7 +378,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hideyuki.machida.CameraCoreExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -383,7 +387,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UETCN89GVG;
+				DEVELOPMENT_TEAM = G9427V36B7;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = CameraCoreExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
@@ -394,7 +398,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hideyuki.machida.CameraCoreExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

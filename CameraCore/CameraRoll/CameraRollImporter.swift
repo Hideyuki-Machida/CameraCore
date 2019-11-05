@@ -9,6 +9,7 @@
 import Foundation
 import Photos
 import AVFoundation
+import MetalCanvas
 
 public final class CameraRollImporter: NSObject {
 	public var onProgress: ((_ progress: Double)->Void)?
@@ -53,19 +54,19 @@ public final class CameraRollImporter: NSObject {
 			exportSession.exportAsynchronously(completionHandler: { [weak self] in
 				switch exportSession.status {
 				case .completed:
-					Debug.SuccessLog("importPHAsset: completed")
+					MCDebug.successLog("importPHAsset: completed")
 					self?.onComplete?(true)
 				case .waiting:
-					Debug.ErrorLog("importPHAsset: waiting")
+					MCDebug.errorLog("importPHAsset: waiting")
 				case .unknown:
-					Debug.ErrorLog("importPHAsset: unknown")
+					MCDebug.errorLog("importPHAsset: unknown")
 				case .exporting:
-					Debug.ErrorLog("importPHAsset: exporting")
+					MCDebug.errorLog("importPHAsset: exporting")
 				case .cancelled:
-					Debug.ErrorLog("importPHAsset: cancelled")
+					MCDebug.errorLog("importPHAsset: cancelled")
 					self?.onComplete?(false)
 				case .failed:
-					Debug.ErrorLog("importPHAsset: failed")
+					MCDebug.errorLog("importPHAsset: failed")
 					self?.onComplete?(false)
 				@unknown default:
 					self?.onComplete?(false)
@@ -82,19 +83,19 @@ public final class CameraRollImporter: NSObject {
 		exportSession.exportAsynchronously(completionHandler: { [weak self] in
 			switch exportSession.status {
 			case .completed:
-				Debug.SuccessLog("importPHAsset: completed")
+				MCDebug.successLog("importPHAsset: completed")
 				self?.onComplete?(true)
 			case .waiting:
-				Debug.ErrorLog("importPHAsset: waiting")
+				MCDebug.errorLog("importPHAsset: waiting")
 			case .unknown:
-				Debug.ErrorLog("importPHAsset: unknown")
+				MCDebug.errorLog("importPHAsset: unknown")
 			case .exporting:
-				Debug.ErrorLog("importPHAsset: exporting")
+				MCDebug.errorLog("importPHAsset: exporting")
 			case .cancelled:
-				Debug.ErrorLog("importPHAsset: cancelled")
+				MCDebug.errorLog("importPHAsset: cancelled")
 				self?.onComplete?(false)
 			case .failed:
-				Debug.ErrorLog("importPHAsset: failed")
+				MCDebug.errorLog("importPHAsset: failed")
 				self?.onComplete?(false)
 			@unknown default:
 				self?.onComplete?(false)

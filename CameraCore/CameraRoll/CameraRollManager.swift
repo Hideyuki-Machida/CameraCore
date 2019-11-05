@@ -9,6 +9,7 @@
 import Foundation
 import AssetsLibrary
 import Photos
+import MetalCanvas
 
 final public class CameraRollManager: NSObject {
 	
@@ -31,7 +32,7 @@ final public class CameraRollManager: NSObject {
 		didSet {
 			self._setup { (result: Result<PHAssetCollection, Error>) in
 				do {
-					Debug.ActionLog(try result.get())
+					MCDebug.log(try result.get())
 				} catch {
 					
 				}
@@ -69,7 +70,7 @@ final public class CameraRollManager: NSObject {
 					
 				}, completionHandler: { (success, err) in
 					if success == true {
-						Debug.SuccessLog("保存成功！")
+						MCDebug.successLog("保存成功！")
 						let assets  = PHAsset.fetchAssets(withLocalIdentifiers: [identifier!], options: nil)
 						let options: PHVideoRequestOptions = PHVideoRequestOptions()
 						PHImageManager.default().requestAVAsset(forVideo: assets.firstObject!, options: options, resultHandler: { (item: AVAsset?, audio: AVAudioMix?, AnyHashable: [AnyHashable : Any]?) in
@@ -88,7 +89,7 @@ final public class CameraRollManager: NSObject {
 							}
 						})
 					} else {
-						Debug.ErrorLog("保存失敗！ \(String(describing: err)) \(String(describing: err?.localizedDescription))")
+						MCDebug.errorLog("保存失敗！ \(String(describing: err)) \(String(describing: err?.localizedDescription))")
 						completion(.failure(ErrorType.save))
 					}
 				})
@@ -106,14 +107,14 @@ final public class CameraRollManager: NSObject {
 		switch status {
 		case .authorized:
 			// アクセス許可あり
-			Debug.SuccessLog("アクセス許可あり")
+			MCDebug.successLog("アクセス許可あり")
 			completion(true)
 		case .restricted:
 			// ユーザー自身にカメラへのアクセスが許可されていない
-			Debug.ErrorLog("ユーザー自身にカメラへのアクセスが許可されていない")
+			MCDebug.errorLog("ユーザー自身にカメラへのアクセスが許可されていない")
 		case .notDetermined:
 			// まだアクセス許可を聞いていない
-			Debug.ErrorLog("まだアクセス許可を聞いていない")
+			MCDebug.errorLog("まだアクセス許可を聞いていない")
 			PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) in
 				if status == .authorized {
 					completion(true)
@@ -123,7 +124,7 @@ final public class CameraRollManager: NSObject {
 			})
 		case .denied:
 			// アクセス許可されていない
-			Debug.ErrorLog("アクセス許可されていない")
+			MCDebug.errorLog("アクセス許可されていない")
 			PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) in
 				if status == .authorized {
 					completion(true)
@@ -181,7 +182,7 @@ final public class CameraRollManager: NSObject {
 		let list: PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.album, subtype: PHAssetCollectionSubtype.any, options:nil)
 		list.enumerateObjects({ (album: PHAssetCollection, index, isStop) -> Void in
 			if album.localizedTitle == self.albumName {
-				Debug.ActionLog("\(self.albumName) アルバムがすでに存在する")
+				MCDebug.log("\(self.albumName) アルバムがすでに存在する")
 				albumLocalIdentifier = album.localIdentifier
 				UserDefaults.standard.set(albumLocalIdentifier, forKey: self.udKey)
 				if let id: String = albumLocalIdentifier {
@@ -195,17 +196,17 @@ final public class CameraRollManager: NSObject {
 		})
 		guard albumLocalIdentifier == nil else { return }
 		
-		Debug.ActionLog("\(self.albumName) アルバムが存在しないので作成")
+		MCDebug.log("\(self.albumName) アルバムが存在しないので作成")
 		PHPhotoLibrary.shared().performChanges({ () -> Void in
 			let request: PHAssetCollectionChangeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: self.albumName)
 			albumLocalIdentifier = request.placeholderForCreatedAssetCollection.localIdentifier
 		}, completionHandler: { (isSuccess, error) -> Void in
 			if isSuccess == true {
-				Debug.ActionLog("\(self.albumName) アルバム作成成功")
+				MCDebug.log("\(self.albumName) アルバム作成成功")
 				UserDefaults.standard.set(albumLocalIdentifier, forKey: self.udKey)
 				completion(.success(albumLocalIdentifier!))
 			} else{
-				Debug.ActionLog("\(self.albumName) アルバム作成失敗")
+				MCDebug.log("\(self.albumName) アルバム作成失敗")
 				completion(.failure(ErrorType.createAlbum))
 			}
 		})

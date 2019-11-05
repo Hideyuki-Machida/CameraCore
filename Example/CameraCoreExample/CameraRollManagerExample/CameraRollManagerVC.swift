@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import CameraCore
 import iOS_DummyAVAssets
+import MetalCanvas
 
 class CameraRollManagerVC: UIViewController {
     
@@ -18,7 +19,7 @@ class CameraRollManagerVC: UIViewController {
     @IBOutlet fileprivate(set) weak var collectionView: UICollectionView!
     
     deinit {
-        Debug.DeinitLog(self)
+        MCDebug.deinitLog(self)
     }
     
     override func viewDidLoad() {

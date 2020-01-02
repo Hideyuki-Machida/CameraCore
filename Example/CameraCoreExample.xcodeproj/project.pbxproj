@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		620E8B07233F6DD300168140 /* CoreMLHelpers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 620E8B06233F6DD300168140 /* CoreMLHelpers.framework */; };
-		620E8B08233F6DD300168140 /* CoreMLHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 620E8B06233F6DD300168140 /* CoreMLHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */; };
 		621FDAF82338A7AA0034A1D9 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */; };
+		6244EB1823BB86530044C22F /* VideoCaptureView001ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */; };
 		6249747C2349D26800325650 /* DeepLabV3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 6249747B2349D26800325650 /* DeepLabV3.mlmodel */; };
 		6249747E2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6249747D2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift */; };
 		624974802349D2EF00325650 /* CoreMLDeeplabV3Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6249747F2349D2EF00325650 /* CoreMLDeeplabV3Layer.swift */; };
@@ -33,7 +32,7 @@
 		62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CA2722901A72004D258A /* AppDelegate.swift */; };
 		62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA2E22901A74004D258A /* Assets.xcassets */; };
 		62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E5CA3022901A74004D258A /* LaunchScreen.storyboard */; };
-		62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */; };
+		62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,7 +42,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				620E8B08233F6DD300168140 /* CoreMLHelpers.framework in Embed Frameworks */,
 				62926254232FE8CF00D47CF0 /* MetalCanvas.framework in Embed Frameworks */,
 				62926257232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Embed Frameworks */,
 				62926252232FE8CF00D47CF0 /* CameraCore.framework in Embed Frameworks */,
@@ -57,6 +55,7 @@
 		620E8B06233F6DD300168140 /* CoreMLHelpers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreMLHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLExampleVC.swift; sourceTree = "<group>"; };
 		621FDAF72338A7AA0034A1D9 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
+		6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureView001ExampleVC.swift; sourceTree = "<group>"; };
 		6249747B2349D26800325650 /* DeepLabV3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DeepLabV3.mlmodel; sourceTree = "<group>"; };
 		6249747D2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLDeeplabV3ExampleVC.swift; sourceTree = "<group>"; };
 		6249747F2349D2EF00325650 /* CoreMLDeeplabV3Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLDeeplabV3Layer.swift; sourceTree = "<group>"; };
@@ -78,7 +77,7 @@
 		62E5CA2E22901A74004D258A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62E5CA3122901A74004D258A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62E5CA3322901A74004D258A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewExampleVC.swift; sourceTree = "<group>"; };
+		62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureView002ExampleVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +85,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				620E8B07233F6DD300168140 /* CoreMLHelpers.framework in Frameworks */,
 				62926253232FE8CF00D47CF0 /* MetalCanvas.framework in Frameworks */,
 				62926256232FE90300D47CF0 /* iOS_DummyAVAssets.framework in Frameworks */,
 				62926251232FE8CF00D47CF0 /* CameraCore.framework in Frameworks */,
@@ -123,7 +121,8 @@
 		624BC10D2338B71900A2D8F0 /* VideoCaptureViewExample */ = {
 			isa = PBXGroup;
 			children = (
-				62E5CB2522904BD3004D258A /* VideoCaptureViewExampleVC.swift */,
+				6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */,
+				62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */,
 				62CE222223376E5D00F3AB3A /* DepthMapLayer.swift */,
 			);
 			path = VideoCaptureViewExample;
@@ -262,9 +261,10 @@
 				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,
 				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
 				6249747C2349D26800325650 /* DeepLabV3.mlmodel in Sources */,
-				62E5CB3222904BD3004D258A /* VideoCaptureViewExampleVC.swift in Sources */,
+				62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */,
 				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				6249747E2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift in Sources */,
+				6244EB1823BB86530044C22F /* VideoCaptureView001ExampleVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
 				62CE222323376E5D00F3AB3A /* DepthMapLayer.swift in Sources */,
 				624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */,

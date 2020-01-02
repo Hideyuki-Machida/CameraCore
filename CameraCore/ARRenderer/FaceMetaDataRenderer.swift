@@ -11,6 +11,7 @@ import ARKit
 import MetalCanvas
 import Vision
 
+/*
 extension CCRenderer.ARRenderer {
 	public class FaceMetaDataRenderer {
 
@@ -39,7 +40,7 @@ extension CCRenderer.ARRenderer {
 
 			//////////////////////////////////////////////////////////
 			// outTexture canvas 生成
-			var faceBoundPoints: [MCGeom.Vec3D] = []
+			var faceBoundPoints: [SIMD3<Float>] = []
 			var tempFaces: [MCVision.Detection.Face.Item] = []
 			for metadataFaceObject: AVMetadataFaceObject in metadataFaceObjects {
 				print("faceID: \(metadataFaceObject.faceID)")
@@ -57,10 +58,10 @@ extension CCRenderer.ARRenderer {
 				print("---@1")
 				print(trackingBoundes)
 				
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y), 0.0))
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
-				faceBoundPoints.append(MCGeom.Vec3D.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y), 0.0))
 				print("---@2")
 				print(faceBoundPoints)
 				
@@ -70,7 +71,7 @@ extension CCRenderer.ARRenderer {
 						//print(metadataFaceObject.bounds)
 						//face.landmarkDetection(pixelBuffer: &imageBuffer, observation: VNDetectedObjectObservation.init(boundingBox: boundes))
 						//face.tracking(pixelBuffer: &pixelBuffer)
-						face.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: landmarkDetectionBoundes))
+						try face.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: landmarkDetectionBoundes))
 						tempFaces.append(face)
 						faceItemFlg = true
 						continue
@@ -144,3 +145,4 @@ extension CCRenderer.ARRenderer {
 		}
 	}
 }
+*/

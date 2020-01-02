@@ -10,6 +10,7 @@ import Foundation
 import ARKit
 import MetalCanvas
 
+/*
 extension CCRenderer.ARRenderer {
 	class RGBCameraRenderer {
 		fileprivate(set) var texture: MCTexture?
@@ -69,7 +70,7 @@ extension CCRenderer.ARRenderer {
 				var mat: MCGeom.Matrix4x4 = MCGeom.Matrix4x4.init()
 				let angle: CGFloat = 90 * CGFloat.pi / 180
 				mat.rotateAroundX(xAngleRad: 0, yAngleRad: 0.0, zAngleRad: Float(angle))
-				image = try MCPrimitive.Image.init(texture: rgbOutTexture, ppsition: MCGeom.Vec3D.init(Float(renderSize.width), 0.0, 0.0), transform: mat, anchorPoint: MCPrimitive.anchor.topLeft)
+                image = try MCPrimitive.Image.init(texture: rgbOutTexture, ppsition: SIMD3<Float>(Float(renderSize.width), 0.0, 0.0), transform: mat, anchorPoint: MCPrimitive.anchor.topLeft)
 				self.image = image
 			} else {
 				image = self.image!
@@ -84,3 +85,4 @@ extension CCRenderer.ARRenderer {
 		}
 	}
 }
+*/

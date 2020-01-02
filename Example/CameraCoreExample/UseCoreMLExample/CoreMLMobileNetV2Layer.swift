@@ -8,7 +8,7 @@
 
 import CameraCore
 import Vision
-
+/*
 final public class CoreMLMobileNetV2Layer: RenderLayerProtocol {
 	public let type: RenderLayerType = RenderLayerType.custom
 	public let id: RenderLayerId
@@ -75,3 +75,4 @@ extension CoreMLMobileNetV2Layer {
 		}
 	}
 }
+*/

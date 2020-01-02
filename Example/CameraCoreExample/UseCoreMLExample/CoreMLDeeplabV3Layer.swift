@@ -5,7 +5,7 @@
 //  Created by hideyuki machida on 2019/10/06.
 //  Copyright © 2019 hideyuki machida. All rights reserved.
 //
-
+/*
 import UIKit
 import CoreMLHelpers
 import MetalCanvas
@@ -87,3 +87,4 @@ extension CoreMLDeeplabV3Layer {
         MCCore.ciContext.render(depthImage, to: pixelBuffer, bounds: depthImage.extent, colorSpace: depthImage.colorSpace)
     }
 }
+*/

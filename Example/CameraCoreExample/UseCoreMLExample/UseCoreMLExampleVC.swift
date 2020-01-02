@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 import CameraCore
-
+/*
 class UseCoreMLExampleVC: UIViewController {
 
 	@IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
@@ -55,3 +55,4 @@ class UseCoreMLExampleVC: UIViewController {
 		self.videoCaptureView.dispose()
 	}
 }
+*/

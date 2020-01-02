@@ -10,7 +10,7 @@ import Foundation
 import ARKit
 import MetalCanvas
 
-@available(iOS 11.0, *)
+/*
 extension CCRenderer.ARRenderer {
 	class ARFaceGeometryRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.Renderer.ARRendererARFaceGeometryRenderer")
@@ -63,3 +63,4 @@ extension CCRenderer.ARRenderer {
 		}
 	}
 }
+*/

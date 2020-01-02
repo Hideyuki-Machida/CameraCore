@@ -124,7 +124,7 @@ extension CameraRollManagerVC: UICollectionViewDelegate {
         switch cameraRollItem.mediaType {
         case .video:
             cameraRollItem.getVideoURL(
-                exportPreset: Settings.PresetiFrame.p1920x1080,
+                exportPreset: Settings.PresetSize.p1920x1080,
                 progressUpdate: { [weak self] (progress) in
 					DispatchQueue.main.async { [weak self] in
 						// クラウド上にある場合のダウンロードプログレス

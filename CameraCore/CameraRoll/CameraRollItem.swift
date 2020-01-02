@@ -81,7 +81,7 @@ public class CameraRollItem {
 	fileprivate static var count: Int = 0
 	fileprivate static var stopFlg: Bool = false
 	
-	public func url(importURL: URL, exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
+	public func url(importURL: URL, exportPreset: Settings.PresetSize, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
 		CameraRollItem.stopFlg = false
 		switch self.mediaType {
 		case .video:
@@ -99,7 +99,7 @@ public class CameraRollItem {
 					progressUpdate?(progress)
 				}
 				
-				PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset(), resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
+				PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset, resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
 					guard let exportSession: AVAssetExportSession = session else { complete?(.failure(ErrorType.exportSession)); return }
 					exportSession.outputURL = importURL
 					exportSession.outputFileType = AVFileType.mp4
@@ -147,7 +147,7 @@ public class CameraRollItem {
 		}
 	}
 
-	public func importAsset(importURL: URL, exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: @escaping ((_ status: CameraRollImportStatus, _ asset: AVURLAsset?)->Void)) {
+	public func importAsset(importURL: URL, exportPreset: Settings.PresetSize, progressUpdate: ((_ progress: Double)->Void)?, complete: @escaping ((_ status: CameraRollImportStatus, _ asset: AVURLAsset?)->Void)) {
 		switch self.mediaType {
 		case .video:
 			self.queue.async { [weak self] in
@@ -164,7 +164,7 @@ public class CameraRollItem {
 }
 
 extension CameraRollItem {
-    public func getVideoURL(exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
+    public func getVideoURL(exportPreset: Settings.PresetSize, progressUpdate: ((_ progress: Double)->Void)?, complete: ((Result<AVURLAsset, Error>)->Void)?) {
         let options: PHVideoRequestOptions = PHVideoRequestOptions()
         options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
 		options.isNetworkAccessAllowed = true
@@ -173,7 +173,7 @@ extension CameraRollItem {
             progressUpdate?(progress)
         }
 		
-        PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset(), resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
+        PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset, resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
 			
 			if let asset: AVURLAsset = session?.asset as? AVURLAsset {
 				complete?(.success(asset))
@@ -204,7 +204,7 @@ extension CameraRollItem {
 }
 
 extension CameraRollItem {
-	private func importVideoAsset(importURL: URL, exportPreset: Settings.PresetiFrame, progressUpdate: ((_ progress: Double)->Void)?, complete: @escaping ((_ status: CameraRollImportStatus, _ asset: AVURLAsset?)->Void)) {
+	private func importVideoAsset(importURL: URL, exportPreset: Settings.PresetSize, progressUpdate: ((_ progress: Double)->Void)?, complete: @escaping ((_ status: CameraRollImportStatus, _ asset: AVURLAsset?)->Void)) {
 		let options: PHVideoRequestOptions = PHVideoRequestOptions()
 		options.deliveryMode = PHVideoRequestOptionsDeliveryMode.highQualityFormat
 		options.isNetworkAccessAllowed = true
@@ -213,7 +213,7 @@ extension CameraRollItem {
 			progressUpdate?(progress)
 		}
 		
-		PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset(), resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
+		PHImageManager.default().requestExportSession(forVideo: self.asset, options: options, exportPreset: exportPreset.aVAssetExportSessionPreset, resultHandler: { (session: AVAssetExportSession?, info: [AnyHashable : Any]?) in
 			guard let asset: AVURLAsset = session?.asset as? AVURLAsset else { complete( CameraRollImportStatus.error, nil ); return }
 			let url: URL = URL.init(fileURLWithPath: importURL.relativePath + "/" + asset.url.lastPathComponent)
 			do {

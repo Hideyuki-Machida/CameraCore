@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 
+/*
 public class SimpleAVPlayer: AVPlayer {
 	public var timeRange: CMTimeRange?
 	public var onUpdate: ((_ time: Float64, _ duration: Float64) -> Void)?
@@ -103,3 +104,4 @@ public class SimpleAVPlayer: AVPlayer {
 	}
 }
 
+*/

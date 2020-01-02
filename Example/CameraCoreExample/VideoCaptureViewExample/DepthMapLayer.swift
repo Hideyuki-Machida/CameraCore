@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 import CameraCore
-
+/*
 final public class DepthMapLayer: RenderLayerProtocol {
 	public let type: RenderLayerType = RenderLayerType.custom
 	public let id: RenderLayerId
@@ -34,3 +34,4 @@ extension DepthMapLayer: MetalRenderLayerProtocol {
 		destination = self.depthMapRenderer.texture!.texture
 	}
 }
+*/

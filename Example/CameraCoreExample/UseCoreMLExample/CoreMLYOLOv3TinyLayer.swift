@@ -8,7 +8,7 @@
 
 import CameraCore
 import Vision
-
+/*
 @available(iOS 12.0, *)
 final public class CoreMLYOLOv3TinyLayer: RenderLayerProtocol {
 	public let type: RenderLayerType = RenderLayerType.custom
@@ -65,3 +65,4 @@ extension CoreMLYOLOv3TinyLayer {
         self.onUpdate?(self.items)
 	}
 }
+*/

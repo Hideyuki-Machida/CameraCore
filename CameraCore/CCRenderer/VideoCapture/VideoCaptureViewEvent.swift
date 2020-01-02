@@ -6,13 +6,13 @@
 //  Copyright © 2018 町田 秀行. All rights reserved.
 //
 
-import Foundation
 import AVFoundation
+import Foundation
 
 public class VideoCaptureViewEvent: NSObject {
-    public var onStatusChange: ((_ status: VideoCaptureStatus)->Void)?
-    public var onPreviewUpdate: ((_ sampleBuffer: CMSampleBuffer)->Void)?
-    public var onRecodingUpdate: ((_ recordedDuration: TimeInterval)->Void)?
-    public var onRecodingComplete: ((_ result: Bool, _ filePath: URL)->Void)?
-    public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer)->Void)?
+    public var onStatusChange: ((_ status: VideoCaptureView.Status) -> Void)?
+    public var onFrameUpdate: ((_ sampleBuffer: CMSampleBuffer) -> Void)?
+    public var onPixelUpdate: ((_ pixelBuffer: CVPixelBuffer) -> Void)?
+    public var onRecodingUpdate: ((_ recordedDuration: TimeInterval) -> Void)?
+    public var onRecodingComplete: ((_ result: Bool, _ filePath: URL) -> Void)?
 }

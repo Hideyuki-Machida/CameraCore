@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import CameraCore
 import Vision
-
+/*
 @available(iOS 12.0, *)
 class UseCoreMLYOLOv3TinyExampleVC: UIViewController {
 
@@ -175,3 +175,4 @@ extension UseCoreMLYOLOv3TinyExampleVC {
         return shapeLayer
     }
 }
+*/

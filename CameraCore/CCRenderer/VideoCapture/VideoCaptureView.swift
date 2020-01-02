@@ -3,282 +3,217 @@
 //  CameraCore
 //
 //  Created by hideyuki machida on 2018/12/17.
-//  Copyright © 2018 町田 秀行. All rights reserved.
+//  Copyright © 2018 hideyuki machida. All rights reserved.
 //
 
-import Foundation
-import UIKit
 import AVFoundation
+import Foundation
 import MetalCanvas
-
-public enum VideoCaptureStatus {
-	case setup
-	case update
-	case ready
-	case play
-	case pause
-	case seek
-	case dispose
-}
+import MetalKit
+import UIKit
 
 public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
-	
-	private let queue: DispatchQueue = DispatchQueue(label: "CameraCore.MetalVideoCaptureView.queue")
-	
-	public var status: VideoCaptureStatus = .setup {
-		willSet {
-			self.event?.onStatusChange?(newValue)
-		}
-	}
-	
-	public var capture: CCRenderer.VideoCapture.VideoCapture?
-	
-	public var croppingRect: CGRect?
-	public var renderSize: CGSize?
-	public var isRecording: Bool {
-		get{
-			return CCRenderer.VideoCapture.CaptureWriter.isWritng
-		}
-	}
-	
-	public var event: VideoCaptureViewEvent?
-	
-	/// 描画時に適用されるフィルターを指定
-	public var renderLayers: [RenderLayerProtocol] = []
-	
-	internal enum RecordingError: Error {
-		case setupError
-		case render
-	}
-	
-	fileprivate var counter: CMTimeValue = 0
-	fileprivate var depthMapRenderer: CCRenderer.ARRenderer.DepthMapRenderer = CCRenderer.ARRenderer.DepthMapRenderer.init()
-	fileprivate var depthMapToHumanSegmentationTexture: MCVision.Depth.HumanSegmentationTexture = MCVision.Depth.HumanSegmentationTexture.init()
-	fileprivate var textureCache: CVMetalTextureCache? = MCCore.createTextureCache()
-	
-	public override func awakeFromNib() {
-		super.awakeFromNib()
-	}
+    public enum Status {
+        case setup
+        case update
+        case ready
+        case play
+        case pause
+        case seek
+        case dispose
+    }
 
-	deinit {
-		Debug.DeinitLog(self)
-		NotificationCenter.default.removeObserver(self)
-	}
-	
-	public func setup(_ paramator: CCRenderer.VideoCapture.VideoCaputureParamator) throws {
-		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.setup - frameRate: \(paramator.frameRate), presetiFrame: \(paramator.presetiFrame)")
+    private let renderQueue: DispatchQueue = DispatchQueue(label: "CameraCore.VideoCaptureView.render.queue")
 
-		self.status = .setup
-		Configuration.captureSize = presetiFrame
-		
-		do {
-			//
-			self.capture = try CCRenderer.VideoCapture.VideoCapture(paramator: paramator)
-			//
-		} catch {
-			self.capture = nil
-			throw RecordingError.setupError
-		}
+    public var status: Status = .setup {
+        willSet {
+            self.event?.onStatusChange?(newValue)
+        }
+    }
 
-		self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
-			guard self?.status == .play else { return }
-			self?.queue.async { [weak self] in
-				autoreleasepool() { [weak self] in
-					do {
-						try self?.updateFrame(
-							sampleBuffer: sampleBuffer,
-							depthData: depthData,
-							metadataObjects: metadataObjects,
-							position: self?.capture?.position ?? .back
-						)
-					} catch {
-						
-					}
-				}
-			}
-		}
+    public var capture: CCRenderer.VideoCapture.VideoCaptureManager?
 
-	}
-	
-	public func play() {
-		guard self.status != .play else { return }
-		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.play")
-		self.capture?.play()
-		//self.isDrawable = true
-		self.status = .play
-	}
-	
-	public func pause() {
-		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.pause")
-		self.capture?.stop()
-		self.status = .pause
-	}
-	
-	public func dispose() {
-		Debug.ActionLog("CCamVideo.VideoRecordingPlayer.dispose")
-		self.capture?.stop()
-		//self.isDrawable = false
-		self.status = .setup
-		self.capture = nil
-	}
-}
+    public var croppingRect: CGRect?
+    public var renderSize: CGSize?
+    public var isDisplaySyncRendering: Bool = false
+    public var isRecording: Bool {
+        return CCRenderer.VideoCapture.CaptureWriter.isWriting
+    }
 
-extension VideoCaptureView {
-	public func recordingStart(_ paramator: CCRenderer.VideoCapture.CaptureWriter.Paramator) throws {
-		try self.capture?.addAudioDataOutput()
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-			let _ = CCRenderer.VideoCapture.CaptureWriter.setup(paramator)
-			let _ = CCRenderer.VideoCapture.CaptureWriter.start()
-		}
-	}
-	
-	public func recordingStop() {
-		CCRenderer.VideoCapture.CaptureWriter.finish({ [weak self] (result: Bool, filePath: URL) in
-			DispatchQueue.main.async { [weak self] in
-				do {
-					try self?.capture?.removeAudioDataOutput()
-					self?.event?.onRecodingComplete?(result, filePath)
-				} catch {
-					
-				}
-			}
-		})
-	}
-	
-	public func recordingCancelled() {
-		CCRenderer.VideoCapture.CaptureWriter.finish(nil)
-	}
-}
+    public var event: VideoCaptureViewEvent?
 
-extension VideoCaptureView {
-	fileprivate func crip(pixelBuffer: CVPixelBuffer, rect: CGRect) -> CIImage {
-		let tempImage: CIImage = CIImage(cvPixelBuffer: pixelBuffer)
-		let cropFilter = CIFilter(name: "CICrop")
-		cropFilter?.setValue(tempImage, forKey: kCIInputImageKey)
-		cropFilter?.setValue(rect, forKey: "inputRectangle")
-		return (cropFilter?.outputImage)!.transformed(by: CGAffineTransform(translationX: 0, y: -rect.origin.y ))
-	}
-}
-
-extension VideoCaptureView {
-	// MARK: -
-	public var frameRate: Int32 { return self.capture?.paramator.frameRate ?? 30 }
-	public var presetiFrame: Settings.PresetiFrame { return self.capture?.paramator.presetiFrame ?? Settings.PresetiFrame.p1280x720 }
-	//public var position: Settings.PresetiFrame { return self._videoCapture?.presetiFrame ?? Settings.PresetiFrame.p1920x1080 }
-	
-	/// フォーカスポイントを設定
-	public func focus(atPoint: CGPoint) -> Bool {
-		guard let videoCapture: CCRenderer.VideoCapture.VideoCapture = self.capture else { return false }
-		return videoCapture.focus(atPoint: atPoint)
-	}
-}
-
-extension VideoCaptureView {
-	fileprivate func updateFrame(sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, position: AVCaptureDevice.Position) throws {
-		//guard let `self` = self else { return }
-		//guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
-		
-		//////////////////////////////////////////////////////////
-		// renderSize
-		if CCRenderer.VideoCapture.CaptureWriter.isWritng == true {
-			CCRenderer.VideoCapture.CaptureWriter.addCaptureSampleBuffer(sampleBuffer: sampleBuffer)
-			let t: TimeInterval = CCRenderer.VideoCapture.CaptureWriter.recordedDuration
-			DispatchQueue.main.async {
-				self.event?.onRecodingUpdate?(t)
-			}
-		}
-		//////////////////////////////////////////////////////////
-		
-		//////////////////////////////////////////////////////////
-		// renderSize
-		guard var originalPixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-		let width: Int = CVPixelBufferGetWidth(originalPixelBuffer)
-		let height: Int = CVPixelBufferGetHeight(originalPixelBuffer)
-		let renderSize: CGSize = CGSize.init(width: width, height: height)
-		//////////////////////////////////////////////////////////
-		/*
-		//////////////////////////////////////////////////////////
-		// rgbPixelBuffer
-		guard var rgbPixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: renderSize) else { return }
-		guard let originalMTLTexture: MTLTexture
-			= MCCore.texture(pixelBuffer: &originalPixelBuffer, textureCache: &textureCache, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else { return }
-		guard let rgbMTLTexture: MTLTexture
-			= MCCore.texture(pixelBuffer: &rgbPixelBuffer, textureCache: &textureCache, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else { return }
-		guard let commandBuffer0: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-		let blitEncoder: MTLBlitCommandEncoder? = commandBuffer0.makeBlitCommandEncoder()
-		blitEncoder?.copy(from: originalMTLTexture,
-						  sourceSlice: 0,
-						  sourceLevel: 0,
-						  sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
-						  sourceSize: MTLSizeMake(rgbMTLTexture.width, rgbMTLTexture.height, rgbMTLTexture.depth),
-						  to: rgbMTLTexture,
-						  destinationSlice: 0,
-						  destinationLevel: 0,
-						  destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
-		blitEncoder?.endEncoding()
-		commandBuffer0.commit()
-		//////////////////////////////////////////////////////////
-		*/
-
-		do {
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-			// renderLayerCompositionInfo
-			var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo.init(
-				compositionTime: CMTime(value: self.counter, timescale: self.frameRate),
-				timeRange: CMTimeRange.zero,
-				percentComplete: 0.0,
-				renderSize: renderSize,
-				metadataObjects: metadataObjects ?? [],
-				depthData: depthData,
-				queue: self.queue
-			)
-			self.counter += 1
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-			// renderLayerCompositionInfo
-			guard var commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-			for (index, _) in self.renderLayers.enumerated() {
-				if var renderLayer: MetalRenderLayerProtocol = self.renderLayers[index] as? MetalRenderLayerProtocol {
-					do {
-						try self.processingMetalRenderLayer(renderLayer: &renderLayer, commandBuffer: &commandBuffer, pixelBuffer: &originalPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-					} catch {
-						Debug.ErrorLog(error)
-					}
-				} else if var renderLayer: CVPixelBufferRenderLayerProtocol = self.renderLayers[index] as? CVPixelBufferRenderLayerProtocol {
-					do {
-						try renderLayer.processing(commandBuffer: &commandBuffer, pixelBuffer: &originalPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-					} catch {
-						Debug.ErrorLog(error)
-					}
-				}
-			}
-			//commandBuffer.commit()
-			///////////////////////////////////////////////////////////////////////////////////////////////////
-			
-			//////////////////////////////////////////////////////////
-			// renderSize
-			guard let rgbTexture: MTLTexture = MCCore.texture(pixelBuffer: &originalPixelBuffer, colorPixelFormat: self.colorPixelFormat) else { return }
-			//let rgbTexture: MCTexture = try MCTexture.init(pixelBuffer: &originalPixelBuffer, planeIndex: 0)
-			//////////////////////////////////////////////////////////
-
-			//guard var commandBuffer002: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-			//var texture: MTLTexture = rgbTexture.texture
-            commandBuffer.addCompletedHandler { [weak self] cb in
-				self?.event?.onPreviewUpdate?(sampleBuffer)
-                self?.event?.onPixelUpdate?(originalPixelBuffer)
+    /// 描画時に適用されるフィルターを指定
+    public var renderLayers: [RenderLayerProtocol] = [] {
+        willSet {
+            self.renderQueue.async { [weak self] in
+                self?.process.update(renderLayers: newValue)
             }
+        }
+    }
 
-            self.update(commandBuffer: &commandBuffer, texture: rgbTexture, renderSize: renderSize, queue: nil)
-		} catch {
-			return
-		}
-	}
-	
-	private func processingMetalRenderLayer(renderLayer: inout MetalRenderLayerProtocol, commandBuffer: inout MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-		guard var textureCache: CVMetalTextureCache = self.textureCache else { throw RecordingError.render }
-		guard let sourceTexture: MTLTexture = MCCore.texture(pixelBuffer: &pixelBuffer, textureCache: &textureCache, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else { throw RecordingError.render }
-		guard var destinationTexture: MTLTexture = sourceTexture.makeTextureView(pixelFormat: sourceTexture.pixelFormat) else { throw RecordingError.render }
-		try renderLayer.processing(commandBuffer: &commandBuffer, source: sourceTexture, destination: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-	}
+    fileprivate var presentationTimeStamp: CMTime = CMTime()
+    fileprivate let process: CCRenderer.PostProcess = CCRenderer.PostProcess()
+
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        self.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(orientationDidChange),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil
+        )
+        self.process.onUpdate = { [weak self] (pixelBuffer: CVPixelBuffer) in
+            self?.event?.onPixelUpdate?(pixelBuffer)
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    public override func setup() throws {
+        try self.setup(Configuration.defaultVideoCaptureProperty)
+    }
+
+    public override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        super.mtkView(view, drawableSizeWillChange: size)
+    }
+
+    public override func draw(in view: MTKView) {
+        super.draw(in: view)
+        guard
+            self.process.presentationTimeStamp != self.presentationTimeStamp,
+            let drawTexture: MTLTexture = self.process.outTexture
+        else { return }
+        self.presentationTimeStamp = self.process.presentationTimeStamp
+        self.drawUpdate(drawTexture: drawTexture)
+    }
+
+    public func setup(_ property: CCRenderer.VideoCapture.Property) throws {
+        try super.setup()
+        self.status = .setup
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        do {
+            self.capture = try CCRenderer.VideoCapture.VideoCaptureManager(property: property)
+        } catch {
+            self.capture = nil
+            throw CCRenderer.ErrorType.setup
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // 描画用テクスチャを生成
+        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        self.process.updateOutTexture(captureSize: captureSize, colorPixelFormat: self.colorPixelFormat)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
+            guard
+                let self = self,
+                self.status == .play,
+                let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true),
+                let frameRate: Int32 = self.capture?.property.captureInfo.frameRate
+            else { return }
+
+            self.renderQueue.async { [weak self] in
+                guard
+                    let self = self,
+                    !self.process.isProcess
+                else { return }
+
+                if self.isDisplaySyncRendering {
+                    guard self.presentationTimeStamp != CMSampleBufferGetPresentationTimeStamp(sampleBuffer) else { return }
+                }
+
+                let currentCaptureItem: CCRenderer.VideoCapture.CaptureData = CCRenderer.VideoCapture.CaptureData(
+                    sampleBuffer: sampleBuffer,
+                    frameRate: frameRate,
+                    depthData: depthData,
+                    metadataObjects: metadataObjects,
+                    captureSize: captureSize,
+                    colorPixelFormat: self.colorPixelFormat
+                )
+
+                do {
+                    try self.process.process(captureData: currentCaptureItem, queue: self.renderQueue)
+                } catch {
+                    MCDebug.errorLog("VideoCaptureView Render")
+                }
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+    }
+
+    public func play() {
+        guard self.status != .play else { return }
+        MCDebug.log("CameraCore.VideoRecordingPlayer.play")
+        self.capture?.play()
+        self.status = .play
+    }
+
+    public func pause() {
+        MCDebug.log("CameraCore.VideoRecordingPlayer.pause")
+        self.capture?.stop()
+        self.status = .pause
+    }
+
+    public func dispose() {
+        MCDebug.log("CameraCore.VideoRecordingPlayer.dispose")
+        self.capture?.stop()
+        self.status = .setup
+        self.capture = nil
+    }
+}
+
+extension VideoCaptureView {
+    public func update(property: CCRenderer.VideoCapture.Property) throws {
+        try self.capture?.update(property: property)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // 描画用テクスチャを生成
+        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        self.process.updateOutTexture(captureSize: captureSize, colorPixelFormat: self.colorPixelFormat)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+    }
+}
+
+extension VideoCaptureView {
+    public func recordingStart(_ parameter: CCRenderer.VideoCapture.CaptureWriter.Parameter) throws {
+        CCRenderer.VideoCapture.CaptureWriter.setup(parameter)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            CCRenderer.VideoCapture.CaptureWriter.start()
+        }
+    }
+
+    public func recordingStop() {
+        CCRenderer.VideoCapture.CaptureWriter.finish { [weak self] (result: Bool, filePath: URL) in
+            DispatchQueue.main.async { [weak self] in
+                self?.event?.onRecodingComplete?(result, filePath)
+            }
+        }
+    }
+
+    public func recordingCancelled() {
+        CCRenderer.VideoCapture.CaptureWriter.finish(nil)
+    }
+}
+
+extension VideoCaptureView {
+    fileprivate func crop(pixelBuffer: CVPixelBuffer, rect: CGRect) -> CIImage? {
+        let tempImage: CIImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let cropFilter = CIFilter(name: "CICrop")
+        cropFilter?.setValue(tempImage, forKey: kCIInputImageKey)
+        cropFilter?.setValue(rect, forKey: "inputRectangle")
+        return cropFilter?.outputImage?.transformed(by: CGAffineTransform(translationX: 0, y: -rect.origin.y))
+    }
+}
+
+extension VideoCaptureView {
+    @objc private func orientationDidChange(_ notification: Notification) {
+        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        self.process.updateOutTexture(captureSize: captureSize, colorPixelFormat: self.colorPixelFormat)
+    }
 }

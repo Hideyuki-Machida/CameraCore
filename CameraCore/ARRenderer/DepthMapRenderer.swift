@@ -11,6 +11,7 @@ import Foundation
 import ARKit
 import MetalCanvas
 
+/*
 extension CCRenderer.ARRenderer {
 
 	public class DepthMapRenderer {
@@ -88,3 +89,4 @@ extension CCRenderer.ARRenderer {
 	}
 
 }
+*/

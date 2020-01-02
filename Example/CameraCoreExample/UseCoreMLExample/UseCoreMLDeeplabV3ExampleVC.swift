@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import CameraCore
 import Vision
-
+/*
 @available(iOS 12.0, *)
 class UseCoreMLDeeplabV3ExampleVC: UIViewController {
 
@@ -38,8 +38,8 @@ class UseCoreMLDeeplabV3ExampleVC: UIViewController {
         self.rootLayer = self.videoCaptureView.layer
         do {
             try self.videoCaptureView.setup(self.videoCaputureParamator)
-            let coreMLLayer = try CoreMLDeeplabV3Layer()
-            self.videoCaptureView.renderLayers = [ coreMLLayer ]
+            //let coreMLLayer = try CoreMLDeeplabV3Layer()
+            //self.videoCaptureView.renderLayers = [ coreMLLayer ]
         } catch {
         }
     }
@@ -55,3 +55,4 @@ class UseCoreMLDeeplabV3ExampleVC: UIViewController {
         self.videoCaptureView.dispose()
     }
 }
+*/

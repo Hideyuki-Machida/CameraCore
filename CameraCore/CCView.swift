@@ -37,12 +37,14 @@ public class CCView: MCImageRenderView {
 
     public override func draw(in view: MTKView) {
         super.draw(in: view)
-        guard
-            self._presentationTimeStamp != self.presentationTimeStamp,
-            let drawTexture: MTLTexture = self.drawTexture
-        else { return }
-        self._presentationTimeStamp = self.presentationTimeStamp
-        self.drawUpdate(drawTexture: drawTexture)
+        drawQueue.async {
+            guard
+                self._presentationTimeStamp != self.presentationTimeStamp,
+                let drawTexture: MTLTexture = self.drawTexture
+            else { return }
+            self._presentationTimeStamp = self.presentationTimeStamp
+            self.drawUpdate(drawTexture: drawTexture)
+        }
     }
 
 }

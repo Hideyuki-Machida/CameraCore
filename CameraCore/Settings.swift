@@ -44,7 +44,7 @@ public class Settings {
             }
         }
 
-        public func size(orientation: AVCaptureVideoOrientation) -> CGSize {
+        public func size(orientation: AVCaptureVideoOrientation) -> MCSize {
             switch orientation {
             case .portrait, .portraitUpsideDown: return self.portraitSize
             case .landscapeLeft, .landscapeRight: return self.landscapeSize
@@ -52,7 +52,7 @@ public class Settings {
             }
         }
 
-        public func size(isOrientation: Bool = true) -> CGSize {
+        public func size(isOrientation: Bool = true) -> MCSize {
             if isOrientation {
                 let currentOrientation: AVCaptureVideoOrientation = Settings.captureVideoOrientation
                 return size(orientation: currentOrientation)
@@ -61,21 +61,21 @@ public class Settings {
             }
         }
 
-        fileprivate var portraitSize: CGSize {
+        fileprivate var portraitSize: MCSize {
             switch self {
             // case .p640x480: return CGSize(width: 480, height: 640)
-            case .p960x540: return CGSize(width: 540, height: 960)
-            case .p1280x720: return CGSize(width: 720, height: 1280)
-            case .p1920x1080: return CGSize(width: 1080, height: 1920)
+            case .p960x540: return MCSize(w: 540, h: 960)
+            case .p1280x720: return MCSize(w: 720, h: 1280)
+            case .p1920x1080: return MCSize(w: 1080, h: 1920)
             }
         }
 
-        fileprivate var landscapeSize: CGSize {
+        fileprivate var landscapeSize: MCSize {
             switch self {
             // case .p640x480: return CGSize(width: 640, height: 480)
-            case .p960x540: return CGSize(width: 960, height: 540)
-            case .p1280x720: return CGSize(width: 1280, height: 720)
-            case .p1920x1080: return CGSize(width: 1920, height: 1080)
+            case .p960x540: return MCSize(w: 960, h: 540)
+            case .p1280x720: return MCSize(w: 1280, h: 720)
+            case .p1920x1080: return MCSize(w: 1920, h: 1080)
             }
         }
     }

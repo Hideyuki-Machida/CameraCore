@@ -65,7 +65,7 @@ fileprivate extension CCImageProcessing.SequenceImageLayer {
 
         // フィルターイメージ生成
         let counter: Int = Int(floorf(imageCounter)) % self.imagePaths.count
-        var filterImage: CIImage = try self.filterImage(count: counter, renderSize: renderLayerCompositionInfo.renderSize)
+        var filterImage: CIImage = try self.filterImage(count: counter, renderSize: renderLayerCompositionInfo.renderSize.toCGSize())
 
         // 上下反転
         filterImage = filterImage.transformed(by: CGAffineTransform(scaleX: 1, y: -1.0).translatedBy(x: 0, y: -CGFloat(filterImage.extent.height)))

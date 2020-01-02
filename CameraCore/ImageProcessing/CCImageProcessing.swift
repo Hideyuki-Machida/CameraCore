@@ -46,6 +46,7 @@ extension CCImageProcessing.PostProcess {
         let presentationTimeStamp: CMTime = CMSampleBufferGetPresentationTimeStamp(captureData.sampleBuffer)
 
         if self.renderLayers.count == 0 {
+            self.presentationTimeStamp = presentationTimeStamp
             self.onUpdatePixelBuffer?(pixelBuffer, presentationTimeStamp)
             return
         }
@@ -59,11 +60,11 @@ extension CCImageProcessing.PostProcess {
         }
     }
     
-    func updateOutTexture(captureSize: CGSize, colorPixelFormat: MTLPixelFormat) -> MCTexture? {
+    func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) -> MCTexture? {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
         guard
-            CGFloat(self.outTexture?.width ?? 0) != captureSize.width,
+            Float(self.outTexture?.width ?? 0) != captureSize.w,
             var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
             let tex: MCTexture = try? MCTexture.init(pixelBuffer: &pixelBuffer, colorPixelFormat: colorPixelFormat, planeIndex: 0)
         else { return nil }
@@ -82,10 +83,10 @@ private extension CCImageProcessing.PostProcess {
         // renderSize
         let width: Int = CVPixelBufferGetWidth(pixelBuffer)
         let height: Int = CVPixelBufferGetHeight(pixelBuffer)
-        let renderSize: CGSize = CGSize(width: width, height: height)
+        let renderSize: MCSize = MCSize(w: width, h: height)
         //////////////////////////////////////////////////////////
 
-        if outTexture.size.toCGSize() == renderSize {
+        if outTexture.size == renderSize {
         } else {
             guard let outTex = updateOutTexture(captureSize: renderSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else {
                 throw self.errorType

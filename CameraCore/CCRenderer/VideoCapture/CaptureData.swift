@@ -18,10 +18,10 @@ extension CCRenderer.VideoCapture {
         let frameRate: Int32
         let depthData: AVDepthData?
         let metadataObjects: [AVMetadataObject]?
-        let captureSize: CGSize
+        let captureSize: MCSize
         let colorPixelFormat: MTLPixelFormat
 
-        internal init(sampleBuffer: CMSampleBuffer, frameRate: Int32, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, captureSize: CGSize, colorPixelFormat: MTLPixelFormat) {
+        internal init(sampleBuffer: CMSampleBuffer, frameRate: Int32, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, captureSize: MCSize, colorPixelFormat: MTLPixelFormat) {
             self.sampleBuffer = sampleBuffer
             self.frameRate = frameRate
             self.depthData = depthData

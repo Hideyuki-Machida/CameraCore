@@ -43,7 +43,7 @@ extension CCRenderer.VideoCapture {
         public var option: [Item]
         public var captureInfo: CCRenderer.VideoCapture.CaptureInfo = CCRenderer.VideoCapture.CaptureInfo()
 
-        fileprivate var requiredCaptureSize: CGSize?
+        fileprivate var requiredCaptureSize: MCSize?
 
         public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, required: [Item] = [], option: [Item] = []) {
             self.devicePosition = devicePosition
@@ -115,9 +115,9 @@ extension CCRenderer.VideoCapture.Property {
         //////////////////////////////////////////////////////////
         // 解像度によりフォーマットを振り分け
         let resultFormat: AVCaptureDevice.Format
-        if let requiredCaptureSize: CGSize = self.requiredCaptureSize {
+        if let requiredCaptureSize: MCSize = self.requiredCaptureSize {
             // 解像度ジャストサイズのものを選択
-            guard let format: AVCaptureDevice.Format = (resultFormats.filter { CMVideoFormatDescriptionGetDimensions($0.formatDescription).width == Int32(requiredCaptureSize.width) }).first else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+            guard let format: AVCaptureDevice.Format = (resultFormats.filter { CMVideoFormatDescriptionGetDimensions($0.formatDescription).width == Int32(requiredCaptureSize.w) }).first else { throw CCRenderer.VideoCapture.ErrorType.setupError }
             resultFormat = format
         } else {
             // 解像度最小のもの
@@ -155,17 +155,17 @@ extension CCRenderer.VideoCapture.Property {
 
     fileprivate func getCaptureSizeFormat(captureSize: Settings.PresetSize, item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         // AVCaptureDevice.Formatと照合するためのOrientationの適応されていないsizeを取得
-        let captureSize: CGSize = captureSize.size(isOrientation: false)
-        let width: CGFloat = captureSize.width
-        let height: CGFloat = captureSize.height
+        let captureSize: MCSize = captureSize.size(isOrientation: false)
+        let width: Float = captureSize.w
+        let height: Float = captureSize.h
 
         var list: [AVCaptureDevice.Format] = []
         for format: AVCaptureDevice.Format in formats {
             let maxWidth: Int32 = CMVideoFormatDescriptionGetDimensions(format.formatDescription).width
             let maxHeight: Int32 = CMVideoFormatDescriptionGetDimensions(format.formatDescription).height
 
-            let gcd: CGFloat = self.gcd(x: CGFloat(maxWidth), y: CGFloat(maxHeight)) // 最大公約数
-            if width <= CGFloat(maxWidth), height <= CGFloat(maxHeight), (CGFloat(maxWidth) / gcd) == 16.0, (CGFloat(maxHeight) / gcd) == 9.0 {
+            let gcd: Float = self.gcd(x: Float(maxWidth), y: Float(maxHeight)) // 最大公約数
+            if width <= Float(maxWidth), height <= Float(maxHeight), (Float(maxWidth) / gcd) == 16.0, (Float(maxHeight) / gcd) == 9.0 {
                 list.append(format)
             }
         }

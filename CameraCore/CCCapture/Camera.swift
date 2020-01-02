@@ -51,9 +51,10 @@ extension CCCapture {
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
+
                 guard
                     let self = self,
-                    let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true),
+                    let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true),
                     let frameRate: Int32 = self.capture?.property.captureInfo.frameRate
 
                     else { return }
@@ -100,7 +101,7 @@ extension CCCapture.Camera {
         try self.capture?.update(property: property)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
-        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        guard let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }

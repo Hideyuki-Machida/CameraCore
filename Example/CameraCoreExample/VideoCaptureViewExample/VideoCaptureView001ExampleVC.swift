@@ -27,7 +27,6 @@ class VideoCaptureView001ExampleVC: UIViewController {
     )
     
     var camera: CCCapture.Camera?
-    var postProcess: CCImageProcessing.PostProcess?
     @IBOutlet weak var drawView: CCView!
     
     deinit {
@@ -40,11 +39,9 @@ class VideoCaptureView001ExampleVC: UIViewController {
         
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
-            let postProcess: CCImageProcessing.PostProcess = CCImageProcessing.PostProcess()
-            camera --> postProcess --> self.drawView
+            camera --> self.drawView
             camera.play()
             self.camera = camera
-            self.postProcess = postProcess
         } catch {
             
         }

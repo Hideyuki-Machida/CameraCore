@@ -20,7 +20,7 @@ public func --> (left: CCCapture.Camera, right: CCImageProcessing.PostProcess) -
     left.onUpdate = { [weak left, weak right] (currentCaptureItem: CCRenderer.VideoCapture.CaptureData) in
         processQueue.async { [weak left, weak right] in
             guard let left: CCCapture.Camera = left, let right: CCImageProcessing.PostProcess = right, !right.isProcess else { return }
-            let captureSize = left.property.captureInfo.presetSize.size(isOrientation: true)
+            let captureSize: MCSize = left.property.captureInfo.presetSize.size(isOrientation: true)
             right.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
             let presentationTimeStamp: CMTime = CMSampleBufferGetPresentationTimeStamp(currentCaptureItem.sampleBuffer)
             guard presentationTimeStamp != right.presentationTimeStamp else { return }
@@ -60,6 +60,30 @@ public func --> (left: CCImageProcessing.PostProcess, right: CCView) -> CCView {
                 right?.presentationTimeStamp = presentationTimeStamp
             } catch {
                     
+            }
+        }
+    }
+
+    return right
+}
+
+@discardableResult
+public func --> (left: CCCapture.Camera, right: CCView) -> CCView {
+    do {
+        try right.setup()
+    } catch {
+        
+    }
+
+    left.onUpdate = { [weak left, weak right] (captureData: CCRenderer.VideoCapture.CaptureData) in
+        drawQueue.async { [weak left, weak right] in
+            guard var pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
+            let presentationTimeStamp: CMTime = CMSampleBufferGetPresentationTimeStamp(captureData.sampleBuffer)
+            do {
+                right?.drawTexture = try MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
+                right?.presentationTimeStamp = presentationTimeStamp
+            } catch {
+                
             }
         }
     }

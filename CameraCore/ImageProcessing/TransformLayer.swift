@@ -46,13 +46,13 @@ public extension CCImageProcessing.TransformLayer {
 }
 
 private extension CCImageProcessing.TransformLayer {
-    func process(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: CGSize) throws -> CIImage {
+    func process(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: MCSize) throws -> CIImage {
         let transformImage: CIImage = image.transformed(by: self.transform)
-        let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize))
+        let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize.toCGSize()))
         guard let result: CIFilter = CIFilter(name: Blendmode.alpha.CIFilterName) else { throw RenderLayerErrorType.renderingError }
         result.setValue(CIImage(color: CIColor(cgColor: self.backgroundColor.cgColor)), forKey: kCIInputBackgroundImageKey)
         result.setValue(croppingImage, forKey: kCIInputImageKey)
-        guard let croppingImage002: CIImage = result.outputImage?.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize)) else { throw RenderLayerErrorType.renderingError }
+        guard let croppingImage002: CIImage = result.outputImage?.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize.toCGSize())) else { throw RenderLayerErrorType.renderingError }
         return croppingImage002
     }
 }

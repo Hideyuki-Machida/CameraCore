@@ -50,11 +50,11 @@ extension CCRenderer.PostProcess {
         }
     }
 
-    func updateOutTexture(captureSize: CGSize, colorPixelFormat: MTLPixelFormat) {
+    func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
         guard
-            CGFloat(self.outTexture?.width ?? 0) != captureSize.width,
+            Float(self.outTexture?.width ?? 0) != captureSize.w,
             var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize)
         else { return }
         self.outTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: colorPixelFormat)
@@ -72,7 +72,7 @@ private extension CCRenderer.PostProcess {
         // renderSize
         let width: Int = CVPixelBufferGetWidth(pixelBuffer)
         let height: Int = CVPixelBufferGetHeight(pixelBuffer)
-        let renderSize: CGSize = CGSize(width: width, height: height)
+        let renderSize: MCSize = MCSize(w: width, h: height)
         //////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ private extension CCRenderer.PostProcess {
         try renderLayer.process(commandBuffer: commandBuffer, source: sourceTexture, destination: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
     }
 */
-    func updateTexture(commandBuffer: MTLCommandBuffer, source: MTLTexture, destination: MTLTexture, renderSize: CGSize) {
+    func updateTexture(commandBuffer: MTLCommandBuffer, source: MTLTexture, destination: MTLTexture, renderSize: MCSize) {
         ////////////////////////////////////////////////////////////
         //
         var commandBuffer: MTLCommandBuffer = commandBuffer

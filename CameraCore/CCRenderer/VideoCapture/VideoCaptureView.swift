@@ -106,7 +106,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
-        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        guard let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
         self.process.updateOutTexture(captureSize: captureSize, colorPixelFormat: self.colorPixelFormat)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -115,7 +115,7 @@ public class VideoCaptureView: MCImageRenderView, VideoCaptureViewProtocol {
             guard
                 let self = self,
                 self.status == .play,
-                let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true),
+                let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true),
                 let frameRate: Int32 = self.capture?.property.captureInfo.frameRate
             else { return }
 
@@ -174,7 +174,7 @@ extension VideoCaptureView {
         try self.capture?.update(property: property)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
-        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        guard let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
         self.process.updateOutTexture(captureSize: captureSize, colorPixelFormat: self.colorPixelFormat)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
@@ -213,7 +213,7 @@ extension VideoCaptureView {
 
 extension VideoCaptureView {
     @objc private func orientationDidChange(_ notification: Notification) {
-        guard let captureSize: CGSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
+        guard let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
         self.process.updateOutTexture(captureSize: captureSize, colorPixelFormat: self.colorPixelFormat)
     }
 }

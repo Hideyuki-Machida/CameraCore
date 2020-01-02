@@ -289,21 +289,21 @@ extension CCRenderer.VideoCapture.CaptureWriter {
         if let croppingRect: CGRect = parameter.croppingRect {
             return croppingRect.size
         }
-        return parameter.presetFrame.size()
+        return parameter.presetFrame.size().toCGSize()
     }
 }
 
 struct CaptureWriterParam {
     fileprivate static var croppingVector: CIVector?
     fileprivate static var croppingRect: CGRect?
-    fileprivate static var sampleSize: CGSize?
-    static func set(croppingRect: CGRect?, sampleSize: CGSize?) {
+    fileprivate static var sampleSize: MCSize?
+    static func set(croppingRect: CGRect?, sampleSize: MCSize?) {
         CaptureWriterParam.croppingVector = nil
         CaptureWriterParam.croppingRect = nil
         CaptureWriterParam.sampleSize = nil
-        guard let croppingRect: CGRect = croppingRect, let sampleSize: CGSize = sampleSize else { return }
+        guard let croppingRect: CGRect = croppingRect, let sampleSize: MCSize = sampleSize else { return }
         CaptureWriterParam.croppingRect = croppingRect
-        let y: CGFloat = sampleSize.height - croppingRect.size.height - croppingRect.origin.y
+        let y: CGFloat = CGFloat(sampleSize.h) - croppingRect.size.height - croppingRect.origin.y
         CaptureWriterParam.croppingVector = CIVector(x: croppingRect.origin.x, y: y, z: croppingRect.size.width, w: croppingRect.size.height)
     }
 

@@ -85,7 +85,7 @@ private extension CCImageProcessing.PostProcess {
         let renderSize: CGSize = CGSize(width: width, height: height)
         //////////////////////////////////////////////////////////
 
-        if CGSize.init(width: outTexture.width, height: outTexture.height) == renderSize {
+        if outTexture.size.toCGSize() == renderSize {
         } else {
             guard let outTex = updateOutTexture(captureSize: renderSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else {
                 throw self.errorType

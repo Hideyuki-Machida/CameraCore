@@ -8,7 +8,6 @@
 
 import AVFoundation
 import MetalCanvas
-import Vision
 
 public extension CCImageProcessing {
     final class LutLayer: RenderLayerProtocol {

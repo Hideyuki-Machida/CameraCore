@@ -89,7 +89,7 @@ fileprivate extension CCImageProcessing.SequenceImageLayer {
 
     // MARK: - Private -
 
-    fileprivate func filterImage(count: Int, renderSize: CGSize) throws -> CIImage {
+    func filterImage(count: Int, renderSize: CGSize) throws -> CIImage {
         // フィルターイメージ作成
         if let filter: CIImage = self.filterCacheImageList[count] {
             return filter
@@ -100,7 +100,7 @@ fileprivate extension CCImageProcessing.SequenceImageLayer {
     }
 
     /// フィルタイメージ生成・取得
-    fileprivate func loadFilterImage(count: Int, renderSize: CGSize) throws -> CIImage {
+    func loadFilterImage(count: Int, renderSize: CGSize) throws -> CIImage {
         // フィルターイメージ作成
         guard self.imagePaths.indices.contains(count) else { throw RenderLayerErrorType.renderingError }
         let imagePath: URL = self.imagePaths[count]

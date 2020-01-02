@@ -7,7 +7,12 @@
 //
 
 import UIKit
+import CameraCore
 
 class ProgressViewVC: UIViewController {
     @IBOutlet weak var progressLabel: UILabel!
+    
+    deinit {
+        Debug.DeinitLog(self)
+    }
 }

@@ -17,11 +17,14 @@ class UseCoreMLYOLOv3TinyExampleVC: UIViewController {
 	@IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
 	
     private var detectionOverlay: CALayer! = nil
-    private var videoCaputureParamator = CCRenderer.VideoCapture.VideoCaputureParamator.init(
-		presetiFrame: Settings.PresetiFrame.p960x540,
-		frameRate: 30,
+	var videoCaputurePropertys = CCRenderer.VideoCapture.Propertys.init(
 		devicePosition: AVCaptureDevice.Position.back,
-		isDepth: false
+		isAudioDataOutput: true,
+		required: [
+			.captureSize(Settings.PresetSize.p960x540),
+			.frameRate(Settings.PresetFrameRate.fr30)
+		],
+		option: []
 	)
 
 	
@@ -35,14 +38,14 @@ class UseCoreMLYOLOv3TinyExampleVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-        let renderSize: CGSize = videoCaputureParamator.presetiFrame.size()
+        let renderSize: CGSize = Settings.PresetSize.p960x540.size()
         
         self.rootLayer = self.videoCaptureView.layer
         self.setupLayers()
         self.updateLayerGeometry()
 
 		do {
-			try self.videoCaptureView.setup(self.videoCaputureParamator)
+			try self.videoCaptureView.setup(self.videoCaputurePropertys)
 			let coreMLLayer = try CoreMLYOLOv3TinyLayer()
             coreMLLayer.onUpdate = { [weak self] (items: [ VNRecognizedObjectObservation ]) in
                 guard let self = self else { return }
@@ -110,7 +113,7 @@ extension UseCoreMLYOLOv3TinyExampleVC {
     
 
     func setupLayers() {
-        let renderSize: CGSize = videoCaputureParamator.presetiFrame.size()
+        let renderSize: CGSize = Settings.PresetSize.p960x540.size()
         
         detectionOverlay = CALayer() // container layer that has all the renderings of the observations
         detectionOverlay.name = "DetectionOverlay"
@@ -123,7 +126,7 @@ extension UseCoreMLYOLOv3TinyExampleVC {
     }
     
     func updateLayerGeometry() {
-        let renderSize: CGSize = videoCaputureParamator.presetiFrame.size()
+        let renderSize: CGSize = Settings.PresetSize.p960x540.size()
         
         let bounds = rootLayer.bounds
         var scale: CGFloat

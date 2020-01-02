@@ -1,0 +1,15 @@
+kernel vec4 filterKernel(sampler image, vec2 resolution, float time)
+{
+	resolution.xy = vec2(1280.0, 1280.0);
+
+	highp vec2 textureCoordinate = destCoord();
+	highp vec2 uv = (textureCoordinate / resolution);
+	uv = vec2(uv.x - 0.28, uv.y - 0.5);
+	highp vec4 color = sample(image, uv);
+	highp float len = length(uv) - 0.35;
+	highp float strength = 4.0;
+	//highp float vignette = (1.0 - (len));
+	highp float vignette = (1.0 - (len * strength));
+	vignette = min(vignette, 1.0);
+	return vec4(color.rgb * vignette, 1.0 );
+}

@@ -10,14 +10,14 @@ import Foundation
 import Photos
 
 public enum CameraRollAssetType: Int, Codable {
-    case unknown = 0
-    case image = 1
-    case video = 2
-    case audio = 3
-    
-    public var phAssetMediaType: PHAssetMediaType {
-        get {
-            return PHAssetMediaType.init(rawValue: self.rawValue)!
-        }
-    }
+	case unknown = 0
+	case image = 1
+	case video = 2
+	case audio = 3
+
+	public var phAssetMediaType: PHAssetMediaType {
+		get {
+			return PHAssetMediaType.init(rawValue: self.rawValue)!
+		}
+	}
 }

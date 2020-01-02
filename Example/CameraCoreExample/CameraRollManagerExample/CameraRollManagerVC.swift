@@ -16,19 +16,9 @@ class CameraRollManagerVC: UIViewController {
     fileprivate var datas: [CameraRollItem] = []
     fileprivate let refreshControl: UIRefreshControl = UIRefreshControl()
     @IBOutlet fileprivate(set) weak var collectionView: UICollectionView!
-
-	/*
-	private let videoCompositionProperty: VideoCompositionProperty = VideoCompositionProperty.init(
-		frameRate: 60,
-		presetiFrame: Settings.PresetiFrame.p1920x1080,
-		renderSize: Settings.PresetiFrame.p1920x1080.size(),
-		renderScale: 1.0,
-		renderType: Settings.RenderType.metal
-	)
-*/
     
     deinit {
-        print("deinit: CameraRollManagerVC")
+        Debug.DeinitLog(self)
     }
     
     override func viewDidLoad() {

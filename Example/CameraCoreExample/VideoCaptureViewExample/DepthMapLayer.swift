@@ -21,6 +21,10 @@ final public class DepthMapLayer: RenderLayerProtocol {
 		self.depthMapRenderer = CCRenderer.ARRenderer.DepthMapRenderer.init()
 	}
 	
+    deinit {
+        Debug.DeinitLog(self)
+    }
+
 	/// キャッシュを消去
 	public func dispose() {
 	}

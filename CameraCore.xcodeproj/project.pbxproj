@@ -16,6 +16,8 @@
 		6258C77423BB4C8900B4AD79 /* AVCaptureDevice.Position+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6258C77323BB4C8900B4AD79 /* AVCaptureDevice.Position+Extension.swift */; };
 		6276D62B23BF4D9600F028E1 /* CCRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62A23BF4D9600F028E1 /* CCRecorder.swift */; };
 		6276D62D23BF58BF00F028E1 /* CCCameraRoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62C23BF58BF00F028E1 /* CCCameraRoll.swift */; };
+		6276D63023BF5C0700F028E1 /* CMFormatDescription+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62E23BF5C0700F028E1 /* CMFormatDescription+Extension.swift */; };
+		6276D63123BF5C0700F028E1 /* CMSampleBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62F23BF5C0700F028E1 /* CMSampleBuffer+Extension.swift */; };
 		6292627C232FEC2600D47CF0 /* CameraRollImportStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */; };
 		6292627D232FEC2600D47CF0 /* CameraRollAssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926278232FEC2600D47CF0 /* CameraRollAssetType.swift */; };
 		6292627E232FEC2600D47CF0 /* CameraRollItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926279232FEC2600D47CF0 /* CameraRollItem.swift */; };
@@ -98,6 +100,8 @@
 		6258C77323BB4C8900B4AD79 /* AVCaptureDevice.Position+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice.Position+Extension.swift"; sourceTree = "<group>"; };
 		6276D62A23BF4D9600F028E1 /* CCRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCRecorder.swift; sourceTree = "<group>"; };
 		6276D62C23BF58BF00F028E1 /* CCCameraRoll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCCameraRoll.swift; sourceTree = "<group>"; };
+		6276D62E23BF5C0700F028E1 /* CMFormatDescription+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMFormatDescription+Extension.swift"; sourceTree = "<group>"; };
+		6276D62F23BF5C0700F028E1 /* CMSampleBuffer+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMSampleBuffer+Extension.swift"; sourceTree = "<group>"; };
 		62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollImportStatus.swift; sourceTree = "<group>"; };
 		62926278232FEC2600D47CF0 /* CameraRollAssetType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollAssetType.swift; sourceTree = "<group>"; };
 		62926279232FEC2600D47CF0 /* CameraRollItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollItem.swift; sourceTree = "<group>"; };
@@ -328,6 +332,8 @@
 				62E5CA5822904A34004D258A /* CGAffineTransform+Extended.swift */,
 				6258C77123BB4C7700B4AD79 /* AVCaptureColorSpace+Extension.swift */,
 				6258C77323BB4C8900B4AD79 /* AVCaptureDevice.Position+Extension.swift */,
+				6276D62E23BF5C0700F028E1 /* CMFormatDescription+Extension.swift */,
+				6276D62F23BF5C0700F028E1 /* CMSampleBuffer+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -512,6 +518,7 @@
 				62E5CAD722904A35004D258A /* CaptureWriter.swift in Sources */,
 				62E5CAC422904A35004D258A /* SoundUtils.swift in Sources */,
 				62E5CAFE22904A35004D258A /* SequenceImageLayer.swift in Sources */,
+				6276D63023BF5C0700F028E1 /* CMFormatDescription+Extension.swift in Sources */,
 				6276D62B23BF4D9600F028E1 /* CCRecorder.swift in Sources */,
 				62E5CACE22904A35004D258A /* TimeInterval+Extended.swift in Sources */,
 				62E5CAC522904A35004D258A /* CodableURL.swift in Sources */,
@@ -541,6 +548,7 @@
 				62E5CABC22904A35004D258A /* SoundSource.swift in Sources */,
 				62B6C4AF23B794530044A531 /* CaptureInfo.swift in Sources */,
 				62B6C4B123B7947D0044A531 /* PostProcess.swift in Sources */,
+				6276D63123BF5C0700F028E1 /* CMSampleBuffer+Extension.swift in Sources */,
 				62E5CACA22904A35004D258A /* CMTimeRange+Extentded.swift in Sources */,
 				62E5CACD22904A35004D258A /* CMTime+Codable.swift in Sources */,
 				62E5CAD022904A35004D258A /* ARVideoFormat.swift in Sources */,

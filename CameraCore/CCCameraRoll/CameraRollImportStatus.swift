@@ -8,8 +8,10 @@
 
 import Foundation
 
-public enum CameraRollImportStatus {
-	case success
-	case error
-	case exists
+extension CCCameraRoll {
+    public enum ImportStatus {
+        case success
+        case error
+        case exists
+    }
 }

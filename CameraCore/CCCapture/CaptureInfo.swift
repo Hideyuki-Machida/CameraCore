@@ -10,7 +10,7 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 
-extension CCRenderer.VideoCapture {
+extension CCCapture.VideoCapture {
     public class CaptureInfo {
         private let traceQueue: DispatchQueue = DispatchQueue(label: "CCRenderer.VideoCapture.CaptureInfo.Queue")
 
@@ -26,7 +26,7 @@ extension CCRenderer.VideoCapture {
         public private(set) var isSmoothAutoFocusEnabled: Bool = true
         public private(set) var depthDataOut: Bool = false
 
-        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, itemList: [CCRenderer.VideoCapture.Property.Item]) {
+        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, itemList: [CCCapture.VideoCapture.Property.Item]) {
             self.device = device
             self.devicePosition = device.position
             self.deviceFormat = deviceFormat

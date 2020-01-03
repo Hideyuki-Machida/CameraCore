@@ -13,19 +13,21 @@ import MetalCanvas
 import MetalPerformanceShaders
 
 extension CCRenderer {
-    public class PostProcess {
+    public class PostProcess: NSObject {
+        public var renderLayers: [RenderLayerProtocol] = []
+
         fileprivate let errorType: CCRenderer.ErrorType = CCRenderer.ErrorType.render
         fileprivate let hasMPS: Bool = MCTools.shard.hasMPS
         fileprivate let filter: MPSImageLanczosScale = MPSImageLanczosScale(device: MCCore.device)
         fileprivate var counter: CMTimeValue = 0
-        fileprivate var renderLayers: [RenderLayerProtocol] = []
 
+        fileprivate(set) var outTexture: MCTexture?
         fileprivate(set) var presentationTimeStamp: CMTime = CMTime()
-        fileprivate(set) var outTexture: MTLTexture?
         fileprivate(set) var isProcess: Bool = false
 
-        var onUpdate: ((_ pixelBuffer: CVPixelBuffer) -> Void)?
-
+        var onUpdate: ((_ texture: MCTexture, _ presentationTimeStamp: CMTime) -> Void)?
+        var onUpdatePixelBuffer: ((_ pixelBuffer: CVPixelBuffer, _ presentationTimeStamp: CMTime) -> Void)?
+        
         deinit {
             MCDebug.deinitLog(self)
         }
@@ -37,9 +39,15 @@ extension CCRenderer.PostProcess {
         self.renderLayers = renderLayers
     }
 
-    func process(captureData: CCRenderer.VideoCapture.CaptureData, queue: DispatchQueue) throws {
+    func process(captureData: CCCapture.VideoCapture.CaptureData, queue: DispatchQueue) throws {
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
         let presentationTimeStamp: CMTime = CMSampleBufferGetPresentationTimeStamp(captureData.sampleBuffer)
+
+        if self.renderLayers.count == 0 {
+            self.presentationTimeStamp = presentationTimeStamp
+            self.onUpdatePixelBuffer?(pixelBuffer, presentationTimeStamp)
+            return
+        }
 
         self.isProcess = true
         do {
@@ -49,24 +57,25 @@ extension CCRenderer.PostProcess {
             throw self.errorType
         }
     }
-
-    func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) {
+    
+    func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) -> MCTexture? {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
         guard
             Float(self.outTexture?.width ?? 0) != captureSize.w,
-            var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize)
-        else { return }
-        self.outTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: colorPixelFormat)
+            var pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
+            let tex: MCTexture = try? MCTexture.init(pixelBuffer: &pixelBuffer, colorPixelFormat: colorPixelFormat, planeIndex: 0)
+        else { return nil }
+        self.outTexture = tex
+        return tex
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
 
 private extension CCRenderer.PostProcess {
-    func process(pixelBuffer: CVPixelBuffer, captureData: CCRenderer.VideoCapture.CaptureData, presentationTimeStamp: CMTime, queue: DispatchQueue) throws {
-        guard let outTexture: MTLTexture = self.outTexture else { return }
-
+    func process(pixelBuffer: CVPixelBuffer, captureData: CCCapture.VideoCapture.CaptureData, presentationTimeStamp: CMTime, queue: DispatchQueue) throws {
         var pixelBuffer: CVPixelBuffer = pixelBuffer
+        guard var outTexture: MCTexture = self.outTexture else { return }
 
         //////////////////////////////////////////////////////////
         // renderSize
@@ -75,6 +84,14 @@ private extension CCRenderer.PostProcess {
         let renderSize: MCSize = MCSize(w: width, h: height)
         //////////////////////////////////////////////////////////
 
+        if outTexture.size == renderSize {
+        } else {
+            guard let outTex = updateOutTexture(captureSize: renderSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm) else {
+                throw self.errorType
+            }
+            outTexture = outTex
+        }
+        
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // renderLayerCompositionInfo
         var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
@@ -97,54 +114,34 @@ private extension CCRenderer.PostProcess {
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
         }
+
         commandBuffer.addCompletedHandler { [weak self] _ in
             queue.async { [weak self] in
-                self?.isProcess = false
                 self?.presentationTimeStamp = presentationTimeStamp
-                self?.outTexture = outTexture
-                self?.onUpdate?(pixelBuffer)
+                self?.onUpdate?(outTexture, presentationTimeStamp)
+                self?.isProcess = false
             }
         }
 
-        self.processRenderLayer(commandBuffer: commandBuffer, originalPixelBuffer: &pixelBuffer, frameRate: captureData.frameRate, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-        guard let rgbTexture: MTLTexture = MCCore.texture(pixelBuffer: &pixelBuffer, colorPixelFormat: captureData.colorPixelFormat) else { throw self.errorType }
-        self.updateTexture(commandBuffer: commandBuffer, source: rgbTexture, destination: outTexture, renderSize: renderLayerCompositionInfo.renderSize)
+        try self.processRenderLayer(commandBuffer: commandBuffer, source: &pixelBuffer, destination: &outTexture,frameRate: captureData.frameRate, renderLayerCompositionInfo: &renderLayerCompositionInfo)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
 
 private extension CCRenderer.PostProcess {
-    func processRenderLayer(commandBuffer: MTLCommandBuffer, originalPixelBuffer: inout CVPixelBuffer, frameRate: Int32, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) {
-        /*
+    func processRenderLayer(commandBuffer: MTLCommandBuffer, source: inout CVPixelBuffer, destination: inout MCTexture, frameRate: Int32, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+        let sourceTexture: MCTexture = try MCTexture.init(pixelBuffer: &source, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
         for index in self.renderLayers.indices {
             guard self.renderLayers.indices.contains(index) else { continue }
-            if var renderLayer: MetalRenderLayerProtocol = self.renderLayers[index] as? MetalRenderLayerProtocol {
-                do {
-                    try self.processMetalRenderLayer(renderLayer: &renderLayer, commandBuffer: commandBuffer, pixelBuffer: &originalPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-                } catch {
-                    MCDebug.log(error)
-                }
-            } else if var renderLayer: CVPixelBufferRenderLayerProtocol = self.renderLayers[index] as? CVPixelBufferRenderLayerProtocol {
-                do {
-                    try renderLayer.process(commandBuffer: commandBuffer, pixelBuffer: &originalPixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-                } catch {
-                    MCDebug.log(error)
-                }
+            do {
+                try self.renderLayers[index].process(commandBuffer: commandBuffer, source: sourceTexture, destination: &destination, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+            } catch {
+                MCDebug.log(error)
             }
         }
- */
     }
-/*
-    func processMetalRenderLayer(renderLayer: inout MetalRenderLayerProtocol, commandBuffer: MTLCommandBuffer, pixelBuffer: inout CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-        guard
-            var textureCache: CVMetalTextureCache = MCCore.textureCache,
-            let sourceTexture: MTLTexture = MCCore.texture(pixelBuffer: &pixelBuffer, textureCache: &textureCache, colorPixelFormat: MTLPixelFormat.bgra8Unorm),
-            var destinationTexture: MTLTexture = sourceTexture.makeTextureView(pixelFormat: sourceTexture.pixelFormat)
-        else { throw self.errorType }
-        try renderLayer.process(commandBuffer: commandBuffer, source: sourceTexture, destination: &destinationTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-    }
-*/
-    func updateTexture(commandBuffer: MTLCommandBuffer, source: MTLTexture, destination: MTLTexture, renderSize: MCSize) {
+
+    func updateTexture(commandBuffer: MTLCommandBuffer, source: MTLTexture, destination: MTLTexture, renderSize: CGSize) {
         ////////////////////////////////////////////////////////////
         //
         var commandBuffer: MTLCommandBuffer = commandBuffer

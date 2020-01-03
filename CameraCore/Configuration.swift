@@ -10,7 +10,7 @@ import AVFoundation
 import Foundation
 
 struct Configuration {
-    public static let defaultVideoCaptureProperty = CCRenderer.VideoCapture.Property(
+    public static let defaultVideoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         deviceType: AVCaptureDevice.DeviceType.builtInDualCamera,
         option: [

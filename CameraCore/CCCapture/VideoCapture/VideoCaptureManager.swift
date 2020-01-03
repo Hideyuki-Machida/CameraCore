@@ -10,7 +10,7 @@ import AVFoundation
 import MetalCanvas
 import UIKit
 
-extension CCRenderer.VideoCapture {
+extension CCCapture.VideoCapture {
     public final class VideoCaptureManager {
         // swiftlint:disable:next nesting
         internal enum ErrorType: Error {
@@ -23,7 +23,7 @@ extension CCRenderer.VideoCapture {
         var captureSession: AVCaptureSession?
         var videoDevice: AVCaptureDevice?
 
-        var property: CCRenderer.VideoCapture.Property = Configuration.defaultVideoCaptureProperty
+        var property: CCCapture.VideoCapture.Property = Configuration.defaultVideoCaptureProperty
 
         public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)? {
             get {
@@ -50,12 +50,12 @@ extension CCRenderer.VideoCapture {
             case audioDataOutput
         }
 
-        public init(property: CCRenderer.VideoCapture.Property) throws {
+        public init(property: CCCapture.VideoCapture.Property) throws {
             self.captureSession = AVCaptureSession()
             try self.setup(property: property)
         }
 
-        func setup(property: CCRenderer.VideoCapture.Property) throws {
+        func setup(property: CCCapture.VideoCapture.Property) throws {
             guard let captureSession: AVCaptureSession = self.captureSession else { return }
             self.property = property
 
@@ -72,8 +72,8 @@ extension CCRenderer.VideoCapture {
 
             //////////////////////////////////////////////////////////
             // AVCaptureDeviceを生成
-            guard let videoDevice: AVCaptureDevice = self.property.captureInfo.device else { throw CCRenderer.VideoCapture.ErrorType.setupError }
-            guard let format: AVCaptureDevice.Format = self.property.captureInfo.deviceFormat else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+            guard let videoDevice: AVCaptureDevice = self.property.captureInfo.device else { throw CCCapture.VideoCapture.ErrorType.setupError }
+            guard let format: AVCaptureDevice.Format = self.property.captureInfo.deviceFormat else { throw CCCapture.VideoCapture.ErrorType.setupError }
             //////////////////////////////////////////////////////////
 
             //////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ extension CCRenderer.VideoCapture {
 
             //////////////////////////////////////////////////////////
             if propertyError {
-                throw CCRenderer.VideoCapture.ErrorType.setupError
+                throw CCCapture.VideoCapture.ErrorType.setupError
             } else {
                 MCDebug.successLog("Video Capture setup")
             }
@@ -163,13 +163,13 @@ extension CCRenderer.VideoCapture {
     }
 }
 
-extension CCRenderer.VideoCapture.VideoCaptureManager {
-    public func update(property: CCRenderer.VideoCapture.Property) throws {
+extension CCCapture.VideoCapture.VideoCaptureManager {
+    public func update(property: CCCapture.VideoCapture.Property) throws {
         try self.setup(property: property)
     }
 }
 
-extension CCRenderer.VideoCapture.VideoCaptureManager {
+extension CCCapture.VideoCapture.VideoCaptureManager {
     // TODO: Torch は ライブでは使っていなかった。。。TorchModeをセットした際にエラーになるケースでUI側からは何が起こったかわからないので後日IFを改修
     public var isTorchActive: Bool {
         get {

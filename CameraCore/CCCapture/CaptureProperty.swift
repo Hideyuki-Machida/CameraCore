@@ -10,7 +10,7 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 
-extension CCRenderer.VideoCapture {
+extension CCCapture.VideoCapture {
     public class Property {
         // swiftlint:disable:next nesting
         public enum Item {
@@ -41,7 +41,7 @@ extension CCRenderer.VideoCapture {
         public var isAudioDataOutput: Bool
         public var required: [Item]
         public var option: [Item]
-        public var captureInfo: CCRenderer.VideoCapture.CaptureInfo = CCRenderer.VideoCapture.CaptureInfo()
+        public var captureInfo: CCCapture.VideoCapture.CaptureInfo = CCCapture.VideoCapture.CaptureInfo()
 
         fileprivate var requiredCaptureSize: MCSize?
 
@@ -55,7 +55,7 @@ extension CCRenderer.VideoCapture {
     }
 }
 
-extension CCRenderer.VideoCapture.Property {
+extension CCCapture.VideoCapture.Property {
     func getDevice(position: AVCaptureDevice.Position, deviceType: AVCaptureDevice.DeviceType, mediaType: AVMediaType = AVMediaType.video) throws -> AVCaptureDevice {
         switch position {
         case .front:
@@ -67,7 +67,7 @@ extension CCRenderer.VideoCapture.Property {
                 return device
             }
         case .unspecified:
-            throw CCRenderer.VideoCapture.ErrorType.setupError
+            throw CCCapture.VideoCapture.ErrorType.setupError
         @unknown default: break
         }
 
@@ -78,31 +78,31 @@ extension CCRenderer.VideoCapture.Property {
             return device
         }
 
-        throw CCRenderer.VideoCapture.ErrorType.setupError
+        throw CCCapture.VideoCapture.ErrorType.setupError
     }
 }
 
-extension CCRenderer.VideoCapture.Property {
+extension CCCapture.VideoCapture.Property {
     public func setup() throws {
         let captureDevice: AVCaptureDevice = try self.getDevice(position: self.devicePosition, deviceType: self.deviceType)
         let formats: [AVCaptureDevice.Format] = captureDevice.formats.filter { $0.mediaType == .video }
 
-        guard formats.count >= 1 else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+        guard formats.count >= 1 else { throw CCCapture.VideoCapture.ErrorType.setupError }
         var resultFormats: [AVCaptureDevice.Format] = formats
 
         //////////////////////////////////////////////////////////
         // 必須のパラメータを設定
-        let required: [CCRenderer.VideoCapture.Property.Item] = self.required
+        let required: [CCCapture.VideoCapture.Property.Item] = self.required
         self.requiredCaptureSize = nil
         for item in required {
             resultFormats = try self.filterProperty(item: item, captureDevice: captureDevice, formats: resultFormats, required: true)
         }
-        guard !resultFormats.isEmpty else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+        guard !resultFormats.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
         //////////////////////////////////////////////////////////
 
         //////////////////////////////////////////////////////////
         // オプションのパラメータを設定
-        let option: [CCRenderer.VideoCapture.Property.Item] = self.option
+        let option: [CCCapture.VideoCapture.Property.Item] = self.option
         for item in option {
             do {
                 resultFormats = try self.filterProperty(item: item, captureDevice: captureDevice, formats: resultFormats, required: false)
@@ -117,14 +117,14 @@ extension CCRenderer.VideoCapture.Property {
         let resultFormat: AVCaptureDevice.Format
         if let requiredCaptureSize: MCSize = self.requiredCaptureSize {
             // 解像度ジャストサイズのものを選択
-            guard let format: AVCaptureDevice.Format = (resultFormats.filter { CMVideoFormatDescriptionGetDimensions($0.formatDescription).width == Int32(requiredCaptureSize.w) }).first else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+            guard let format: AVCaptureDevice.Format = (resultFormats.filter { CMVideoFormatDescriptionGetDimensions($0.formatDescription).width == Int32(requiredCaptureSize.w) }).first else { throw CCCapture.VideoCapture.ErrorType.setupError }
             resultFormat = format
         } else {
             // 解像度最小のもの
             guard let format: AVCaptureDevice.Format = resultFormats.min(by: { first, second in
                 CMVideoFormatDescriptionGetDimensions(first.formatDescription).width < CMVideoFormatDescriptionGetDimensions(second.formatDescription).width
             })
-            else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+            else { throw CCCapture.VideoCapture.ErrorType.setupError }
             resultFormat = format
         }
         //////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ extension CCRenderer.VideoCapture.Property {
         //////////////////////////////////////////////////////////
     }
 
-    fileprivate func filterProperty(item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
+    fileprivate func filterProperty(item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         switch item {
         case let .captureSize(captureSize):
             if required {
@@ -153,7 +153,7 @@ extension CCRenderer.VideoCapture.Property {
         }
     }
 
-    fileprivate func getCaptureSizeFormat(captureSize: Settings.PresetSize, item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
+    fileprivate func getCaptureSizeFormat(captureSize: Settings.PresetSize, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         // AVCaptureDevice.Formatと照合するためのOrientationの適応されていないsizeを取得
         let captureSize: MCSize = captureSize.size(isOrientation: false)
         let width: Float = captureSize.w
@@ -170,11 +170,11 @@ extension CCRenderer.VideoCapture.Property {
             }
         }
 
-        guard !list.isEmpty else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+        guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
         return list
     }
 
-    fileprivate func getFrameRateFormat(frameRate: Settings.PresetFrameRate, item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
+    fileprivate func getFrameRateFormat(frameRate: Settings.PresetFrameRate, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         var list: [AVCaptureDevice.Format] = []
         for format: AVCaptureDevice.Format in formats {
             for range: AVFrameRateRange in format.videoSupportedFrameRateRanges {
@@ -185,50 +185,50 @@ extension CCRenderer.VideoCapture.Property {
             }
         }
 
-        guard !list.isEmpty else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+        guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
         return list
     }
 
-    fileprivate func getColorSpaceFormat(colorSpace: AVCaptureColorSpace, item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
+    fileprivate func getColorSpaceFormat(colorSpace: AVCaptureColorSpace, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         let list: [AVCaptureDevice.Format] = formats.filter {
             let colorSpaces: [AVCaptureColorSpace] = $0.supportedColorSpaces.filter { $0 == colorSpace }
             return !colorSpaces.isEmpty
         }
 
-        guard !list.isEmpty else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+        guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
         return list
     }
 
-    fileprivate func getVideoHDRFormat(on: Bool, item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
+    fileprivate func getVideoHDRFormat(on: Bool, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         if on {
             let list: [AVCaptureDevice.Format] = formats.filter { $0.isVideoHDRSupported == true }
 
-            guard !list.isEmpty else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+            guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
             return list
         } else {
             if required {
                 let list: [AVCaptureDevice.Format] = formats.filter { $0.isVideoHDRSupported == false }
-                guard !list.isEmpty else { throw CCRenderer.VideoCapture.ErrorType.setupError }
+                guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
                 return list
             }
             return formats
         }
     }
 
-    fileprivate func getSmoothAutoFocusEnabledFormat(on: Bool, item: CCRenderer.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
+    fileprivate func getSmoothAutoFocusEnabledFormat(on: Bool, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         if on, required {
             if captureDevice.isSmoothAutoFocusSupported {
-                throw CCRenderer.VideoCapture.ErrorType.setupError
+                throw CCCapture.VideoCapture.ErrorType.setupError
             }
         }
         return formats
     }
 }
 
-extension CCRenderer.VideoCapture.Property {
-    public func swap(property: CCRenderer.VideoCapture.Property.Item) throws {
+extension CCCapture.VideoCapture.Property {
+    public func swap(property: CCCapture.VideoCapture.Property.Item) throws {
         var isUpdate: Bool = false
-        func map(prop: CCRenderer.VideoCapture.Property.Item) -> CCRenderer.VideoCapture.Property.Item {
+        func map(prop: CCCapture.VideoCapture.Property.Item) -> CCCapture.VideoCapture.Property.Item {
             if prop == property {
                 isUpdate = true
                 return property
@@ -240,12 +240,12 @@ extension CCRenderer.VideoCapture.Property {
         self.option = self.option.map { map(prop: $0) }
 
         if !isUpdate {
-            throw CCRenderer.VideoCapture.ErrorType.setupError
+            throw CCCapture.VideoCapture.ErrorType.setupError
         }
     }
 }
 
-extension CCRenderer.VideoCapture.Property {
+extension CCCapture.VideoCapture.Property {
     private func gcd(x: Float, y: Float) -> Float {
         if y == 0 { return x }
         return gcd(x: y, y: x.truncatingRemainder(dividingBy: y))

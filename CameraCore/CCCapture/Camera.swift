@@ -14,7 +14,7 @@ import UIKit
 
 extension CCCapture {
     @objc public class Camera: NSObject {
-        fileprivate(set) public var property: CCRenderer.VideoCapture.Property
+        fileprivate(set) public var property: CCCapture.VideoCapture.Property
         
         public var event: Event?
         public var status: Camera.Status = .setup {
@@ -23,10 +23,10 @@ extension CCCapture {
             }
         }
 
-        public var onUpdate: ((_ currentCaptureItem: CCRenderer.VideoCapture.CaptureData)->Void)?
-        public var capture: CCRenderer.VideoCapture.VideoCaptureManager?
+        public var onUpdate: ((_ currentCaptureItem: CCCapture.VideoCapture.CaptureData)->Void)?
+        public var capture: CCCapture.VideoCapture.VideoCaptureManager?
 
-        public init(_ property: CCRenderer.VideoCapture.Property) throws {
+        public init(_ property: CCCapture.VideoCapture.Property) throws {
             self.property = property
 
             super.init()
@@ -37,12 +37,12 @@ extension CCCapture {
             MCDebug.deinitLog(self)
         }
 
-        public func setup(_ property: CCRenderer.VideoCapture.Property) throws {
+        public func setup(_ property: CCCapture.VideoCapture.Property) throws {
             self.property = property
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
             do {
-                self.capture = try CCRenderer.VideoCapture.VideoCaptureManager(property: property)
+                self.capture = try CCCapture.VideoCapture.VideoCaptureManager(property: property)
             } catch {
                 self.capture = nil
                 throw CCRenderer.ErrorType.setup
@@ -59,7 +59,7 @@ extension CCCapture {
 
                     else { return }
                 
-                let currentCaptureItem: CCRenderer.VideoCapture.CaptureData = CCRenderer.VideoCapture.CaptureData(
+                let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
                     sampleBuffer: sampleBuffer,
                     frameRate: frameRate,
                     depthData: depthData,
@@ -97,7 +97,7 @@ extension CCCapture {
 }
 
 extension CCCapture.Camera {
-    public func update(property: CCRenderer.VideoCapture.Property) throws {
+    public func update(property: CCCapture.VideoCapture.Property) throws {
         try self.capture?.update(property: property)
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // 描画用テクスチャを生成
@@ -119,6 +119,6 @@ extension CCCapture.Camera {
 
     public class Event: NSObject {
         public var onStatusChange: ((_ status: CCCapture.Camera.Status) -> Void)?
-        public var onUpdate: ((_ captureData: CCRenderer.VideoCapture.CaptureData) -> Void)?
+        public var onUpdate: ((_ captureData: CCCapture.VideoCapture.CaptureData) -> Void)?
     }
 }

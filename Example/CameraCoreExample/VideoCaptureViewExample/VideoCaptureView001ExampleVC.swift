@@ -14,7 +14,7 @@ import UIKit
 
 class VideoCaptureView001ExampleVC: UIViewController {
     private var observers = [NSKeyValueObservation]()
-    var videoCaptureProperty = CCRenderer.VideoCapture.Property(
+    var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
         required: [

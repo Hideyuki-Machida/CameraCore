@@ -16,10 +16,10 @@ let drawQueue: DispatchQueue = DispatchQueue(label: "CameraCore.DrawQueue")
 infix operator --> : AdditionPrecedence
 
 @discardableResult
-public func --> (left: CCCapture.Camera, right: CCImageProcessing.PostProcess) -> CCImageProcessing.PostProcess {
-    left.onUpdate = { [weak left, weak right] (currentCaptureItem: CCRenderer.VideoCapture.CaptureData) in
+public func --> (left: CCCapture.Camera, right: CCRenderer.PostProcess) -> CCRenderer.PostProcess {
+    left.onUpdate = { [weak left, weak right] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
         processQueue.async { [weak left, weak right] in
-            guard let left: CCCapture.Camera = left, let right: CCImageProcessing.PostProcess = right, !right.isProcess else { return }
+            guard let left: CCCapture.Camera = left, let right: CCRenderer.PostProcess = right, !right.isProcess else { return }
             let captureSize: MCSize = left.property.captureInfo.presetSize.size(isOrientation: true)
             right.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
             let presentationTimeStamp: CMTime = CMSampleBufferGetPresentationTimeStamp(currentCaptureItem.sampleBuffer)
@@ -35,7 +35,7 @@ public func --> (left: CCCapture.Camera, right: CCImageProcessing.PostProcess) -
 }
 
 @discardableResult
-public func --> (left: CCImageProcessing.PostProcess, right: CCView) -> CCView {
+public func --> (left: CCRenderer.PostProcess, right: CCView) -> CCView {
     do {
         try right.setup()
     } catch {
@@ -75,7 +75,7 @@ public func --> (left: CCCapture.Camera, right: CCView) -> CCView {
         
     }
 
-    left.onUpdate = { [weak left, weak right] (captureData: CCRenderer.VideoCapture.CaptureData) in
+    left.onUpdate = { [weak left, weak right] (captureData: CCCapture.VideoCapture.CaptureData) in
         drawQueue.async { [weak left, weak right] in
             guard var pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
             let presentationTimeStamp: CMTime = CMSampleBufferGetPresentationTimeStamp(captureData.sampleBuffer)

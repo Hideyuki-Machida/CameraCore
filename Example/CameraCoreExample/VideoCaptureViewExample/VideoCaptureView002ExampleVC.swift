@@ -18,10 +18,10 @@ class VideoCaptureView002ExampleVC: UIViewController {
     @IBOutlet weak var drawView: CCView!
     
     private var camera: CCCapture.Camera?
-    private var postProcess: CCImageProcessing.PostProcess?
+    private var postProcess: CCRenderer.PostProcess?
     private var lutLayer: CCImageProcessing.LutLayer!
 
-    var videoCaptureProperty = CCRenderer.VideoCapture.Property(
+    var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
         required: [
@@ -57,7 +57,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
-            let postProcess: CCImageProcessing.PostProcess = CCImageProcessing.PostProcess()
+            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess()
             camera --> postProcess --> self.drawView
             camera.event = event
             camera.play()

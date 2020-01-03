@@ -10,7 +10,7 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 
-extension CCRenderer.VideoCapture {
+extension CCCapture.VideoCapture {
     final class VideoCaptureOutput: NSObject {
         fileprivate let videoOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.VideoQueue")
         fileprivate let audioOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.AudioQueue")
@@ -27,7 +27,7 @@ extension CCRenderer.VideoCapture {
             MCDebug.deinitLog(self)
         }
 
-        internal func set(videoDevice: AVCaptureDevice, captureSession: AVCaptureSession, property: CCRenderer.VideoCapture.Property) throws {
+        internal func set(videoDevice: AVCaptureDevice, captureSession: AVCaptureSession, property: CCCapture.VideoCapture.Property) throws {
             let devicePosition: AVCaptureDevice.Position = property.captureInfo.devicePosition
 
             var dataOutputs: [AVCaptureOutput] = []
@@ -49,7 +49,7 @@ extension CCRenderer.VideoCapture {
                     dataOutputs.append(videoDataOutput)
                 } else {
                     MCDebug.errorLog("AVCaptureVideoDataOutputConnection")
-                    throw CCRenderer.VideoCapture.VideoCaptureManager.ErrorType.setupError
+                    throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
                 }
             }
             //////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ extension CCRenderer.VideoCapture {
             if property.isAudioDataOutput {
                 //////////////////////////////////////////////////////////
                 // AVCaptureAudioDataOutput
-                guard let audioDevice: AVCaptureDevice = AVCaptureDevice.default(for: AVMediaType.audio) else { throw CCRenderer.VideoCapture.VideoCaptureManager.ErrorType.setupError }
+                guard let audioDevice: AVCaptureDevice = AVCaptureDevice.default(for: AVMediaType.audio) else { throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError }
                 let audioInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: audioDevice)
                 let audioDataOutput: AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
                 if captureSession.canAddInput(audioInput), captureSession.canAddOutput(audioDataOutput) {
@@ -70,7 +70,7 @@ extension CCRenderer.VideoCapture {
                         dataOutputs.append(audioDataOutput)
                     } else {
                         MCDebug.errorLog("AVCaptureAudioDataOutputConnection")
-                        throw CCRenderer.VideoCapture.VideoCaptureManager.ErrorType.setupError
+                        throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
                     }
                 }
                 //////////////////////////////////////////////////////////
@@ -82,14 +82,14 @@ extension CCRenderer.VideoCapture {
     }
 }
 
-extension CCRenderer.VideoCapture.VideoCaptureOutput {
+extension CCCapture.VideoCapture.VideoCaptureOutput {
     @objc private func orientationDidChange(_ notification: Notification) {
         guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
         connection.videoOrientation = Settings.captureVideoOrientation
     }
 }
 
-extension CCRenderer.VideoCapture.VideoCaptureOutput {
+extension CCCapture.VideoCapture.VideoCaptureOutput {
     /// AVCaptureVideoDataOutputを生成
     fileprivate func createVideoDataOutput() -> AVCaptureVideoDataOutput {
         let videoDataOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
@@ -102,7 +102,7 @@ extension CCRenderer.VideoCapture.VideoCaptureOutput {
     }
 }
 
-extension CCRenderer.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
+extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         self.onUpdate?(sampleBuffer, nil, nil)
     }

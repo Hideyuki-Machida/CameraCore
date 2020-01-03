@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CCRenderer {
+extension CCCapture {
     public struct VideoCapture {
         private init() {} /* このstructはnamespace用途なのでインスタンス化防止 */
         

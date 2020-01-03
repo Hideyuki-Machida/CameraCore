@@ -12,7 +12,7 @@ import Foundation
 import MetalCanvas
 import MetalPerformanceShaders
 
-extension CCRenderer.VideoCapture {
+extension CCCapture.VideoCapture {
     public struct CaptureData {
         let sampleBuffer: CMSampleBuffer
         let frameRate: Int32

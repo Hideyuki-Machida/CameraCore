@@ -13,7 +13,7 @@ import MetalCanvas
 
 // モジュールテスト用
 // TODO: テスト用のためのClass。本番使用時には再設計 & レビューが必要
-extension CCRenderer.VideoCapture {
+extension CCRecorder {
     public final class CaptureWriter {
         // swiftlint:disable:next nesting
         public struct Parameter {
@@ -284,7 +284,7 @@ extension CCRenderer.VideoCapture {
     }
 }
 
-extension CCRenderer.VideoCapture.CaptureWriter {
+extension CCRecorder.CaptureWriter {
     fileprivate static func getCaptureSize(parameter: Parameter) -> CGSize {
         if let croppingRect: CGRect = parameter.croppingRect {
             return croppingRect.size

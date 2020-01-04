@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MetalCanvas
 
 class LUTFilterUtils: NSObject {
 	static func generateLUTFilterCubeData(lutImage: UIImage, dimension: Int) -> NSData? {
@@ -89,7 +90,7 @@ class LUTFilterUtils: NSObject {
 						//let a: Double = Double(bitmap[bitmapOffest + 3]) * div_255
 						
 						let dataOffset = (z * dimension * dimension + y * dimension + x) * 4
-						Debug.ActionLog("r: \(bitmap[bitmapOffest + 1])")
+						MCDebug.log("r: \(bitmap[bitmapOffest + 1])")
 						data[dataOffset] = Float(r)
 						data[dataOffset + 1] = Float(g)
 						data[dataOffset + 2] = Float(b)

@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import CameraCore
+import MetalCanvas
 
 class CameraRollManagerVideoPreviewVC: UIViewController {
 
@@ -18,7 +19,7 @@ class CameraRollManagerVideoPreviewVC: UIViewController {
 	private var player : AVPlayer! = AVPlayer()
 
     deinit {
-        Debug.DeinitLog(self)
+        MCDebug.deinitLog(self)
     }
     
 	override func viewDidAppear(_ animated: Bool) {

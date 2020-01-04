@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
+import MetalCanvas
 
 public final class SoundUtils {
 	public static let shared = SoundUtils()
@@ -32,7 +33,7 @@ public final class SoundUtils {
 			
 			//self.ffmpeg(url: url)
 		} catch {
-			Debug.ActionLog(url)
+			MCDebug.log(url)
 		}
 		return 0
 	}

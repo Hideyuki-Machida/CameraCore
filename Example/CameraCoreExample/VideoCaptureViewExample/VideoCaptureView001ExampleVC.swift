@@ -13,7 +13,6 @@ import MetalCanvas
 import UIKit
 
 class VideoCaptureView001ExampleVC: UIViewController {
-    private var observers = [NSKeyValueObservation]()
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,

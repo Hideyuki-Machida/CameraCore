@@ -18,7 +18,7 @@ extension CCRenderer.ARRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.FaceMetaDataRendererQueue")
 
 		fileprivate var canvas: MCCanvas?
-		public fileprivate(set) var texture: MCTexture?
+		public fileprivate(set) var texture: CCTexture?
 		fileprivate(set) var faces: [MCVision.Detection.Face.Item] = []
 		
 		public init() {}
@@ -26,10 +26,10 @@ extension CCRenderer.ARRenderer {
 		public func update(commandBuffer: inout MTLCommandBuffer, metadataFaceObjects: [AVMetadataFaceObject], pixelBuffer: inout CVPixelBuffer, renderSize: CGSize) throws {
 			//////////////////////////////////////////////////////////
 			// outTexture canvas 生成
-			var outTexture: MCTexture
+			var outTexture: CCTexture
 			if self.texture == nil {
 				guard var newImageBuffer: CVPixelBuffer = CVPixelBuffer.create(size: renderSize) else { return }
-				outTexture = try MCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+				outTexture = try CCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
 				//self.canvas = try MCCanvas.init(destination: &outTexture, orthoType: .topLeft, loadAction: MTLLoadAction.clear)
 				self.canvas = try MCCanvas.init(destination: &outTexture, orthoType: .perspective, loadAction: MTLLoadAction.clear)
 			} else {

@@ -12,9 +12,7 @@ import MetalCanvas
 
 extension CCCapture.VideoCapture {
     public class Property {
-        // swiftlint:disable:next nesting
         public enum Item {
-            // swiftlint:disable:previous nesting
             case captureSize(Settings.PresetSize)
             case frameRate(Settings.PresetFrameRate)
             case colorSpace(AVCaptureColorSpace)
@@ -39,16 +37,18 @@ extension CCCapture.VideoCapture {
         public var devicePosition: AVCaptureDevice.Position
         public var deviceType: AVCaptureDevice.DeviceType
         public var isAudioDataOutput: Bool
+        public var captureVideoOrientation: AVCaptureVideoOrientation?
         public var required: [Item]
         public var option: [Item]
         public var captureInfo: CCCapture.VideoCapture.CaptureInfo = CCCapture.VideoCapture.CaptureInfo()
 
         fileprivate var requiredCaptureSize: MCSize?
 
-        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, required: [Item] = [], option: [Item] = []) {
+        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, captureVideoOrientation: AVCaptureVideoOrientation? = nil, required: [Item] = [], option: [Item] = []) {
             self.devicePosition = devicePosition
             self.deviceType = deviceType
             self.isAudioDataOutput = isAudioDataOutput
+            self.captureVideoOrientation = captureVideoOrientation
             self.required = required
             self.option = option
         }
@@ -67,7 +67,7 @@ extension CCCapture.VideoCapture.Property {
                 return device
             }
         case .unspecified:
-            throw CCCapture.VideoCapture.ErrorType.setupError
+            throw CCCapture.ErrorType.setup
         @unknown default: break
         }
 
@@ -78,7 +78,7 @@ extension CCCapture.VideoCapture.Property {
             return device
         }
 
-        throw CCCapture.VideoCapture.ErrorType.setupError
+        throw CCCapture.ErrorType.setup
     }
 }
 
@@ -87,7 +87,7 @@ extension CCCapture.VideoCapture.Property {
         let captureDevice: AVCaptureDevice = try self.getDevice(position: self.devicePosition, deviceType: self.deviceType)
         let formats: [AVCaptureDevice.Format] = captureDevice.formats.filter { $0.mediaType == .video }
 
-        guard formats.count >= 1 else { throw CCCapture.VideoCapture.ErrorType.setupError }
+        guard formats.count >= 1 else { throw CCCapture.ErrorType.setup }
         var resultFormats: [AVCaptureDevice.Format] = formats
 
         //////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ extension CCCapture.VideoCapture.Property {
         for item in required {
             resultFormats = try self.filterProperty(item: item, captureDevice: captureDevice, formats: resultFormats, required: true)
         }
-        guard !resultFormats.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
+        guard !resultFormats.isEmpty else { throw CCCapture.ErrorType.setup }
         //////////////////////////////////////////////////////////
 
         //////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ extension CCCapture.VideoCapture.Property {
             guard let format: AVCaptureDevice.Format = resultFormats.min(by: { first, second in
                 CMVideoFormatDescriptionGetDimensions(first.formatDescription).width < CMVideoFormatDescriptionGetDimensions(second.formatDescription).width
             })
-            else { throw CCCapture.VideoCapture.ErrorType.setupError }
+            else { throw CCCapture.ErrorType.setup }
             resultFormat = format
         }
         //////////////////////////////////////////////////////////
@@ -139,7 +139,8 @@ extension CCCapture.VideoCapture.Property {
         switch item {
         case let .captureSize(captureSize):
             if required {
-                self.requiredCaptureSize = captureSize.size(isOrientation: false)
+                // AVCaptureDevice.Formatと照合するためのOrientationの適応されていないsizeを取得
+                self.requiredCaptureSize = captureSize.size(orientation: Configuration.shared.defaultDeviceFormatVideoOrientation)
             }
             return try self.getCaptureSizeFormat(captureSize: captureSize, item: item, captureDevice: captureDevice, formats: formats, required: required)
         case let .frameRate(frameRate):
@@ -155,7 +156,7 @@ extension CCCapture.VideoCapture.Property {
 
     fileprivate func getCaptureSizeFormat(captureSize: Settings.PresetSize, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         // AVCaptureDevice.Formatと照合するためのOrientationの適応されていないsizeを取得
-        let captureSize: MCSize = captureSize.size(isOrientation: false)
+        let captureSize: MCSize = captureSize.size(orientation: Configuration.shared.defaultDeviceFormatVideoOrientation)
         let width: Float = captureSize.w
         let height: Float = captureSize.h
 
@@ -170,7 +171,7 @@ extension CCCapture.VideoCapture.Property {
             }
         }
 
-        guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
+        guard !list.isEmpty else { throw CCCapture.ErrorType.setup }
         return list
     }
 
@@ -185,7 +186,7 @@ extension CCCapture.VideoCapture.Property {
             }
         }
 
-        guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
+        guard !list.isEmpty else { throw CCCapture.ErrorType.setup }
         return list
     }
 
@@ -195,7 +196,7 @@ extension CCCapture.VideoCapture.Property {
             return !colorSpaces.isEmpty
         }
 
-        guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
+        guard !list.isEmpty else { throw CCCapture.ErrorType.setup }
         return list
     }
 
@@ -203,12 +204,12 @@ extension CCCapture.VideoCapture.Property {
         if on {
             let list: [AVCaptureDevice.Format] = formats.filter { $0.isVideoHDRSupported == true }
 
-            guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
+            guard !list.isEmpty else { throw CCCapture.ErrorType.setup }
             return list
         } else {
             if required {
                 let list: [AVCaptureDevice.Format] = formats.filter { $0.isVideoHDRSupported == false }
-                guard !list.isEmpty else { throw CCCapture.VideoCapture.ErrorType.setupError }
+                guard !list.isEmpty else { throw CCCapture.ErrorType.setup }
                 return list
             }
             return formats
@@ -218,7 +219,7 @@ extension CCCapture.VideoCapture.Property {
     fileprivate func getSmoothAutoFocusEnabledFormat(on: Bool, item: CCCapture.VideoCapture.Property.Item, captureDevice: AVCaptureDevice, formats: [AVCaptureDevice.Format], required: Bool) throws -> [AVCaptureDevice.Format] {
         if on, required {
             if captureDevice.isSmoothAutoFocusSupported {
-                throw CCCapture.VideoCapture.ErrorType.setupError
+                throw CCCapture.ErrorType.setup
             }
         }
         return formats
@@ -240,7 +241,7 @@ extension CCCapture.VideoCapture.Property {
         self.option = self.option.map { map(prop: $0) }
 
         if !isUpdate {
-            throw CCCapture.VideoCapture.ErrorType.setupError
+            throw CCCapture.ErrorType.setup
         }
     }
 }

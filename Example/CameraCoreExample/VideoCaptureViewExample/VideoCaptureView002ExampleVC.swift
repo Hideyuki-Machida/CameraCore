@@ -57,8 +57,9 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
-            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess()
-            camera --> postProcess --> self.drawView
+            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess(isDisplayLink: true)
+
+            try camera --> postProcess --> self.drawView
             camera.event = event
             camera.play()
             self.camera = camera
@@ -380,7 +381,7 @@ extension VideoCaptureView002ExampleVC {
 
         let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
-            self.postProcess?.renderLayers = []
+            self.postProcess?.renderLayers = [self.lutLayer]
         })
 
         let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {

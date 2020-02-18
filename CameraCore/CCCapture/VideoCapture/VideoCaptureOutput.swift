@@ -12,38 +12,42 @@ import MetalCanvas
 
 extension CCCapture.VideoCapture {
     final class VideoCaptureOutput: NSObject {
-        fileprivate let videoOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.VideoQueue")
-        fileprivate let audioOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.AudioQueue")
-        fileprivate let depthOutputQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
         fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
 
         fileprivate(set) var videoDataOutput: AVCaptureVideoDataOutput?
         fileprivate(set) var audioDataOutput: AVCaptureAudioDataOutput?
 
-        var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
+        fileprivate(set) var captureVideoOrientation: AVCaptureVideoOrientation?
+
+        var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
 
         deinit {
             NotificationCenter.default.removeObserver(self)
             MCDebug.deinitLog(self)
         }
 
-        internal func set(videoDevice: AVCaptureDevice, captureSession: AVCaptureSession, property: CCCapture.VideoCapture.Property) throws {
+        func set(videoDevice: AVCaptureDevice, captureSession: AVCaptureSession, property: CCCapture.VideoCapture.Property) throws {
             let devicePosition: AVCaptureDevice.Position = property.captureInfo.devicePosition
 
             var dataOutputs: [AVCaptureOutput] = []
+            self.captureVideoOrientation = property.captureVideoOrientation
 
             //////////////////////////////////////////////////////////
             // AVCaptureVideoDataOutput
             let videoDataInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
             let videoDataOutput: AVCaptureVideoDataOutput = self.createVideoDataOutput()
             if captureSession.canAddInput(videoDataInput), captureSession.canAddOutput(videoDataOutput) {
-                videoDataOutput.setSampleBufferDelegate(self, queue: self.videoOutputQueue)
+                videoDataOutput.setSampleBufferDelegate(self, queue: CCCapture.videoOutputQueue)
                 captureSession.addInput(videoDataInput)
                 captureSession.addOutput(videoDataOutput)
                 if let connection: AVCaptureConnection = videoDataOutput.connection(with: .video) {
                     connection.isEnabled = true
                     connection.isVideoMirrored = devicePosition == .front ? true : false
-                    connection.videoOrientation = Settings.captureVideoOrientation
+
+                    if let captureVideoOrientation: AVCaptureVideoOrientation = self.captureVideoOrientation {
+                        // captureVideoOrientation が固定の場合
+                        connection.videoOrientation = captureVideoOrientation
+                    }
 
                     self.videoDataOutput = videoDataOutput
                     dataOutputs.append(videoDataOutput)
@@ -61,7 +65,7 @@ extension CCCapture.VideoCapture {
                 let audioInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: audioDevice)
                 let audioDataOutput: AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
                 if captureSession.canAddInput(audioInput), captureSession.canAddOutput(audioDataOutput) {
-                    audioDataOutput.setSampleBufferDelegate(self, queue: self.audioOutputQueue)
+                    audioDataOutput.setSampleBufferDelegate(self, queue: CCCapture.audioOutputQueue)
                     captureSession.addInput(audioInput)
                     captureSession.addOutput(audioDataOutput)
                     if let connection: AVCaptureConnection = audioDataOutput.connection(with: .audio) {
@@ -76,26 +80,40 @@ extension CCCapture.VideoCapture {
                 //////////////////////////////////////////////////////////
             }
 
-            NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+
+            self.setVideoOrientation()
         }
     }
 }
 
-extension CCCapture.VideoCapture.VideoCaptureOutput {
-    @objc private func orientationDidChange(_ notification: Notification) {
+private extension CCCapture.VideoCapture.VideoCaptureOutput {
+    @objc func orientationDidChange(_ notification: Notification) {
+        self.setVideoOrientation()
+    }
+
+    func setVideoOrientation() {
+        guard self.captureVideoOrientation == nil else { return }
+        // captureVideoOrientation が固定ではない
         guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
-        connection.videoOrientation = Settings.captureVideoOrientation
+        DispatchQueue.main.async {
+            // UIApplication.shared.statusBarOrientation.toAVCaptureVideoOrientation はメインスレッドからしか呼べない
+            guard
+                let captureVideoOrientation: AVCaptureVideoOrientation = UIApplication.shared.statusBarOrientation.toAVCaptureVideoOrientation
+            else { return }
+            connection.videoOrientation = captureVideoOrientation
+        }
     }
 }
 
-extension CCCapture.VideoCapture.VideoCaptureOutput {
+private extension CCCapture.VideoCapture.VideoCaptureOutput {
     /// AVCaptureVideoDataOutputを生成
-    fileprivate func createVideoDataOutput() -> AVCaptureVideoDataOutput {
+    func createVideoDataOutput() -> AVCaptureVideoDataOutput {
         let videoDataOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
         videoDataOutput.videoSettings = [
-            kCVPixelBufferPixelFormatTypeKey as String: Configuration.outputPixelBufferPixelFormatTypeKey,
+            kCVPixelBufferPixelFormatTypeKey as String: Configuration.shared.outputPixelBufferPixelFormatTypeKey,
         ]
 
         return videoDataOutput
@@ -104,6 +122,8 @@ extension CCCapture.VideoCapture.VideoCaptureOutput {
 
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        self.onUpdate?(sampleBuffer, nil, nil)
+        guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
+        self.onUpdate?(sampleBuffer, connection.videoOrientation, nil, nil)
     }
 }
+

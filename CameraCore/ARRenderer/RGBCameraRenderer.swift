@@ -13,10 +13,10 @@ import MetalCanvas
 /*
 extension CCRenderer.ARRenderer {
 	class RGBCameraRenderer {
-		fileprivate(set) var texture: MCTexture?
+		fileprivate(set) var texture: CCTexture?
 		
 		fileprivate var renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
-		fileprivate var rgbOutTexture: MCTexture?
+		fileprivate var rgbOutTexture: CCTexture?
 		fileprivate let colorSpaceYCbCrToRGB: MCFilter.ColorSpace.YCbCrToRGB = MCFilter.ColorSpace.YCbCrToRGB()
 		fileprivate var image: MCPrimitive.Image?
 		fileprivate var canvas: MCCanvas?
@@ -30,13 +30,13 @@ extension CCRenderer.ARRenderer {
 			guard CVPixelBufferGetPlaneCount(pixelBuffer) >= 2 else { return }
 			//////////////////////////////////////////////////////////
 			// YCbCr → RGB 変換
-			var capturedImageTextureY: MCTexture = try MCTexture.init(pixelBuffer: &pixelBuffer, colorPixelFormat: .r8Unorm, planeIndex: 0)
-			var capturedImageTextureCbCr: MCTexture = try MCTexture.init(pixelBuffer: &pixelBuffer, colorPixelFormat: .rg8Unorm, planeIndex: 1)
+			var capturedImageTextureY: CCTexture = try CCTexture.init(pixelBuffer: &pixelBuffer, colorPixelFormat: .r8Unorm, planeIndex: 0)
+			var capturedImageTextureCbCr: CCTexture = try CCTexture.init(pixelBuffer: &pixelBuffer, colorPixelFormat: .rg8Unorm, planeIndex: 1)
 			
-			var rgbOutTexture: MCTexture
+			var rgbOutTexture: CCTexture
 			if self.rgbOutTexture == nil {
 				guard var rgbOutImageBuffer: CVImageBuffer = CVImageBuffer.create(size: CGSize.init(width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))) else { return }
-				rgbOutTexture = try MCTexture.init(pixelBuffer: &rgbOutImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+				rgbOutTexture = try CCTexture.init(pixelBuffer: &rgbOutImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
 				self.renderPassDescriptor.colorAttachments[0].texture = rgbOutTexture.texture
 				self.rgbOutTexture = rgbOutTexture
 			} else {
@@ -44,10 +44,10 @@ extension CCRenderer.ARRenderer {
 				//try self.canvas?.update(destination: &destinationTexture)
 			}
 			
-			var outTexture: MCTexture
+			var outTexture: CCTexture
 			if self.texture == nil {
 				guard var outImageBuffer: CVImageBuffer = CVImageBuffer.create(size: renderSize) else { return }
-				outTexture = try MCTexture.init(pixelBuffer: &outImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+				outTexture = try CCTexture.init(pixelBuffer: &outImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
 				self.canvas = try MCCanvas.init(destination: &outTexture, orthoType: .topLeft)
 			} else {
 				outTexture = self.texture!

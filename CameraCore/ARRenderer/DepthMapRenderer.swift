@@ -17,7 +17,7 @@ extension CCRenderer.ARRenderer {
 	public class DepthMapRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.depthDataMapUpdateQueue")
 		
-		public fileprivate(set) var texture: MCTexture?
+		public fileprivate(set) var texture: CCTexture?
 		
 		fileprivate var canvas: MCCanvas?
 		fileprivate var renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
@@ -41,14 +41,14 @@ extension CCRenderer.ARRenderer {
 			print("kCVPixelFormatType_DepthFloat16: \(depthData.depthDataType == kCVPixelFormatType_DepthFloat16)")
 			print("kCVPixelFormatType_DepthFloat32: \(depthData.depthDataType == kCVPixelFormatType_DepthFloat32)")
 
-			let depthDataMapTexture: MCTexture = try MCTexture.init(pixelBuffer: &depthDataMap, colorPixelFormat: .bgra8Unorm, planeIndex: 0)
+			let depthDataMapTexture: CCTexture = try CCTexture.init(pixelBuffer: &depthDataMap, colorPixelFormat: .bgra8Unorm, planeIndex: 0)
 			
 			//////////////////////////////////////////////////////////
 			// outTexture canvas 生成
-			var outTexture: MCTexture
+			var outTexture: CCTexture
 			if self.texture == nil {
 				guard var newImageBuffer: CVImageBuffer = CVImageBuffer.create(size: renderSize) else { return }
-				outTexture = try MCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+				outTexture = try CCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
 				self.canvas = try MCCanvas.init(destination: &outTexture, orthoType: .topLeft)
 			} else {
 				outTexture = self.texture!

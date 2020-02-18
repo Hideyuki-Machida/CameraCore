@@ -23,7 +23,7 @@ public extension CCImageProcessing {
         private let contentMode: CompositionImageLayerContentMode
         private var contentModeTransform: CGAffineTransform?
         private var _image: CIImage?
-        private var overTexture: MCTexture?
+        private var overTexture: CCTexture?
 
         public convenience init(imagePath: URL, blendMode: Blendmode, alpha: CGFloat = 1.0, renderSize: CGSize, contentMode: CompositionImageLayerContentMode = .none, transform: CGAffineTransform? = nil) {
             self.init(id: RenderLayerId(), imagePath: imagePath, blendMode: blendMode, alpha: alpha, renderSize: renderSize, contentMode: contentMode, transform: transform)
@@ -46,7 +46,7 @@ public extension CCImageProcessing {
 }
 
 public extension CCImageProcessing.ImageLayer {
-    func process(commandBuffer: MTLCommandBuffer, source: MCTexture, destination: inout MCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+    func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard var inputImage: CIImage = CIImage(mtlTexture: source.texture, options: nil) else { throw RenderLayerErrorType.renderingError }
         inputImage = try self.process(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
         let colorSpace: CGColorSpace = inputImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()

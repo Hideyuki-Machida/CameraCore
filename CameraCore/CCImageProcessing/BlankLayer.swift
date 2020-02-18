@@ -28,5 +28,5 @@ public extension CCImageProcessing {
 }
 
 public extension CCImageProcessing.BlankLayer {
-    func process(commandBuffer: MTLCommandBuffer, source: MCTexture, destination: inout MCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
+    func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
 }

@@ -47,7 +47,7 @@ public extension CCImageProcessing {
 }
 
 public extension CCImageProcessing.SequenceImageLayer {
-    func process(commandBuffer: MTLCommandBuffer, source: MCTexture, destination: inout MCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+    func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard
             !self.imagePaths.isEmpty,
             var inputImage: CIImage = CIImage(mtlTexture: source.texture, options: nil)
@@ -65,7 +65,7 @@ fileprivate extension CCImageProcessing.SequenceImageLayer {
 
         // フィルターイメージ生成
         let counter: Int = Int(floorf(imageCounter)) % self.imagePaths.count
-        var filterImage: CIImage = try self.filterImage(count: counter, renderSize: renderLayerCompositionInfo.renderSize.toCGSize())
+        var filterImage: CIImage = try self.filterImage(count: counter, renderSize: renderLayerCompositionInfo.renderSize)
 
         // 上下反転
         filterImage = filterImage.transformed(by: CGAffineTransform(scaleX: 1, y: -1.0).translatedBy(x: 0, y: -CGFloat(filterImage.extent.height)))
@@ -89,7 +89,7 @@ fileprivate extension CCImageProcessing.SequenceImageLayer {
 
     // MARK: - Private -
 
-    func filterImage(count: Int, renderSize: CGSize) throws -> CIImage {
+    func filterImage(count: Int, renderSize: MCSize) throws -> CIImage {
         // フィルターイメージ作成
         if let filter: CIImage = self.filterCacheImageList[count] {
             return filter
@@ -100,7 +100,8 @@ fileprivate extension CCImageProcessing.SequenceImageLayer {
     }
 
     /// フィルタイメージ生成・取得
-    func loadFilterImage(count: Int, renderSize: CGSize) throws -> CIImage {
+    func loadFilterImage(count: Int, renderSize: MCSize) throws -> CIImage {
+        let renderSize: CGSize = renderSize.toCGSize()
         // フィルターイメージ作成
         guard self.imagePaths.indices.contains(count) else { throw RenderLayerErrorType.renderingError }
         let imagePath: URL = self.imagePaths[count]

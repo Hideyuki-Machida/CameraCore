@@ -12,9 +12,7 @@ import UIKit
 
 extension CCCapture.VideoCapture {
     public final class VideoCaptureManager {
-        // swiftlint:disable:next nesting
         internal enum ErrorType: Error {
-            // swiftlint:disable:previous nesting
             case setupError
         }
 
@@ -23,9 +21,9 @@ extension CCCapture.VideoCapture {
         var captureSession: AVCaptureSession?
         var videoDevice: AVCaptureDevice?
 
-        var property: CCCapture.VideoCapture.Property = Configuration.defaultVideoCaptureProperty
+        var property: CCCapture.VideoCapture.Property = CCCapture.VideoCapture.Property()
 
-        public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)? {
+        public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)? {
             get {
                 return self.captureOutput.onUpdate
             }
@@ -42,9 +40,7 @@ extension CCCapture.VideoCapture {
                 .filter { $0.device.hasMediaType(AVMediaType.video) }.first
         }
 
-        // swiftlint:disable:next nesting
         internal enum VideoSettingError: Error {
-            // swiftlint:disable:previous nesting
             case captureSetting
             case videoDataOutput
             case audioDataOutput
@@ -72,8 +68,8 @@ extension CCCapture.VideoCapture {
 
             //////////////////////////////////////////////////////////
             // AVCaptureDeviceを生成
-            guard let videoDevice: AVCaptureDevice = self.property.captureInfo.device else { throw CCCapture.VideoCapture.ErrorType.setupError }
-            guard let format: AVCaptureDevice.Format = self.property.captureInfo.deviceFormat else { throw CCCapture.VideoCapture.ErrorType.setupError }
+            guard let videoDevice: AVCaptureDevice = self.property.captureInfo.device else { throw CCCapture.ErrorType.setup }
+            guard let format: AVCaptureDevice.Format = self.property.captureInfo.deviceFormat else { throw CCCapture.ErrorType.setup }
             //////////////////////////////////////////////////////////
 
             //////////////////////////////////////////////////////////
@@ -135,7 +131,7 @@ extension CCCapture.VideoCapture {
 
             //////////////////////////////////////////////////////////
             if propertyError {
-                throw CCCapture.VideoCapture.ErrorType.setupError
+                throw CCCapture.ErrorType.setup
             } else {
                 MCDebug.successLog("Video Capture setup")
             }
@@ -176,7 +172,7 @@ extension CCCapture.VideoCapture.VideoCaptureManager {
             return self.videoDevice?.isTorchActive ?? false
         }
         set {
-            let errorMessage: String = "CCRenderer.VideoCapture.VideoCaptureManager.isTorchActive: set"
+            let errorMessage: String = "CCCapture.VideoCapture.VideoCaptureManager.isTorchActive: set"
             guard
                 let device: AVCaptureDevice = self.videoDevice,
                 let torchMode: AVCaptureDevice.TorchMode = newValue ? .on : .off,
@@ -206,7 +202,7 @@ extension CCCapture.VideoCapture.VideoCaptureManager {
                 self.videoDevice?.videoZoomFactor = newValue
                 self.videoDevice?.unlockForConfiguration()
             } catch {
-                MCDebug.errorLog("CCRenderer.VideoCapture.VideoCaptureManager.zoom: set")
+                MCDebug.errorLog("CCCapture.VideoCapture.VideoCaptureManager.zoom: set")
             }
         }
     }

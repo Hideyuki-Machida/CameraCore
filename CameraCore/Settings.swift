@@ -52,13 +52,9 @@ public class Settings {
             }
         }
 
-        public func size(isOrientation: Bool = true) -> MCSize {
-            if isOrientation {
-                let currentOrientation: AVCaptureVideoOrientation = Settings.captureVideoOrientation
-                return size(orientation: currentOrientation)
-            } else {
-                return self.landscapeSize
-            }
+        public func size(orientation: UIInterfaceOrientation) -> MCSize {
+            let currentOrientation: AVCaptureVideoOrientation = orientation.toAVCaptureVideoOrientation ?? Configuration.shared.defaultAVCaptureVideoOrientation
+            return size(orientation: currentOrientation)
         }
 
         fileprivate var portraitSize: MCSize {
@@ -101,7 +97,7 @@ public class Settings {
         public var val: AVVideoCodecType {
             switch self {
             case .h264: return AVVideoCodecType.h264
-            case .hevc: return MetalCanvas.MCTools.shard.hasHEVCHardwareEncoder ? AVVideoCodecType.hevc : AVVideoCodecType.h264
+            case .hevc: return MetalCanvas.MCTools.shared.hasHEVCHardwareEncoder ? AVVideoCodecType.hevc : AVVideoCodecType.h264
             }
         }
     }
@@ -109,20 +105,5 @@ public class Settings {
     public enum RenderType: Int, Codable {
         case openGL = 0
         case metal = 1
-    }
-
-    private static var stockCaptureVideoOrientation: AVCaptureVideoOrientation = AVCaptureVideoOrientation.portrait
-    public static var captureVideoOrientation: AVCaptureVideoOrientation {
-        switch UIDevice.current.orientation {
-        case .unknown: break
-        case .portrait: self.stockCaptureVideoOrientation = AVCaptureVideoOrientation.portrait
-        case .portraitUpsideDown: break
-        case .landscapeLeft: self.stockCaptureVideoOrientation = AVCaptureVideoOrientation.landscapeRight
-        case .landscapeRight: self.stockCaptureVideoOrientation = AVCaptureVideoOrientation.landscapeLeft
-        case .faceUp: break
-        case .faceDown: break
-        @unknown default: break
-        }
-        return self.stockCaptureVideoOrientation
     }
 }

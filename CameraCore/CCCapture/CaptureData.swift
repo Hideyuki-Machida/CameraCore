@@ -15,19 +15,21 @@ import MetalPerformanceShaders
 extension CCCapture.VideoCapture {
     public struct CaptureData {
         let sampleBuffer: CMSampleBuffer
-        let frameRate: Int32
+        let captureInfo: CCCapture.VideoCapture.CaptureInfo
         let depthData: AVDepthData?
         let metadataObjects: [AVMetadataObject]?
-        let captureSize: MCSize
         let colorPixelFormat: MTLPixelFormat
+        let presentationTimeStamp: CMTime
+        let captureVideoOrientation: AVCaptureVideoOrientation
 
-        internal init(sampleBuffer: CMSampleBuffer, frameRate: Int32, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, captureSize: MCSize, colorPixelFormat: MTLPixelFormat) {
+        internal init(sampleBuffer: CMSampleBuffer, captureInfo: CCCapture.VideoCapture.CaptureInfo, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, colorPixelFormat: MTLPixelFormat, captureVideoOrientation: AVCaptureVideoOrientation) {
             self.sampleBuffer = sampleBuffer
-            self.frameRate = frameRate
+            self.captureInfo = captureInfo
             self.depthData = depthData
             self.metadataObjects = metadataObjects
-            self.captureSize = captureSize
             self.colorPixelFormat = colorPixelFormat
+            self.presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+            self.captureVideoOrientation = captureVideoOrientation
         }
     }
 }

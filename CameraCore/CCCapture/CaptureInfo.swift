@@ -12,13 +12,13 @@ import MetalCanvas
 
 extension CCCapture.VideoCapture {
     public class CaptureInfo {
-        private let traceQueue: DispatchQueue = DispatchQueue(label: "CCRenderer.VideoCapture.CaptureInfo.Queue")
+        private let traceQueue: DispatchQueue = DispatchQueue(label: "CCCapture.VideoCapture.CaptureInfo.Queue")
 
         public private(set) var device: AVCaptureDevice?
         public private(set) var deviceFormat: AVCaptureDevice.Format?
         public private(set) var deviceType: AVCaptureDevice.DeviceType?
         public private(set) var presetSize: Settings.PresetSize = Settings.PresetSize.p1280x720
-        public private(set) var captureSize: MCSize = Settings.PresetSize.p1280x720.size()
+        public private(set) var captureSize: MCSize = Settings.PresetSize.p1280x720.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
         public private(set) var devicePosition: AVCaptureDevice.Position = .back
         public private(set) var frameRate: Int32 = 30
         public private(set) var colorSpace: AVCaptureColorSpace = .sRGB
@@ -36,7 +36,7 @@ extension CCCapture.VideoCapture {
                     self.presetSize = captureSize
                     let w: Int32 = CMVideoFormatDescriptionGetDimensions(deviceFormat.formatDescription).width
                     let h: Int32 = CMVideoFormatDescriptionGetDimensions(deviceFormat.formatDescription).height
-                    self.captureSize = MCSize(w: Float(w), h: Float(h))
+                    self.captureSize = MCSize(w: CGFloat(w), h: CGFloat(h))
                 case let .frameRate(frameRate):
                     self.frameRate = self.frameRate(frameRate: frameRate, deviceFormat: deviceFormat)
                 case let .colorSpace(colorSpace):
@@ -96,3 +96,4 @@ extension CCCapture.VideoCapture {
         }
     }
 }
+

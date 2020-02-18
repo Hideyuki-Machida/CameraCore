@@ -87,11 +87,11 @@ public protocol RenderLayerProtocol {
     var type: RenderLayerType { get }
     var customIndex: Int { get }
     mutating func dispose()
-    mutating func process(commandBuffer: MTLCommandBuffer, source: MCTexture, destination: inout MCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws
+    mutating func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws
 }
 
 public extension RenderLayerProtocol {
-    func blitEncoder(commandBuffer: MTLCommandBuffer, source: MCTexture, destination: inout MCTexture) throws {
+    func blitEncoder(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture) throws {
         guard source.size == destination.size else { throw RenderLayerErrorType.renderingError }
         let blitEncoder: MTLBlitCommandEncoder? = commandBuffer.makeBlitCommandEncoder()
         blitEncoder?.copy(from: source.texture,

@@ -36,7 +36,7 @@ public extension CCImageProcessing {
             self.id = id
             self.dimension = dimension
             self.lutImageURL = lutImageURL
-            self.lutFilter = try MCFilter.ColorProcessing.Lut3DFilter(lutImageTexture: try MCTexture(URL: lutImageURL, isSRGB: false))
+            self.lutFilter = try MCFilter.ColorProcessing.Lut3DFilter(lutImageTexture: try CCTexture(URL: lutImageURL, isSRGB: false))
             self.lutFilter.intensity = self.intensity
         }
 
@@ -45,7 +45,7 @@ public extension CCImageProcessing {
 }
 
 public extension CCImageProcessing.LutLayer {
-    func process(commandBuffer: MTLCommandBuffer, source: MCTexture, destination: inout MCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+    func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         try self.lutFilter.process(commandBuffer: commandBuffer, imageTexture: source, destinationTexture: &destination)
     }
 }

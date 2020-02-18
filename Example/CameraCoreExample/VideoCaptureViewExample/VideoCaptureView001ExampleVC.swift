@@ -26,6 +26,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
     )
     
     var camera: CCCapture.Camera?
+    var imageRecognition: CCVision.ImageRecognition?
     @IBOutlet weak var drawView: CCView!
     
     deinit {
@@ -38,9 +39,12 @@ class VideoCaptureView001ExampleVC: UIViewController {
         
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
-            camera --> self.drawView
+            let imageRecognition: CCVision.ImageRecognition = CCVision.ImageRecognition()
+            //try camera --> imageRecognition --> self.drawView
+            try camera --> self.drawView
             camera.play()
             self.camera = camera
+            self.imageRecognition = imageRecognition
         } catch {
             
         }

@@ -14,8 +14,12 @@ import UIKit
 
 extension CCCapture {
     @objc public class Camera: NSObject {
-        fileprivate(set) public var property: CCCapture.VideoCapture.Property
-        
+        public fileprivate(set) var property: CCCapture.VideoCapture.Property {
+            willSet {
+                self.onUpdateCaptureProperty?(newValue)
+            }
+        }
+
         public var event: Event?
         public var status: Camera.Status = .setup {
             willSet {
@@ -23,7 +27,9 @@ extension CCCapture {
             }
         }
 
-        public var onUpdate: ((_ currentCaptureItem: CCCapture.VideoCapture.CaptureData)->Void)?
+        public var onUpdateCaptureData: ((_ currentCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
+        public var onUpdateCaptureProperty: ((_ property: CCCapture.VideoCapture.Property) -> Void)?
+
         public var capture: CCCapture.VideoCapture.VideoCaptureManager?
 
         public init(_ property: CCCapture.VideoCapture.Property) throws {
@@ -32,7 +38,7 @@ extension CCCapture {
             super.init()
             try self.setup(property)
         }
-        
+
         deinit {
             MCDebug.deinitLog(self)
         }
@@ -50,25 +56,23 @@ extension CCCapture {
             ///////////////////////////////////////////////////////////////////////////////////////////////////
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-            self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
+            self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, captureVideoOrientation: AVCaptureVideoOrientation, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
 
                 guard
                     let self = self,
-                    let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true),
-                    let frameRate: Int32 = self.capture?.property.captureInfo.frameRate
+                    let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
+                else { return }
 
-                    else { return }
-                
                 let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
                     sampleBuffer: sampleBuffer,
-                    frameRate: frameRate,
+                    captureInfo: captureInfo,
                     depthData: depthData,
                     metadataObjects: metadataObjects,
-                    captureSize: captureSize,
-                    colorPixelFormat: MTLPixelFormat.bgra8Unorm
+                    colorPixelFormat: MTLPixelFormat.bgra8Unorm,
+                    captureVideoOrientation: captureVideoOrientation
                 )
 
-                self.onUpdate?(currentCaptureItem)
+                self.onUpdateCaptureData?(currentCaptureItem)
                 self.event?.onUpdate?(currentCaptureItem)
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,10 +103,6 @@ extension CCCapture {
 extension CCCapture.Camera {
     public func update(property: CCCapture.VideoCapture.Property) throws {
         try self.capture?.update(property: property)
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        // 描画用テクスチャを生成
-        guard let captureSize: MCSize = self.capture?.property.captureInfo.presetSize.size(isOrientation: true) else { return }
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
 

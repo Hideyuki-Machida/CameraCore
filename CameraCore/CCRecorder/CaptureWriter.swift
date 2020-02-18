@@ -65,7 +65,7 @@ extension CCRecorder {
             CaptureWriter.parameter = parameter
             let url: URL = parameter.outputFilePath
 
-            CaptureWriterParam.set(croppingRect: parameter.croppingRect, sampleSize: parameter.presetFrame.size())
+            CaptureWriterParam.set(croppingRect: parameter.croppingRect, sampleSize: parameter.presetFrame.size(orientation: UIInterfaceOrientation.portrait))
 
             let w: AVAssetWriter
             do {
@@ -224,7 +224,7 @@ extension CCRecorder {
                 resultImage = flipped.transformed(by: CGAffineTransform(translationX: flipped.extent.width, y: 0.0))
             }
 
-            MCCore.ciContext.render(resultImage, to: buf, bounds: resultImage.extent, colorSpace: resultImage.colorSpace ?? Configuration.colorSpace)
+            MCCore.ciContext.render(resultImage, to: buf, bounds: resultImage.extent, colorSpace: resultImage.colorSpace ?? CGColorSpaceCreateDeviceRGB())
             CaptureWriter.pixelBufferAdaptor?.append(buf, withPresentationTime: timestamp)
             CVPixelBufferUnlockBaseAddress(buf, CVPixelBufferLockFlags.readOnly)
         }
@@ -289,7 +289,7 @@ extension CCRecorder.CaptureWriter {
         if let croppingRect: CGRect = parameter.croppingRect {
             return croppingRect.size
         }
-        return parameter.presetFrame.size().toCGSize()
+        return parameter.presetFrame.size(orientation: UIInterfaceOrientation.portrait).toCGSize()
     }
 }
 

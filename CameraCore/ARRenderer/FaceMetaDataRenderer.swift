@@ -11,13 +11,14 @@ import ARKit
 import MetalCanvas
 import Vision
 
+/*
 extension CCRenderer.ARRenderer {
 	public class FaceMetaDataRenderer {
 
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.ARVideoCaptureView.FaceMetaDataRendererQueue")
 
 		fileprivate var canvas: MCCanvas?
-		public fileprivate(set) var texture: MCTexture?
+		public fileprivate(set) var texture: CCTexture?
 		fileprivate(set) var faces: [MCVision.Detection.Face.Item] = []
 		
 		public init() {}
@@ -25,10 +26,10 @@ extension CCRenderer.ARRenderer {
 		public func update(commandBuffer: inout MTLCommandBuffer, metadataFaceObjects: [AVMetadataFaceObject], pixelBuffer: inout CVPixelBuffer, renderSize: CGSize) throws {
 			//////////////////////////////////////////////////////////
 			// outTexture canvas 生成
-			var outTexture: MCTexture
+			var outTexture: CCTexture
 			if self.texture == nil {
 				guard var newImageBuffer: CVPixelBuffer = CVPixelBuffer.create(size: renderSize) else { return }
-				outTexture = try MCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+				outTexture = try CCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
 				//self.canvas = try MCCanvas.init(destination: &outTexture, orthoType: .topLeft, loadAction: MTLLoadAction.clear)
 				self.canvas = try MCCanvas.init(destination: &outTexture, orthoType: .perspective, loadAction: MTLLoadAction.clear)
 			} else {
@@ -57,10 +58,10 @@ extension CCRenderer.ARRenderer {
 				print("---@1")
 				print(trackingBoundes)
 				
-				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y), 0.0))
-				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
-				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
-				faceBoundPoints.append(SIMD3<Float>.init(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y + trackingBoundes.size.height), 0.0))
+				faceBoundPoints.append(SIMD3<Float>(Float(trackingBoundes.origin.x + trackingBoundes.size.width), Float(trackingBoundes.origin.y), 0.0))
 				print("---@2")
 				print(faceBoundPoints)
 				
@@ -70,7 +71,7 @@ extension CCRenderer.ARRenderer {
 						//print(metadataFaceObject.bounds)
 						//face.landmarkDetection(pixelBuffer: &imageBuffer, observation: VNDetectedObjectObservation.init(boundingBox: boundes))
 						//face.tracking(pixelBuffer: &pixelBuffer)
-						try? face.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: landmarkDetectionBoundes))
+						try face.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: landmarkDetectionBoundes))
 						tempFaces.append(face)
 						faceItemFlg = true
 						continue
@@ -81,13 +82,13 @@ extension CCRenderer.ARRenderer {
 				let newFaceItem: MCVision.Detection.Face.Item = MCVision.Detection.Face.Item.init(id: metadataFaceObject.faceID, observation: VNFaceObservation.init(boundingBox: trackingBoundes), landmarks: nil, renderSize: renderSize)
 				print("new Face: \(metadataFaceObject.faceID)")
 				//newFaceItem.landmarkDetection(pixelBuffer: &pixelBuffer, observation: VNDetectedObjectObservation.init(boundingBox: boundes))
-				try? newFaceItem.tracking(pixelBuffer: &pixelBuffer)
+				newFaceItem.tracking(pixelBuffer: &pixelBuffer)
 				tempFaces.append(newFaceItem)
 			}
 			self.faces = tempFaces
 			print("faces: \(faces)")
 			
-			var faceLandmarkPoints: [SIMD3<Float>] = []
+			var faceLandmarkPoints: [MCGeom.Vec3D] = []
 			/*
 			for face: MCVision.FaceDetection.FaceItem in self.faces {
 				if let faceContour: VNFaceLandmarkRegion2D = face.landmarks?.faceContour {
@@ -144,3 +145,4 @@ extension CCRenderer.ARRenderer {
 		}
 	}
 }
+*/

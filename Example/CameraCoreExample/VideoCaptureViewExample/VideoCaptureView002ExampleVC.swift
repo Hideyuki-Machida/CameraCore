@@ -4,90 +4,86 @@
 //  CameraCore_Example
 //
 //  Created by hideyuki machida on 2018/12/17.
-//  Copyright © 2018 町田 秀行. All rights reserved.
+//  Copyright © 2018 hideyuki machida. All rights reserved.
 //
 
-import UIKit
 import AVFoundation
-import MetalCanvas
 import CameraCore
 import iOS_DummyAVAssets
+import MetalCanvas
+import UIKit
 
 class VideoCaptureView002ExampleVC: UIViewController {
-
-    @IBOutlet weak var videoCaptureView: CameraCore.VideoCaptureView!
     @IBOutlet weak var recordingButton: UIButton!
+    @IBOutlet weak var drawView: CCView!
+    
+    private var camera: CCCapture.Camera?
+    private var postProcess: CCRenderer.PostProcess?
+    private var lutLayer: CCImageProcessing.LutLayer!
 
-    var lutLayer: LutLayer!
-
-    var videoCaputurePropertys = CCRenderer.VideoCapture.Propertys.init(
-        
+    var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
             .frameRate(Settings.PresetFrameRate.fps30),
-            .isDepthDataOut(false)
         ],
         option: [
-            .colorSpace(AVCaptureColorSpace.P3_D65)
+            .colorSpace(AVCaptureColorSpace.P3_D65),
         ]
     )
 
-
     deinit {
-        self.videoCaptureView.pause()
-        self.videoCaptureView.dispose()
+        self.camera?.pause()
         MCDebug.deinitLog(self)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let event: VideoCaptureViewEvent = VideoCaptureViewEvent()
-        event.onRecodingUpdate = { (recordedDuration: TimeInterval) in
-            print(recordedDuration)
-        }
-        event.onRecodingComplete = { (result: Bool, filePath: URL) in
-            print(result)
-            print(filePath)
-            if result {
-            } else {
-            }
-        }
-        event.onFrameUpdate = { (sampleBuffer: CMSampleBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
-            //print(sampleBuffer)
-        }
-        event.onPixelUpdate = { (pixelBuffer: CVPixelBuffer, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]) in
-            //print(pixelBuffer)
-            if let depthData = depthData {
-                print(depthData)
-            }
-            if metadataObjects.count >= 1 {
-                print(metadataObjects)
-            }
-        }
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        // VideoCaptureViewのイベント設定
+        let event: CCCapture.Camera.Event = CCCapture.Camera.Event()
 
-        self.videoCaptureView.event = event
+        // VideoCaptureViewにイベントをセット
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        // VideoCaptureViewのセットアップ
         do {
-            self.lutLayer = try LutLayer.init(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: LutLayer.Dimension.d3)
-            try self.videoCaptureView.setup(self.videoCaputurePropertys)
+            // RenderLayerでLutフィルターを設定
+            self.lutLayer = try CCImageProcessing.LutLayer(lutImageURL: iOS_DummyAVAssets.AssetManager.LutAsset.vivid.url, dimension: .dim3)
+
+            // VideoCapturePropertyをセット
+            let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
+            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess(isDisplayLink: true)
+
+            try camera --> postProcess --> self.drawView
+            camera.event = event
+            camera.play()
+            self.camera = camera
+            self.postProcess = postProcess
         } catch {
-            MCDebug.errorLog("videoCaptureView: Setting Error")
+            MCDebug.errorLog("VideoCaptureView setup error")
         }
+        /////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.videoCaptureView.play()
+
+        // VideoCaptureViewのキャプチャスタート
+        self.camera?.play()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.videoCaptureView.pause()
-        self.videoCaptureView.dispose()
+
+        // VideoCaptureViewのキャプチャ停止
+        self.camera?.pause()
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -100,7 +96,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.setFPS()
     }
 
-    @IBAction func setPresetiFrameBtnTapAction(_ sender: UIButton) {
+    @IBAction func setPresetFrameBtnTapAction(_ sender: UIButton) {
         self.setResolution()
     }
 
@@ -116,15 +112,8 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.setFilter()
     }
 
-    @IBAction func setMetaDataOutBtnTapAction(_ sender: UIButton) {
-        self.setMetaDataOut()
-    }
-
-    @IBAction func setDepthDataOutBtnTapAction(_ sender: UIButton) {
-        self.setDepthDataOut()
-    }
-
     @IBAction func recordingTapAction(_ sender: Any) {
+        /*
         if self.videoCaptureView.isRecording {
             self.videoCaptureView.recordingStop()
             self.recordingButton.setTitle("撮影開始", for: UIControl.State.normal)
@@ -133,29 +122,24 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             do {
                 try self.videoCaptureView.recordingStart(
-                    CCRenderer.VideoCapture.CaptureWriter.Paramator.init(
-                        outputFilePath: URL.init(fileURLWithPath: filePath),
-                        presetiFrame: Settings.PresetSize.p1280x720,
-                        frameRate: .fps60,
+                    CCRenderer.VideoCapture.CaptureWriter.Parameter(
+                        outputFilePath: URL(fileURLWithPath: filePath),
+                        presetFrame: Settings.PresetSize.p1280x720,
+                        frameRate: 30,
                         devicePosition: AVCaptureDevice.Position.back,
-                        croppingRect: CGRect.init(origin: CGPoint.init(), size: Settings.PresetSize.p1280x720.size()),
+                        croppingRect: CGRect(origin: CGPoint(), size: Settings.PresetSize.p1280x720.size()),
                         fileType: AVFileType.mp4,
                         videoCodecType: Settings.VideoCodec.hevc
                     )
                 )
                 self.recordingButton.setTitle("撮影ストップ", for: UIControl.State.normal)
-            } catch {
-                
-            }
-
+            } catch {}
         }
+         */
     }
-    
 }
 
-
 extension VideoCaptureView002ExampleVC {
-    
     private enum FrameRateLabel: String {
         case fps15 = "15 FPS"
         case fps24 = "24 FPS"
@@ -165,82 +149,82 @@ extension VideoCaptureView002ExampleVC {
         case fps120 = "120 FPS"
         case fps240 = "240 FPS"
     }
-    
+
     @IBAction func setFPS() {
-        let action: UIAlertController = UIAlertController(title: "FPS設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action000: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps15.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action: UIAlertController = UIAlertController(title: "FPS設定", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+        let action000: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps15.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps15))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps15))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps15.rawValue)
             }
         })
 
-        let action001: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps24.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action001: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps24.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps24))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps24))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps24.rawValue)
             }
         })
-        
-        let action002: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps30.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let action002: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps30.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps30))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps30))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps30.rawValue)
             }
         })
-        
-        let action003: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps60.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let action003: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps60.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps60))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps60))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps60.rawValue)
             }
         })
-        
-        let action004: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps90.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let action004: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps90.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps90))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps90))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps90.rawValue)
             }
         })
-        
-        let action005: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps120.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let action005: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps120.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps120))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps120))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps120.rawValue)
             }
         })
 
-        let action006: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps240.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action006: UIAlertAction = UIAlertAction(title: FrameRateLabel.fps240.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .frameRate(.fps240))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .frameRate(.fps240))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(FrameRateLabel.fps240.rawValue)
             }
         })
 
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
+            (_: UIAlertAction!) -> Void in
         })
 
         action.addAction(action000)
@@ -251,77 +235,63 @@ extension VideoCaptureView002ExampleVC {
         action.addAction(action005)
         action.addAction(action006)
         action.addAction(cancel)
-        
+
         self.present(action, animated: true, completion: nil)
     }
 }
 
-
 extension VideoCaptureView002ExampleVC {
     private enum ResolutionLabel: String {
-        case p960x540 = "p960x540"
-        case p1280x720 = "p1280x720"
-        case p1920x1080 = "p1920x1080"
-        case p3840x2160 = "p3840x2160"
+        case p960x540
+        case p1280x720
+        case p1920x1080
     }
 
     func setResolution() {
-        let action: UIAlertController = UIAlertController(title: "撮影解像度設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: ResolutionLabel.p960x540.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action: UIAlertController = UIAlertController(title: "撮影解像度設定", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+        let action001: UIAlertAction = UIAlertAction(title: ResolutionLabel.p960x540.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .captureSize(.p960x540))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .captureSize(.p960x540))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(ResolutionLabel.p960x540.rawValue)
             }
         })
 
-        let action002: UIAlertAction = UIAlertAction(title: ResolutionLabel.p1280x720.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action002: UIAlertAction = UIAlertAction(title: ResolutionLabel.p1280x720.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .captureSize(.p1280x720))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .captureSize(.p1280x720))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(ResolutionLabel.p1280x720.rawValue)
             }
         })
 
-        let action003: UIAlertAction = UIAlertAction(title: ResolutionLabel.p1920x1080.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action003: UIAlertAction = UIAlertAction(title: ResolutionLabel.p1920x1080.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                try self.videoCaputurePropertys.swap(property: .captureSize(.p1920x1080))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                try self.videoCaptureProperty.swap(property: .captureSize(.p1920x1080))
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(ResolutionLabel.p1920x1080.rawValue)
             }
         })
 
-        let action004: UIAlertAction = UIAlertAction(title: ResolutionLabel.p3840x2160.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            do {
-                try self.videoCaputurePropertys.swap(property: .captureSize(.p3840x2160))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
-            } catch {
-                MCDebug.errorLog(ResolutionLabel.p3840x2160.rawValue)
-            }
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
+            (_: UIAlertAction!) -> Void in
         })
 
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
-        })
-        
         action.addAction(action001)
         action.addAction(action002)
         action.addAction(action003)
-        action.addAction(action004)
         action.addAction(cancel)
-        
+
         self.present(action, animated: true, completion: nil)
     }
 }
-
 
 extension VideoCaptureView002ExampleVC {
     private enum TouchLabel: String {
@@ -330,259 +300,158 @@ extension VideoCaptureView002ExampleVC {
     }
 
     func setTouch() {
-        let action: UIAlertController = UIAlertController(title: "Touch設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: TouchLabel.on.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            self.videoCaptureView.capture!.isTouchActive = true
+        let action: UIAlertController = UIAlertController(title: "Touch設定", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+        let action001: UIAlertAction = UIAlertAction(title: TouchLabel.on.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
+            self.camera?.capture!.isTorchActive = true
         })
-        
-        let action002: UIAlertAction = UIAlertAction(title: TouchLabel.off.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            self.videoCaptureView.capture!.isTouchActive = false
+
+        let action002: UIAlertAction = UIAlertAction(title: TouchLabel.off.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
+            self.camera?.capture!.isTorchActive = false
         })
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
+            (_: UIAlertAction!) -> Void in
         })
-        
+
         action.addAction(action001)
         action.addAction(action002)
         action.addAction(cancel)
-        
-        self.present(action, animated: true, completion: nil)
 
+        self.present(action, animated: true, completion: nil)
     }
 }
 
 extension VideoCaptureView002ExampleVC {
     private enum PositionLabel: String {
-        case front = "front"
-        case back = "back"
+        case front
+        case back
     }
 
     func setPosition() {
-        let action: UIAlertController = UIAlertController(title: "Position設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: PositionLabel.front.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action: UIAlertController = UIAlertController(title: "Position設定", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+        let action001: UIAlertAction = UIAlertAction(title: PositionLabel.front.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                self.videoCaputurePropertys.devicePosition = .front
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                self.videoCaptureProperty.devicePosition = .front
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(PositionLabel.front.rawValue)
             }
         })
-        
-        let action002: UIAlertAction = UIAlertAction(title: PositionLabel.back.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let action002: UIAlertAction = UIAlertAction(title: PositionLabel.back.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                self.videoCaputurePropertys.devicePosition = .back
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                self.videoCaptureProperty.devicePosition = .back
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(PositionLabel.back.rawValue)
             }
         })
 
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
+            (_: UIAlertAction!) -> Void in
         })
-        
+
         action.addAction(action001)
         action.addAction(action002)
         action.addAction(cancel)
-        
+
         self.present(action, animated: true, completion: nil)
     }
-
 }
 
 extension VideoCaptureView002ExampleVC {
     private enum FilterLabel: String {
-        case ON = "ON"
-        case OFF = "OFF"
+        case ON
+        case OFF
     }
 
     func setFilter() {
-        let action: UIAlertController = UIAlertController(title: "Filter設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: FilterLabel.ON.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            self.videoCaptureView.renderLayers = [ self.lutLayer ]
+        let action: UIAlertController = UIAlertController(title: "Filter設定", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+        let action001: UIAlertAction = UIAlertAction(title: FilterLabel.ON.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
+            self.postProcess?.renderLayers = [self.lutLayer]
         })
-        
-        let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            self.videoCaptureView.renderLayers = []
+
+        let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
+            self.postProcess?.renderLayers = [self.lutLayer]
         })
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
+
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
+            (_: UIAlertAction!) -> Void in
         })
-        
+
         action.addAction(action001)
         action.addAction(action002)
         action.addAction(cancel)
-        
+
         self.present(action, animated: true, completion: nil)
     }
 }
 
 extension VideoCaptureView002ExampleVC {
     private enum DeviceType: String {
-        case builtInWideAngleCamera = "builtInWideAngleCamera"
-        case builtInDualCamera = "builtInDualCamera"
-        case builtInTelephotoCamera = "builtInTelephotoCamera"
-        case builtInTrueDepthCamera = "builtInTrueDepthCamera"
+        case builtInWideAngleCamera
+        case builtInDualCamera
+        case builtInTelephotoCamera
         func item() -> AVCaptureDevice.DeviceType {
             switch self {
             case .builtInWideAngleCamera: return .builtInWideAngleCamera
             case .builtInTelephotoCamera: return .builtInTelephotoCamera
             case .builtInDualCamera: return .builtInDualCamera
-            case .builtInTrueDepthCamera: return .builtInTrueDepthCamera
             }
         }
     }
 
     func setDeviceType() {
-        
-        let action: UIAlertController = UIAlertController(title: "カメラデバイスタイプ設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: DeviceType.builtInWideAngleCamera.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action: UIAlertController = UIAlertController(title: "カメラデバイスタイプ設定", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+        let action001: UIAlertAction = UIAlertAction(title: DeviceType.builtInWideAngleCamera.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                self.videoCaputurePropertys.deviceType = DeviceType.builtInWideAngleCamera.item()
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                self.videoCaptureProperty.deviceType = DeviceType.builtInWideAngleCamera.item()
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(DeviceType.builtInWideAngleCamera.rawValue)
             }
         })
 
-        let action002: UIAlertAction = UIAlertAction(title: DeviceType.builtInDualCamera.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action002: UIAlertAction = UIAlertAction(title: DeviceType.builtInDualCamera.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                self.videoCaputurePropertys.deviceType = DeviceType.builtInDualCamera.item()
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                self.videoCaptureProperty.deviceType = DeviceType.builtInDualCamera.item()
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(DeviceType.builtInDualCamera.rawValue)
             }
         })
 
-        let action003: UIAlertAction = UIAlertAction(title: DeviceType.builtInTelephotoCamera.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
+        let action003: UIAlertAction = UIAlertAction(title: DeviceType.builtInTelephotoCamera.rawValue, style: UIAlertAction.Style.default, handler: {
+            (_: UIAlertAction!) -> Void in
             do {
-                self.videoCaputurePropertys.deviceType = DeviceType.builtInTelephotoCamera.item()
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
+                self.videoCaptureProperty.deviceType = DeviceType.builtInTelephotoCamera.item()
+                try self.camera?.update(property: self.videoCaptureProperty)
             } catch {
                 MCDebug.errorLog(DeviceType.builtInTelephotoCamera.rawValue)
             }
         })
 
-        let action004: UIAlertAction = UIAlertAction(title: DeviceType.builtInTrueDepthCamera.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            do {
-                self.videoCaputurePropertys.deviceType = DeviceType.builtInTrueDepthCamera.item()
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
-            } catch {
-                MCDebug.errorLog(DeviceType.builtInTrueDepthCamera.rawValue)
-            }
+        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
+            (_: UIAlertAction!) -> Void in
         })
 
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
-        })
-        
         action.addAction(action001)
         action.addAction(action002)
         action.addAction(action003)
-        action.addAction(action004)
         action.addAction(cancel)
-        
-        self.present(action, animated: true, completion: nil)
-    }
 
-}
-
-extension VideoCaptureView002ExampleVC {
-    private enum MetaDataLabel: String {
-        case ON = "ON"
-        case OFF = "OFF"
-    }
-
-    func setMetaDataOut() {
-        let action: UIAlertController = UIAlertController(title: "MetaData(Face)設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: MetaDataLabel.ON.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            do {
-                self.videoCaputurePropertys.metadataObjects = [.face]
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
-            } catch {
-                MCDebug.errorLog("MetaData: " + MetaDataLabel.ON.rawValue)
-            }
-        })
-        
-        let action002: UIAlertAction = UIAlertAction(title: MetaDataLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            do {
-                self.videoCaputurePropertys.metadataObjects = []
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
-            } catch {
-                MCDebug.errorLog("MetaData: " + MetaDataLabel.OFF.rawValue)
-            }
-        })
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
-        })
-        
-        action.addAction(action001)
-        action.addAction(action002)
-        action.addAction(cancel)
-        
-        self.present(action, animated: true, completion: nil)
-    }
-}
-
-extension VideoCaptureView002ExampleVC {
-    private enum DepthLabel: String {
-        case ON = "ON"
-        case OFF = "OFF"
-    }
-
-    func setDepthDataOut() {
-        let action: UIAlertController = UIAlertController(title: "Depth設定", message: "", preferredStyle:  UIAlertController.Style.actionSheet)
-        
-        let action001: UIAlertAction = UIAlertAction(title: DepthLabel.ON.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            do {
-                self.videoCaputurePropertys.devicePosition = .back
-                self.videoCaputurePropertys.deviceType = DeviceType.builtInDualCamera.item()
-                try self.videoCaputurePropertys.swap(property: .isDepthDataOut(true))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
-            } catch {
-                MCDebug.errorLog("Depth: " + DepthLabel.ON.rawValue)
-            }
-        })
-        
-        let action002: UIAlertAction = UIAlertAction(title: DepthLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler:{
-            (action: UIAlertAction!) -> Void in
-            do {
-                try self.videoCaputurePropertys.swap(property: .isDepthDataOut(false))
-                try self.videoCaptureView.update(propertys: self.videoCaputurePropertys)
-            } catch {
-                MCDebug.errorLog("Depth: " + DepthLabel.OFF.rawValue)
-            }
-        })
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
-            (action: UIAlertAction!) -> Void in
-        })
-        
-        action.addAction(action001)
-        action.addAction(action002)
-        action.addAction(cancel)
-        
         self.present(action, animated: true, completion: nil)
     }
 }

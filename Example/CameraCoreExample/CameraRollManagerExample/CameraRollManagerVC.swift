@@ -14,7 +14,7 @@ import MetalCanvas
 
 class CameraRollManagerVC: UIViewController {
     
-    fileprivate var datas: [CameraRollItem] = []
+    fileprivate var datas: [CCCameraRoll.Item] = []
     fileprivate let refreshControl: UIRefreshControl = UIRefreshControl()
     @IBOutlet fileprivate(set) weak var collectionView: UICollectionView!
     
@@ -25,7 +25,7 @@ class CameraRollManagerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        CameraRollManager.albumName = "Test Album"
+        CCCameraRoll.Manager.albumName = "Test Album"
         
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
@@ -46,12 +46,12 @@ class CameraRollManagerVC: UIViewController {
     }
     
     func setup() {
-        CameraRollManager.authorization { [weak self] (success: Bool) in
+        CCCameraRoll.Manager.authorization { [weak self] (success: Bool) in
             guard let `self` = self else { return }
             guard success == true else {
                 return
             }
-            CameraRollManager.fetchPHAssetData() { [weak self] (items: [CameraRollItem]) in
+            CCCameraRoll.Manager.fetchPHAssetData() { [weak self] (items: [CCCameraRoll.Item]) in
                 self?.datas = items
                 DispatchQueue.main.async { [weak self] in
                     self?.refreshControl.endRefreshing()
@@ -99,7 +99,7 @@ extension CameraRollManagerVC: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: CameraRollManagerVCCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CameraRollManagerVCCell
-        let data: CameraRollItem = self.datas[indexPath.row]
+        let data: CCCameraRoll.Item = self.datas[indexPath.row]
         cell.setData(data: data)
         return cell
     }
@@ -111,7 +111,7 @@ extension CameraRollManagerVC: UICollectionViewDataSource {
 extension CameraRollManagerVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cameraRollItem: CameraRollItem = self.datas[indexPath.row]
+        let cameraRollItem: CCCameraRoll.Item = self.datas[indexPath.row]
         switch cameraRollItem.mediaType {
         case .video:
             cameraRollItem.getVideoURL(
@@ -247,7 +247,7 @@ final class CameraRollManagerVCCell: UICollectionViewCell {
     @IBOutlet fileprivate(set) weak var tapEffect: UIView!
     
     private var gradientLayer: CAGradientLayer?
-    private var data: CameraRollItem?
+    private var data: CCCameraRoll.Item?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -269,7 +269,7 @@ final class CameraRollManagerVCCell: UICollectionViewCell {
         super.layoutSubviews()
     }
     
-    func setData(data: CameraRollItem) {
+    func setData(data: CCCameraRoll.Item) {
         self.data = data
         switch data.mediaType {
         case .video:

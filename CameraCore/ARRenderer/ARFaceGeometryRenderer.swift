@@ -10,11 +10,11 @@ import Foundation
 import ARKit
 import MetalCanvas
 
-@available(iOS 11.0, *)
+/*
 extension CCRenderer.ARRenderer {
 	class ARFaceGeometryRenderer {
 		let queue: DispatchQueue = DispatchQueue(label: "CameraCore.Renderer.ARRendererARFaceGeometryRenderer")
-		fileprivate(set) var texture: MCTexture?
+		fileprivate(set) var texture: CCTexture?
 
 		fileprivate var renderPassDescriptor: MTLRenderPassDescriptor = MTLRenderPassDescriptor()
 		fileprivate var faceGeometry: ARSCNFaceGeometry!
@@ -47,10 +47,10 @@ extension CCRenderer.ARRenderer {
 			self.faceGeometry.update(from: geometry)
 			self.faceNode.transform = SCNMatrix4.init(faceAnchor.transform)
 
-			var outTexture: MCTexture
+			var outTexture: CCTexture
 			if self.texture == nil {
 				guard var newImageBuffer: CVImageBuffer = CVImageBuffer.create(size: renderSize) else { return }
-				outTexture = try MCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+				outTexture = try CCTexture.init(pixelBuffer: &newImageBuffer, colorPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
 				self.renderPassDescriptor.colorAttachments[0].texture = outTexture.texture
 				self.texture = outTexture
 			} else {
@@ -63,3 +63,4 @@ extension CCRenderer.ARRenderer {
 		}
 	}
 }
+*/

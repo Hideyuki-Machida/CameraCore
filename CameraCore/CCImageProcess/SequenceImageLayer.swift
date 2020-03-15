@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     final class SequenceImageLayer: RenderLayerProtocol {
         public let type: RenderLayerType = RenderLayerType.sequenceImage
         public let id: RenderLayerId
@@ -46,7 +46,7 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.SequenceImageLayer {
+public extension CCImageProcess.SequenceImageLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard
             !self.imagePaths.isEmpty,
@@ -59,7 +59,7 @@ public extension CCImageProcessing.SequenceImageLayer {
     }
 }
 
-fileprivate extension CCImageProcessing.SequenceImageLayer {
+fileprivate extension CCImageProcess.SequenceImageLayer {
     func process(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
         let imageCounter: Float = Float(renderLayerCompositionInfo.compositionTime.value) * Float(self.updateFrameRate) / Float(renderLayerCompositionInfo.compositionTime.timescale)
 

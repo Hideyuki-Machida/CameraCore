@@ -22,7 +22,7 @@ public extension CCVision.ImageRecognition {
     func pipe(camera: CCCapture.Camera) -> CCVision.ImageRecognition {
         let _events: CCVision.ImageRecognition.Events = CCVision.ImageRecognition.Events()
         self.set(events: _events)
-        camera.onUpdateCaptureData = { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
+        camera.pipe.outCaptureData = { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
             guard
                 let self = self
             else { return }

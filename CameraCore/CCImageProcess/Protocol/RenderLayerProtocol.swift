@@ -43,13 +43,13 @@ public enum RenderLayerType: Int, Codable {
 
     public var type: RenderLayerProtocol.Type? {
         switch self {
-        case .blank: return CCImageProcessing.BlankLayer.self
-        case .transformLayer: return CCImageProcessing.TransformLayer.self
-        case .image: return CCImageProcessing.ImageLayer.self
-        case .lut: return CCImageProcessing.LutLayer.self
-        case .sequenceImage: return CCImageProcessing.SequenceImageLayer.self
-        case .mask: return CCImageProcessing.MaskLayer.self
-        case .colorOverlay: return CCImageProcessing.ColorOverlayLayer.self
+        case .blank: return CCImageProcess.BlankLayer.self
+        case .transformLayer: return CCImageProcess.TransformLayer.self
+        case .image: return CCImageProcess.ImageLayer.self
+        case .lut: return CCImageProcess.LutLayer.self
+        case .sequenceImage: return CCImageProcess.SequenceImageLayer.self
+        case .mask: return CCImageProcess.MaskLayer.self
+        case .colorOverlay: return CCImageProcess.ColorOverlayLayer.self
         //case .imageBlend: return CCImageProcessing.ImageBlendLayer.self
         case .custom: return nil
         }
@@ -83,7 +83,7 @@ public enum Blendmode: String, Codable {
 // MARK: レンダリングレイヤー protocol
 
 public protocol RenderLayerProtocol {
-    var id: CCImageProcessing.RenderLayerId { get }
+    var id: CCImageProcess.RenderLayerId { get }
     var type: RenderLayerType { get }
     var customIndex: Int { get }
     mutating func dispose()

@@ -8,6 +8,6 @@
 
 import Foundation
 
-public struct CCImageProcessing {
+public struct CCImageProcess {
     private init() {} // このstructはnamespace用途なのでインスタンス化防止
 }

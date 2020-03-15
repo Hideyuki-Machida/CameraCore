@@ -10,7 +10,7 @@ import AVFoundation
 import MetalCanvas
 import UIKit
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     final class TransformLayer: RenderLayerProtocol {
         public let type: RenderLayerType = RenderLayerType.transformLayer
         public let id: RenderLayerId
@@ -32,7 +32,7 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.TransformLayer {
+public extension CCImageProcess.TransformLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard let image: CIImage = CIImage(mtlTexture: source.texture, options: nil) else { throw RenderLayerErrorType.renderingError }
         let colorSpace: CGColorSpace = image.colorSpace ?? CGColorSpaceCreateDeviceRGB()
@@ -45,7 +45,7 @@ public extension CCImageProcessing.TransformLayer {
     }
 }
 
-private extension CCImageProcessing.TransformLayer {
+private extension CCImageProcess.TransformLayer {
     func process(image: CIImage, compositionTime: CMTime, timeRange: CMTimeRange, percentComplete: Float, renderSize: MCSize) throws -> CIImage {
         let transformImage: CIImage = image.transformed(by: self.transform)
         let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize.toCGSize()))

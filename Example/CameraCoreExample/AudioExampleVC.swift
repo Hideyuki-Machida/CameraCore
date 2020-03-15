@@ -39,7 +39,7 @@ class AudioExampleVC: UIViewController {
             self.videoRecorder = try CCRecorder.VideoRecorder()
             self.audioRecorder = try CCRecorder.AudioRecorder()
 
-            let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
+            let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             self.camera = camera
             try self.camera --> self.videoRecorder
 
@@ -65,7 +65,7 @@ class AudioExampleVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         do {
-            self.camera?.play()
+            self.camera?.triger.play()
             try self.audioPlayer?.play()
         } catch {
             print("error")

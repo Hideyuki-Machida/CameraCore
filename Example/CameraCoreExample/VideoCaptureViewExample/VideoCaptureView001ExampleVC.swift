@@ -38,11 +38,11 @@ class VideoCaptureView001ExampleVC: UIViewController {
         super.viewDidLoad()
         
         do {
-            let camera: CCCapture.Camera = try CCCapture.Camera(self.videoCaptureProperty)
+            let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             let imageRecognition: CCVision.ImageRecognition = CCVision.ImageRecognition()
             //try camera --> imageRecognition --> self.drawView
             try camera --> self.drawView
-            camera.play()
+            camera.triger.play()
             self.camera = camera
             self.imageRecognition = imageRecognition
         } catch {

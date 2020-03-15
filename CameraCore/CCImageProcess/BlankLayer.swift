@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     final class BlankLayer: RenderLayerProtocol {
         public let type: RenderLayerType = RenderLayerType.blank
         public let id: RenderLayerId
@@ -27,6 +27,6 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.BlankLayer {
+public extension CCImageProcess.BlankLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {}
 }

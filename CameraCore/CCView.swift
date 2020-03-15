@@ -125,7 +125,7 @@ extension CCView {
     func pipe(camera: CCCapture.Camera) throws -> CCView {
         try self.setup()
 
-        camera.onUpdateCaptureData = { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
+        camera.pipe.outCaptureData = { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
             guard let self = self else { return }
             if captureData.colorPixelFormat != self.colorPixelFormat {
                 MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")

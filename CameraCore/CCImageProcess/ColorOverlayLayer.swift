@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     final class ColorOverlayLayer: RenderLayerProtocol {
         public let type: RenderLayerType = RenderLayerType.colorOverlay
         public let id: RenderLayerId
@@ -42,7 +42,7 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.ColorOverlayLayer {
+public extension CCImageProcess.ColorOverlayLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard let image: CIImage = CIImage(mtlTexture: source.texture, options: nil) else { throw RenderLayerErrorType.renderingError }
         let colorSpace: CGColorSpace = image.colorSpace ?? CGColorSpaceCreateDeviceRGB()
@@ -51,7 +51,7 @@ public extension CCImageProcessing.ColorOverlayLayer {
     }
 }
 
-fileprivate extension CCImageProcessing.ColorOverlayLayer {
+fileprivate extension CCImageProcess.ColorOverlayLayer {
     func processing(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
         let arguments: [Any] = [
             image,

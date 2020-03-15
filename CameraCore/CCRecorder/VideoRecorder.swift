@@ -43,7 +43,8 @@ public extension CCRecorder.VideoRecorder {
 
 extension CCRecorder.VideoRecorder {
     func pipe(camera: CCCapture.Camera) throws {
-        camera.onUpdateCaptureData = { (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
+
+        camera.pipe.outCaptureData = { (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
             guard self.isRecording == true else { return }
             self.captureWriter.setSampleBuffer(sampleBuffer: currentCaptureItem.sampleBuffer)
         }

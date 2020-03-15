@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     struct RenderLayerId: Codable {
         public let key: String
         public init() {
@@ -17,14 +17,14 @@ public extension CCImageProcessing {
     }
 }
 
-extension CCImageProcessing.RenderLayerId: Equatable {
-    public static func ==(lhs: CCImageProcessing.RenderLayerId, rhs: CCImageProcessing.RenderLayerId) -> Bool{
+extension CCImageProcess.RenderLayerId: Equatable {
+    public static func ==(lhs: CCImageProcess.RenderLayerId, rhs: CCImageProcess.RenderLayerId) -> Bool{
         return lhs.key == rhs.key
     }
 }
 
-extension CCImageProcessing.RenderLayerId {
-    public static func !=(lhs: CCImageProcessing.RenderLayerId, rhs: CCImageProcessing.RenderLayerId) -> Bool{
+extension CCImageProcess.RenderLayerId {
+    public static func !=(lhs: CCImageProcess.RenderLayerId, rhs: CCImageProcess.RenderLayerId) -> Bool{
         return lhs.key != rhs.key
     }
 }

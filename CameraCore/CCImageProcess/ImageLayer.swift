@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     /// ImageLayer 画像オーバーレイエフェクト
     final class ImageLayer: RenderLayerProtocol {
         public let type: RenderLayerType = RenderLayerType.image
@@ -45,7 +45,7 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.ImageLayer {
+public extension CCImageProcess.ImageLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard var inputImage: CIImage = CIImage(mtlTexture: source.texture, options: nil) else { throw RenderLayerErrorType.renderingError }
         inputImage = try self.process(image: inputImage, renderLayerCompositionInfo: &renderLayerCompositionInfo)
@@ -57,7 +57,7 @@ public extension CCImageProcessing.ImageLayer {
 }
 
 
-fileprivate extension CCImageProcessing.ImageLayer {
+fileprivate extension CCImageProcess.ImageLayer {
     func process(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
         // フィルターイメージ生成
         if let selfImage = self._image {
@@ -124,7 +124,7 @@ fileprivate extension CCImageProcessing.ImageLayer {
     }
 }
 
-extension CCImageProcessing.ImageLayer {
+extension CCImageProcess.ImageLayer {
     // 設計されているが、まだ未実装のenum項目をコメントアウト
     public enum CompositionImageLayerContentMode: Int, Codable {
         // case scaleToFill = 0

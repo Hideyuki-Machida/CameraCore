@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     final class MaskLayer: RenderLayerProtocol {
         public let type: RenderLayerType = RenderLayerType.mask
         public let id: RenderLayerId
@@ -35,7 +35,7 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.MaskLayer {
+public extension CCImageProcess.MaskLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         guard let image: CIImage = CIImage(mtlTexture: source.texture, options: nil) else { throw RenderLayerErrorType.renderingError }
 
@@ -45,7 +45,7 @@ public extension CCImageProcessing.MaskLayer {
     }
 }
 
-fileprivate extension CCImageProcessing.MaskLayer {
+fileprivate extension CCImageProcess.MaskLayer {
     func process(image: CIImage, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws -> CIImage {
         guard
             let image: CIImage = self.maskShader.apply(extent: image.extent, arguments: [

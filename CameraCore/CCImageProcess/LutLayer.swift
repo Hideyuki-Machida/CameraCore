@@ -9,7 +9,7 @@
 import AVFoundation
 import MetalCanvas
 
-public extension CCImageProcessing {
+public extension CCImageProcess {
     final class LutLayer: RenderLayerProtocol {
         public enum Dimension: Int, Codable {
             case dim3 = 64
@@ -44,7 +44,7 @@ public extension CCImageProcessing {
     }
 }
 
-public extension CCImageProcessing.LutLayer {
+public extension CCImageProcess.LutLayer {
     func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         try self.lutFilter.process(commandBuffer: commandBuffer, imageTexture: source, destinationTexture: &destination)
     }

@@ -12,12 +12,6 @@ import Foundation
 import MetalCanvas
 import MetalPerformanceShaders
 
-import AVFoundation
-import CoreVideo
-import Foundation
-import MetalCanvas
-import MetalPerformanceShaders
-
 extension CCRenderer {
     public class PostProcess: NSObject {
         private let postProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
@@ -258,14 +252,14 @@ extension CCRenderer.PostProcess {
         if self.isDisplayLink {
             self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
             self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
-            camera.onUpdateCaptureData = { [weak self] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
+            camera.pipe.outCaptureData = { [weak self] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
                 // CADisplayLinkのloopで参照されるのでQueueを揃える。
                 self?.postProcessQueue.sync { [weak self] in
                     self?.currentCaptureItem = currentCaptureItem
                 }
             }
         } else {
-            camera.onUpdateCaptureData = { [weak self] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
+            camera.pipe.outCaptureData = { [weak self] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
                 self?.process(currentCaptureItem: currentCaptureItem)
             }
         }
@@ -279,7 +273,7 @@ extension CCRenderer.PostProcess {
             !self.isProcess,
             currentCaptureItem.presentationTimeStamp != self.presentationTimeStamp
         else { return }
-        self.postProcessQueue.sync { [weak self] in
+        self.postProcessQueue.async { [weak self] in
             do {
                 try self?.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
             } catch {

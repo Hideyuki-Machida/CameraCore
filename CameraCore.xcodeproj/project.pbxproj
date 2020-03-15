@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		621EDDBE241E316B00087E47 /* CCComponentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621EDDBD241E316B00087E47 /* CCComponentProtocol.swift */; };
 		6244EB1323BB82B80044C22F /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1223BB82B80044C22F /* Camera.swift */; };
 		6244EB1623BB85CE0044C22F /* CCCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1523BB85CE0044C22F /* CCCapture.swift */; };
-		6244EB1A23BBBF910044C22F /* CCImageProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1923BBBF910044C22F /* CCImageProcessing.swift */; };
+		6244EB1A23BBBF910044C22F /* CCImageProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1923BBBF910044C22F /* CCImageProcess.swift */; };
 		6258C76C23BB467C00B4AD79 /* CaptureProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6258C76B23BB467C00B4AD79 /* CaptureProperty.swift */; };
 		6258C76E23BB48C300B4AD79 /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6258C76D23BB48C300B4AD79 /* VideoCapture.swift */; };
 		6258C77223BB4C7700B4AD79 /* AVCaptureColorSpace+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6258C77123BB4C7700B4AD79 /* AVCaptureColorSpace+Extension.swift */; };
@@ -95,9 +96,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		621EDDBD241E316B00087E47 /* CCComponentProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCComponentProtocol.swift; sourceTree = "<group>"; };
 		6244EB1223BB82B80044C22F /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		6244EB1523BB85CE0044C22F /* CCCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCCapture.swift; sourceTree = "<group>"; };
-		6244EB1923BBBF910044C22F /* CCImageProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCImageProcessing.swift; sourceTree = "<group>"; };
+		6244EB1923BBBF910044C22F /* CCImageProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCImageProcess.swift; sourceTree = "<group>"; };
 		6258C76B23BB467C00B4AD79 /* CaptureProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureProperty.swift; sourceTree = "<group>"; };
 		6258C76D23BB48C300B4AD79 /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		6258C77123BB4C7700B4AD79 /* AVCaptureColorSpace+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureColorSpace+Extension.swift"; sourceTree = "<group>"; };
@@ -288,7 +290,7 @@
 				62AEDBB923C46CD4006CF7F8 /* CCVision */,
 				62E5CA5922904A34004D258A /* CCRenderer */,
 				62D319CA23BC7EAF0070E36A /* CCRecorder */,
-				62E5CA8722904A35004D258A /* CCImageProcessing */,
+				62E5CA8722904A35004D258A /* CCImageProcess */,
 				62926276232FEC2600D47CF0 /* CCCameraRoll */,
 				62E6FAE723F80CEE006E11D7 /* CCAudio */,
 				62FABEBF2296E5A4002672A0 /* ARRenderer */,
@@ -296,6 +298,7 @@
 				62E5CA5022904A34004D258A /* Extension */,
 				62E5CA4422904A34004D258A /* Utils */,
 				62E5CA4022904A34004D258A /* AVModuleCore.swift */,
+				621EDDBD241E316B00087E47 /* CCComponentProtocol.swift */,
 				62D319C623BC6B4D0070E36A /* CCView.swift */,
 				62E6FAE123F80628006E11D7 /* CCView+OrientationManager.swift */,
 				62AEDBA623C2FE83006CF7F8 /* CCTexture.swift */,
@@ -369,7 +372,7 @@
 			path = CCRenderer;
 			sourceTree = "<group>";
 		};
-		62E5CA8722904A35004D258A /* CCImageProcessing */ = {
+		62E5CA8722904A35004D258A /* CCImageProcess */ = {
 			isa = PBXGroup;
 			children = (
 				62E5CA9122904A35004D258A /* Id */,
@@ -381,9 +384,9 @@
 				62E5CA8C22904A35004D258A /* ColorOverlayLayer.swift */,
 				62E5CA8F22904A35004D258A /* SequenceImageLayer.swift */,
 				62E5CA9322904A35004D258A /* TransformLayer.swift */,
-				6244EB1923BBBF910044C22F /* CCImageProcessing.swift */,
+				6244EB1923BBBF910044C22F /* CCImageProcess.swift */,
 			);
-			path = CCImageProcessing;
+			path = CCImageProcess;
 			sourceTree = "<group>";
 		};
 		62E5CA9122904A35004D258A /* Id */ = {
@@ -574,6 +577,7 @@
 				62E5CAB922904A35004D258A /* AssetManager.swift in Sources */,
 				62E5CAC922904A35004D258A /* CMTime+Extended.swift in Sources */,
 				62E5CAFB22904A35004D258A /* ColorOverlayLayer.swift in Sources */,
+				621EDDBE241E316B00087E47 /* CCComponentProtocol.swift in Sources */,
 				62D319C723BC6B4D0070E36A /* CCView.swift in Sources */,
 				62E5CABC22904A35004D258A /* SoundSource.swift in Sources */,
 				62B6C4AF23B794530044A531 /* CaptureInfo.swift in Sources */,
@@ -598,7 +602,7 @@
 				6276D62D23BF58BF00F028E1 /* CCCameraRoll.swift in Sources */,
 				62E5CABA22904A35004D258A /* AVModuleCore.swift in Sources */,
 				6244EB1323BB82B80044C22F /* Camera.swift in Sources */,
-				6244EB1A23BBBF910044C22F /* CCImageProcessing.swift in Sources */,
+				6244EB1A23BBBF910044C22F /* CCImageProcess.swift in Sources */,
 				62E5CAD522904A35004D258A /* SimpleAVPlayer.swift in Sources */,
 				62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */,
 				62E5CAF722904A35004D258A /* BlankLayer.swift in Sources */,

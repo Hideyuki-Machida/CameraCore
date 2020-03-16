@@ -13,13 +13,12 @@ import MetalKit
 import UIKit
 
 public class CCView: MCImageRenderView {
+    public let setup: CCView.Setup = CCView.Setup()
+    public let triger: CCView.Triger = CCView.Triger()
+    public let pipe: CCView.Pipe = CCView.Pipe()
+
     enum ErrorType: Error {
         case draw
-    }
-
-    deinit {
-        self.isDraw = false
-        NotificationCenter.default.removeObserver(self)
     }
 
     fileprivate let orientationManager: OrientationManager = OrientationManager()
@@ -69,7 +68,26 @@ public class CCView: MCImageRenderView {
         }
     }
 
-    public override func setup() throws {
+    public override init(frame frameRect: CGRect, device: MTLDevice?) {
+        super.init(frame: frameRect, device: device)
+        self._init()
+    }
+
+    public required init(coder: NSCoder) {
+        super.init(coder: coder)
+        self._init()
+    }
+
+    private func _init() {
+        self.triger.onDispose = self.dispose
+        self.pipe.ccview = self
+    }
+
+    deinit {
+        self.dispose()
+    }
+    
+    public func _setup() throws {
         try super.setup()
         self.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
     }
@@ -103,49 +121,90 @@ public class CCView: MCImageRenderView {
     }
 }
 
-// MARK: - pipe
+fileprivate extension CCView {
+    func dispose() {
+        self.triger.onDispose = nil
+        self.pipe.dispose()
+        self.isDraw = false
+        NotificationCenter.default.removeObserver(self)
+    }
+}
 
 extension CCView {
-    func pipe(postProcess: CCRenderer.PostProcess) throws -> CCView {
-        try self.setup()
-
-        postProcess.onUpdate = { [weak self] (outTexture: CCTexture) in
-            guard let self = self else { return }
-            if outTexture.colorPixelFormat != self.colorPixelFormat {
-                MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
-                return
-            }
-
-            self.drawTexture = outTexture
-        }
-
-        return self
+    // MARK: - Setup
+    public class Setup: CCComponentSetupProtocol {
     }
 
-    func pipe(camera: CCCapture.Camera) throws -> CCView {
-        try self.setup()
+    // MARK: - Triger
+    public class Triger: CCComponentTrigerProtocol {
+        fileprivate var onDispose: (()->Void)?
 
-        camera.pipe.outCaptureData = { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
-            guard let self = self else { return }
-            if captureData.colorPixelFormat != self.colorPixelFormat {
-                MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
-                return
+        public func dispose() { self.onDispose?() }
+    }
+
+    // MARK: - Pipe
+    public class Pipe: NSObject, CCComponentPipeProtocol {
+        fileprivate var ccview: CCView?
+        fileprivate var observations: [NSKeyValueObservation] = []
+
+        @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
+
+        func input(postProcess: CCRenderer.PostProcess) throws -> CCView {
+            try self.ccview?._setup()
+            let observation: NSKeyValueObservation = postProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCRenderer.PostProcess.Pipe, change) in
+                guard let outTexture: CCTexture = object.outTexture else { return }
+
+                guard let self = self else { return }
+
+                if outTexture.colorPixelFormat != self.ccview?.colorPixelFormat {
+                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    return
+                }
+
+                self.ccview?.drawTexture = outTexture
+
             }
+            self.observations.append(observation)
 
-            guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
-            do {
-                var drawTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: captureData.colorPixelFormat, planeIndex: 0)
-                drawTexture.presentationTimeStamp = captureData.presentationTimeStamp
-                drawTexture.captureVideoOrientation = captureData.captureVideoOrientation
-                drawTexture.presetSize = captureData.captureInfo.presetSize
-
-                self.drawTexture = drawTexture
-
-            } catch {
-                MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
-            }
+            return self.ccview!
         }
 
-        return self
+        func input(camera: CCCapture.Camera) throws -> CCView {
+            try self.ccview?._setup()
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+
+                guard let self = self else { return }
+                if captureData.colorPixelFormat != self.ccview?.colorPixelFormat {
+                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    return
+                }
+
+                guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
+                do {
+                    var drawTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: captureData.colorPixelFormat, planeIndex: 0)
+                    drawTexture.presentationTimeStamp = captureData.presentationTimeStamp
+                    drawTexture.captureVideoOrientation = captureData.captureVideoOrientation
+                    drawTexture.presetSize = captureData.captureInfo.presetSize
+
+                    DispatchQueue.main.async { [weak self] in
+                        self?.ccview?.drawTexture = drawTexture
+                    }
+
+                } catch {
+                    MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
+                }
+
+            }
+            self.observations.append(observation)
+
+            return self.ccview!
+        }
+
+        fileprivate func dispose() {
+            self.ccview = nil
+            self.observations.forEach { $0.invalidate() }
+            self.observations.removeAll()
+        }
     }
 }

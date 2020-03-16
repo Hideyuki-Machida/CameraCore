@@ -14,12 +14,12 @@ infix operator -->: AdditionPrecedence
 
 @discardableResult
 public func --> (camera: CCCapture.Camera, postProcess: CCRenderer.PostProcess) throws -> CCRenderer.PostProcess {
-    return try postProcess.pipe(camera: camera)
+    return try postProcess.pipe.input(camera: camera)
 }
 
 @discardableResult
 public func --> (camera: CCCapture.Camera, view: CCView) throws -> CCView {
-    return try view.pipe(camera: camera)
+    return try view.pipe.input(camera: camera)
 }
 
 @discardableResult
@@ -29,7 +29,7 @@ public func --> (camera: CCCapture.Camera, imageRecognition: CCVision.ImageRecog
 
 @discardableResult
 public func --> (postProcess: CCRenderer.PostProcess, view: CCView) throws -> CCView {
-    return try view.pipe(postProcess: postProcess)
+    return try view.pipe.input(postProcess: postProcess)
 }
 
 /*

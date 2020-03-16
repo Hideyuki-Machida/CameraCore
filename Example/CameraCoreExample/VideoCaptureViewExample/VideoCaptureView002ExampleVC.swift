@@ -35,6 +35,9 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
     deinit {
         self.camera?.triger.pause()
+        self.camera?.triger.dispose()
+        self.postProcess?.triger.dispose()
+        self.drawView.triger.dispose()
         MCDebug.deinitLog(self)
     }
 
@@ -57,7 +60,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess(isDisplayLink: true)
+            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess(isDisplayLink: false)
 
             try camera --> postProcess --> self.drawView
             camera.event = event

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol CCComponentProtocol {
+public protocol CCComponentProtocol: NSObject {
     var setup: CCComponentSetupProtocol { get set }
     var triger: CCComponentTrigerProtocol { get set }
     var pipe: CCComponentPipeProtocol { get set }

@@ -14,21 +14,34 @@ import MetalPerformanceShaders
 
 extension CCRenderer {
     public class PostProcess: NSObject {
+        public let setup: CCRenderer.PostProcess.Setup = CCRenderer.PostProcess.Setup()
+        public let triger: CCRenderer.PostProcess.Triger = CCRenderer.PostProcess.Triger()
+        public let pipe: CCRenderer.PostProcess.Pipe = CCRenderer.PostProcess.Pipe()
+
         private let postProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
-
-        private let isDisplayLink: Bool
-        public var renderLayers: [RenderLayerProtocol] = []
-
+        
         fileprivate let errorType: CCRenderer.ErrorType = CCRenderer.ErrorType.render
         fileprivate let hasMPS: Bool = MPSSupportsMTLDevice(MCCore.device)
         fileprivate let filter: MPSImageLanczosScale = MPSImageLanczosScale(device: MCCore.device)
         fileprivate var counter: CMTimeValue = 0
-        fileprivate var displayLink: CADisplayLink?
-
-        fileprivate(set) var outTexture: CCTexture?
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         //
+
+        private var _renderLayers: [RenderLayerProtocol] = []
+        public var renderLayers: [RenderLayerProtocol] {
+            get {
+                objc_sync_enter(self)
+                let renderLayers: [RenderLayerProtocol] = self._renderLayers
+                objc_sync_exit(self)
+                return renderLayers
+            }
+            set {
+                objc_sync_enter(self)
+                self._renderLayers = newValue
+                objc_sync_exit(self)
+            }
+        }
 
         private var _presentationTimeStamp: CMTime = CMTime()
         fileprivate(set) var presentationTimeStamp: CMTime {
@@ -60,48 +73,21 @@ extension CCRenderer {
             }
         }
 
-        private var _currentCaptureItem: CCCapture.VideoCapture.CaptureData?
-        fileprivate(set) var currentCaptureItem: CCCapture.VideoCapture.CaptureData? {
-            get {
-                objc_sync_enter(self)
-                let currentCaptureItem: CCCapture.VideoCapture.CaptureData? = self._currentCaptureItem
-                objc_sync_exit(self)
-                return currentCaptureItem
-            }
-            set {
-                objc_sync_enter(self)
-                self._currentCaptureItem = newValue
-                objc_sync_exit(self)
-            }
-        }
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         fileprivate(set) var captureSize: Settings.PresetSize = Settings.PresetSize.p1280x720
 
-        var onUpdate: ((_ texture: CCTexture) -> Void)?
-
         public init(isDisplayLink: Bool) {
-            self.isDisplayLink = isDisplayLink
             super.init()
+            self.pipe.isDisplayLink = isDisplayLink
+            self.pipe.postProcess = self
+            self.triger.onDispose = self.dispose
         }
 
         deinit {
             self.dispose()
             MCDebug.deinitLog(self)
         }
-    }
-}
-
-public extension CCRenderer.PostProcess {
-    func dispose() {
-        self.displayLink?.invalidate()
-        objc_sync_enter(self)
-        for index in self.renderLayers.indices {
-            guard self.renderLayers.indices.contains(index) else { continue }
-            self.renderLayers[index].dispose()
-        }
-        objc_sync_exit(self)
     }
 }
 
@@ -122,7 +108,8 @@ extension CCRenderer.PostProcess {
             var outTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: captureData.colorPixelFormat, planeIndex: 0)
             outTexture.presentationTimeStamp = presentationTimeStamp
             outTexture.presetSize = presetSize
-            self.onUpdate?(outTexture)
+            self.pipe.outTexture = outTexture
+            self.pipe.outPresentationTimeStamp = captureData.presentationTimeStamp
             return
         }
 
@@ -134,26 +121,12 @@ extension CCRenderer.PostProcess {
             throw self.errorType
         }
     }
-
-    @discardableResult
-    func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) throws -> CCTexture {
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        // 描画用テクスチャを生成
-        guard
-            Float(self.outTexture?.size.w ?? 0) != captureSize.w,
-            let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
-            let tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: colorPixelFormat, planeIndex: 0)
-        else { throw self.errorType }
-        self.outTexture = tex
-        return tex
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-    }
 }
 
 private extension CCRenderer.PostProcess {
     func process(pixelBuffer: CVPixelBuffer, captureData: CCCapture.VideoCapture.CaptureData, queue: DispatchQueue) throws {
         var pixelBuffer: CVPixelBuffer = pixelBuffer
-        guard var outTexture: CCTexture = self.outTexture else { return }
+        guard var outTexture: CCTexture = self.pipe.outTexture else { return }
 
         //////////////////////////////////////////////////////////
         // renderSize
@@ -163,7 +136,7 @@ private extension CCRenderer.PostProcess {
         //////////////////////////////////////////////////////////
 
         if outTexture.size != renderSize {
-            outTexture = try updateOutTexture(captureSize: renderSize, colorPixelFormat: captureData.colorPixelFormat)
+            outTexture = try self.pipe.updateOutTexture(captureSize: renderSize, colorPixelFormat: captureData.colorPixelFormat)
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,7 +171,8 @@ private extension CCRenderer.PostProcess {
             outTexture.presentationTimeStamp = captureData.presentationTimeStamp
             outTexture.captureVideoOrientation = captureData.captureVideoOrientation
             outTexture.presetSize = captureData.captureInfo.presetSize
-            self.onUpdate?(outTexture)
+            self.pipe.outTexture = outTexture
+            self.pipe.outPresentationTimeStamp = captureData.presentationTimeStamp
         }
 
         try self.processRenderLayer(commandBuffer: commandBuffer, source: &pixelBuffer, destination: &outTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
@@ -243,54 +217,164 @@ private extension CCRenderer.PostProcess {
     }
 }
 
-// MARK: - pipe
+fileprivate extension CCRenderer.PostProcess {
+    func dispose() {
+        self.triger.onDispose = nil
+        self.pipe.dispose()
+        objc_sync_enter(self)
+        for index in self.renderLayers.indices {
+            guard self.renderLayers.indices.contains(index) else { continue }
+            self.renderLayers[index].dispose()
+        }
+        objc_sync_exit(self)
+    }
+}
 
 extension CCRenderer.PostProcess {
-    func pipe(camera: CCCapture.Camera) throws -> CCRenderer.PostProcess {
-        let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
-        try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
-        if self.isDisplayLink {
-            self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
-            self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
-            camera.pipe.outCaptureData = { [weak self] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
-                // CADisplayLinkのloopで参照されるのでQueueを揃える。
-                self?.postProcessQueue.sync { [weak self] in
-                    self?.currentCaptureItem = currentCaptureItem
-                }
+    // MARK: - Setup
+    public class Setup: CCComponentSetupProtocol {
+        fileprivate var onUpdate: ((_ property: CCCapture.VideoCapture.Property) throws-> Void)?
+
+        public func update(property: CCCapture.VideoCapture.Property) throws { try self.onUpdate?(property) }
+    }
+
+    // MARK: - Triger
+    public class Triger: CCComponentTrigerProtocol {
+        fileprivate var onDispose: (()->Void)?
+
+        public func dispose() { self.onDispose?() }
+    }
+
+    // MARK: - Pipe
+    public class Pipe: NSObject, CCComponentPipeProtocol {
+        fileprivate let errorType: CCRenderer.ErrorType = CCRenderer.ErrorType.render
+
+        private var _currentCaptureItem: CCCapture.VideoCapture.CaptureData?
+        fileprivate(set) var currentCaptureItem: CCCapture.VideoCapture.CaptureData? {
+            get {
+                objc_sync_enter(self)
+                let currentCaptureItem: CCCapture.VideoCapture.CaptureData? = self._currentCaptureItem
+                objc_sync_exit(self)
+                return currentCaptureItem
             }
-        } else {
-            camera.pipe.outCaptureData = { [weak self] (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
-                self?.process(currentCaptureItem: currentCaptureItem)
+            set {
+                objc_sync_enter(self)
+                self._currentCaptureItem = newValue
+                objc_sync_exit(self)
             }
         }
 
-        return self
-    }
+        private var _outTexture: CCTexture?
+        public var outTexture: CCTexture? {
+            get {
+                objc_sync_enter(self)
+                let outTexture: CCTexture? = self._outTexture
+                objc_sync_exit(self)
+                return outTexture
+            }
+            set {
+                objc_sync_enter(self)
+                self._outTexture = newValue
+                objc_sync_exit(self)
+            }
+        }
 
-    @objc private func updateDisplay() {
-        guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
-        guard
-            !self.isProcess,
-            currentCaptureItem.presentationTimeStamp != self.presentationTimeStamp
-        else { return }
-        self.postProcessQueue.async { [weak self] in
+        private var _outPresentationTimeStamp: CMTime = CMTime.zero
+        @objc dynamic public var outPresentationTimeStamp: CMTime {
+            get {
+                objc_sync_enter(self)
+                let presentationTimeStamp: CMTime = self._outPresentationTimeStamp
+                objc_sync_exit(self)
+                return presentationTimeStamp
+            }
+            set {
+                objc_sync_enter(self)
+                self._outPresentationTimeStamp = newValue
+                objc_sync_exit(self)
+            }
+        }
+
+        fileprivate var displayLink: CADisplayLink?
+        fileprivate var isDisplayLink: Bool = false
+        fileprivate var postProcess: CCRenderer.PostProcess?
+        fileprivate var observations: [NSKeyValueObservation] = []
+
+        func input(camera: CCCapture.Camera) throws -> CCRenderer.PostProcess {
+
+            let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
+            try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
+            if self.isDisplayLink {
+                self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
+                self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+                let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+                    // CADisplayLinkのloopで参照されるのでQueueを揃える。
+                    self?.postProcess?.postProcessQueue.sync { [weak self] in
+                        self?.currentCaptureItem = captureData
+                    }
+                }
+                self.observations.append(observation)
+            } else {
+                let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+                    // CADisplayLinkのloopで参照されるのでQueueを揃える。
+                    self?.process(currentCaptureItem: captureData)
+                }
+                self.observations.append(observation)
+            }
+
+            return self.postProcess!
+        }
+
+        @objc private func updateDisplay() {
+            guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
+            guard
+                let postProcess: CCRenderer.PostProcess = self.postProcess,
+                !postProcess.isProcess,
+                currentCaptureItem.presentationTimeStamp != postProcess.presentationTimeStamp
+            else { return }
+            postProcess.postProcessQueue.async { [weak postProcess] in
+                do {
+                    try postProcess?.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+                } catch {
+                    MCDebug.log("CCRenderer.PostProcess: process error")
+                }
+            }
+        }
+
+        private func process(currentCaptureItem: CCCapture.VideoCapture.CaptureData) {
+            guard
+                let postProcess: CCRenderer.PostProcess = self.postProcess,
+                !postProcess.isProcess,
+                currentCaptureItem.presentationTimeStamp != postProcess.presentationTimeStamp
+            else { return }
             do {
-                try self?.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+                try postProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
             } catch {
                 MCDebug.log("CCRenderer.PostProcess: process error")
             }
         }
-    }
 
-    private func process(currentCaptureItem: CCCapture.VideoCapture.CaptureData) {
-        guard
-            !self.isProcess,
-            currentCaptureItem.presentationTimeStamp != self.presentationTimeStamp
-        else { return }
-        do {
-            try self.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
-        } catch {
-            MCDebug.log("CCRenderer.PostProcess: process error")
+        @discardableResult
+        func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) throws -> CCTexture {
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // 描画用テクスチャを生成
+            guard
+                Float(self.outTexture?.size.w ?? 0) != captureSize.w,
+                let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
+                let tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: colorPixelFormat, planeIndex: 0)
+            else { throw self.errorType }
+            self.outTexture = tex
+            return tex
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+        }
+
+        fileprivate func dispose() {
+            self.postProcess = nil
+            self.observations.forEach { $0.invalidate() }
+            self.observations.removeAll()
+            self.displayLink?.invalidate()
         }
     }
 }
+

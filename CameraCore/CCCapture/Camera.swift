@@ -31,7 +31,9 @@ extension CCCapture {
         public func dispose() { self.onDispose?() }
     }
 
-    public class CameraPipe: CCComponentPipeProtocol {
+    public class CameraPipe: NSObject, CCComponentPipeProtocol {
+        @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
+        public var currentCaptureItem: CCCapture.VideoCapture.CaptureData?
         public var outCaptureData: ((_ currentCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
     }
 
@@ -67,6 +69,7 @@ extension CCCapture {
             try self.setupProperty(property: property)
             
             self.setup.onSetup = self.setupProperty
+            self.setup.onUpdate = self.updateProperty
             self.triger.onPlay = self.play
             self.triger.onPause = self.pause
             self.triger.onDispose = self.dispose
@@ -99,6 +102,11 @@ extension CCCapture.Camera {
         self.capture?.stop()
         self.status = .setup
         self.capture = nil
+        self.setup.onSetup = nil
+        self.setup.onUpdate = nil
+        self.triger.onPlay = nil
+        self.triger.onPause = nil
+        self.triger.onDispose = nil
     }
 }
 
@@ -132,8 +140,9 @@ fileprivate extension CCCapture.Camera {
                 captureVideoOrientation: captureVideoOrientation
             )
 
-            self.event?.onUpdate?(currentCaptureItem)
-            self.pipe.outCaptureData?(currentCaptureItem)
+
+            self.pipe.currentCaptureItem = currentCaptureItem
+            self.pipe.outPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }

@@ -15,7 +15,8 @@ import UIKit
 class VideoCaptureView001ExampleVC: UIViewController {
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
-        isAudioDataOutput: true,
+        //isAudioDataOutput: true,
+        isAudioDataOutput: false,
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
             .frameRate(Settings.PresetFrameRate.fps30),
@@ -31,7 +32,8 @@ class VideoCaptureView001ExampleVC: UIViewController {
     
     deinit {
         MCDebug.deinitLog(self)
-        //self.camera.rem
+        self.camera?.triger.dispose()
+        CameraCore.flush()
     }
 
     override func viewDidLoad() {

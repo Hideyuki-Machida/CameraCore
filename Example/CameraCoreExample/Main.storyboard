@@ -342,7 +342,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="FoS-fP-yzk" customClass="CCView" customModule="CameraCore">
-                                <rect key="frame" x="-41" y="0.0" width="457" height="812"/>
+                                <rect key="frame" x="0.0" y="72.666666666666686" width="375" height="666.66666666666652"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="FoS-fP-yzk" secondAttribute="height" multiplier="16:9" id="OgT-KQ-E0w"/>
                                     <constraint firstAttribute="width" secondItem="FoS-fP-yzk" secondAttribute="height" multiplier="9:16" id="av4-2O-x3d"/>
@@ -462,10 +462,9 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="FoS-fP-yzk" firstAttribute="top" secondItem="cpw-ss-QbB" secondAttribute="top" id="21T-PA-tSY"/>
+                            <constraint firstItem="FoS-fP-yzk" firstAttribute="leading" secondItem="cpw-ss-QbB" secondAttribute="leading" id="EQo-mH-1nW"/>
                             <constraint firstItem="xIM-73-ZQ4" firstAttribute="leading" secondItem="neG-pe-oaO" secondAttribute="leading" constant="10" id="Hvp-34-I4z"/>
                             <constraint firstItem="dt6-Fd-uYx" firstAttribute="leading" secondItem="xIM-73-ZQ4" secondAttribute="trailing" constant="10" id="IJv-nj-Iff"/>
-                            <constraint firstAttribute="bottom" secondItem="FoS-fP-yzk" secondAttribute="bottom" id="Krf-f7-u6R"/>
                             <constraint firstItem="oG8-Fo-T9C" firstAttribute="top" secondItem="xIM-73-ZQ4" secondAttribute="bottom" constant="10" id="RZU-BA-rIT"/>
                             <constraint firstItem="neG-pe-oaO" firstAttribute="bottom" secondItem="oG8-Fo-T9C" secondAttribute="bottom" constant="10" id="Seq-gb-gHF"/>
                             <constraint firstItem="FoS-fP-yzk" firstAttribute="centerY" secondItem="cpw-ss-QbB" secondAttribute="centerY" id="UN6-8j-ZtK"/>
@@ -473,6 +472,7 @@
                             <constraint firstItem="FoS-fP-yzk" firstAttribute="centerX" secondItem="cpw-ss-QbB" secondAttribute="centerX" id="YJA-I5-Hif"/>
                             <constraint firstItem="neG-pe-oaO" firstAttribute="trailing" secondItem="oG8-Fo-T9C" secondAttribute="trailing" constant="10" id="cnS-f3-Qtb"/>
                             <constraint firstItem="oG8-Fo-T9C" firstAttribute="top" secondItem="dt6-Fd-uYx" secondAttribute="bottom" constant="10" id="ddK-w5-0Un"/>
+                            <constraint firstAttribute="trailing" secondItem="FoS-fP-yzk" secondAttribute="trailing" id="iFc-6r-7bx"/>
                             <constraint firstItem="neG-pe-oaO" firstAttribute="trailing" secondItem="dt6-Fd-uYx" secondAttribute="trailing" constant="10" id="ltp-Rn-UIa"/>
                             <constraint firstItem="FoS-fP-yzk" firstAttribute="leading" secondItem="cpw-ss-QbB" secondAttribute="leading" id="qGs-he-Ry7"/>
                             <constraint firstItem="oG8-Fo-T9C" firstAttribute="leading" secondItem="neG-pe-oaO" secondAttribute="leading" constant="10" id="vLQ-ce-Eh4"/>
@@ -481,8 +481,6 @@
                         <viewLayoutGuide key="safeArea" id="neG-pe-oaO"/>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="21T-PA-tSY"/>
-                                <exclude reference="Krf-f7-u6R"/>
                                 <exclude reference="qGs-he-Ry7"/>
                                 <exclude reference="xA7-VT-whd"/>
                             </mask>
@@ -497,12 +495,6 @@
                             <mask key="constraints">
                                 <include reference="qGs-he-Ry7"/>
                                 <include reference="xA7-VT-whd"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="constraints">
-                                <include reference="21T-PA-tSY"/>
-                                <include reference="Krf-f7-u6R"/>
                             </mask>
                         </variation>
                     </view>

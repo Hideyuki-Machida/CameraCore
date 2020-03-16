@@ -15,6 +15,8 @@ import MetalPerformanceShaders
 extension CCRenderer {
     public class PostProcess: NSObject {
         private let postProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
+        
+        private var observation: NSKeyValueObservation?
 
         private let isDisplayLink: Bool
         public var renderLayers: [RenderLayerProtocol] = []
@@ -247,6 +249,19 @@ private extension CCRenderer.PostProcess {
 
 extension CCRenderer.PostProcess {
     func pipe(camera: CCCapture.Camera) throws -> CCRenderer.PostProcess {
+        self.observation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.old, .new]) { (object, change) in
+            print(change)
+        }
+        /*
+        self.observe(KeyPath<CCRenderer.PostProcess, Value>) { (<#CCRenderer.PostProcess#>, <#NSKeyValueObservedChange<Value>#>) in
+            <#code#>
+        }
+        let v: NSKeyValueObservation = self.observe(camera.pipe.outPresentationTimeStamp, options: [.old, .new]) { object, change in
+            print("value=\(change.newValue)")
+        }
+        */
+
+        
         let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
         try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
         if self.isDisplayLink {

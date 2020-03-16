@@ -19,9 +19,12 @@ public class CCView: MCImageRenderView {
 
     deinit {
         self.isDraw = false
+        self.observations.map { $0.invalidate() }
+        self.observations.removeAll()
         NotificationCenter.default.removeObserver(self)
     }
 
+    fileprivate var observations: [NSKeyValueObservation] = []
     fileprivate let orientationManager: OrientationManager = OrientationManager()
 
     private var _presentationTimeStamp: CMTime = CMTime()
@@ -124,7 +127,33 @@ extension CCView {
 
     func pipe(camera: CCCapture.Camera) throws -> CCView {
         try self.setup()
+        let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.CameraPipe, change) in
+            guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
 
+            guard let self = self else { return }
+            if captureData.colorPixelFormat != self.colorPixelFormat {
+                MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                return
+            }
+
+            guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
+            do {
+                var drawTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: captureData.colorPixelFormat, planeIndex: 0)
+                drawTexture.presentationTimeStamp = captureData.presentationTimeStamp
+                drawTexture.captureVideoOrientation = captureData.captureVideoOrientation
+                drawTexture.presetSize = captureData.captureInfo.presetSize
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.drawTexture = drawTexture
+                }
+
+            } catch {
+                MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
+            }
+
+        }
+        self.observations.append(observation)
+        /*
         camera.pipe.outCaptureData = { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
             guard let self = self else { return }
             if captureData.colorPixelFormat != self.colorPixelFormat {
@@ -145,7 +174,7 @@ extension CCView {
                 MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
             }
         }
-
+         */
         return self
     }
 }

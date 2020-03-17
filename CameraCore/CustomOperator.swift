@@ -40,9 +40,12 @@ public func --> (imageRecognition: CCVision.ImageRecognition, view: CCView) thro
 */
 
 public func --> (camera: CCCapture.Camera, videoRecorder: CCRecorder.VideoRecorder) throws {
-    try videoRecorder.pipe(camera: camera)
+    try videoRecorder.pipe.input(camera: camera)
 }
 
+public func --> (postProcess: CCRenderer.PostProcess, videoRecorder: CCRecorder.VideoRecorder) throws {
+    try videoRecorder.pipe.input(postProcess: postProcess)
+}
 
 
 @discardableResult

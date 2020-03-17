@@ -93,7 +93,7 @@ extension AudioExampleVC {
     func videoRecording() {
         if self.videoRecorder.isRecording {
             self.recordingButton.setTitle("撮影開始", for: UIControl.State.normal)
-            self.videoRecorder.stop()
+            self.videoRecorder.triger.stop()
         } else {
             let filePath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/" + "recordingVideo" + NSUUID().uuidString + ".mp4"
 
@@ -108,8 +108,8 @@ extension AudioExampleVC {
                     videoCodecType: Settings.VideoCodec.hevc
                 )
 
-                try self.videoRecorder.setup(parameter: param)
-                self.videoRecorder.start()
+                try self.videoRecorder.setup.setup(parameter: param)
+                self.videoRecorder.triger.start()
                 self.recordingButton.setTitle("撮影ストップ", for: UIControl.State.normal)
             } catch {}
         }

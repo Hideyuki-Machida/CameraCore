@@ -8,48 +8,32 @@
 
 import Foundation
 import AVFoundation
+import MetalCanvas
 
 
 extension CCRecorder {
     public class VideoRecorder {
+        public let setup: CCRecorder.VideoRecorder.Setup = CCRecorder.VideoRecorder.Setup()
+        public let triger: CCRecorder.VideoRecorder.Triger = CCRecorder.VideoRecorder.Triger()
+        public let pipe: CCRecorder.VideoRecorder.Pipe = CCRecorder.VideoRecorder.Pipe()
+
         var captureWriter: CaptureWriter = CaptureWriter()
         public var isRecording: Bool = false
 
         public init() throws {
+            self.setup.videoRecorder = self
+            self.triger.videoRecorder = self
+            self.pipe.videoRecorder = self
         }
-    }
-}
-
-public extension CCRecorder.VideoRecorder {
-    func setup(parameter: CCRecorder.CaptureWriter.Parameter) throws {
-        try self.captureWriter.setup(parameter)
-    }
-
-    func start() {
-        self.isRecording = true
-        self.captureWriter.start()
-    }
-    
-    func stop() {
-        self.isRecording = false
-        self.captureWriter.stop()
-        /*
-        CCRecorder.CaptureWriter.finish { (success: Bool, url: URL) in
-            print(success)
+        
+        deinit {
+            self.dispose()
+            MCDebug.deinitLog(self)
         }
- */
     }
 }
 
 extension CCRecorder.VideoRecorder {
-    func pipe(camera: CCCapture.Camera) throws {
-
-        camera.pipe.outCaptureData = { (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
-            guard self.isRecording == true else { return }
-            self.captureWriter.setSampleBuffer(sampleBuffer: currentCaptureItem.sampleBuffer)
-        }
-    }
-
     func pipe(audioEngine: CCAudio.AudioEngine) throws {
         audioEngine.onUpdateSampleBuffer = { (sampleBuffer: CMSampleBuffer) in
             guard self.isRecording == true else { return }
@@ -205,5 +189,92 @@ extension CCRecorder.VideoRecorder {
             })
         }
 
+        deinit {
+            MCDebug.deinitLog(self)
+        }
+
+    }
+}
+
+fileprivate extension CCRecorder.VideoRecorder {
+    func dispose() {
+        self.setup._dispose()
+        self.triger._dispose()
+        self.pipe._dispose()
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension CCRecorder.VideoRecorder {
+    // MARK: - Setup
+    public class Setup: CCComponentSetupProtocol {
+        fileprivate var videoRecorder: CCRecorder.VideoRecorder?
+        
+        public func setup(parameter: CCRecorder.CaptureWriter.Parameter) throws {
+           try self.videoRecorder?.captureWriter.setup(parameter)
+       }
+
+        fileprivate func _dispose() {
+            self.videoRecorder = nil
+        }
+    }
+
+    // MARK: - Triger
+    public class Triger: CCComponentTrigerProtocol {
+        fileprivate var videoRecorder: CCRecorder.VideoRecorder?
+
+        public func start() {
+            self.videoRecorder?.isRecording = true
+            self.videoRecorder?.captureWriter.start()
+        }
+
+        public func stop() {
+            self.videoRecorder?.isRecording = false
+            self.videoRecorder?.captureWriter.stop()
+        }
+
+        public func dispose() {
+            self.videoRecorder?.dispose()
+        }
+
+        fileprivate func _dispose() {
+            self.videoRecorder = nil
+        }
+    }
+
+    // MARK: - Pipe
+    public class Pipe: NSObject, CCComponentPipeProtocol {
+        fileprivate var videoRecorder: CCRecorder.VideoRecorder?
+        fileprivate var observations: [NSKeyValueObservation] = []
+
+        @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
+
+        func input(camera: CCCapture.Camera) throws {
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+
+                guard let self = self else { return }
+                guard self.videoRecorder?.isRecording == true else { return }
+                self.videoRecorder?.captureWriter.setSampleBuffer(sampleBuffer: captureData.sampleBuffer)
+            }
+            self.observations.append(observation)
+        }
+
+        func input(postProcess: CCRenderer.PostProcess) throws {
+            let observation: NSKeyValueObservation = postProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCRenderer.PostProcess.Pipe, change) in
+                guard let outTexture: CCTexture = object.outTexture else { return }
+
+                guard let self = self else { return }
+                guard self.videoRecorder?.isRecording == true else { return }
+
+            }
+            self.observations.append(observation)
+        }
+
+        fileprivate func _dispose() {
+            self.videoRecorder = nil
+            self.observations.forEach { $0.invalidate() }
+            self.observations.removeAll()
+        }
     }
 }

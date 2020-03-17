@@ -19,6 +19,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
     
     private var camera: CCCapture.Camera?
     private var postProcess: CCRenderer.PostProcess?
+    private var videoRecorder: CCRecorder.VideoRecorder?
     private var lutLayer: CCImageProcess.LutLayer!
 
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
@@ -37,6 +38,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.camera?.triger.pause()
         self.camera?.triger.dispose()
         self.postProcess?.triger.dispose()
+        self.videoRecorder?.triger.dispose()
         self.drawView.triger.dispose()
         MCDebug.deinitLog(self)
     }
@@ -61,12 +63,15 @@ class VideoCaptureView002ExampleVC: UIViewController {
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess(isDisplayLink: false)
+            let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 
             try camera --> postProcess --> self.drawView
+            try postProcess --> videoRecorder
             camera.event = event
             camera.triger.play()
             self.camera = camera
             self.postProcess = postProcess
+            self.videoRecorder = videoRecorder
         } catch {
             MCDebug.errorLog("VideoCaptureView setup error")
         }

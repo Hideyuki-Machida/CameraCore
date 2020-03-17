@@ -79,9 +79,10 @@ extension CCRenderer {
 
         public init(isDisplayLink: Bool) {
             super.init()
-            self.pipe.isDisplayLink = isDisplayLink
+            self.setup.postProcess = self
+            self.triger.postProcess = self
             self.pipe.postProcess = self
-            self.triger.onDispose = self.dispose
+            self.pipe.isDisplayLink = isDisplayLink
         }
 
         deinit {
@@ -219,8 +220,9 @@ private extension CCRenderer.PostProcess {
 
 fileprivate extension CCRenderer.PostProcess {
     func dispose() {
-        self.triger.onDispose = nil
-        self.pipe.dispose()
+        self.setup._dispose()
+        self.triger._dispose()
+        self.pipe._dispose()
         objc_sync_enter(self)
         for index in self.renderLayers.indices {
             guard self.renderLayers.indices.contains(index) else { continue }
@@ -233,16 +235,23 @@ fileprivate extension CCRenderer.PostProcess {
 extension CCRenderer.PostProcess {
     // MARK: - Setup
     public class Setup: CCComponentSetupProtocol {
-        fileprivate var onUpdate: ((_ property: CCCapture.VideoCapture.Property) throws-> Void)?
-
-        public func update(property: CCCapture.VideoCapture.Property) throws { try self.onUpdate?(property) }
+        fileprivate var postProcess: CCRenderer.PostProcess?
+        fileprivate func _dispose() {
+            self.postProcess = nil
+        }
     }
 
     // MARK: - Triger
     public class Triger: CCComponentTrigerProtocol {
-        fileprivate var onDispose: (()->Void)?
+        fileprivate var postProcess: CCRenderer.PostProcess?
 
-        public func dispose() { self.onDispose?() }
+        public func dispose() {
+            self.postProcess?.dispose()
+        }
+
+        fileprivate func _dispose() {
+            self.postProcess = nil
+        }
     }
 
     // MARK: - Pipe
@@ -369,7 +378,7 @@ extension CCRenderer.PostProcess {
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
-        fileprivate func dispose() {
+        fileprivate func _dispose() {
             self.postProcess = nil
             self.observations.forEach { $0.invalidate() }
             self.observations.removeAll()

@@ -41,11 +41,10 @@ extension CCCapture {
             super.init()
             try self.setupProperty(property: property)
             
-            self.setup.onSetup = self.setupProperty
-            self.setup.onUpdate = self.updateProperty
-            self.triger.onPlay = self.play
-            self.triger.onPause = self.pause
-            self.triger.onDispose = self.dispose
+            self.setup.camera = self
+            self.triger.camera = self
+            self.pipe.camera = self
+
         }
 
         deinit {
@@ -75,11 +74,9 @@ extension CCCapture.Camera {
         self.capture?.stop()
         self.status = .setup
         self.capture = nil
-        self.setup.onSetup = nil
-        self.setup.onUpdate = nil
-        self.triger.onPlay = nil
-        self.triger.onPause = nil
-        self.triger.onDispose = nil
+        self.setup.camera = nil
+        self.triger.camera = nil
+        self.pipe.camera = nil
     }
 }
 
@@ -145,26 +142,44 @@ extension CCCapture.Camera {
 extension CCCapture.Camera {
     // MARK: - Setup
     public class Setup: CCComponentSetupProtocol {
-        fileprivate var onSetup: ((_ property: CCCapture.VideoCapture.Property) throws -> Void)?
-        fileprivate var onUpdate: ((_ property: CCCapture.VideoCapture.Property) throws-> Void)?
+        fileprivate var camera: CCCapture.Camera?
 
-        public func setup(property: CCCapture.VideoCapture.Property) throws { try self.onSetup?(property) }
-        public func update(property: CCCapture.VideoCapture.Property) throws { try self.onUpdate?(property) }
+        public func setup(property: CCCapture.VideoCapture.Property) throws {
+            try self.camera?.setupProperty(property: property)
+        }
+        public func update(property: CCCapture.VideoCapture.Property) throws {
+            try self.camera?.updateProperty(property: property)
+        }
+
+        fileprivate func _dispose() {
+            self.camera = nil
+        }
     }
 
     // MARK: - Triger
     public class Triger: CCComponentTrigerProtocol {
-        fileprivate var onPlay: (()->Void)?
-        fileprivate var onPause: (()->Void)?
-        fileprivate var onDispose: (()->Void)?
+        fileprivate var camera: CCCapture.Camera?
+        
+        public func play() {
+            self.camera?.play()
+        }
 
-        public func play() { self.onPlay?() }
-        public func pause() { self.onPause?() }
-        public func dispose() { self.onDispose?() }
+        public func pause() {
+            self.camera?.pause()
+        }
+        public func dispose() {
+            self.camera?.dispose()
+        }
+
+        fileprivate func _dispose() {
+            self.camera = nil
+        }
     }
 
     // MARK: - Pipe
     public class Pipe: NSObject, CCComponentPipeProtocol {
+        fileprivate var camera: CCCapture.Camera?
+
         private var _currentCaptureItem: CCCapture.VideoCapture.CaptureData?
         public var currentCaptureItem: CCCapture.VideoCapture.CaptureData? {
             get {
@@ -196,6 +211,10 @@ extension CCCapture.Camera {
         }
 
         public var outCaptureData: ((_ currentCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
+        
+        fileprivate func _dispose() {
+            self.camera = nil
+        }
     }
 }
 

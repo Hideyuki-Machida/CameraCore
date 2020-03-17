@@ -15,8 +15,7 @@ import UIKit
 class VideoCaptureView001ExampleVC: UIViewController {
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
-        //isAudioDataOutput: true,
-        isAudioDataOutput: false,
+        isAudioDataOutput: true,
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
             .frameRate(Settings.PresetFrameRate.fps30),
@@ -28,13 +27,15 @@ class VideoCaptureView001ExampleVC: UIViewController {
     
     var camera: CCCapture.Camera?
     var imageRecognition: CCVision.ImageRecognition?
+    var videoRecorder: CCRecorder.VideoRecorder?
     @IBOutlet weak var drawView: CCView!
     
     deinit {
-        MCDebug.deinitLog(self)
         self.camera?.triger.dispose()
         self.drawView.triger.dispose()
+        self.videoRecorder?.triger.dispose()
         CameraCore.flush()
+        MCDebug.deinitLog(self)
     }
 
     override func viewDidLoad() {
@@ -43,11 +44,14 @@ class VideoCaptureView001ExampleVC: UIViewController {
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             let imageRecognition: CCVision.ImageRecognition = CCVision.ImageRecognition()
+            let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
             //try camera --> imageRecognition --> self.drawView
             try camera --> self.drawView
+            try camera --> videoRecorder
             camera.triger.play()
             self.camera = camera
             self.imageRecognition = imageRecognition
+            self.videoRecorder = videoRecorder
         } catch {
             
         }

@@ -79,7 +79,8 @@ public class CCView: MCImageRenderView {
     }
 
     private func _init() {
-        self.triger.onDispose = self.dispose
+        self.setup.ccview = self
+        self.triger.ccview = self
         self.pipe.ccview = self
     }
 
@@ -123,8 +124,9 @@ public class CCView: MCImageRenderView {
 
 fileprivate extension CCView {
     func dispose() {
-        self.triger.onDispose = nil
-        self.pipe.dispose()
+        self.setup._dispose()
+        self.triger._dispose()
+        self.pipe._dispose()
         self.isDraw = false
         NotificationCenter.default.removeObserver(self)
     }
@@ -133,13 +135,23 @@ fileprivate extension CCView {
 extension CCView {
     // MARK: - Setup
     public class Setup: CCComponentSetupProtocol {
+        fileprivate var ccview: CCView?
+        fileprivate func _dispose() {
+            self.ccview = nil
+        }
     }
 
     // MARK: - Triger
     public class Triger: CCComponentTrigerProtocol {
-        fileprivate var onDispose: (()->Void)?
+        fileprivate var ccview: CCView?
 
-        public func dispose() { self.onDispose?() }
+        public func dispose() {
+            self.ccview?.dispose()
+        }
+
+        fileprivate func _dispose() {
+            self.ccview = nil
+        }
     }
 
     // MARK: - Pipe
@@ -201,7 +213,7 @@ extension CCView {
             return self.ccview!
         }
 
-        fileprivate func dispose() {
+        fileprivate func _dispose() {
             self.ccview = nil
             self.observations.forEach { $0.invalidate() }
             self.observations.removeAll()

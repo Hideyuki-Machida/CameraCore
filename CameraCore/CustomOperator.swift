@@ -23,8 +23,8 @@ public func --> (camera: CCCapture.Camera, view: CCView) throws -> CCView {
 }
 
 @discardableResult
-public func --> (camera: CCCapture.Camera, imageRecognition: CCVision.ImageRecognition) throws -> CCVision.ImageRecognition {
-    return imageRecognition.pipe(camera: camera)
+public func --> (camera: CCCapture.Camera, imageRecognition: CCVision.Inference) throws -> CCVision.Inference {
+    return imageRecognition.pipe.input(camera: camera)
 }
 
 @discardableResult

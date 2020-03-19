@@ -9,4 +9,6 @@
 import Foundation
 import MetalCanvas
 
-public typealias CCVision = MCVision
+public struct CCVision {
+    private init() {} // このstructはnamespace用途なのでインスタンス化防止
+}

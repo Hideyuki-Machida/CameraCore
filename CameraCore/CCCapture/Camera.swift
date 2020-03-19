@@ -48,6 +48,7 @@ extension CCCapture {
         }
 
         deinit {
+            self.dispose()
             MCDebug.deinitLog(self)
         }
 
@@ -55,28 +56,27 @@ extension CCCapture {
 }
 
 
-extension CCCapture.Camera {
-    fileprivate func play() {
+fileprivate extension CCCapture.Camera {
+    func play() {
         guard self.status != .play else { return }
-        MCDebug.log("CameraCore.VideoRecordingPlayer.play")
+        MCDebug.log("CameraCore.Camera.play")
         self.capture?.play()
         self.status = .play
     }
 
-    fileprivate func pause() {
-        MCDebug.log("CameraCore.VideoRecordingPlayer.pause")
+    func pause() {
+        MCDebug.log("CameraCore.Camera.pause")
         self.capture?.stop()
         self.status = .pause
     }
 
-    fileprivate func dispose() {
-        MCDebug.log("CameraCore.VideoRecordingPlayer.dispose")
+    func dispose() {
         self.capture?.stop()
         self.status = .setup
         self.capture = nil
-        self.setup.camera = nil
-        self.triger.camera = nil
-        self.pipe.camera = nil
+        self.setup._dispose()
+        self.triger._dispose()
+        self.pipe._dispose()
     }
 }
 
@@ -167,6 +167,7 @@ extension CCCapture.Camera {
         public func pause() {
             self.camera?.pause()
         }
+
         public func dispose() {
             self.camera?.dispose()
         }

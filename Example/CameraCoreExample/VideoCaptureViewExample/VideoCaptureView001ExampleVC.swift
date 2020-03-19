@@ -26,13 +26,14 @@ class VideoCaptureView001ExampleVC: UIViewController {
     )
     
     var camera: CCCapture.Camera?
-    var imageRecognition: CCVision.ImageRecognition?
+    var inference: CCVision.Inference?
     var videoRecorder: CCRecorder.VideoRecorder?
     @IBOutlet weak var drawView: CCView!
     
     deinit {
         self.camera?.triger.dispose()
         self.drawView.triger.dispose()
+        self.inference?.triger.dispose()
         self.videoRecorder?.triger.dispose()
         CameraCore.flush()
         MCDebug.deinitLog(self)
@@ -43,14 +44,14 @@ class VideoCaptureView001ExampleVC: UIViewController {
         
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let imageRecognition: CCVision.ImageRecognition = CCVision.ImageRecognition()
+            let inference: CCVision.Inference = CCVision.Inference()
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
             //try camera --> imageRecognition --> self.drawView
             try camera --> self.drawView
             try camera --> videoRecorder
             camera.triger.play()
             self.camera = camera
-            self.imageRecognition = imageRecognition
+            self.inference = inference
             self.videoRecorder = videoRecorder
         } catch {
             

@@ -25,8 +25,8 @@
 		6292627F232FEC2600D47CF0 /* CameraRollManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6292627A232FEC2600D47CF0 /* CameraRollManager.swift */; };
 		62926280232FEC2600D47CF0 /* CameraRollImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6292627B232FEC2600D47CF0 /* CameraRollImporter.swift */; };
 		62AEDBA723C2FE83006CF7F8 /* CCTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEDBA623C2FE83006CF7F8 /* CCTexture.swift */; };
-		62AEDBBB23C46D7A006CF7F8 /* CCVision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEDBBA23C46D7A006CF7F8 /* CCVision.swift */; };
-		62AEDBBD23C46FC0006CF7F8 /* ImageRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEDBBC23C46FC0006CF7F8 /* ImageRecognition.swift */; };
+		62AEDBBB23C46D7A006CF7F8 /* CCInference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEDBBA23C46D7A006CF7F8 /* CCInference.swift */; };
+		62AEDBBD23C46FC0006CF7F8 /* Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEDBBC23C46FC0006CF7F8 /* Inference.swift */; };
 		62B6C4AD23B794360044A531 /* CaptureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B6C4AC23B794360044A531 /* CaptureData.swift */; };
 		62B6C4AF23B794530044A531 /* CaptureInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B6C4AE23B794530044A531 /* CaptureInfo.swift */; };
 		62B6C4B123B7947D0044A531 /* PostProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B6C4B023B7947D0044A531 /* PostProcess.swift */; };
@@ -114,8 +114,8 @@
 		6292627A232FEC2600D47CF0 /* CameraRollManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManager.swift; sourceTree = "<group>"; };
 		6292627B232FEC2600D47CF0 /* CameraRollImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollImporter.swift; sourceTree = "<group>"; };
 		62AEDBA623C2FE83006CF7F8 /* CCTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTexture.swift; sourceTree = "<group>"; };
-		62AEDBBA23C46D7A006CF7F8 /* CCVision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCVision.swift; sourceTree = "<group>"; };
-		62AEDBBC23C46FC0006CF7F8 /* ImageRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRecognition.swift; sourceTree = "<group>"; };
+		62AEDBBA23C46D7A006CF7F8 /* CCInference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCInference.swift; sourceTree = "<group>"; };
+		62AEDBBC23C46FC0006CF7F8 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
 		62B6C4AC23B794360044A531 /* CaptureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureData.swift; sourceTree = "<group>"; };
 		62B6C4AE23B794530044A531 /* CaptureInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureInfo.swift; sourceTree = "<group>"; };
 		62B6C4B023B7947D0044A531 /* PostProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostProcess.swift; sourceTree = "<group>"; };
@@ -234,13 +234,13 @@
 			path = CCCameraRoll;
 			sourceTree = "<group>";
 		};
-		62AEDBB923C46CD4006CF7F8 /* CCVision */ = {
+		62AEDBB923C46CD4006CF7F8 /* CCInference */ = {
 			isa = PBXGroup;
 			children = (
-				62AEDBBA23C46D7A006CF7F8 /* CCVision.swift */,
-				62AEDBBC23C46FC0006CF7F8 /* ImageRecognition.swift */,
+				62AEDBBA23C46D7A006CF7F8 /* CCInference.swift */,
+				62AEDBBC23C46FC0006CF7F8 /* Inference.swift */,
 			);
-			path = CCVision;
+			path = CCInference;
 			sourceTree = "<group>";
 		};
 		62CE222123376C9E00F3AB3A /* Protocol */ = {
@@ -287,7 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				6244EB1423BB85A40044C22F /* CCCapture */,
-				62AEDBB923C46CD4006CF7F8 /* CCVision */,
+				62AEDBB923C46CD4006CF7F8 /* CCInference */,
 				62E5CA5922904A34004D258A /* CCRenderer */,
 				62D319CA23BC7EAF0070E36A /* CCRecorder */,
 				62E5CA8722904A35004D258A /* CCImageProcess */,
@@ -566,8 +566,8 @@
 				62AEDBA723C2FE83006CF7F8 /* CCTexture.swift in Sources */,
 				62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */,
 				62E5CACB22904A35004D258A /* CMTimeRange+Codable.swift in Sources */,
-				62AEDBBD23C46FC0006CF7F8 /* ImageRecognition.swift in Sources */,
-				62AEDBBB23C46D7A006CF7F8 /* CCVision.swift in Sources */,
+				62AEDBBD23C46FC0006CF7F8 /* Inference.swift in Sources */,
+				62AEDBBB23C46D7A006CF7F8 /* CCInference.swift in Sources */,
 				62E5CAFA22904A35004D258A /* LutLayer.swift in Sources */,
 				62E5CABB22904A35004D258A /* Settings.swift in Sources */,
 				62E5CACC22904A35004D258A /* AVCaptureVideoOrientation+Extended.swift in Sources */,

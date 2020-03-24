@@ -1,9 +1,9 @@
 //
-//  Process.swift
+//  ImageProcess.swift
 //  CameraCore
 //
-//  Created by hideyuki machida on 2019/12/26.
-//  Copyright © 2019 hideyuki machida. All rights reserved.
+//  Created by hideyuki machida on 2020/03/22.
+//  Copyright © 2020 hideyuki machida. All rights reserved.
 //
 
 import AVFoundation
@@ -12,13 +12,19 @@ import Foundation
 import MetalCanvas
 import MetalPerformanceShaders
 
-extension CCRenderer {
-    public class PostProcess: NSObject {
-        public let setup: CCRenderer.PostProcess.Setup = CCRenderer.PostProcess.Setup()
-        public let triger: CCRenderer.PostProcess.Triger = CCRenderer.PostProcess.Triger()
-        public let pipe: CCRenderer.PostProcess.Pipe = CCRenderer.PostProcess.Pipe()
+extension CCImageProcess {
+    public class ImageProcess: NSObject, CCComponentProtocol {
 
-        private let postProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
+        // MARK: - CCComponentProtocol
+        public let setup: CCImageProcess.ImageProcess.Setup = CCImageProcess.ImageProcess.Setup()
+        public let triger: CCImageProcess.ImageProcess.Triger = CCImageProcess.ImageProcess.Triger()
+        public let pipe: CCImageProcess.ImageProcess.Pipe = CCImageProcess.ImageProcess.Pipe()
+        public var debugger: ComponentDebugger?
+
+        //private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
+        private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess", attributes: DispatchQueue.Attributes.concurrent)
+        private let imageProcessCompleteQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess.Complete", attributes: DispatchQueue.Attributes.concurrent)
+        
         
         fileprivate let errorType: CCRenderer.ErrorType = CCRenderer.ErrorType.render
         fileprivate let hasMPS: Bool = MPSSupportsMTLDevice(MCCore.device)
@@ -79,9 +85,9 @@ extension CCRenderer {
 
         public init(isDisplayLink: Bool) {
             super.init()
-            self.setup.postProcess = self
-            self.triger.postProcess = self
-            self.pipe.postProcess = self
+            self.setup.imageProcess = self
+            self.triger.imageProcess = self
+            self.pipe.imageProcess = self
             self.pipe.isDisplayLink = isDisplayLink
         }
 
@@ -92,9 +98,9 @@ extension CCRenderer {
     }
 }
 
-extension CCRenderer.PostProcess {
+extension CCImageProcess.ImageProcess {
     func update(renderLayers: [RenderLayerProtocol]) {
-        self.postProcessQueue.async { [weak self] in
+        self.imageProcessQueue.async { [weak self] in
             self?.renderLayers = renderLayers
         }
     }
@@ -124,7 +130,7 @@ extension CCRenderer.PostProcess {
     }
 }
 
-private extension CCRenderer.PostProcess {
+private extension CCImageProcess.ImageProcess {
     func process(pixelBuffer: CVPixelBuffer, captureData: CCCapture.VideoCapture.CaptureData, queue: DispatchQueue) throws {
         var pixelBuffer: CVPixelBuffer = pixelBuffer
         guard var outTexture: CCTexture = self.pipe.outTexture else { return }
@@ -167,13 +173,18 @@ private extension CCRenderer.PostProcess {
         commandBuffer.addCompletedHandler { [weak self] _ in
             guard let self = self else { return }
             self.isProcess = false
+            self.imageProcessCompleteQueue.async { [weak self] in
+                guard let self = self else { return }
+                self.presentationTimeStamp = captureData.presentationTimeStamp
+                outTexture.presentationTimeStamp = captureData.presentationTimeStamp
+                outTexture.captureVideoOrientation = captureData.captureVideoOrientation
+                outTexture.presetSize = captureData.captureInfo.presetSize
 
-            self.presentationTimeStamp = captureData.presentationTimeStamp
-            outTexture.presentationTimeStamp = captureData.presentationTimeStamp
-            outTexture.captureVideoOrientation = captureData.captureVideoOrientation
-            outTexture.presetSize = captureData.captureInfo.presetSize
-            self.pipe.outTexture = outTexture
-            self.pipe.outPresentationTimeStamp = captureData.presentationTimeStamp
+                self.debugger?.update()
+
+                self.pipe.outTexture = outTexture
+                self.pipe.outPresentationTimeStamp = captureData.presentationTimeStamp
+            }
         }
 
         try self.processRenderLayer(commandBuffer: commandBuffer, source: &pixelBuffer, destination: &outTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
@@ -181,7 +192,7 @@ private extension CCRenderer.PostProcess {
     }
 }
 
-private extension CCRenderer.PostProcess {
+private extension CCImageProcess.ImageProcess {
     func processRenderLayer(commandBuffer: MTLCommandBuffer, source: inout CVPixelBuffer, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         // CVPixelBufferからMetal処理用にCCTextureに変換
         var sourceTexture: CCTexture = try CCTexture(pixelBuffer: source, colorPixelFormat: renderLayerCompositionInfo.pixelFormat, planeIndex: 0)
@@ -218,7 +229,7 @@ private extension CCRenderer.PostProcess {
     }
 }
 
-fileprivate extension CCRenderer.PostProcess {
+fileprivate extension CCImageProcess.ImageProcess {
     func dispose() {
         self.setup._dispose()
         self.triger._dispose()
@@ -232,25 +243,25 @@ fileprivate extension CCRenderer.PostProcess {
     }
 }
 
-extension CCRenderer.PostProcess {
+extension CCImageProcess.ImageProcess {
     // MARK: - Setup
     public class Setup: CCComponentSetupProtocol {
-        fileprivate var postProcess: CCRenderer.PostProcess?
+        fileprivate var imageProcess: CCImageProcess.ImageProcess?
         fileprivate func _dispose() {
-            self.postProcess = nil
+            self.imageProcess = nil
         }
     }
 
     // MARK: - Triger
     public class Triger: CCComponentTrigerProtocol {
-        fileprivate var postProcess: CCRenderer.PostProcess?
+        fileprivate var imageProcess: CCImageProcess.ImageProcess?
 
         public func dispose() {
-            self.postProcess?.dispose()
+            self.imageProcess?.dispose()
         }
 
         fileprivate func _dispose() {
-            self.postProcess = nil
+            self.imageProcess = nil
         }
     }
 
@@ -305,46 +316,46 @@ extension CCRenderer.PostProcess {
 
         fileprivate var displayLink: CADisplayLink?
         fileprivate var isDisplayLink: Bool = false
-        fileprivate var postProcess: CCRenderer.PostProcess?
+        fileprivate var imageProcess: CCImageProcess.ImageProcess?
         fileprivate var observations: [NSKeyValueObservation] = []
-
-        func input(camera: CCCapture.Camera) throws -> CCRenderer.PostProcess {
+        
+        func input(camera: CCCapture.Camera) throws -> CCImageProcess.ImageProcess {
 
             let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
             try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
             if self.isDisplayLink {
                 self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
                 self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
-                let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+                let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
                     // CADisplayLinkのloopで参照されるのでQueueを揃える。
-                    self?.postProcess?.postProcessQueue.sync { [weak self] in
+                    self?.imageProcess?.imageProcessQueue.sync { [weak self] in
                         self?.currentCaptureItem = captureData
                     }
                 }
                 self.observations.append(observation)
             } else {
-                let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+                let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
                     // CADisplayLinkのloopで参照されるのでQueueを揃える。
                     self?.process(currentCaptureItem: captureData)
                 }
                 self.observations.append(observation)
             }
 
-            return self.postProcess!
+            return self.imageProcess!
         }
 
         @objc private func updateDisplay() {
             guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
             guard
-                let postProcess: CCRenderer.PostProcess = self.postProcess,
-                !postProcess.isProcess,
-                currentCaptureItem.presentationTimeStamp != postProcess.presentationTimeStamp
+                let imageProcess: CCImageProcess.ImageProcess = self.imageProcess,
+                !imageProcess.isProcess,
+                currentCaptureItem.presentationTimeStamp != imageProcess.presentationTimeStamp
             else { return }
-            postProcess.postProcessQueue.async { [weak postProcess] in
+            imageProcess.imageProcessQueue.async { [weak imageProcess] in
                 do {
-                    try postProcess?.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+                    try imageProcess?.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
                 } catch {
                     MCDebug.log("CCRenderer.PostProcess: process error")
                 }
@@ -353,14 +364,14 @@ extension CCRenderer.PostProcess {
 
         private func process(currentCaptureItem: CCCapture.VideoCapture.CaptureData) {
             guard
-                let postProcess: CCRenderer.PostProcess = self.postProcess,
-                !postProcess.isProcess,
-                currentCaptureItem.presentationTimeStamp != postProcess.presentationTimeStamp
+                let imageProcess: CCImageProcess.ImageProcess = self.imageProcess
             else { return }
-            do {
-                try postProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
-            } catch {
-                MCDebug.log("CCRenderer.PostProcess: process error")
+            self.imageProcess?.imageProcessQueue.async { [weak self] in
+                do {
+                    try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+                } catch {
+                    MCDebug.log("CCRenderer.PostProcess: process error")
+                }
             }
         }
 
@@ -379,11 +390,10 @@ extension CCRenderer.PostProcess {
         }
 
         fileprivate func _dispose() {
-            self.postProcess = nil
+            self.imageProcess = nil
             self.observations.forEach { $0.invalidate() }
             self.observations.removeAll()
             self.displayLink?.invalidate()
         }
     }
 }
-

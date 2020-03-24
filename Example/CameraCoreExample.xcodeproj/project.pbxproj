@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		620A665F24277E420036BC7E /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620A665C24277E420036BC7E /* DebugView.swift */; };
+		620A666024277E420036BC7E /* DebugView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 620A665D24277E420036BC7E /* DebugView.xib */; };
 		621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */; };
 		6244EB1823BB86530044C22F /* VideoCaptureView001ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */; };
 		6249747E2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6249747D2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift */; };
@@ -50,6 +52,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		620A665C24277E420036BC7E /* DebugView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		620A665D24277E420036BC7E /* DebugView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebugView.xib; sourceTree = "<group>"; };
 		620E8B06233F6DD300168140 /* CoreMLHelpers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreMLHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLExampleVC.swift; sourceTree = "<group>"; };
 		6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureView001ExampleVC.swift; sourceTree = "<group>"; };
@@ -90,6 +94,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		620A665B24277E1D0036BC7E /* Debugger */ = {
+			isa = PBXGroup;
+			children = (
+				620A665C24277E420036BC7E /* DebugView.swift */,
+				620A665D24277E420036BC7E /* DebugView.xib */,
+			);
+			path = Debugger;
+			sourceTree = "<group>";
+		};
 		624BC10C2338B70400A2D8F0 /* UseCoreMLExample */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +171,7 @@
 				624BC10D2338B71900A2D8F0 /* VideoCaptureViewExample */,
 				624BC10C2338B70400A2D8F0 /* UseCoreMLExample */,
 				624BC10E2338B74200A2D8F0 /* CameraRollManagerExample */,
+				620A665B24277E1D0036BC7E /* Debugger */,
 				62926264232FEB8400D47CF0 /* ProgressViewVC.swift */,
 				62E6FAE323F80C68006E11D7 /* AudioExampleVC.swift */,
 				62A27092232F95B4007CCA7C /* Main.storyboard */,
@@ -227,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				620A666024277E420036BC7E /* DebugView.xib in Resources */,
 				62A27093232F95B4007CCA7C /* Main.storyboard in Resources */,
 				62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */,
 				62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */,
@@ -240,6 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				620A665F24277E420036BC7E /* DebugView.swift in Sources */,
 				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
 				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,

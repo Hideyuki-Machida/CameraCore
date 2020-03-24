@@ -16,12 +16,15 @@ import UIKit
 class VideoCaptureView002ExampleVC: UIViewController {
     @IBOutlet weak var recordingButton: UIButton!
     @IBOutlet weak var drawView: CCView!
-    
+
     private var camera: CCCapture.Camera?
-    private var postProcess: CCRenderer.PostProcess?
+    private var imageProcess: CCImageProcess.ImageProcess?
     private var videoRecorder: CCRecorder.VideoRecorder?
+    private var debugger: CCDebug.DebuggerC = CCDebug.DebuggerC()
     private var lutLayer: CCImageProcess.LutLayer!
 
+    private var debuggerObservation: NSKeyValueObservation?
+    
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
@@ -35,11 +38,14 @@ class VideoCaptureView002ExampleVC: UIViewController {
     )
 
     deinit {
-        self.camera?.triger.pause()
+        self.camera?.triger.stop()
         self.camera?.triger.dispose()
-        self.postProcess?.triger.dispose()
+        self.imageProcess?.triger.dispose()
         self.videoRecorder?.triger.dispose()
         self.drawView.triger.dispose()
+        self.debugger.triger.stop()
+        self.debugger.triger.dispose()
+
         MCDebug.deinitLog(self)
     }
 
@@ -62,34 +68,43 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let postProcess: CCRenderer.PostProcess = CCRenderer.PostProcess(isDisplayLink: false)
+            let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: false)
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 
-            try camera --> postProcess --> self.drawView
-            try postProcess --> videoRecorder
+            try camera --> imageProcess --> self.drawView
+            try imageProcess --> videoRecorder
+
             camera.event = event
-            camera.triger.play()
+            camera.triger.start()
+            
             self.camera = camera
-            self.postProcess = postProcess
+            self.imageProcess = imageProcess
             self.videoRecorder = videoRecorder
+
+            try self.debugger.setup.set(component: camera)
+            try self.debugger.setup.set(component: imageProcess)
+            try self.debugger.setup.set(component: self.drawView)
         } catch {
             MCDebug.errorLog("VideoCaptureView setup error")
         }
         /////////////////////////////////////////////////////////////////////////////////////////////
+        
+        self.setDebuggerView()
+        self.debugger.triger.start()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // VideoCaptureViewのキャプチャスタート
-        self.camera?.triger.play()
+        self.camera?.triger.start()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         // VideoCaptureViewのキャプチャ停止
-        self.camera?.triger.pause()
+        self.camera?.triger.stop()
     }
 
     override func didReceiveMemoryWarning() {
@@ -384,12 +399,12 @@ extension VideoCaptureView002ExampleVC {
 
         let action001: UIAlertAction = UIAlertAction(title: FilterLabel.ON.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
-            self.postProcess?.renderLayers = [self.lutLayer]
+            self.imageProcess?.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer]
         })
 
         let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
-            self.postProcess?.renderLayers = [self.lutLayer]
+            self.imageProcess?.renderLayers = []
         })
 
         let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {
@@ -461,5 +476,24 @@ extension VideoCaptureView002ExampleVC {
         action.addAction(cancel)
 
         self.present(action, animated: true, completion: nil)
+    }
+}
+
+
+extension VideoCaptureView002ExampleVC {
+    public func setDebuggerView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let debugView: DebugView = Bundle.main.loadNibNamed("DebugView", owner: self, options: nil)?.first as! DebugView
+            self.view.addSubview(debugView)
+
+            self.debuggerObservation?.invalidate()
+            self.debuggerObservation = self.debugger.outPut.observe(\.onUpdate, options: [.new]) { [weak self] (debuggerOutput: CCDebug.DebuggerC.Output, _) in
+                DispatchQueue.main.async { [weak self] in
+                    debugView.set(debugData: debuggerOutput.data)
+                }
+            }
+
+        }
     }
 }

@@ -49,7 +49,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
             //try camera --> imageRecognition --> self.drawView
             try camera --> self.drawView
             try camera --> videoRecorder
-            camera.triger.play()
+            camera.triger.start()
             self.camera = camera
             self.inference = inference
             self.videoRecorder = videoRecorder

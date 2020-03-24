@@ -7,23 +7,33 @@
 //
 
 import Foundation
+import MetalCanvas
 
-public protocol CCComponentProtocol: NSObject {
-    var setup: CCComponentSetupProtocol { get set }
-    var triger: CCComponentTrigerProtocol { get set }
-    var pipe: CCComponentPipeProtocol { get set }
-}
-
-/*
-extension CCComponentProtocol {
-    var setup:
-}
-*/
 public protocol CCComponentSetupProtocol {
 }
 
 public protocol CCComponentTrigerProtocol {
 }
 
-public protocol CCComponentPipeProtocol {
+public protocol CCComponentPipeProtocol: NSObjectProtocol {
+}
+
+public protocol CCComponentProtocol: NSObjectProtocol {
+    //var setup: CCComponentSetupProtocol { get }
+    //var triger: CCComponentTrigerProtocol { get }
+    //var pipe: CCComponentPipeProtocol { get }
+    
+    var debugger: ComponentDebugger? { get set }
+    var isDebugMode: Bool { get set }
+}
+
+extension CCComponentProtocol {
+    public var isDebugMode: Bool {
+        get {
+            return self.debugger != nil
+        }
+        set {
+            self.debugger = newValue ? ComponentDebugger() : nil
+        }
+    }
 }

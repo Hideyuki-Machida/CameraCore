@@ -250,8 +250,8 @@ extension CCRecorder.VideoRecorder {
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
         func input(camera: CCCapture.Camera) throws {
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
 
                 guard let self = self else { return }
                 guard self.videoRecorder?.isRecording == true else { return }
@@ -260,8 +260,8 @@ extension CCRecorder.VideoRecorder {
             self.observations.append(observation)
         }
 
-        func input(postProcess: CCRenderer.PostProcess) throws {
-            let observation: NSKeyValueObservation = postProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCRenderer.PostProcess.Pipe, change) in
+        func input(imageProcess: CCImageProcess.ImageProcess) throws {
+            let observation: NSKeyValueObservation = imageProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCImageProcess.ImageProcess.Pipe, change) in
                 guard let outTexture: CCTexture = object.outTexture else { return }
 
                 guard let self = self else { return }

@@ -13,10 +13,14 @@ import MetalKit
 import UIKit
 
 extension CCCapture {
-    @objc public class Camera: NSObject {
+    @objc public class Camera: NSObject, CCComponentProtocol {
+
+        // MARK: - CCComponentProtocol
         public let setup: CCCapture.Camera.Setup = CCCapture.Camera.Setup()
         public let triger: CCCapture.Camera.Triger = CCCapture.Camera.Triger()
         public let pipe: CCCapture.Camera.Pipe = CCCapture.Camera.Pipe()
+        public var debugger: ComponentDebugger?
+
         
         public fileprivate(set) var property: CCCapture.VideoCapture.Property {
             willSet {
@@ -44,7 +48,6 @@ extension CCCapture {
             self.setup.camera = self
             self.triger.camera = self
             self.pipe.camera = self
-
         }
 
         deinit {
@@ -57,14 +60,14 @@ extension CCCapture {
 
 
 fileprivate extension CCCapture.Camera {
-    func play() {
+    func start() {
         guard self.status != .play else { return }
         MCDebug.log("CameraCore.Camera.play")
         self.capture?.play()
         self.status = .play
     }
 
-    func pause() {
+    func stop() {
         MCDebug.log("CameraCore.Camera.pause")
         self.capture?.stop()
         self.status = .pause
@@ -101,18 +104,23 @@ fileprivate extension CCCapture.Camera {
                 let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
             else { return }
 
-            let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
-                sampleBuffer: sampleBuffer,
-                captureInfo: captureInfo,
-                depthData: depthData,
-                metadataObjects: metadataObjects,
-                colorPixelFormat: MTLPixelFormat.bgra8Unorm,
-                captureVideoOrientation: captureVideoOrientation
-            )
+            if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
+                // ピクセルデータ
+                let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
+                    sampleBuffer: sampleBuffer,
+                    captureInfo: captureInfo,
+                    depthData: depthData,
+                    metadataObjects: metadataObjects,
+                    colorPixelFormat: MTLPixelFormat.bgra8Unorm,
+                    captureVideoOrientation: captureVideoOrientation
+                )
 
+                self.pipe.currentVideoCaptureItem = currentCaptureItem
+                self.pipe.outVideoCapturePresentationTimeStamp = currentCaptureItem.presentationTimeStamp
 
-            self.pipe.currentCaptureItem = currentCaptureItem
-            self.pipe.outPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
+                // デバッグ
+                self.debugger?.update()
+            }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
@@ -160,12 +168,12 @@ extension CCCapture.Camera {
     public class Triger: CCComponentTrigerProtocol {
         fileprivate var camera: CCCapture.Camera?
         
-        public func play() {
-            self.camera?.play()
+        public func start() {
+            self.camera?.start()
         }
 
-        public func pause() {
-            self.camera?.pause()
+        public func stop() {
+            self.camera?.stop()
         }
 
         public func dispose() {
@@ -181,37 +189,37 @@ extension CCCapture.Camera {
     public class Pipe: NSObject, CCComponentPipeProtocol {
         fileprivate var camera: CCCapture.Camera?
 
-        private var _currentCaptureItem: CCCapture.VideoCapture.CaptureData?
-        public var currentCaptureItem: CCCapture.VideoCapture.CaptureData? {
+        private var _currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData?
+        public var currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData? {
             get {
                 objc_sync_enter(self)
-                let currentCaptureItem: CCCapture.VideoCapture.CaptureData? = self._currentCaptureItem
+                let currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData? = self._currentVideoCaptureItem
                 objc_sync_exit(self)
-                return currentCaptureItem
+                return currentVideoCaptureItem
             }
             set {
                 objc_sync_enter(self)
-                self._currentCaptureItem = newValue
+                self._currentVideoCaptureItem = newValue
                 objc_sync_exit(self)
             }
         }
 
-        private var _outPresentationTimeStamp: CMTime = CMTime.zero
-        @objc dynamic public var outPresentationTimeStamp: CMTime {
+        private var _outVideoCapturePresentationTimeStamp: CMTime = CMTime.zero
+        @objc dynamic public var outVideoCapturePresentationTimeStamp: CMTime {
             get {
                 objc_sync_enter(self)
-                let presentationTimeStamp: CMTime = self._outPresentationTimeStamp
+                let videoCapturePresentationTimeStamp: CMTime = self._outVideoCapturePresentationTimeStamp
                 objc_sync_exit(self)
-                return presentationTimeStamp
+                return videoCapturePresentationTimeStamp
             }
             set {
                 objc_sync_enter(self)
-                self._outPresentationTimeStamp = newValue
+                self._outVideoCapturePresentationTimeStamp = newValue
                 objc_sync_exit(self)
             }
         }
 
-        public var outCaptureData: ((_ currentCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
+        public var outVideoCaptureData: ((_ currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
         
         fileprivate func _dispose() {
             self.camera = nil

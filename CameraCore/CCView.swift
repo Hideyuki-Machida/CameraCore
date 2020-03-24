@@ -12,11 +12,12 @@ import MetalCanvas
 import MetalKit
 import UIKit
 
-public class CCView: MCImageRenderView {
+public class CCView: MCImageRenderView, CCComponentProtocol {
     public let setup: CCView.Setup = CCView.Setup()
     public let triger: CCView.Triger = CCView.Triger()
     public let pipe: CCView.Pipe = CCView.Pipe()
-
+    public var debugger: ComponentDebugger?
+    
     enum ErrorType: Error {
         case draw
     }
@@ -108,6 +109,7 @@ public class CCView: MCImageRenderView {
 
         commandBuffer.addCompletedHandler { [weak self] (_: MTLCommandBuffer) in
             self?.isDraw = false
+            self?.debugger?.update()
         }
 
         self.isDraw = true
@@ -161,9 +163,9 @@ extension CCView {
 
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
-        func input(postProcess: CCRenderer.PostProcess) throws -> CCView {
+        func input(imageProcess: CCImageProcess.ImageProcess) throws -> CCView {
             try self.ccview?._setup()
-            let observation: NSKeyValueObservation = postProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCRenderer.PostProcess.Pipe, change) in
+            let observation: NSKeyValueObservation = imageProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCImageProcess.ImageProcess.Pipe, change) in
                 guard let outTexture: CCTexture = object.outTexture else { return }
 
                 guard let self = self else { return }
@@ -183,8 +185,8 @@ extension CCView {
 
         func input(camera: CCCapture.Camera) throws -> CCView {
             try self.ccview?._setup()
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentCaptureItem else { return }
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
 
                 guard let self = self else { return }
                 if captureData.colorPixelFormat != self.ccview?.colorPixelFormat {

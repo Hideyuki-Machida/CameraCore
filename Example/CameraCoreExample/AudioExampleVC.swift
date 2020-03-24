@@ -65,7 +65,7 @@ class AudioExampleVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         do {
-            self.camera?.triger.play()
+            self.camera?.triger.start()
             try self.audioPlayer?.play()
         } catch {
             print("error")

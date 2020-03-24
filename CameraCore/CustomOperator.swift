@@ -13,8 +13,8 @@ import MetalCanvas
 infix operator -->: AdditionPrecedence
 
 @discardableResult
-public func --> (camera: CCCapture.Camera, postProcess: CCRenderer.PostProcess) throws -> CCRenderer.PostProcess {
-    return try postProcess.pipe.input(camera: camera)
+public func --> (camera: CCCapture.Camera, imageProcess: CCImageProcess.ImageProcess) throws -> CCImageProcess.ImageProcess {
+    return try imageProcess.pipe.input(camera: camera)
 }
 
 @discardableResult
@@ -28,8 +28,8 @@ public func --> (camera: CCCapture.Camera, imageRecognition: CCVision.Inference)
 }
 
 @discardableResult
-public func --> (postProcess: CCRenderer.PostProcess, view: CCView) throws -> CCView {
-    return try view.pipe.input(postProcess: postProcess)
+public func --> (imageProcess: CCImageProcess.ImageProcess, view: CCView) throws -> CCView {
+    return try view.pipe.input(imageProcess: imageProcess)
 }
 
 /*
@@ -43,8 +43,8 @@ public func --> (camera: CCCapture.Camera, videoRecorder: CCRecorder.VideoRecord
     try videoRecorder.pipe.input(camera: camera)
 }
 
-public func --> (postProcess: CCRenderer.PostProcess, videoRecorder: CCRecorder.VideoRecorder) throws {
-    try videoRecorder.pipe.input(postProcess: postProcess)
+public func --> (imageProcess: CCImageProcess.ImageProcess, videoRecorder: CCRecorder.VideoRecorder) throws {
+    try videoRecorder.pipe.input(imageProcess: imageProcess)
 }
 
 

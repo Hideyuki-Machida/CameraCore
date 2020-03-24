@@ -11,7 +11,6 @@ import AVFoundation
 import MetalCanvas
 
 
-
 public extension CCVision {
     class Inference: NSObject {
         public let setup: CCVision.Inference.Setup = CCVision.Inference.Setup()
@@ -63,7 +62,7 @@ extension CCVision.Inference {
         fileprivate var inference: CCVision.Inference?
 
        func input(camera: CCCapture.Camera) -> CCVision.Inference {
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
 
                 guard let self = self else { return }
                 

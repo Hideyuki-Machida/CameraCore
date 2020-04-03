@@ -16,7 +16,7 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
     public let setup: CCView.Setup = CCView.Setup()
     public let triger: CCView.Triger = CCView.Triger()
     public let pipe: CCView.Pipe = CCView.Pipe()
-    public var debugger: ComponentDebugger?
+    public var debug: CCComponentDebug?
     
     enum ErrorType: Error {
         case draw
@@ -109,7 +109,7 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
 
         commandBuffer.addCompletedHandler { [weak self] (_: MTLCommandBuffer) in
             self?.isDraw = false
-            self?.debugger?.update()
+            self?.debug?.update()
         }
 
         self.isDraw = true
@@ -208,6 +208,26 @@ extension CCView {
                 } catch {
                     MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
                 }
+
+            }
+            self.observations.append(observation)
+
+            return self.ccview!
+        }
+
+        func input(player: CCPlayer) throws -> CCView {
+            try self.ccview?._setup()
+            let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
+                guard let outTexture: CCTexture = object.outTexture else { return }
+
+                guard let self = self else { return }
+
+                if outTexture.colorPixelFormat != self.ccview?.colorPixelFormat {
+                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    return
+                }
+
+                self.ccview?.drawTexture = outTexture
 
             }
             self.observations.append(observation)

@@ -19,11 +19,13 @@ extension CCImageProcess {
         public let setup: CCImageProcess.ImageProcess.Setup = CCImageProcess.ImageProcess.Setup()
         public let triger: CCImageProcess.ImageProcess.Triger = CCImageProcess.ImageProcess.Triger()
         public let pipe: CCImageProcess.ImageProcess.Pipe = CCImageProcess.ImageProcess.Pipe()
-        public var debugger: ComponentDebugger?
+        public var debug: CCComponentDebug?
 
-        //private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
-        private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess", attributes: DispatchQueue.Attributes.concurrent)
-        private let imageProcessCompleteQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess.Complete", attributes: DispatchQueue.Attributes.concurrent)
+        private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess")
+        private let imageProcessCompleteQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess.Complete")
+
+        //private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess", attributes: DispatchQueue.Attributes.concurrent)
+        //private let imageProcessCompleteQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess.Complete", attributes: DispatchQueue.Attributes.concurrent)
         
         
         fileprivate let errorType: CCRenderer.ErrorType = CCRenderer.ErrorType.render
@@ -180,7 +182,7 @@ private extension CCImageProcess.ImageProcess {
                 outTexture.captureVideoOrientation = captureData.captureVideoOrientation
                 outTexture.presetSize = captureData.captureInfo.presetSize
 
-                self.debugger?.update()
+                self.debug?.update()
 
                 self.pipe.outTexture = outTexture
                 self.pipe.outPresentationTimeStamp = captureData.presentationTimeStamp
@@ -318,76 +320,6 @@ extension CCImageProcess.ImageProcess {
         fileprivate var isDisplayLink: Bool = false
         fileprivate var imageProcess: CCImageProcess.ImageProcess?
         fileprivate var observations: [NSKeyValueObservation] = []
-        
-        func input(camera: CCCapture.Camera) throws -> CCImageProcess.ImageProcess {
-
-            let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
-            try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
-            if self.isDisplayLink {
-                self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
-                self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
-                let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
-                    // CADisplayLinkのloopで参照されるのでQueueを揃える。
-                    self?.imageProcess?.imageProcessQueue.sync { [weak self] in
-                        self?.currentCaptureItem = captureData
-                    }
-                }
-                self.observations.append(observation)
-            } else {
-                let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                    guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
-                    // CADisplayLinkのloopで参照されるのでQueueを揃える。
-                    self?.process(currentCaptureItem: captureData)
-                }
-                self.observations.append(observation)
-            }
-
-            return self.imageProcess!
-        }
-
-        @objc private func updateDisplay() {
-            guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
-            guard
-                let imageProcess: CCImageProcess.ImageProcess = self.imageProcess,
-                !imageProcess.isProcess,
-                currentCaptureItem.presentationTimeStamp != imageProcess.presentationTimeStamp
-            else { return }
-            imageProcess.imageProcessQueue.async { [weak imageProcess] in
-                do {
-                    try imageProcess?.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
-                } catch {
-                    MCDebug.log("CCRenderer.PostProcess: process error")
-                }
-            }
-        }
-
-        private func process(currentCaptureItem: CCCapture.VideoCapture.CaptureData) {
-            guard
-                let imageProcess: CCImageProcess.ImageProcess = self.imageProcess
-            else { return }
-            self.imageProcess?.imageProcessQueue.async { [weak self] in
-                do {
-                    try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
-                } catch {
-                    MCDebug.log("CCRenderer.PostProcess: process error")
-                }
-            }
-        }
-
-        @discardableResult
-        func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) throws -> CCTexture {
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-            // 描画用テクスチャを生成
-            guard
-                Float(self.outTexture?.size.w ?? 0) != captureSize.w,
-                let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
-                let tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: colorPixelFormat, planeIndex: 0)
-            else { throw self.errorType }
-            self.outTexture = tex
-            return tex
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-        }
 
         fileprivate func _dispose() {
             self.imageProcess = nil
@@ -396,4 +328,112 @@ extension CCImageProcess.ImageProcess {
             self.displayLink?.invalidate()
         }
     }
+}
+
+
+extension CCImageProcess.ImageProcess.Pipe {
+    func input(camera: CCCapture.Camera) throws -> CCImageProcess.ImageProcess {
+
+        let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
+        try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
+        if self.isDisplayLink {
+            self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
+            self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
+                // CADisplayLinkのloopで参照されるのでQueueを揃える。
+                self?.imageProcess?.imageProcessQueue.sync { [weak self] in
+                    self?.currentCaptureItem = captureData
+                }
+            }
+            self.observations.append(observation)
+        } else {
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
+                // CADisplayLinkのloopで参照されるのでQueueを揃える。
+                self?.process(currentCaptureItem: captureData)
+            }
+            self.observations.append(observation)
+        }
+
+        return self.imageProcess!
+    }
+}
+
+extension CCImageProcess.ImageProcess.Pipe {
+    func input(player: CCPlayer) throws -> CCImageProcess.ImageProcess {
+
+        /*
+        //let captureSize: MCSize = camera.property.captureInfo.presetSize.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
+        try self.updateOutTexture(captureSize: captureSize, colorPixelFormat: MTLPixelFormat.bgra8Unorm)
+        if self.isDisplayLink {
+            self.displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
+            self.displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+            let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
+                guard let texture: CCTexture = object.outTexture else { return }
+                // CADisplayLinkのloopで参照されるのでQueueを揃える。
+                self?.imageProcess?.imageProcessQueue.sync { [weak self] in
+                    //self?.currentCaptureItem = captureData
+                }
+            }
+            self.observations.append(observation)
+        } else {
+            let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
+                guard let texture: CCTexture = object.outTexture else { return }
+                // CADisplayLinkのloopで参照されるのでQueueを揃える。
+                //self?.process(currentCaptureItem: captureData)
+            }
+            self.observations.append(observation)
+        }
+    */
+        return self.imageProcess!
+    }
+}
+
+extension CCImageProcess.ImageProcess.Pipe {
+    @objc private func updateDisplay() {
+        guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
+        guard
+            let imageProcess: CCImageProcess.ImageProcess = self.imageProcess,
+            !imageProcess.isProcess,
+            currentCaptureItem.presentationTimeStamp != imageProcess.presentationTimeStamp
+        else { return }
+        imageProcess.imageProcessQueue.async { [weak self] in
+            imageProcess.debug?.update(thred: Thread.current, queue: imageProcess.imageProcessQueue)
+            do {
+                try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+            } catch {
+                MCDebug.log("CCRenderer.PostProcess: process error")
+            }
+        }
+    }
+
+    private func process(currentCaptureItem: CCCapture.VideoCapture.CaptureData) {
+        guard
+            let imageProcess: CCImageProcess.ImageProcess = self.imageProcess
+        else { return }
+        imageProcess.imageProcessQueue.async { [weak self] in
+            //imageProcess.debugger?.update(thred: Thread.current, queue: imageProcess.imageProcessQueue)
+            do {
+                try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+            } catch {
+                MCDebug.log("CCRenderer.PostProcess: process error")
+            }
+        }
+    }
+
+    @discardableResult
+    func updateOutTexture(captureSize: MCSize, colorPixelFormat: MTLPixelFormat) throws -> CCTexture {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // 描画用テクスチャを生成
+        guard
+            Float(self.outTexture?.size.w ?? 0) != captureSize.w,
+            let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
+            let tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: colorPixelFormat, planeIndex: 0)
+        else { throw self.errorType }
+        self.outTexture = tex
+        return tex
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+    }
+
 }

@@ -20,7 +20,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
     private var camera: CCCapture.Camera?
     private var imageProcess: CCImageProcess.ImageProcess?
     private var videoRecorder: CCRecorder.VideoRecorder?
-    private var debugger: CCDebug.DebuggerC = CCDebug.DebuggerC()
+    private var debugger: CCDebug.ComponentDebugger = CCDebug.ComponentDebugger()
     private var lutLayer: CCImageProcess.LutLayer!
 
     private var debuggerObservation: NSKeyValueObservation?
@@ -68,10 +68,11 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: false)
+            let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: true)
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 
             try camera --> imageProcess --> self.drawView
+            //try camera --> self.drawView
             try imageProcess --> videoRecorder
 
             camera.event = event
@@ -136,29 +137,29 @@ class VideoCaptureView002ExampleVC: UIViewController {
     }
 
     @IBAction func recordingTapAction(_ sender: Any) {
-        /*
-        if self.videoCaptureView.isRecording {
-            self.videoCaptureView.recordingStop()
+
+        if self.videoRecorder?.isRecording == true {
+            self.videoRecorder?.triger.stop()
             self.recordingButton.setTitle("撮影開始", for: UIControl.State.normal)
         } else {
             let filePath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/" + "recordingVideo" + NSUUID().uuidString + ".mp4"
-
+            let size: MCSize = Settings.PresetSize.p1280x720.size(orientation: AVCaptureVideoOrientation.portrait)
             do {
-                try self.videoCaptureView.recordingStart(
-                    CCRenderer.VideoCapture.CaptureWriter.Parameter(
-                        outputFilePath: URL(fileURLWithPath: filePath),
-                        presetFrame: Settings.PresetSize.p1280x720,
-                        frameRate: 30,
-                        devicePosition: AVCaptureDevice.Position.back,
-                        croppingRect: CGRect(origin: CGPoint(), size: Settings.PresetSize.p1280x720.size()),
-                        fileType: AVFileType.mp4,
-                        videoCodecType: Settings.VideoCodec.hevc
-                    )
+                let parameter: CCRecorder.CaptureWriter.Parameter = CCRecorder.CaptureWriter.Parameter(
+                    outputFilePath: URL(fileURLWithPath: filePath),
+                    presetFrame: Settings.PresetSize.p1280x720,
+                    frameRate: 30,
+                    devicePosition: AVCaptureDevice.Position.back,
+                    croppingRect: CGRect(origin: CGPoint(), size: size.toCGSize()),
+                    fileType: AVFileType.mp4,
+                    videoCodecType: Settings.VideoCodec.hevc
                 )
+                try self.videoRecorder?.setup.setup(parameter: parameter)
+                self.videoRecorder?.triger.start()
                 self.recordingButton.setTitle("撮影ストップ", for: UIControl.State.normal)
             } catch {}
         }
-         */
+
     }
 }
 
@@ -488,7 +489,7 @@ extension VideoCaptureView002ExampleVC {
             self.view.addSubview(debugView)
 
             self.debuggerObservation?.invalidate()
-            self.debuggerObservation = self.debugger.outPut.observe(\.onUpdate, options: [.new]) { [weak self] (debuggerOutput: CCDebug.DebuggerC.Output, _) in
+            self.debuggerObservation = self.debugger.outPut.observe(\.onUpdate, options: [.new]) { [weak self] (debuggerOutput: CCDebug.ComponentDebugger.Output, _) in
                 DispatchQueue.main.async { [weak self] in
                     debugView.set(debugData: debuggerOutput.data)
                 }

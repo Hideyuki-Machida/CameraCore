@@ -17,6 +17,8 @@ extension CCRecorder {
         public let triger: CCRecorder.VideoRecorder.Triger = CCRecorder.VideoRecorder.Triger()
         public let pipe: CCRecorder.VideoRecorder.Pipe = CCRecorder.VideoRecorder.Pipe()
 
+        fileprivate let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRecorder.VideoRecorder", attributes: DispatchQueue.Attributes.concurrent)
+
         var captureWriter: CaptureWriter = CaptureWriter()
         public var isRecording: Bool = false
 
@@ -175,6 +177,22 @@ extension CCRecorder.VideoRecorder {
 
             }
         }
+
+        func set(pixelBuffer: CVPixelBuffer, presentationTimeStamp: CMTime) {
+            guard let w: AVAssetWriter = self.writer else { return }
+            var timingInfo: CMSampleTimingInfo = CMSampleTimingInfo()
+            if self.videoOffsetTime == CMTime.zero {
+                self.videoOffsetTime = presentationTimeStamp
+            }
+            timingInfo.presentationTimeStamp = CMTimeSubtract(presentationTimeStamp, self.videoOffsetTime)
+            guard
+                let formatDescription: CMFormatDescription = CMFormatDescription.create(from: pixelBuffer),
+                let sampleBuffer: CMSampleBuffer = CMSampleBuffer.create(from: pixelBuffer, formatDescription: formatDescription, timingInfo: &timingInfo)
+            else { return }
+            w.inputs
+                .filter { $0.mediaType == AVMediaType.video && $0.isReadyForMoreMediaData }
+                .forEach { $0.append(sampleBuffer) }
+        }
         
         func start() {
             self.writer?.startWriting()
@@ -266,7 +284,9 @@ extension CCRecorder.VideoRecorder {
 
                 guard let self = self else { return }
                 guard self.videoRecorder?.isRecording == true else { return }
+                guard let pixelBuffer: CVPixelBuffer = outTexture.pixelBuffer else { return }
 
+                self.videoRecorder?.captureWriter.set(pixelBuffer: pixelBuffer, presentationTimeStamp: outTexture.presentationTimeStamp)
             }
             self.observations.append(observation)
         }

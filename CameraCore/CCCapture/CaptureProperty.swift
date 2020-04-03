@@ -38,17 +38,19 @@ extension CCCapture.VideoCapture {
         public var deviceType: AVCaptureDevice.DeviceType
         public var isAudioDataOutput: Bool
         public var captureVideoOrientation: AVCaptureVideoOrientation?
+        public var pixelFormatType: OSType
         public var required: [Item]
         public var option: [Item]
         public var captureInfo: CCCapture.VideoCapture.CaptureInfo = CCCapture.VideoCapture.CaptureInfo()
 
         fileprivate var requiredCaptureSize: MCSize?
 
-        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, captureVideoOrientation: AVCaptureVideoOrientation? = nil, required: [Item] = [], option: [Item] = []) {
+        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, captureVideoOrientation: AVCaptureVideoOrientation? = nil, pixelFormatType: OSType = kCVPixelFormatType_32BGRA, required: [Item] = [], option: [Item] = []) {
             self.devicePosition = devicePosition
             self.deviceType = deviceType
             self.isAudioDataOutput = isAudioDataOutput
             self.captureVideoOrientation = captureVideoOrientation
+            self.pixelFormatType = pixelFormatType
             self.required = required
             self.option = option
         }

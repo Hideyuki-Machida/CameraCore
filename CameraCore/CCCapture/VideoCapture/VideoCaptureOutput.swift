@@ -35,7 +35,7 @@ extension CCCapture.VideoCapture {
             //////////////////////////////////////////////////////////
             // AVCaptureVideoDataOutput
             let videoDataInput: AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-            let videoDataOutput: AVCaptureVideoDataOutput = self.createVideoDataOutput()
+            let videoDataOutput: AVCaptureVideoDataOutput = self.createVideoDataOutput(pixelFormatType: property.pixelFormatType)
             if captureSession.canAddInput(videoDataInput), captureSession.canAddOutput(videoDataOutput) {
                 videoDataOutput.setSampleBufferDelegate(self, queue: CCCapture.videoOutputQueue)
                 captureSession.addInput(videoDataInput)
@@ -109,11 +109,11 @@ private extension CCCapture.VideoCapture.VideoCaptureOutput {
 
 private extension CCCapture.VideoCapture.VideoCaptureOutput {
     /// AVCaptureVideoDataOutputを生成
-    func createVideoDataOutput() -> AVCaptureVideoDataOutput {
+    func createVideoDataOutput(pixelFormatType: OSType) -> AVCaptureVideoDataOutput {
         let videoDataOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
         videoDataOutput.videoSettings = [
-            kCVPixelBufferPixelFormatTypeKey as String: Configuration.shared.outputPixelBufferPixelFormatTypeKey,
+            kCVPixelBufferPixelFormatTypeKey as String: pixelFormatType,
         ]
 
         return videoDataOutput

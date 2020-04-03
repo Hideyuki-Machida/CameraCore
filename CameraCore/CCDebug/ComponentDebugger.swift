@@ -10,15 +10,15 @@ import Foundation
 import MetalCanvas
 
 public extension CCDebug {
-    class DebuggerC: NSObject {
-        public let outPut: CCDebug.DebuggerC.Output = CCDebug.DebuggerC.Output()
-        public let fileWriter: CCDebug.DebuggerC.FileWriter = CCDebug.DebuggerC.FileWriter()
+    class ComponentDebugger: NSObject {
+        public let outPut: CCDebug.ComponentDebugger.Output = CCDebug.ComponentDebugger.Output()
+        public let fileWriter: CCDebug.ComponentDebugger.FileWriter = CCDebug.ComponentDebugger.FileWriter()
 
-        fileprivate let debugLoopQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCDebug.DebuggerC.debugLoopQueue")
-        fileprivate let writeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCDebug.DebuggerC.writeQueue")
+        fileprivate let debugLoopQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCDebug.ComponentDebugger.debugLoopQueue")
+        fileprivate let writeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCDebug.ComponentDebugger.writeQueue")
 
-        public let setup: CCDebug.DebuggerC.Setup = CCDebug.DebuggerC.Setup()
-        public let triger: CCDebug.DebuggerC.Triger = CCDebug.DebuggerC.Triger()
+        public let setup: CCDebug.ComponentDebugger.Setup = CCDebug.ComponentDebugger.Setup()
+        public let triger: CCDebug.ComponentDebugger.Triger = CCDebug.ComponentDebugger.Triger()
 
         fileprivate var list: [CCComponentProtocol] = []
         
@@ -65,18 +65,19 @@ public extension CCDebug {
         @objc private func debugLoop() {
             let currentTime: TimeInterval = Date().timeIntervalSince1970
             let mainthredFPS: Int = self.mainthredFPSDebugger.fps()
-            let usedCPU: Int = Int(MCDebug.usedCPU())
-            let usedMemory: Int = Int(MCDebug.usedMemory() ?? 0)
+            let usedCPU: Int = Int(MCDebug.Device.usedCPU())
+            let usedMemory: Int = Int(MCDebug.Device.usedMemory() ?? 0)
             let thermalState: Int = ProcessInfo.processInfo.thermalState.rawValue
             
-            var compornetFPSList: [CCDebug.DebuggerC.Output.Data.CompornetFPS] = []
+            var compornetFPSList: [CCDebug.ComponentDebugger.Output.Data.CompornetFPS] = []
             for i in self.list {
                 let name: String = String(describing: type(of: i))
-                let fps: Int = i.debugger?.fps() ?? 0
-                compornetFPSList.append(CCDebug.DebuggerC.Output.Data.CompornetFPS(name: name, fps: fps))
+                let fps: Int = i.debug?.fps() ?? 0
+                //i.debug?.cpu()
+                compornetFPSList.append(CCDebug.ComponentDebugger.Output.Data.CompornetFPS(name: name, fps: fps))
             }
 
-            self.outPut.data = CCDebug.DebuggerC.Output.Data(
+            self.outPut.data = CCDebug.ComponentDebugger.Output.Data(
                 time: Int(currentTime - self.startTime),
                 mainthredFPS: mainthredFPS,
                 compornetFPSList: compornetFPSList,
@@ -100,7 +101,7 @@ public extension CCDebug {
     }
 }
 
-fileprivate extension CCDebug.DebuggerC {
+fileprivate extension CCDebug.ComponentDebugger {
     func dispose() {
         self.stop()
         self.list = []
@@ -111,10 +112,10 @@ fileprivate extension CCDebug.DebuggerC {
 }
 
 
-extension CCDebug.DebuggerC {
+extension CCDebug.ComponentDebugger {
     // MARK: - Setup
     public class Setup: CCComponentSetupProtocol {
-        fileprivate var debugger: CCDebug.DebuggerC?
+        fileprivate var debugger: CCDebug.ComponentDebugger?
 
         public func set(component: CCComponentProtocol) throws {
             component.isDebugMode = true
@@ -128,7 +129,7 @@ extension CCDebug.DebuggerC {
 
     // MARK: - Triger
     public class Triger: CCComponentTrigerProtocol {
-        fileprivate var debugger: CCDebug.DebuggerC?
+        fileprivate var debugger: CCDebug.ComponentDebugger?
 
         public func start() {
             self.debugger?.start()
@@ -148,7 +149,7 @@ extension CCDebug.DebuggerC {
     }
 }
 
-public extension CCDebug.DebuggerC {
+public extension CCDebug.ComponentDebugger {
     class Output: NSObject {
         public struct Data {
             public struct CompornetFPS {
@@ -158,7 +159,7 @@ public extension CCDebug.DebuggerC {
             
             public var time: Int = 0
             public var mainthredFPS: Int = 0
-            public var compornetFPSList: [CCDebug.DebuggerC.Output.Data.CompornetFPS] = []
+            public var compornetFPSList: [CCDebug.ComponentDebugger.Output.Data.CompornetFPS] = []
             public var usedCPU: Int = 0
             public var usedMemory: Int = 0
             public var thermalState: Int = 0
@@ -174,12 +175,12 @@ public extension CCDebug.DebuggerC {
             }
         }
 
-        public var data: CCDebug.DebuggerC.Output.Data = Data()
+        public var data: CCDebug.ComponentDebugger.Output.Data = Data()
         @objc public dynamic var onUpdate: Int = 0
     }
 }
 
-public extension CCDebug.DebuggerC {
+public extension CCDebug.ComponentDebugger {
     class FileWriter: NSObject {
         let lebels: [String] = ["time", "mainthredFPS", "cameraFPS", "imageProcessFPS", "liveViewFPS", "usedCPU", "usedMemory", "thermalState"]
         let documentsPath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String

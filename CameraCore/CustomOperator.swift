@@ -67,3 +67,12 @@ public func --> (audioEngine: CCAudio.AudioEngine, videoRecorder: CCRecorder.Vid
 public func --> (audioEngine: CCAudio.AudioEngine, audioRecorder: CCRecorder.AudioRecorder) throws {
     try audioRecorder.pipe(audioEngine: audioEngine)
 }
+
+
+public func --> (player: CCPlayer, view: CCView) throws {
+    try view.pipe.input(player: player)
+}
+
+public func --> (player: CCPlayer, imageProcess: CCImageProcess.ImageProcess) throws {
+    try imageProcess.pipe.input(player: player)
+}

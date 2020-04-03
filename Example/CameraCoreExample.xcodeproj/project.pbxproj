@@ -10,6 +10,7 @@
 		620A665F24277E420036BC7E /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620A665C24277E420036BC7E /* DebugView.swift */; };
 		620A666024277E420036BC7E /* DebugView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 620A665D24277E420036BC7E /* DebugView.xib */; };
 		621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */; };
+		6240B21A2433214B00DE292E /* PlayerExample001VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6240B2192433214B00DE292E /* PlayerExample001VC.swift */; };
 		6244EB1823BB86530044C22F /* VideoCaptureView001ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */; };
 		6249747E2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6249747D2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift */; };
 		624974802349D2EF00325650 /* CoreMLDeeplabV3Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6249747F2349D2EF00325650 /* CoreMLDeeplabV3Layer.swift */; };
@@ -56,6 +57,7 @@
 		620A665D24277E420036BC7E /* DebugView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebugView.xib; sourceTree = "<group>"; };
 		620E8B06233F6DD300168140 /* CoreMLHelpers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreMLHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLExampleVC.swift; sourceTree = "<group>"; };
+		6240B2192433214B00DE292E /* PlayerExample001VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerExample001VC.swift; sourceTree = "<group>"; };
 		6244EB1723BB86530044C22F /* VideoCaptureView001ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureView001ExampleVC.swift; sourceTree = "<group>"; };
 		6249747D2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLDeeplabV3ExampleVC.swift; sourceTree = "<group>"; };
 		6249747F2349D2EF00325650 /* CoreMLDeeplabV3Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLDeeplabV3Layer.swift; sourceTree = "<group>"; };
@@ -101,6 +103,14 @@
 				620A665D24277E420036BC7E /* DebugView.xib */,
 			);
 			path = Debugger;
+			sourceTree = "<group>";
+		};
+		6240B218243320EF00DE292E /* PlayerExample */ = {
+			isa = PBXGroup;
+			children = (
+				6240B2192433214B00DE292E /* PlayerExample001VC.swift */,
+			);
+			path = PlayerExample;
 			sourceTree = "<group>";
 		};
 		624BC10C2338B70400A2D8F0 /* UseCoreMLExample */ = {
@@ -169,6 +179,7 @@
 			children = (
 				62E5CA2722901A72004D258A /* AppDelegate.swift */,
 				624BC10D2338B71900A2D8F0 /* VideoCaptureViewExample */,
+				6240B218243320EF00DE292E /* PlayerExample */,
 				624BC10C2338B70400A2D8F0 /* UseCoreMLExample */,
 				624BC10E2338B74200A2D8F0 /* CameraRollManagerExample */,
 				620A665B24277E1D0036BC7E /* Debugger */,
@@ -258,6 +269,7 @@
 				620A665F24277E420036BC7E /* DebugView.swift in Sources */,
 				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
+				6240B21A2433214B00DE292E /* PlayerExample001VC.swift in Sources */,
 				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,
 				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
 				62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */,

@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		620A66632427869F0036BC7E /* ImageProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620A66622427869F0036BC7E /* ImageProcess.swift */; };
 		621EDDBE241E316B00087E47 /* CCComponentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621EDDBD241E316B00087E47 /* CCComponentProtocol.swift */; };
-		6236E07D242339380067C8BB /* ComponentDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236E07C242339380067C8BB /* ComponentDebugger.swift */; };
+		6236E07D242339380067C8BB /* ComponentDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6236E07C242339380067C8BB /* ComponentDebug.swift */; };
+		6240B2172433157500DE292E /* CCPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6240B2162433157500DE292E /* CCPlayer.swift */; };
 		6244EB1323BB82B80044C22F /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1223BB82B80044C22F /* Camera.swift */; };
 		6244EB1623BB85CE0044C22F /* CCCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1523BB85CE0044C22F /* CCCapture.swift */; };
 		6244EB1A23BBBF910044C22F /* CCImageProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6244EB1923BBBF910044C22F /* CCImageProcess.swift */; };
@@ -80,7 +81,7 @@
 		62ECAD3F23F95639007B7795 /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECAD3E23F95639007B7795 /* VideoRecorder.swift */; };
 		62ECAD4123F9AA63007B7795 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECAD4023F9AA63007B7795 /* AudioRecorder.swift */; };
 		62F6D0742429DD3D004F834E /* CCDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6D0732429DD3D004F834E /* CCDebug.swift */; };
-		62F6D0762429DD8E004F834E /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6D0752429DD8E004F834E /* Debugger.swift */; };
+		62F6D0762429DD8E004F834E /* ComponentDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6D0752429DD8E004F834E /* ComponentDebugger.swift */; };
 		62FABEC42296E5A4002672A0 /* RGBCameraRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */; };
 		62FABEC52296E5A4002672A0 /* ARFaceGeometryRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */; };
 		62FABEC62296E5A4002672A0 /* FaceMetaDataRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */; };
@@ -101,7 +102,8 @@
 /* Begin PBXFileReference section */
 		620A66622427869F0036BC7E /* ImageProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcess.swift; sourceTree = "<group>"; };
 		621EDDBD241E316B00087E47 /* CCComponentProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCComponentProtocol.swift; sourceTree = "<group>"; };
-		6236E07C242339380067C8BB /* ComponentDebugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDebugger.swift; sourceTree = "<group>"; };
+		6236E07C242339380067C8BB /* ComponentDebug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDebug.swift; sourceTree = "<group>"; };
+		6240B2162433157500DE292E /* CCPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCPlayer.swift; sourceTree = "<group>"; };
 		6244EB1223BB82B80044C22F /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		6244EB1523BB85CE0044C22F /* CCCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCCapture.swift; sourceTree = "<group>"; };
 		6244EB1923BBBF910044C22F /* CCImageProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCImageProcess.swift; sourceTree = "<group>"; };
@@ -176,7 +178,7 @@
 		62ECAD3E23F95639007B7795 /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
 		62ECAD4023F9AA63007B7795 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		62F6D0732429DD3D004F834E /* CCDebug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCDebug.swift; sourceTree = "<group>"; };
-		62F6D0752429DD8E004F834E /* Debugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debugger.swift; sourceTree = "<group>"; };
+		62F6D0752429DD8E004F834E /* ComponentDebugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDebugger.swift; sourceTree = "<group>"; };
 		62FABEC02296E5A4002672A0 /* RGBCameraRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBCameraRenderer.swift; sourceTree = "<group>"; };
 		62FABEC12296E5A4002672A0 /* ARFaceGeometryRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARFaceGeometryRenderer.swift; sourceTree = "<group>"; };
 		62FABEC22296E5A4002672A0 /* FaceMetaDataRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceMetaDataRenderer.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				62E5CA4422904A34004D258A /* Utils */,
 				62E5CA4022904A34004D258A /* AVModuleCore.swift */,
 				621EDDBD241E316B00087E47 /* CCComponentProtocol.swift */,
+				6240B2162433157500DE292E /* CCPlayer.swift */,
 				62D319C623BC6B4D0070E36A /* CCView.swift */,
 				62E6FAE123F80628006E11D7 /* CCView+OrientationManager.swift */,
 				62AEDBA623C2FE83006CF7F8 /* CCTexture.swift */,
@@ -339,7 +342,7 @@
 		62E5CA4422904A34004D258A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				6236E07C242339380067C8BB /* ComponentDebugger.swift */,
+				6236E07C242339380067C8BB /* ComponentDebug.swift */,
 				62E5CA4622904A34004D258A /* SoundPlayer.swift */,
 				62E5CA4922904A34004D258A /* GLTextureConvert.swift */,
 				62E5CA4C22904A34004D258A /* SoundUtils.swift */,
@@ -429,7 +432,7 @@
 			isa = PBXGroup;
 			children = (
 				62F6D0732429DD3D004F834E /* CCDebug.swift */,
-				62F6D0752429DD8E004F834E /* Debugger.swift */,
+				62F6D0752429DD8E004F834E /* ComponentDebugger.swift */,
 			);
 			path = CCDebug;
 			sourceTree = "<group>";
@@ -555,6 +558,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6240B2172433157500DE292E /* CCPlayer.swift in Sources */,
 				62E5CAD422904A35004D258A /* RenderEventProtocol.swift in Sources */,
 				62D319C923BC7D840070E36A /* CustomOperator.swift in Sources */,
 				62ECAD4123F9AA63007B7795 /* AudioRecorder.swift in Sources */,
@@ -603,7 +607,7 @@
 				6276D63123BF5C0700F028E1 /* CMSampleBuffer+Extension.swift in Sources */,
 				62E5CACA22904A35004D258A /* CMTimeRange+Extentded.swift in Sources */,
 				62E6FAEB23F80D2B006E11D7 /* Mic.swift in Sources */,
-				62F6D0762429DD8E004F834E /* Debugger.swift in Sources */,
+				62F6D0762429DD8E004F834E /* ComponentDebugger.swift in Sources */,
 				62E5CACD22904A35004D258A /* CMTime+Codable.swift in Sources */,
 				62E6FAED23F80D48006E11D7 /* AudioPlayer.swift in Sources */,
 				62E5CAC722904A35004D258A /* TransformUtils.swift in Sources */,
@@ -624,7 +628,7 @@
 				6244EB1A23BBBF910044C22F /* CCImageProcess.swift in Sources */,
 				62E5CAD522904A35004D258A /* SimpleAVPlayer.swift in Sources */,
 				62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */,
-				6236E07D242339380067C8BB /* ComponentDebugger.swift in Sources */,
+				6236E07D242339380067C8BB /* ComponentDebug.swift in Sources */,
 				62E5CAF722904A35004D258A /* BlankLayer.swift in Sources */,
 				62E5CAF822904A35004D258A /* MaskLayer.swift in Sources */,
 				62B6C4AD23B794360044A531 /* CaptureData.swift in Sources */,

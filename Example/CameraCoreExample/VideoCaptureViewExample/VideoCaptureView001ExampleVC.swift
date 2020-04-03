@@ -6,6 +6,7 @@
 //  Copyright © 2019 hideyuki machida. All rights reserved.
 //
 
+import CoreVideo
 import AVFoundation
 import CameraCore
 import iOS_DummyAVAssets

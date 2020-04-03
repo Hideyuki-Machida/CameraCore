@@ -19,7 +19,7 @@ extension CCCapture {
         public let setup: CCCapture.Camera.Setup = CCCapture.Camera.Setup()
         public let triger: CCCapture.Camera.Triger = CCCapture.Camera.Triger()
         public let pipe: CCCapture.Camera.Pipe = CCCapture.Camera.Pipe()
-        public var debugger: ComponentDebugger?
+        public var debug: CCComponentDebug?
 
         
         public fileprivate(set) var property: CCCapture.VideoCapture.Property {
@@ -119,7 +119,8 @@ fileprivate extension CCCapture.Camera {
                 self.pipe.outVideoCapturePresentationTimeStamp = currentCaptureItem.presentationTimeStamp
 
                 // デバッグ
-                self.debugger?.update()
+                self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
+                self.debug?.update()
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////

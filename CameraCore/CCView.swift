@@ -163,6 +163,12 @@ extension CCView {
 
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
+        fileprivate func _dispose() {
+            self.ccview = nil
+            self.observations.forEach { $0.invalidate() }
+            self.observations.removeAll()
+        }
+
         func input(imageProcess: CCImageProcess.ImageProcess) throws -> CCView {
             try self.ccview?._setup()
             let observation: NSKeyValueObservation = imageProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCImageProcess.ImageProcess.Pipe, change) in
@@ -189,14 +195,14 @@ extension CCView {
                 guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
 
                 guard let self = self else { return }
-                if captureData.colorPixelFormat != self.ccview?.colorPixelFormat {
+                if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
                     MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
                     return
                 }
 
                 guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { /* 画像データではないBuffer */ return }
                 do {
-                    var drawTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, colorPixelFormat: captureData.colorPixelFormat, planeIndex: 0)
+                    var drawTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: captureData.mtlPixelFormat, planeIndex: 0)
                     drawTexture.presentationTimeStamp = captureData.presentationTimeStamp
                     drawTexture.captureVideoOrientation = captureData.captureVideoOrientation
                     drawTexture.presetSize = captureData.captureInfo.presetSize
@@ -214,7 +220,7 @@ extension CCView {
 
             return self.ccview!
         }
-
+    
         func input(player: CCPlayer) throws -> CCView {
             try self.ccview?._setup()
             let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
@@ -235,10 +241,36 @@ extension CCView {
             return self.ccview!
         }
 
-        fileprivate func _dispose() {
-            self.ccview = nil
-            self.observations.forEach { $0.invalidate() }
-            self.observations.removeAll()
+        func input(camera: CCARCapture.cARCamera) throws -> CCView {
+            try self.ccview?._setup()
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.ouTimeStamp, options: [.new]) { [weak self] (object: CCARCapture.cARCamera.Pipe, change) in
+                guard let captureData: CCARCapture.CaptureData = object.captureData else { return }
+
+                guard let self = self else { return }
+                if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
+                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    return
+                }
+
+                let pixelBuffer: CVPixelBuffer = captureData.arFrame.capturedImage
+                do {
+                    var drawTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: captureData.mtlPixelFormat, planeIndex: 0)
+                    drawTexture.presentationTimeStamp = captureData.presentationTimeStamp
+                    drawTexture.captureVideoOrientation = captureData.captureVideoOrientation
+                    drawTexture.presetSize = captureData.captureInfo.presetSize
+
+                    DispatchQueue.main.async { [weak self] in
+                        self?.ccview?.drawTexture = drawTexture
+                    }
+
+                } catch {
+                    MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
+                }
+
+            }
+            self.observations.append(observation)
+
+            return self.ccview!
         }
     }
 }

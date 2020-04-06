@@ -22,6 +22,9 @@
 		6276D62D23BF58BF00F028E1 /* CCCameraRoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62C23BF58BF00F028E1 /* CCCameraRoll.swift */; };
 		6276D63023BF5C0700F028E1 /* CMFormatDescription+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62E23BF5C0700F028E1 /* CMFormatDescription+Extension.swift */; };
 		6276D63123BF5C0700F028E1 /* CMSampleBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276D62F23BF5C0700F028E1 /* CMSampleBuffer+Extension.swift */; };
+		6291CD3F243869C100FDED0C /* CCARCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6291CD3E243869C100FDED0C /* CCARCapture.swift */; };
+		6291CD4324386D2700FDED0C /* ARCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6291CD4224386D2700FDED0C /* ARCamera.swift */; };
+		6291CD452438788E00FDED0C /* -CaptureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6291CD442438788E00FDED0C /* -CaptureData.swift */; };
 		6292627C232FEC2600D47CF0 /* CameraRollImportStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */; };
 		6292627D232FEC2600D47CF0 /* CameraRollAssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926278232FEC2600D47CF0 /* CameraRollAssetType.swift */; };
 		6292627E232FEC2600D47CF0 /* CameraRollItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926279232FEC2600D47CF0 /* CameraRollItem.swift */; };
@@ -115,6 +118,9 @@
 		6276D62C23BF58BF00F028E1 /* CCCameraRoll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCCameraRoll.swift; sourceTree = "<group>"; };
 		6276D62E23BF5C0700F028E1 /* CMFormatDescription+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMFormatDescription+Extension.swift"; sourceTree = "<group>"; };
 		6276D62F23BF5C0700F028E1 /* CMSampleBuffer+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMSampleBuffer+Extension.swift"; sourceTree = "<group>"; };
+		6291CD3E243869C100FDED0C /* CCARCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCARCapture.swift; sourceTree = "<group>"; };
+		6291CD4224386D2700FDED0C /* ARCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCamera.swift; sourceTree = "<group>"; };
+		6291CD442438788E00FDED0C /* -CaptureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "-CaptureData.swift"; sourceTree = "<group>"; };
 		62926277232FEC2600D47CF0 /* CameraRollImportStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollImportStatus.swift; sourceTree = "<group>"; };
 		62926278232FEC2600D47CF0 /* CameraRollAssetType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollAssetType.swift; sourceTree = "<group>"; };
 		62926279232FEC2600D47CF0 /* CameraRollItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollItem.swift; sourceTree = "<group>"; };
@@ -229,6 +235,16 @@
 			path = VideoCapture;
 			sourceTree = "<group>";
 		};
+		6291CD3D2438699A00FDED0C /* CCARCapture */ = {
+			isa = PBXGroup;
+			children = (
+				6291CD3E243869C100FDED0C /* CCARCapture.swift */,
+				6291CD4224386D2700FDED0C /* ARCamera.swift */,
+				6291CD442438788E00FDED0C /* -CaptureData.swift */,
+			);
+			path = CCARCapture;
+			sourceTree = "<group>";
+		};
 		62926276232FEC2600D47CF0 /* CCCameraRoll */ = {
 			isa = PBXGroup;
 			children = (
@@ -295,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				6244EB1423BB85A40044C22F /* CCCapture */,
+				6291CD3D2438699A00FDED0C /* CCARCapture */,
 				62AEDBB923C46CD4006CF7F8 /* CCInference */,
 				62E5CA5922904A34004D258A /* CCRenderer */,
 				62D319CA23BC7EAF0070E36A /* CCRecorder */,
@@ -620,6 +637,8 @@
 				62926280232FEC2600D47CF0 /* CameraRollImporter.swift in Sources */,
 				62E5CABE22904A35004D258A /* SoundPlayer.swift in Sources */,
 				62E6FAE023F801E9006E11D7 /* UIInterfaceOrientation+Extension.swift in Sources */,
+				6291CD4324386D2700FDED0C /* ARCamera.swift in Sources */,
+				6291CD3F243869C100FDED0C /* CCARCapture.swift in Sources */,
 				62E5CAD222904A35004D258A /* CCRenderer.swift in Sources */,
 				6258C76C23BB467C00B4AD79 /* CaptureProperty.swift in Sources */,
 				6276D62D23BF58BF00F028E1 /* CCCameraRoll.swift in Sources */,
@@ -629,6 +648,7 @@
 				62E5CAD522904A35004D258A /* SimpleAVPlayer.swift in Sources */,
 				62FABEC72296E5A4002672A0 /* DepthMapRenderer.swift in Sources */,
 				6236E07D242339380067C8BB /* ComponentDebug.swift in Sources */,
+				6291CD452438788E00FDED0C /* -CaptureData.swift in Sources */,
 				62E5CAF722904A35004D258A /* BlankLayer.swift in Sources */,
 				62E5CAF822904A35004D258A /* MaskLayer.swift in Sources */,
 				62B6C4AD23B794360044A531 /* CaptureData.swift in Sources */,

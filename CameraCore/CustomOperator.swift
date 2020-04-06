@@ -73,6 +73,14 @@ public func --> (player: CCPlayer, view: CCView) throws {
     try view.pipe.input(player: player)
 }
 
-public func --> (player: CCPlayer, imageProcess: CCImageProcess.ImageProcess) throws {
-    try imageProcess.pipe.input(player: player)
+public func --> (player: CCPlayer, imageProcess: CCImageProcess.ImageProcess) throws -> CCImageProcess.ImageProcess {
+    return try imageProcess.pipe.input(player: player)
+}
+
+public func --> (camera: CCARCapture.cARCamera, imageProcess: CCImageProcess.ImageProcess) throws -> CCImageProcess.ImageProcess {
+    return try imageProcess.pipe.input(camera: camera)
+}
+
+public func --> (camera: CCARCapture.cARCamera, view: CCView) throws -> CCView {
+    return try view.pipe.input(camera: camera)
 }

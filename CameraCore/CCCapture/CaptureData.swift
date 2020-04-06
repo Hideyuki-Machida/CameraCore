@@ -18,16 +18,18 @@ extension CCCapture.VideoCapture {
         let captureInfo: CCCapture.VideoCapture.CaptureInfo
         let depthData: AVDepthData?
         let metadataObjects: [AVMetadataObject]?
-        let colorPixelFormat: MTLPixelFormat
+        let mtlPixelFormat: MTLPixelFormat
+        let outPutPixelFormatType: MCPixelFormatType
         let presentationTimeStamp: CMTime
         let captureVideoOrientation: AVCaptureVideoOrientation
 
-        internal init(sampleBuffer: CMSampleBuffer, captureInfo: CCCapture.VideoCapture.CaptureInfo, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, colorPixelFormat: MTLPixelFormat, captureVideoOrientation: AVCaptureVideoOrientation) {
+        internal init(sampleBuffer: CMSampleBuffer, captureInfo: CCCapture.VideoCapture.CaptureInfo, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, mtlPixelFormat: MTLPixelFormat, outPutPixelFormatType: MCPixelFormatType, captureVideoOrientation: AVCaptureVideoOrientation) {
             self.sampleBuffer = sampleBuffer
             self.captureInfo = captureInfo
             self.depthData = depthData
             self.metadataObjects = metadataObjects
-            self.colorPixelFormat = colorPixelFormat
+            self.mtlPixelFormat = mtlPixelFormat
+            self.outPutPixelFormatType = outPutPixelFormatType
             self.presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             self.captureVideoOrientation = captureVideoOrientation
         }

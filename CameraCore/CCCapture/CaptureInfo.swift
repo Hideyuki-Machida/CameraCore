@@ -22,14 +22,22 @@ extension CCCapture.VideoCapture {
         public private(set) var devicePosition: AVCaptureDevice.Position = .back
         public private(set) var frameRate: Int32 = 30
         public private(set) var colorSpace: AVCaptureColorSpace = .sRGB
+        public private(set) var outPutPixelFormatType: MCPixelFormatType = MCPixelFormatType.kCV32BGRA
         public private(set) var videoHDR: Bool?
         public private(set) var isSmoothAutoFocusEnabled: Bool = true
         public private(set) var depthDataOut: Bool = false
 
-        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, itemList: [CCCapture.VideoCapture.Property.Item]) {
+        func updateAr() {
+            self.captureSize = MCSize.init(1920, 1440)
+            self.frameRate = 60
+            self.outPutPixelFormatType = MCPixelFormatType.kCV420YpCbCr8BiPlanarFullRange
+        }
+        
+        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, outPutPixelFormatType: MCPixelFormatType, itemList: [CCCapture.VideoCapture.Property.Item]) {
             self.device = device
             self.devicePosition = device.position
             self.deviceFormat = deviceFormat
+            self.outPutPixelFormatType = outPutPixelFormatType
             for item in itemList {
                 switch item {
                 case let .captureSize(captureSize):

@@ -38,19 +38,19 @@ extension CCCapture.VideoCapture {
         public var deviceType: AVCaptureDevice.DeviceType
         public var isAudioDataOutput: Bool
         public var captureVideoOrientation: AVCaptureVideoOrientation?
-        public var pixelFormatType: OSType
+        public var outPutPixelFormatType: MCPixelFormatType
         public var required: [Item]
         public var option: [Item]
         public var captureInfo: CCCapture.VideoCapture.CaptureInfo = CCCapture.VideoCapture.CaptureInfo()
 
         fileprivate var requiredCaptureSize: MCSize?
 
-        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, captureVideoOrientation: AVCaptureVideoOrientation? = nil, pixelFormatType: OSType = kCVPixelFormatType_32BGRA, required: [Item] = [], option: [Item] = []) {
+        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, captureVideoOrientation: AVCaptureVideoOrientation? = nil, outPutPixelFormatType: MCPixelFormatType = MCPixelFormatType.kCV32BGRA, required: [Item] = [], option: [Item] = []) {
             self.devicePosition = devicePosition
             self.deviceType = deviceType
             self.isAudioDataOutput = isAudioDataOutput
             self.captureVideoOrientation = captureVideoOrientation
-            self.pixelFormatType = pixelFormatType
+            self.outPutPixelFormatType = outPutPixelFormatType
             self.required = required
             self.option = option
         }
@@ -133,7 +133,7 @@ extension CCCapture.VideoCapture.Property {
 
         //////////////////////////////////////////////////////////
         // Infoを設定
-        self.captureInfo.update(device: captureDevice, deviceFormat: resultFormat, itemList: self.required + self.option)
+        self.captureInfo.update(device: captureDevice, deviceFormat: resultFormat, outPutPixelFormatType: self.outPutPixelFormatType, itemList: self.required + self.option)
         //////////////////////////////////////////////////////////
     }
 

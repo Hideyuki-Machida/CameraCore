@@ -102,7 +102,7 @@ fileprivate extension CCCapture.Camera {
             guard
                 let self = self,
                 let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
-            else { return }
+           else { return }
 
             if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
                 // ピクセルデータ
@@ -111,7 +111,8 @@ fileprivate extension CCCapture.Camera {
                     captureInfo: captureInfo,
                     depthData: depthData,
                     metadataObjects: metadataObjects,
-                    colorPixelFormat: MTLPixelFormat.bgra8Unorm,
+                    mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
+                    outPutPixelFormatType: captureInfo.outPutPixelFormatType,
                     captureVideoOrientation: captureVideoOrientation
                 )
 

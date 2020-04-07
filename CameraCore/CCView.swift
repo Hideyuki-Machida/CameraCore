@@ -169,7 +169,7 @@ extension CCView {
             self.observations.removeAll()
         }
 
-        func input(imageProcess: CCImageProcess.ImageProcess) throws -> CCView {
+        func input(imageProcess: CCImageProcess.ImageProcess) throws {
             try self.ccview?._setup()
             let observation: NSKeyValueObservation = imageProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCImageProcess.ImageProcess.Pipe, change) in
                 guard let outTexture: CCTexture = object.outTexture else { return }
@@ -185,11 +185,9 @@ extension CCView {
 
             }
             self.observations.append(observation)
-
-            return self.ccview!
         }
 
-        func input(camera: CCCapture.Camera) throws -> CCView {
+        func input(camera: CCCapture.Camera) throws {
             try self.ccview?._setup()
             let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
                 guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
@@ -217,11 +215,9 @@ extension CCView {
 
             }
             self.observations.append(observation)
-
-            return self.ccview!
         }
     
-        func input(player: CCPlayer) throws -> CCView {
+        func input(player: CCPlayer) throws {
             try self.ccview?._setup()
             let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
                 guard let outTexture: CCTexture = object.outTexture else { return }
@@ -237,11 +233,9 @@ extension CCView {
 
             }
             self.observations.append(observation)
-
-            return self.ccview!
         }
 
-        func input(camera: CCARCapture.cARCamera) throws -> CCView {
+        func input(camera: CCARCapture.cARCamera) throws {
             try self.ccview?._setup()
             let observation: NSKeyValueObservation = camera.pipe.observe(\.ouTimeStamp, options: [.new]) { [weak self] (object: CCARCapture.cARCamera.Pipe, change) in
                 guard let captureData: CCARCapture.CaptureData = object.captureData else { return }
@@ -269,8 +263,6 @@ extension CCView {
 
             }
             self.observations.append(observation)
-
-            return self.ccview!
         }
     }
 }

@@ -12,15 +12,35 @@ import ARKit
 
 extension CCARCapture {
     @objc public class cARCamera: NSObject, CCComponentProtocol {
+        public enum Mode {
+            case worldTracking
+            case orientationTracking
+            case faceTracking
+            
+            var configuration: ARConfiguration {
+                switch self {
+                case .worldTracking:
+                    return ARWorldTrackingConfiguration()
+                case .orientationTracking:
+                    return AROrientationTrackingConfiguration()
+                case .faceTracking:
+                    return ARFaceTrackingConfiguration()
+                }
+            }
+        }
+
         // MARK: - CCComponentProtocol
         public let setup: CCARCapture.cARCamera.Setup = CCARCapture.cARCamera.Setup()
         public let triger: CCARCapture.cARCamera.Triger = CCARCapture.cARCamera.Triger()
         public let pipe: CCARCapture.cARCamera.Pipe = CCARCapture.cARCamera.Pipe()
         public var debug: CCComponentDebug?
 
+        var configuration: ARConfiguration
         let session: ARSession = ARSession.init()
         
-        public override init() {
+        public init(mode: CCARCapture.cARCamera.Mode) {
+
+            self.configuration = mode.configuration
             super.init()
 
             self.setup.camera = self
@@ -29,10 +49,8 @@ extension CCARCapture {
         }
         
         fileprivate func start() {
-            // Create a session configuration
-            let configuration = ARWorldTrackingConfiguration()
             self.session.delegate = self
-            self.session.run(configuration)
+            self.session.run(self.configuration)
         }
 
         deinit {
@@ -86,6 +104,10 @@ extension CCARCapture.cARCamera {
 
         public func start() {
             self.camera?.start()
+        }
+
+        public func dispose() {
+            self.camera?.dispose()
         }
 
         fileprivate func _dispose() {

@@ -29,6 +29,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
     var camera: CCCapture.Camera?
     var inference: CCVision.Inference?
     var videoRecorder: CCRecorder.VideoRecorder?
+
     @IBOutlet weak var drawView: CCView!
     
     deinit {

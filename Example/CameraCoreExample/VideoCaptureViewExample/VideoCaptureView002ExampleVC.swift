@@ -45,7 +45,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.drawView.triger.dispose()
         self.debugger.triger.stop()
         self.debugger.triger.dispose()
-
+        CameraCore.flush()
         MCDebug.deinitLog(self)
     }
 
@@ -71,13 +71,15 @@ class VideoCaptureView002ExampleVC: UIViewController {
             let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: true)
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 
+            //imageProcess.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer]
+            
             try camera --> imageProcess --> self.drawView
             //try camera --> self.drawView
             try imageProcess --> videoRecorder
 
             camera.event = event
             camera.triger.start()
-            
+
             self.camera = camera
             self.imageProcess = imageProcess
             self.videoRecorder = videoRecorder
@@ -400,7 +402,8 @@ extension VideoCaptureView002ExampleVC {
 
         let action001: UIAlertAction = UIAlertAction(title: FilterLabel.ON.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
-            self.imageProcess?.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer]
+            //self.imageProcess?.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer]
+            self.imageProcess?.renderLayers = [self.lutLayer]
         })
 
         let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler: {

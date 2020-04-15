@@ -96,7 +96,6 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
 
     public override func draw(in view: MTKView) {
         super.draw(in: view)
-
         guard
             !self.isDraw,
             let drawTexture: CCTexture = self.drawTexture,
@@ -106,7 +105,7 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
         self.presentationTimeStamp = drawTexture.presentationTimeStamp
 
         guard let commandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-
+        commandBuffer.label = "@CommandBuffer: CCView.drew: \(drawTexture.presentationTimeStamp.value)"
         commandBuffer.addCompletedHandler { [weak self] (_: MTLCommandBuffer) in
             self?.isDraw = false
             self?.debug?.update()
@@ -115,9 +114,9 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
         self.isDraw = true
 
         do {
-            let texture: CCTexture = try orientationManager.rotateTexture(commandBuffer: commandBuffer, source: drawTexture, colorPixelFormat: self.colorPixelFormat, captureVideoOrientation: drawTexture.captureVideoOrientation)
-
-            self.drawUpdate(commandBuffer: commandBuffer, drawTexture: texture.texture)
+            //let texture: CCTexture = try orientationManager.rotateTexture(commandBuffer: commandBuffer, source: drawTexture, colorPixelFormat: self.colorPixelFormat, captureVideoOrientation: drawTexture.captureVideoOrientation)
+        //print("CCView: ", drawTexture.presentationTimeStamp)
+            self.drawUpdate(commandBuffer: commandBuffer, drawTexture: drawTexture.texture)
         } catch {
             MCDebug.errorLog("CCView draw")
         }
@@ -181,8 +180,15 @@ extension CCView {
                     return
                 }
 
-                self.ccview?.drawTexture = outTexture
+                /*
+                guard let commandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
+                commandBuffer.addCompletedHandler { [weak self] (_: MTLCommandBuffer) in
+                    self?.ccview!.draw()
+                }
 
+                self.ccview!.drawUpdate(commandBuffer: commandBuffer, drawTexture: outTexture.texture)
+ */
+                self.ccview?.drawTexture = outTexture
             }
             self.observations.append(observation)
         }

@@ -20,7 +20,7 @@
                                 <rect key="frame" x="20" y="108" width="335" height="650"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVS-AO-cUS">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="122"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="84.333333333333329"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video撮影">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -30,7 +30,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRg-Uo-E2Y">
-                                        <rect key="frame" x="0.0" y="132" width="335" height="122"/>
+                                        <rect key="frame" x="0.0" y="94.333333333333343" width="335" height="84.333333333333343"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video撮影 - 設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -39,8 +39,28 @@
                                             <segue destination="EXy-AM-FWc" kind="show" id="lXt-ld-8Pi"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gX2-jD-lbf">
+                                        <rect key="frame" x="0.0" y="188.66666666666669" width="335" height="84.333333333333314"/>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="ARVideo">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="kCW-9o-am8" kind="show" id="2NA-Pi-d1t"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bDJ-L5-Ges">
+                                        <rect key="frame" x="0.0" y="283" width="335" height="84"/>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Depthカメラ">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="jd9-SI-Qkh" kind="show" id="IkC-uE-vNC"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Krl-zp-QEa">
-                                        <rect key="frame" x="0.0" y="264" width="335" height="122"/>
+                                        <rect key="frame" x="0.0" y="377" width="335" height="84.333333333333314"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video再生">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -50,7 +70,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EW6-07-B65">
-                                        <rect key="frame" x="0.0" y="396" width="335" height="122"/>
+                                        <rect key="frame" x="0.0" y="471.33333333333331" width="335" height="84.333333333333314"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Audio再生">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -60,7 +80,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4B-kh-CMo">
-                                        <rect key="frame" x="0.0" y="528" width="335" height="122"/>
+                                        <rect key="frame" x="0.0" y="565.66666666666663" width="335" height="84.333333333333371"/>
                                         <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
                                         <state key="normal" title="カメラロール操作">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -593,6 +613,81 @@
             </objects>
             <point key="canvasLocation" x="238" y="-548"/>
         </scene>
+        <!--Depthカメラ-->
+        <scene sceneID="u52-Zt-lfS">
+            <objects>
+                <viewController id="jd9-SI-Qkh" customClass="DepthVideoCaptureExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QSe-1k-V0e">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="M66-vL-IDF" customClass="CCView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="72.666666666666686" width="375" height="666.66666666666652"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="M66-vL-IDF" secondAttribute="height" multiplier="9:16" id="nhj-it-91G"/>
+                                    <constraint firstAttribute="width" secondItem="M66-vL-IDF" secondAttribute="height" multiplier="16:9" id="s7u-aP-mYf"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="nhj-it-91G"/>
+                                        <exclude reference="s7u-aP-mYf"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="s7u-aP-mYf"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="s7u-aP-mYf"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="nhj-it-91G"/>
+                                    </mask>
+                                </variation>
+                            </mtkView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="M66-vL-IDF" firstAttribute="leading" secondItem="voO-gl-1TW" secondAttribute="leading" id="Bea-S6-KtH"/>
+                            <constraint firstItem="M66-vL-IDF" firstAttribute="centerX" secondItem="QSe-1k-V0e" secondAttribute="centerX" id="Fdv-2o-aqT"/>
+                            <constraint firstItem="voO-gl-1TW" firstAttribute="trailing" secondItem="M66-vL-IDF" secondAttribute="trailing" id="pUK-pd-DYk"/>
+                            <constraint firstItem="M66-vL-IDF" firstAttribute="leading" secondItem="QSe-1k-V0e" secondAttribute="leading" id="pWW-Nl-OxE"/>
+                            <constraint firstItem="M66-vL-IDF" firstAttribute="centerY" secondItem="QSe-1k-V0e" secondAttribute="centerY" id="qpU-bc-0Te"/>
+                            <constraint firstAttribute="trailing" secondItem="M66-vL-IDF" secondAttribute="trailing" id="t5I-VQ-KqG"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="voO-gl-1TW"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="t5I-VQ-KqG"/>
+                                <exclude reference="pWW-Nl-OxE"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="t5I-VQ-KqG"/>
+                                <include reference="pWW-Nl-OxE"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="t5I-VQ-KqG"/>
+                                <include reference="pWW-Nl-OxE"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="Depthカメラ" id="dSL-v0-hlH"/>
+                    <connections>
+                        <outlet property="drawView" destination="M66-vL-IDF" id="dlg-9s-Cb6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aeQ-Fj-KGV" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2044" y="858"/>
+        </scene>
         <!--Audio再生-->
         <scene sceneID="rra-7Z-7ae">
             <objects>
@@ -761,6 +856,61 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bTU-ia-0P5" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-558" y="2189"/>
+        </scene>
+        <!--ARVideo-->
+        <scene sceneID="O5b-4y-fYe">
+            <objects>
+                <viewController id="kCW-9o-am8" customClass="ARVideoCaptureExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="h0E-HL-NGu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="0YF-5J-4xn" customClass="CCView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="72.666666666666686" width="375" height="666.66666666666652"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="0YF-5J-4xn" secondAttribute="height" multiplier="9:16" id="T58-D0-QTq"/>
+                                    <constraint firstAttribute="width" secondItem="0YF-5J-4xn" secondAttribute="height" multiplier="16:9" id="iHP-BG-FoA"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="T58-D0-QTq"/>
+                                        <exclude reference="iHP-BG-FoA"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="iHP-BG-FoA"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="iHP-BG-FoA"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="T58-D0-QTq"/>
+                                    </mask>
+                                </variation>
+                            </mtkView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0YF-5J-4xn" firstAttribute="trailing" secondItem="Uqq-f9-fy2" secondAttribute="trailing" id="207-BB-fU1"/>
+                            <constraint firstItem="0YF-5J-4xn" firstAttribute="centerX" secondItem="h0E-HL-NGu" secondAttribute="centerX" id="FBH-Tu-3z8"/>
+                            <constraint firstItem="0YF-5J-4xn" firstAttribute="centerY" secondItem="h0E-HL-NGu" secondAttribute="centerY" id="XRn-V4-K8E"/>
+                            <constraint firstItem="0YF-5J-4xn" firstAttribute="leading" secondItem="Uqq-f9-fy2" secondAttribute="leading" id="dD8-sd-SkG"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Uqq-f9-fy2"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="ARVideo" id="e93-my-a0l"/>
+                    <connections>
+                        <outlet property="drawView" destination="0YF-5J-4xn" id="j3W-eQ-aVt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yky-Le-N0d" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1670" y="1684"/>
         </scene>
     </scenes>
 </document>

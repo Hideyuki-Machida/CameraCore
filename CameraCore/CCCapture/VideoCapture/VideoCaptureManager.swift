@@ -23,15 +23,25 @@ extension CCCapture.VideoCapture {
 
         var property: CCCapture.VideoCapture.Property = CCCapture.VideoCapture.Property()
 
-        public var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)? {
+        public var onUpdateSampleBuffer: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)? {
             get {
-                return self.captureOutput.onUpdate
+                return self.captureOutput.onUpdateSampleBuffer
             }
             set {
-                self.captureOutput.onUpdate = newValue
+                self.captureOutput.onUpdateSampleBuffer = newValue
             }
         }
 
+        public var onUpdateDepthData: ((_ depthData: AVDepthData) -> Void)? {
+            get {
+                return self.captureOutput.onUpdateDepthData
+            }
+            set {
+                self.captureOutput.onUpdateDepthData = newValue
+            }
+        }
+
+        
         let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue")
 
         var currentVideoInput: AVCaptureDeviceInput? {
@@ -70,6 +80,7 @@ extension CCCapture.VideoCapture {
             // AVCaptureDeviceを生成
             guard let videoDevice: AVCaptureDevice = self.property.captureInfo.device else { throw CCCapture.ErrorType.setup }
             guard let format: AVCaptureDevice.Format = self.property.captureInfo.deviceFormat else { throw CCCapture.ErrorType.setup }
+            let depthDataFormat: AVCaptureDevice.Format? = self.property.captureInfo.depthDataFormat
             //////////////////////////////////////////////////////////
 
             //////////////////////////////////////////////////////////
@@ -112,6 +123,9 @@ extension CCCapture.VideoCapture {
             //////////////////////////////////////////////////////////
             try videoDevice.lockForConfiguration()
             videoDevice.activeFormat = format
+            if depthDataFormat != nil {
+                videoDevice.activeDepthDataFormat = depthDataFormat
+            }
 
             // フォーカスモード設定
             if videoDevice.isSmoothAutoFocusSupported {
@@ -139,7 +153,7 @@ extension CCCapture.VideoCapture {
         }
 
         deinit {
-            self.onUpdate = nil
+            self.onUpdateSampleBuffer = nil
             MCDebug.log(self)
             guard let captureSession: AVCaptureSession = self.captureSession else { return }
             if captureSession.isRunning {

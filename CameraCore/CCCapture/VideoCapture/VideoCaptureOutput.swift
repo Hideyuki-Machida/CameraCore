@@ -16,11 +16,16 @@ extension CCCapture.VideoCapture {
 
         fileprivate(set) var videoDataOutput: AVCaptureVideoDataOutput?
         fileprivate(set) var audioDataOutput: AVCaptureAudioDataOutput?
+        fileprivate(set) var videoDepthDataOutput: AVCaptureDepthDataOutput?
+        
 
         fileprivate(set) var captureVideoOrientation: AVCaptureVideoOrientation?
 
-        var onUpdate: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
+        var onUpdateSampleBuffer: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
 
+        var onUpdateDepthData: ((_ depthData: AVDepthData) -> Void)?
+
+        
         deinit {
             NotificationCenter.default.removeObserver(self)
             MCDebug.deinitLog(self)
@@ -80,6 +85,34 @@ extension CCCapture.VideoCapture {
                 //////////////////////////////////////////////////////////
             }
 
+            if property.isDepthDataOutput {
+                //////////////////////////////////////////////////////////
+                // AVCaptureDepthDataOutput
+                let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
+                if captureSession.canAddOutput(videoDepthDataOutput) {
+                    captureSession.addOutput(videoDepthDataOutput)
+                    videoDepthDataOutput.isFilteringEnabled = true
+                    videoDepthDataOutput.setDelegate(self, callbackQueue: CCCapture.depthOutputQueue)
+                    if let connection: AVCaptureConnection = videoDepthDataOutput.connection(with: .depthData) {
+                        connection.isEnabled = true
+                        connection.isVideoMirrored = devicePosition == .front ? true : false
+
+                        if let captureVideoOrientation: AVCaptureVideoOrientation = self.captureVideoOrientation {
+                            // captureVideoOrientation が固定の場合
+                            connection.videoOrientation = captureVideoOrientation
+                        }
+
+                        self.videoDepthDataOutput = videoDepthDataOutput
+                        dataOutputs.append(self.videoDepthDataOutput!)
+                    } else {
+                        MCDebug.errorLog("No AVCaptureDepthDataOutputConnection")
+                        throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
+                    }
+                }
+                //////////////////////////////////////////////////////////
+                
+            }
+
             NotificationCenter.default.removeObserver(self, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
 
@@ -123,7 +156,12 @@ private extension CCCapture.VideoCapture.VideoCaptureOutput {
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
-        self.onUpdate?(sampleBuffer, connection.videoOrientation, nil, nil)
+        self.onUpdateSampleBuffer?(sampleBuffer, connection.videoOrientation, nil, nil)
     }
 }
 
+extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDelegate {
+    func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
+        self.onUpdateDepthData?(depthData)
+    }
+}

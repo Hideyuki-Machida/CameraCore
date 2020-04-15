@@ -48,10 +48,10 @@ class PlayerExample001VC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let url: URL = iOS_DummyAVAssets.AssetManager.VideoAsset.portrait002.url
+        //let url: URL = iOS_DummyAVAssets.AssetManager.VideoAsset.portrait002.url
         //let url: URL = URL(string: "https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8")!
         //let url: URL = URL(string: "https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8")!
-        //let url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8")!
+        let url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8")!
         //let url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")!
         
         
@@ -60,17 +60,13 @@ class PlayerExample001VC: UIViewController {
             //try self.player --> imageProcess --> self.drawView
             try self.player --> self.drawView
             self.player.setup.update(url: url)
-            self.player.triger.play()
 
             let playerStatusObservation: NSKeyValueObservation = self.player.event.observe(\.statuss, options: [.new]) { [weak self] (object: CCPlayer.Event, change) in
-                print(1111)
                 guard
                     let self = self,
                     let statusId: Int = change.newValue,
                     let status: CCPlayer.Status = CCPlayer.Status.init(rawValue: statusId)
                 else { return }
-                
-                print(status)
             }
             self.observations.append(playerStatusObservation)
 
@@ -98,6 +94,19 @@ class PlayerExample001VC: UIViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.player.triger.play()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.player.triger.pause()
+    }
+
+    
     @IBAction func seek(_ sender: UISlider) {
         self.player.triger.seek(progress: sender.value)
     }

@@ -97,7 +97,7 @@ fileprivate extension CCCapture.Camera {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        self.capture?.onUpdate = { [weak self] (sampleBuffer: CMSampleBuffer, captureVideoOrientation: AVCaptureVideoOrientation, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
+        self.capture?.onUpdateSampleBuffer = { [weak self] (sampleBuffer: CMSampleBuffer, captureVideoOrientation: AVCaptureVideoOrientation, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
 
             guard
                 let self = self,
@@ -125,6 +125,13 @@ fileprivate extension CCCapture.Camera {
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        self.capture?.onUpdateDepthData = { [weak self] (depthData: AVDepthData) in
+            
+            print(CVPixelBufferGetWidth(depthData.depthDataMap))
+            print(CVPixelBufferGetHeight(depthData.depthDataMap))
+            print(depthData)
+        }
     }
 
     func updateProperty(property: CCCapture.VideoCapture.Property) throws {

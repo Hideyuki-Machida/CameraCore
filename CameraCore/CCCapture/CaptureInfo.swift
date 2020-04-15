@@ -16,6 +16,7 @@ extension CCCapture.VideoCapture {
 
         public private(set) var device: AVCaptureDevice?
         public private(set) var deviceFormat: AVCaptureDevice.Format?
+        public private(set) var depthDataFormat: AVCaptureDevice.Format?
         public private(set) var deviceType: AVCaptureDevice.DeviceType?
         public private(set) var presetSize: Settings.PresetSize = Settings.PresetSize.p1280x720
         public private(set) var captureSize: MCSize = Settings.PresetSize.p1280x720.size(orientation: Configuration.shared.currentUIInterfaceOrientation)
@@ -33,11 +34,25 @@ extension CCCapture.VideoCapture {
             self.outPutPixelFormatType = MCPixelFormatType.kCV420YpCbCr8BiPlanarFullRange
         }
         
-        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, outPutPixelFormatType: MCPixelFormatType, itemList: [CCCapture.VideoCapture.Property.Item]) {
+        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, isDepthDataOutput: Bool, outPutPixelFormatType: MCPixelFormatType, itemList: [CCCapture.VideoCapture.Property.Item]) {
             self.device = device
             self.devicePosition = device.position
             self.deviceFormat = deviceFormat
             self.outPutPixelFormatType = outPutPixelFormatType
+
+            //////////////////////////////////////////////////////////
+            // isDepthDataOutputがtrueの場合にはdepthFormatsを取得
+            if isDepthDataOutput {
+                var depthFormats: [AVCaptureDevice.Format] = []
+                deviceFormat.supportedDepthDataFormats.forEach { depthFormats.append($0) }
+                depthFormats = depthFormats.filter { CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_DepthFloat32 }
+                self.depthDataFormat = depthFormats.max(by: { first, second in
+                    CMVideoFormatDescriptionGetDimensions(first.formatDescription).width < CMVideoFormatDescriptionGetDimensions(second.formatDescription).width
+                })!
+                self.depthDataOut = isDepthDataOutput
+            }
+            //////////////////////////////////////////////////////////
+
             for item in itemList {
                 switch item {
                 case let .captureSize(captureSize):

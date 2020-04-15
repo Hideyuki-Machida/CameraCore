@@ -39,18 +39,29 @@ extension CCCapture.VideoCapture {
         public var isAudioDataOutput: Bool
         public var captureVideoOrientation: AVCaptureVideoOrientation?
         public var outPutPixelFormatType: MCPixelFormatType
+        public var isDepthDataOutput: Bool
         public var required: [Item]
         public var option: [Item]
         public var captureInfo: CCCapture.VideoCapture.CaptureInfo = CCCapture.VideoCapture.CaptureInfo()
 
         fileprivate var requiredCaptureSize: MCSize?
 
-        public init(devicePosition: AVCaptureDevice.Position = .back, deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera, isAudioDataOutput: Bool = true, captureVideoOrientation: AVCaptureVideoOrientation? = nil, outPutPixelFormatType: MCPixelFormatType = MCPixelFormatType.kCV32BGRA, required: [Item] = [], option: [Item] = []) {
+        public init(
+            devicePosition: AVCaptureDevice.Position = .back,
+            deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera,
+            isAudioDataOutput: Bool = true,
+            captureVideoOrientation: AVCaptureVideoOrientation? = nil,
+            outPutPixelFormatType: MCPixelFormatType = MCPixelFormatType.kCV32BGRA,
+            isDepthDataOutput: Bool = false,
+            required: [Item] = [],
+            option: [Item] = []
+        ){
             self.devicePosition = devicePosition
             self.deviceType = deviceType
             self.isAudioDataOutput = isAudioDataOutput
             self.captureVideoOrientation = captureVideoOrientation
             self.outPutPixelFormatType = outPutPixelFormatType
+            self.isDepthDataOutput = isDepthDataOutput
             self.required = required
             self.option = option
         }
@@ -87,11 +98,18 @@ extension CCCapture.VideoCapture.Property {
 extension CCCapture.VideoCapture.Property {
     public func setup() throws {
         let captureDevice: AVCaptureDevice = try self.getDevice(position: self.devicePosition, deviceType: self.deviceType)
-        let formats: [AVCaptureDevice.Format] = captureDevice.formats.filter { $0.mediaType == .video }
+        var formats: [AVCaptureDevice.Format] = captureDevice.formats.filter { $0.mediaType == .video }
 
+        //////////////////////////////////////////////////////////
+        // isDepthDataOutputがtrueの場合にはdepthFormatsを取得
+        if self.isDepthDataOutput {
+            formats = formats.filter { !$0.supportedDepthDataFormats.isEmpty }
+        }
+        //////////////////////////////////////////////////////////
+        
         guard formats.count >= 1 else { throw CCCapture.ErrorType.setup }
         var resultFormats: [AVCaptureDevice.Format] = formats
-
+        
         //////////////////////////////////////////////////////////
         // 必須のパラメータを設定
         let required: [CCCapture.VideoCapture.Property.Item] = self.required
@@ -133,7 +151,7 @@ extension CCCapture.VideoCapture.Property {
 
         //////////////////////////////////////////////////////////
         // Infoを設定
-        self.captureInfo.update(device: captureDevice, deviceFormat: resultFormat, outPutPixelFormatType: self.outPutPixelFormatType, itemList: self.required + self.option)
+        self.captureInfo.update(device: captureDevice, deviceFormat: resultFormat, isDepthDataOutput: self.isDepthDataOutput, outPutPixelFormatType: self.outPutPixelFormatType, itemList: self.required + self.option)
         //////////////////////////////////////////////////////////
     }
 

@@ -168,11 +168,11 @@ private extension CCImageProcess.ImageProcess {
         commandBuffer.label = "@CommandBuffer: CCImageProcess.ImageProcess.process: \(outTexture.presentationTimeStamp.value)"
         defer {
             commandBuffer.commit()
-            //commandBuffer.waitUntilCompleted()
         }
 
         commandBuffer.addCompletedHandler { [weak self] _ in
             guard let self = self else { return }
+            self.debug?.update()
             self.isProcess = false
             self.pipe.outUpdate(outTexture: outTexture, captureData: captureData)
         }
@@ -340,7 +340,10 @@ extension CCImageProcess.ImageProcess.Pipe {
                     let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem
                 else { return }
                 
-                if self.updateCaptureData(captureData: captureData) {
+                if (self.imageProcess?.renderLayers.isEmpty ?? true) {
+                    // レンダーレイヤーが無い
+                    self.passThrough(captureData: captureData)
+                } else {
                     self.currentCaptureItem = captureData
                 }
             }
@@ -352,7 +355,10 @@ extension CCImageProcess.ImageProcess.Pipe {
                     let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem
                 else { return }
 
-                if self.updateCaptureData(captureData: captureData) {
+                if (self.imageProcess?.renderLayers.isEmpty ?? true) {
+                    // レンダーレイヤーが無い
+                    self.passThrough(captureData: captureData)
+                } else {
                     self.process(currentCaptureItem: captureData)
                 }
             }
@@ -458,35 +464,38 @@ extension CCImageProcess.ImageProcess.Pipe {
 }
 
 extension CCImageProcess.ImageProcess.Pipe {
+    private func passThrough(captureData: CCCapture.VideoCapture.CaptureData) {
+        guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { return }
+        do {
+            let outTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: captureData.mtlPixelFormat, planeIndex: 0)
+            self.outUpdate(outTexture: outTexture, captureData: captureData)
+        } catch {
+            MCDebug.log("CCRenderer.PostProcess: process error")
+        }
+    }
+    
     @objc private func updateDisplay() {
-        //print(self.currentCaptureItem)
         guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
-        //print(currentCaptureItem)
         guard
             let imageProcess: CCImageProcess.ImageProcess = self.imageProcess,
             !imageProcess.isProcess
         else { return }
-        //imageProcess.imageProcessQueue.async { [weak self] in
-            imageProcess.debug?.update(thred: Thread.current, queue: imageProcess.imageProcessQueue)
-            do {
-                try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
-            } catch {
-                MCDebug.log("CCRenderer.PostProcess: process error")
-            }
-        //}
+        imageProcess.debug?.update(thred: Thread.current, queue: imageProcess.imageProcessQueue)
+        do {
+            try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+        } catch {
+            MCDebug.log("CCRenderer.PostProcess: process error")
+        }
     }
 
     private func process(currentCaptureItem: CCCapture.VideoCapture.CaptureData) {
         guard
             let imageProcess: CCImageProcess.ImageProcess = self.imageProcess
         else { return }
-        imageProcess.imageProcessQueue.async { [weak self] in
-            //imageProcess.debugger?.update(thred: Thread.current, queue: imageProcess.imageProcessQueue)
-            do {
-                try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
-            } catch {
-                MCDebug.log("CCRenderer.PostProcess: process error")
-            }
+        do {
+            try imageProcess.process(captureData: currentCaptureItem, queue: CCCapture.videoOutputQueue)
+        } catch {
+            MCDebug.log("CCRenderer.PostProcess: process error")
         }
     }
 
@@ -507,33 +516,14 @@ extension CCImageProcess.ImageProcess.Pipe {
 }
 
 extension CCImageProcess.ImageProcess.Pipe {
-    fileprivate func updateCaptureData(captureData: CCCapture.VideoCapture.CaptureData) -> Bool {
-        if (self.imageProcess?.renderLayers.isEmpty ?? true) {
-            guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { return false  }
-
-            do {
-                let outTexture: CCTexture = try CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: captureData.mtlPixelFormat, planeIndex: 0)
-                self.outUpdate(outTexture: outTexture, captureData: captureData)
-            } catch {
-                
-            }
-        }
-        /*else {
-            
-            self.currentCaptureItem = captureData
-        }*/
-        return true
-    }
-
     fileprivate func outUpdate(outTexture: CCTexture, captureData: CCCapture.VideoCapture.CaptureData) {
+
         self.imageProcess?.imageProcessCompleteQueue.async { [weak self] in
             guard let self = self else { return }
             var outTexture: CCTexture = outTexture
             outTexture.presentationTimeStamp = captureData.presentationTimeStamp
             outTexture.captureVideoOrientation = captureData.captureVideoOrientation
             outTexture.presetSize = captureData.captureInfo.presetSize
-
-            self.imageProcess?.debug?.update()
 
             self.outTexture = outTexture
             self.outPresentationTimeStamp = captureData.presentationTimeStamp

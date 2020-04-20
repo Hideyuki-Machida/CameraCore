@@ -34,6 +34,14 @@ public func --> (camera: CCARCapture.cARCamera, imageProcess: CCImageProcess.Ima
 }
 
 
+// MARK: - CCVision.Inference
+
+@discardableResult
+public func --> (inference: CCVision.Inference, imageProcess: CCImageProcess.ImageProcess) throws -> CCImageProcess.ImageProcess {
+    return try imageProcess.pipe.input(inference: inference)
+}
+
+
 // MARK: - CCView
 
 public func --> (camera: CCCapture.Camera, view: CCView) throws {

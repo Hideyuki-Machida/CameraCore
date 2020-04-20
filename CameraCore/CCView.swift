@@ -115,7 +115,7 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
 
         do {
             let texture: CCTexture = try orientationManager.rotateTexture(commandBuffer: commandBuffer, source: drawTexture, colorPixelFormat: self.colorPixelFormat, captureVideoOrientation: drawTexture.captureVideoOrientation)
-            self.drawUpdate(commandBuffer: commandBuffer, drawTexture: drawTexture.texture)
+            self.drawUpdate(commandBuffer: commandBuffer, drawTexture: texture.texture)
         } catch {
             MCDebug.errorLog("CCView draw")
         }

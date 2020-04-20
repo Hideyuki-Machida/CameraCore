@@ -41,9 +41,8 @@ extension CCImageProcess {
         public var renderLayers: [RenderLayerProtocol] {
             get {
                 objc_sync_enter(self)
-                let renderLayers: [RenderLayerProtocol] = self._renderLayers
-                objc_sync_exit(self)
-                return renderLayers
+                defer { objc_sync_exit(self) }
+                return self._renderLayers
             }
             set {
                 objc_sync_enter(self)
@@ -56,9 +55,8 @@ extension CCImageProcess {
         fileprivate(set) var isProcess: Bool {
             get {
                 objc_sync_enter(self)
-                let isProcess: Bool = self._isProcess
-                objc_sync_exit(self)
-                return isProcess
+                defer { objc_sync_exit(self) }
+                return self._isProcess
             }
             set {
                 objc_sync_enter(self)
@@ -81,6 +79,21 @@ extension CCImageProcess {
             }
         }
 
+        private var _inferenceUserInfo: [ String : Any] = [ : ]
+        fileprivate(set) var inferenceUserInfo: [ String : Any] {
+            get {
+                objc_sync_enter(self)
+                defer { objc_sync_exit(self) }
+                return self._inferenceUserInfo
+            }
+            set {
+                objc_sync_enter(self)
+                self._inferenceUserInfo = newValue
+                objc_sync_exit(self)
+            }
+        }
+
+        
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         fileprivate(set) var captureSize: Settings.PresetSize = Settings.PresetSize.p1280x720
@@ -150,13 +163,15 @@ private extension CCImageProcess.ImageProcess {
         // renderLayerCompositionInfo
         var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
             compositionTime: CMTime(value: self.counter, timescale: captureData.captureInfo.frameRate),
+            presentationTimeStamp: captureData.presentationTimeStamp,
             captureInfo: captureData.captureInfo,
             timeRange: CMTimeRange.zero,
             percentComplete: 0.0,
             renderSize: renderSize,
             metadataObjects: captureData.metadataObjects ?? [],
             depthData: captureData.depthData,
-            queue: queue
+            queue: queue,
+            inferenceUserInfo: self.inferenceUserInfo
         )
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -326,7 +341,7 @@ extension CCImageProcess.ImageProcess.Pipe {
         if self.isDisplayLink {
             self.imageProcess?.imageProcessQueue.async { [weak self] in
                 guard let self = self else { return }
-                let interval: TimeInterval = 1.0 / (240 * 2)
+                let interval: TimeInterval = 1.0 / (60 * 2)
                 let timer: Timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(self.updateDisplay), userInfo: nil, repeats: true)
                 RunLoop.current.add(timer, forMode: RunLoop.Mode.tracking)
                 while self.isLoop {
@@ -365,6 +380,18 @@ extension CCImageProcess.ImageProcess.Pipe {
             self.observations.append(observation)
         }
 
+        return self.imageProcess!
+    }
+}
+
+extension CCImageProcess.ImageProcess.Pipe {
+    func input(inference: CCVision.Inference) throws -> CCImageProcess.ImageProcess {
+        let observation: NSKeyValueObservation = inference.pipe.observe(\.outTimeStamp, options: [.new]) { [weak self] (object: CCVision.Inference.Pipe, change) in
+            self?.imageProcess?.imageProcessCompleteQueue.async { [weak self] in
+                self?.imageProcess?.inferenceUserInfo = object.userInfo
+            }
+        }
+        self.observations.append(observation)
         return self.imageProcess!
     }
 }
@@ -417,13 +444,15 @@ extension CCImageProcess.ImageProcess.Pipe {
                 // renderLayerCompositionInfo
                 var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
                     compositionTime: CMTime(value: self.counter, timescale: 60),
+                    presentationTimeStamp: CMTime.zero,
                     captureInfo: captureData.captureInfo,
                     timeRange: CMTimeRange.zero,
                     percentComplete: 0.0,
                     renderSize: renderSize,
                     metadataObjects: [],
                     depthData: nil,
-                    queue: self.imageProcess!.imageProcessQueue
+                    queue: self.imageProcess!.imageProcessQueue,
+                    inferenceUserInfo: self.imageProcess!.inferenceUserInfo
                 )
                 ///////////////////////////////////////////////////////////////////////////////////////////////////
         self.counter += 1

@@ -94,9 +94,12 @@ extension CCRecorder.VideoRecorder {
 extension CCRecorder.VideoRecorder {
     class CaptureWriter {
         var writer: AVAssetWriter?
-        init() {
-            
-        }
+
+        private var pixelOffsetTime: CMTime = CMTime.zero
+        private var audioOffsetTime: CMTime = CMTime.zero
+        private var pixelPresentationTimeStamp: CMTime = CMTime.zero
+        private var audioPresentationTimeStamp: CMTime = CMTime.zero
+
         func setup(_ parameter: CCRecorder.CaptureWriter.Parameter) throws {
             let url: URL = parameter.outputFilePath
 
@@ -132,16 +135,14 @@ extension CCRecorder.VideoRecorder {
 
             self.writer = w
         }
-        
+
         fileprivate func getCaptureSize(parameter: CCRecorder.CaptureWriter.Parameter) -> CGSize {
             if let croppingRect: CGRect = parameter.croppingRect {
                 return croppingRect.size
             }
             return parameter.presetFrame.size(orientation: UIInterfaceOrientation.portrait).toCGSize()
         }
-        
-        private var videoOffsetTime: CMTime = CMTime.zero
-        private var audioOffsetTime: CMTime = CMTime.zero
+
         func setSampleBuffer(sampleBuffer: CMSampleBuffer) {
             guard let w: AVAssetWriter = self.writer else { return }
             if let _: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
@@ -149,12 +150,17 @@ extension CCRecorder.VideoRecorder {
                 var info = CMSampleTimingInfo()
                 var count: CMItemCount = 1
                 CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: count, arrayToFill: &info, entriesNeededOut: &count)
-                if self.videoOffsetTime == CMTime.zero {
-                    self.videoOffsetTime = info.presentationTimeStamp
+                guard self.pixelPresentationTimeStamp != info.presentationTimeStamp else { return }
+                if self.pixelOffsetTime == CMTime.zero {
+                    self.pixelOffsetTime = info.presentationTimeStamp
                 }
-                info.presentationTimeStamp = CMTimeSubtract(info.presentationTimeStamp, self.videoOffsetTime)
+
+                info.presentationTimeStamp = CMTimeSubtract(info.presentationTimeStamp, self.pixelOffsetTime)
                 let status002: OSStatus = CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleTimingEntryCount: 1, sampleTimingArray: &info, sampleBufferOut: &copyBuffer)
                 guard status002 == noErr else { return }
+
+                self.pixelPresentationTimeStamp = info.presentationTimeStamp
+
                 w.inputs
                     .filter { $0.mediaType == AVMediaType.video && $0.isReadyForMoreMediaData }
                     .forEach { $0.append(copyBuffer!) }
@@ -164,12 +170,16 @@ extension CCRecorder.VideoRecorder {
                 var info = CMSampleTimingInfo()
                 var count: CMItemCount = 1
                 CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: count, arrayToFill: &info, entriesNeededOut: &count)
+                guard self.audioPresentationTimeStamp != info.presentationTimeStamp else { return }
                 if self.audioOffsetTime == CMTime.zero {
                     self.audioOffsetTime = info.presentationTimeStamp
                 }
+
                 info.presentationTimeStamp = CMTimeSubtract(info.presentationTimeStamp, self.audioOffsetTime)
                 let status002: OSStatus = CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleTimingEntryCount: 1, sampleTimingArray: &info, sampleBufferOut: &copyBuffer)
                 guard status002 == noErr else { return }
+
+                self.audioPresentationTimeStamp = info.presentationTimeStamp
 
                 w.inputs
                     .filter { $0.mediaType == AVMediaType.audio && $0.isReadyForMoreMediaData }
@@ -181,20 +191,29 @@ extension CCRecorder.VideoRecorder {
         func set(pixelBuffer: CVPixelBuffer, presentationTimeStamp: CMTime) {
             guard let w: AVAssetWriter = self.writer else { return }
             var timingInfo: CMSampleTimingInfo = CMSampleTimingInfo()
-            if self.videoOffsetTime == CMTime.zero {
-                self.videoOffsetTime = presentationTimeStamp
+            if self.pixelOffsetTime == CMTime.zero {
+                self.pixelOffsetTime = presentationTimeStamp
             }
-            timingInfo.presentationTimeStamp = CMTimeSubtract(presentationTimeStamp, self.videoOffsetTime)
+            timingInfo.presentationTimeStamp = CMTimeSubtract(presentationTimeStamp, self.pixelOffsetTime)
+
             guard
+                self.pixelPresentationTimeStamp != timingInfo.presentationTimeStamp,
                 let formatDescription: CMFormatDescription = CMFormatDescription.create(from: pixelBuffer),
                 let sampleBuffer: CMSampleBuffer = CMSampleBuffer.create(from: pixelBuffer, formatDescription: formatDescription, timingInfo: &timingInfo)
             else { return }
+
+            self.pixelPresentationTimeStamp = timingInfo.presentationTimeStamp
             w.inputs
                 .filter { $0.mediaType == AVMediaType.video && $0.isReadyForMoreMediaData }
                 .forEach { $0.append(sampleBuffer) }
         }
-        
+
         func start() {
+            self.pixelOffsetTime = CMTime.zero
+            self.audioOffsetTime = CMTime.zero
+            self.pixelPresentationTimeStamp = CMTime.zero
+            self.audioPresentationTimeStamp = CMTime.zero
+
             self.writer?.startWriting()
             self.writer?.startSession(atSourceTime: CMTime.zero)
         }
@@ -273,6 +292,7 @@ extension CCRecorder.VideoRecorder {
 
                 guard let self = self else { return }
                 guard self.videoRecorder?.isRecording == true else { return }
+                guard CMSampleBufferGetImageBuffer(captureData.sampleBuffer) == nil else { return }
                 self.videoRecorder?.captureWriter.setSampleBuffer(sampleBuffer: captureData.sampleBuffer)
             }
             self.observations.append(observation)

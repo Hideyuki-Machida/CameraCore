@@ -102,23 +102,23 @@ fileprivate extension CCCapture.Camera {
             guard
                 let self = self,
                 let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
-           else { return }
+            else { return }
+
+            // ピクセルデータ
+            let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
+                sampleBuffer: sampleBuffer,
+                captureInfo: captureInfo,
+                depthData: depthData,
+                metadataObjects: metadataObjects,
+                mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
+                outPutPixelFormatType: captureInfo.outPutPixelFormatType,
+                captureVideoOrientation: captureVideoOrientation
+            )
+
+            self.pipe.currentVideoCaptureItem = currentCaptureItem
+            self.pipe.outVideoCapturePresentationTimeStamp = currentCaptureItem.presentationTimeStamp
 
             if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
-                // ピクセルデータ
-                let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
-                    sampleBuffer: sampleBuffer,
-                    captureInfo: captureInfo,
-                    depthData: depthData,
-                    metadataObjects: metadataObjects,
-                    mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
-                    outPutPixelFormatType: captureInfo.outPutPixelFormatType,
-                    captureVideoOrientation: captureVideoOrientation
-                )
-
-                self.pipe.currentVideoCaptureItem = currentCaptureItem
-                self.pipe.outVideoCapturePresentationTimeStamp = currentCaptureItem.presentationTimeStamp
-
                 // デバッグ
                 self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
                 self.debug?.update()

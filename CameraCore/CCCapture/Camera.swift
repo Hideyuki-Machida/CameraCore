@@ -116,12 +116,15 @@ fileprivate extension CCCapture.Camera {
             )
 
             self.pipe.currentVideoCaptureItem = currentCaptureItem
-            self.pipe.outVideoCapturePresentationTimeStamp = currentCaptureItem.presentationTimeStamp
 
             if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
+                self.pipe.outPixelPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
+
                 // デバッグ
                 self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
                 self.debug?.update()
+            } else {
+                self.pipe.outAudioPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -202,9 +205,8 @@ extension CCCapture.Camera {
         public var currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData? {
             get {
                 objc_sync_enter(self)
-                let currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData? = self._currentVideoCaptureItem
-                objc_sync_exit(self)
-                return currentVideoCaptureItem
+                defer { objc_sync_exit(self) }
+                return self._currentVideoCaptureItem
             }
             set {
                 objc_sync_enter(self)
@@ -213,21 +215,35 @@ extension CCCapture.Camera {
             }
         }
 
-        private var _outVideoCapturePresentationTimeStamp: CMTime = CMTime.zero
-        @objc dynamic public var outVideoCapturePresentationTimeStamp: CMTime {
+        private var _outPixelPresentationTimeStamp: CMTime = CMTime.zero
+        @objc dynamic public var outPixelPresentationTimeStamp: CMTime {
             get {
                 objc_sync_enter(self)
-                let videoCapturePresentationTimeStamp: CMTime = self._outVideoCapturePresentationTimeStamp
-                objc_sync_exit(self)
-                return videoCapturePresentationTimeStamp
+                defer { objc_sync_exit(self) }
+                return self._outPixelPresentationTimeStamp
             }
             set {
                 objc_sync_enter(self)
-                self._outVideoCapturePresentationTimeStamp = newValue
+                self._outPixelPresentationTimeStamp = newValue
                 objc_sync_exit(self)
             }
         }
 
+        private var _outAudioPresentationTimeStamp: CMTime = CMTime.zero
+        @objc dynamic public var outAudioPresentationTimeStamp: CMTime {
+            get {
+                objc_sync_enter(self)
+                defer { objc_sync_exit(self) }
+                return self._outAudioPresentationTimeStamp
+            }
+            set {
+                objc_sync_enter(self)
+                self._outAudioPresentationTimeStamp = newValue
+                objc_sync_exit(self)
+            }
+        }
+
+        
         public var outVideoCaptureData: ((_ currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
         
         fileprivate func _dispose() {

@@ -349,7 +349,7 @@ extension CCImageProcess.ImageProcess.Pipe {
                 }
             }
 
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
                 guard
                     let self = self,
                     let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem
@@ -364,7 +364,7 @@ extension CCImageProcess.ImageProcess.Pipe {
             }
             self.observations.append(observation)
         } else {
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
                 guard
                     let self = self,
                     let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem

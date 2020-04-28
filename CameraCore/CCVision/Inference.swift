@@ -189,7 +189,7 @@ extension CCVision.Inference {
         func input(camera: CCCapture.Camera) -> CCVision.Inference {
             self.runLoop()
 
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
                 guard
                     let self = self,
                     let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem

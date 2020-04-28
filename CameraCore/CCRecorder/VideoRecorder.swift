@@ -144,51 +144,17 @@ extension CCRecorder.VideoRecorder {
         }
 
         func setSampleBuffer(sampleBuffer: CMSampleBuffer) {
-            guard let w: AVAssetWriter = self.writer else { return }
-            if let _: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-                var copyBuffer : CMSampleBuffer?
+            if let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                 var info = CMSampleTimingInfo()
                 var count: CMItemCount = 1
                 CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: count, arrayToFill: &info, entriesNeededOut: &count)
-                guard self.pixelPresentationTimeStamp != info.presentationTimeStamp else { return }
-                if self.pixelOffsetTime == CMTime.zero {
-                    self.pixelOffsetTime = info.presentationTimeStamp
-                }
-
-                info.presentationTimeStamp = CMTimeSubtract(info.presentationTimeStamp, self.pixelOffsetTime)
-                let status002: OSStatus = CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleTimingEntryCount: 1, sampleTimingArray: &info, sampleBufferOut: &copyBuffer)
-                guard status002 == noErr else { return }
-
-                self.pixelPresentationTimeStamp = info.presentationTimeStamp
-
-                w.inputs
-                    .filter { $0.mediaType == AVMediaType.video && $0.isReadyForMoreMediaData }
-                    .forEach { $0.append(copyBuffer!) }
-
+                self.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: info.presentationTimeStamp)
             } else {
-                var copyBuffer : CMSampleBuffer?
-                var info = CMSampleTimingInfo()
-                var count: CMItemCount = 1
-                CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: count, arrayToFill: &info, entriesNeededOut: &count)
-                guard self.audioPresentationTimeStamp != info.presentationTimeStamp else { return }
-                if self.audioOffsetTime == CMTime.zero {
-                    self.audioOffsetTime = info.presentationTimeStamp
-                }
-
-                info.presentationTimeStamp = CMTimeSubtract(info.presentationTimeStamp, self.audioOffsetTime)
-                let status002: OSStatus = CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleTimingEntryCount: 1, sampleTimingArray: &info, sampleBufferOut: &copyBuffer)
-                guard status002 == noErr else { return }
-
-                self.audioPresentationTimeStamp = info.presentationTimeStamp
-
-                w.inputs
-                    .filter { $0.mediaType == AVMediaType.audio && $0.isReadyForMoreMediaData }
-                    .forEach { $0.append(copyBuffer!) }
-
+                self.setAudioBuffer(sampleBuffer: sampleBuffer)
             }
         }
 
-        func set(pixelBuffer: CVPixelBuffer, presentationTimeStamp: CMTime) {
+        func setPixelBuffer(pixelBuffer: CVPixelBuffer, presentationTimeStamp: CMTime) {
             guard let w: AVAssetWriter = self.writer else { return }
             var timingInfo: CMSampleTimingInfo = CMSampleTimingInfo()
             if self.pixelOffsetTime == CMTime.zero {
@@ -208,6 +174,29 @@ extension CCRecorder.VideoRecorder {
                 .forEach { $0.append(sampleBuffer) }
         }
 
+        func setAudioBuffer(sampleBuffer: CMSampleBuffer) {
+            guard let w: AVAssetWriter = self.writer else { return }
+            var copyBuffer : CMSampleBuffer?
+            var info = CMSampleTimingInfo()
+            var count: CMItemCount = 1
+            CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, entryCount: count, arrayToFill: &info, entriesNeededOut: &count)
+            guard self.audioPresentationTimeStamp != info.presentationTimeStamp else { return }
+            if self.audioOffsetTime == CMTime.zero {
+                self.audioOffsetTime = info.presentationTimeStamp
+            }
+
+            info.presentationTimeStamp = CMTimeSubtract(info.presentationTimeStamp, self.audioOffsetTime)
+            let status002: OSStatus = CMSampleBufferCreateCopyWithNewTiming(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleTimingEntryCount: 1, sampleTimingArray: &info, sampleBufferOut: &copyBuffer)
+            guard status002 == noErr else { return }
+
+            self.audioPresentationTimeStamp = info.presentationTimeStamp
+
+            w.inputs
+                .filter { $0.mediaType == AVMediaType.audio && $0.isReadyForMoreMediaData }
+                .forEach { $0.append(copyBuffer!) }
+        }
+
+        
         func start() {
             self.pixelOffsetTime = CMTime.zero
             self.audioOffsetTime = CMTime.zero
@@ -287,15 +276,26 @@ extension CCRecorder.VideoRecorder {
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
         func input(camera: CCCapture.Camera) throws {
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            let observation001: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+                guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
+
+                guard let self = self else { return }
+                guard self.videoRecorder?.isRecording == true else { return }
+                guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer) else { return }
+
+                self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: captureData.presentationTimeStamp)
+            }
+            self.observations.append(observation001)
+
+            let observation002: NSKeyValueObservation = camera.pipe.observe(\.outAudioPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
                 guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
 
                 guard let self = self else { return }
                 guard self.videoRecorder?.isRecording == true else { return }
                 guard CMSampleBufferGetImageBuffer(captureData.sampleBuffer) == nil else { return }
-                self.videoRecorder?.captureWriter.setSampleBuffer(sampleBuffer: captureData.sampleBuffer)
+                self.videoRecorder?.captureWriter.setAudioBuffer(sampleBuffer: captureData.sampleBuffer)
             }
-            self.observations.append(observation)
+            self.observations.append(observation002)
         }
 
         func input(imageProcess: CCImageProcess.ImageProcess) throws {
@@ -306,7 +306,7 @@ extension CCRecorder.VideoRecorder {
                 guard self.videoRecorder?.isRecording == true else { return }
                 guard let pixelBuffer: CVPixelBuffer = outTexture.pixelBuffer else { return }
 
-                self.videoRecorder?.captureWriter.set(pixelBuffer: pixelBuffer, presentationTimeStamp: outTexture.presentationTimeStamp)
+                self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: outTexture.presentationTimeStamp)
             }
             self.observations.append(observation)
         }

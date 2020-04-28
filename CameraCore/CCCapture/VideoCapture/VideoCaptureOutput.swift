@@ -16,8 +16,8 @@ extension CCCapture.VideoCapture {
 
         fileprivate(set) var videoDataOutput: AVCaptureVideoDataOutput?
         fileprivate(set) var audioDataOutput: AVCaptureAudioDataOutput?
-        fileprivate(set) var videoDepthDataOutput: AVCaptureDepthDataOutput?
-        
+        fileprivate(set) var depthDataOutput: AVCaptureDepthDataOutput?
+        fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
 
         fileprivate(set) var captureVideoOrientation: AVCaptureVideoOrientation?
 
@@ -88,12 +88,12 @@ extension CCCapture.VideoCapture {
             if property.isDepthDataOutput {
                 //////////////////////////////////////////////////////////
                 // AVCaptureDepthDataOutput
-                let videoDepthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
-                if captureSession.canAddOutput(videoDepthDataOutput) {
-                    captureSession.addOutput(videoDepthDataOutput)
-                    videoDepthDataOutput.isFilteringEnabled = true
-                    videoDepthDataOutput.setDelegate(self, callbackQueue: CCCapture.depthOutputQueue)
-                    if let connection: AVCaptureConnection = videoDepthDataOutput.connection(with: .depthData) {
+                let depthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
+                if captureSession.canAddOutput(depthDataOutput) {
+                    captureSession.addOutput(depthDataOutput)
+                    depthDataOutput.isFilteringEnabled = true
+                    depthDataOutput.setDelegate(self, callbackQueue: CCCapture.depthOutputQueue)
+                    if let connection: AVCaptureConnection = depthDataOutput.connection(with: .depthData) {
                         connection.isEnabled = true
                         connection.isVideoMirrored = devicePosition == .front ? true : false
 
@@ -102,15 +102,16 @@ extension CCCapture.VideoCapture {
                             connection.videoOrientation = captureVideoOrientation
                         }
 
-                        self.videoDepthDataOutput = videoDepthDataOutput
-                        dataOutputs.append(self.videoDepthDataOutput!)
+                        self.depthDataOutput = depthDataOutput
+                        dataOutputs.append(self.depthDataOutput!)
                     } else {
                         MCDebug.errorLog("No AVCaptureDepthDataOutputConnection")
                         throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
                     }
                 }
                 //////////////////////////////////////////////////////////
-                
+                self.outputSynchronizer = AVCaptureDataOutputSynchronizer(dataOutputs: [self.videoDataOutput!, self.depthDataOutput!])
+                self.outputSynchronizer!.setDelegate(self, queue: CCCapture.depthOutputQueue)
             }
 
             NotificationCenter.default.removeObserver(self, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
@@ -120,7 +121,24 @@ extension CCCapture.VideoCapture {
         }
     }
 }
-
+/*
+private extension CCCapture.VideoCapture.VideoCaptureOutput {
+    class videoDataOutputSampleBufferDelegate: AVCaptureVideoDataOutputSampleBufferDelegate {
+        func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+            guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
+            //self.onUpdateSampleBuffer?(sampleBuffer, connection.videoOrientation, nil, nil)
+            //print(CMSampleBufferGetImageBuffer(sampleBuffer))
+        }
+    }
+    class audioDataOutputSampleBufferDelegate: AVCaptureAudioDataOutputSampleBufferDelegate {
+        func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+            guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
+            //self.onUpdateSampleBuffer?(sampleBuffer, connection.videoOrientation, nil, nil)
+            //print(CMSampleBufferGetImageBuffer(sampleBuffer))
+        }
+    }
+}
+*/
 private extension CCCapture.VideoCapture.VideoCaptureOutput {
     @objc func orientationDidChange(_ notification: Notification) {
         self.setVideoOrientation()
@@ -159,9 +177,25 @@ extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSam
         self.onUpdateSampleBuffer?(sampleBuffer, connection.videoOrientation, nil, nil)
     }
 }
-
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDelegate {
     func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
         self.onUpdateDepthData?(depthData)
     }
 }
+extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchronizerDelegate {
+    func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
+        //print(1111)
+        if let syncedDepthData = synchronizedDataCollection.synchronizedData(for: self.depthDataOutput!) as? AVCaptureSynchronizedDepthData, !syncedDepthData.depthDataWasDropped {
+            let depthData = syncedDepthData.depthData
+            print(depthData)
+        }
+        
+        if let syncedVideoData = synchronizedDataCollection.synchronizedData(for: self.videoDataOutput!) as? AVCaptureSynchronizedSampleBufferData, !syncedVideoData.sampleBufferWasDropped {
+            let videoSampleBuffer = syncedVideoData.sampleBuffer
+            print("video")
+            guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
+            self.onUpdateSampleBuffer?(videoSampleBuffer, connection.videoOrientation, nil, nil)
+        }
+    }
+}
+

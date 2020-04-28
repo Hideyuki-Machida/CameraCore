@@ -20,7 +20,7 @@ class DepthVideoCaptureExampleVC: UIViewController {
         isDepthDataOutput: true,
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
-            .frameRate(Settings.PresetFrameRate.fps30),
+            .frameRate(Settings.PresetFrameRate.fps60),
         ],
         option: [
             //.colorSpace(AVCaptureColorSpace.P3_D65),
@@ -52,6 +52,10 @@ class DepthVideoCaptureExampleVC: UIViewController {
 
             camera.triger.start()
             self.camera = camera
+
+            try self.debugger.setup.set(component: camera)
+            try self.debugger.setup.set(component: self.drawView)
+
         } catch {
             
         }

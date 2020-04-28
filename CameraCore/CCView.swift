@@ -194,9 +194,10 @@ extension CCView {
 
         func input(camera: CCCapture.Camera) throws {
             try self.ccview?._setup()
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outVideoCapturePresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
                 guard let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem else { return }
 
+                print(111)
                 guard let self = self else { return }
                 if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
                     MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
@@ -210,6 +211,7 @@ extension CCView {
                     drawTexture.captureVideoOrientation = captureData.captureVideoOrientation
                     drawTexture.presetSize = captureData.captureInfo.presetSize
 
+                    print(222, drawTexture.presentationTimeStamp)
                     DispatchQueue.main.async { [weak self] in
                         self?.ccview?.drawTexture = drawTexture
                     }

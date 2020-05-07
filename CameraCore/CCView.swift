@@ -28,9 +28,8 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
     fileprivate(set) var presentationTimeStamp: CMTime {
         get {
             objc_sync_enter(self)
-            let presentationTimeStamp: CMTime = self._presentationTimeStamp
-            objc_sync_exit(self)
-            return presentationTimeStamp
+            defer { objc_sync_exit(self) }
+            return self._presentationTimeStamp
         }
         set {
             objc_sync_enter(self)
@@ -43,9 +42,8 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
     fileprivate(set) var isDraw: Bool {
         get {
             objc_sync_enter(self)
-            let isDraw: Bool = self._isDraw
-            objc_sync_exit(self)
-            return isDraw
+            defer { objc_sync_exit(self) }
+            return self._isDraw
         }
         set {
             objc_sync_enter(self)
@@ -58,9 +56,8 @@ public class CCView: MCImageRenderView, CCComponentProtocol {
     fileprivate(set) var drawTexture: CCTexture? {
         get {
             objc_sync_enter(self)
-            let drawTexture: CCTexture? = self._drawTexture
-            objc_sync_exit(self)
-            return drawTexture
+            defer { objc_sync_exit(self) }
+            return self._drawTexture
         }
         set {
             objc_sync_enter(self)

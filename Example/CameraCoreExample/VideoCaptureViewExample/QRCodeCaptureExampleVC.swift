@@ -1,8 +1,8 @@
 //
-//  DepthVideoCaptureExampleVC.swift
+//  QRCodeCaptureExampleVC.swift
 //  CameraCoreExample
 //
-//  Created by hideyuki machida on 2020/04/07.
+//  Created by hideyuki machida on 2020/05/03.
 //  Copyright © 2020 hideyuki machida. All rights reserved.
 //
 
@@ -13,15 +13,12 @@ import MetalCanvas
 import UIKit
 
 @available(iOS 11.1, *)
-class DepthVideoCaptureExampleVC: UIViewController {
+class QRCodeCaptureExampleVC: UIViewController {
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
-        //devicePosition: AVCaptureDevice.Position.front,
         devicePosition: AVCaptureDevice.Position.back,
-        //deviceType: .builtInTrueDepthCamera,
         deviceType: .builtInDualCamera,
-        isAudioDataOutput: true,
-        isDepthDataOutput: true,
-        metadata: [.face],
+        isAudioDataOutput: false,
+        metadata: [.qr],
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
             .frameRate(Settings.PresetFrameRate.fps60),
@@ -54,7 +51,7 @@ class DepthVideoCaptureExampleVC: UIViewController {
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: false)
-            imageProcess.renderLayers = [try DepthMapLayer()]
+            imageProcess.renderLayers = [try QRCodeLayer()]
 
             //try camera --> self.drawView
             try camera --> imageProcess --> self.drawView
@@ -77,7 +74,7 @@ class DepthVideoCaptureExampleVC: UIViewController {
 }
 
 @available(iOS 11.1, *)
-extension DepthVideoCaptureExampleVC {
+extension QRCodeCaptureExampleVC {
     public func setDebuggerView() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }

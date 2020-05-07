@@ -17,13 +17,15 @@ extension CCCapture.VideoCapture {
         fileprivate(set) var videoDataOutput: AVCaptureVideoDataOutput?
         fileprivate(set) var audioDataOutput: AVCaptureAudioDataOutput?
         fileprivate(set) var depthDataOutput: AVCaptureDepthDataOutput?
+        fileprivate(set) var metadataOutput: AVCaptureMetadataOutput?
+
         fileprivate(set) var outputSynchronizer: AVCaptureDataOutputSynchronizer?
 
         fileprivate(set) var captureVideoOrientation: AVCaptureVideoOrientation?
 
         var onUpdateSampleBuffer: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
-
         var onUpdateDepthData: ((_ depthData: AVDepthData) -> Void)?
+        var onUpdateMetadataObjects: ((_ metadataObjects: [AVMetadataObject]) -> Void)?
 
         
         deinit {
@@ -110,8 +112,18 @@ extension CCCapture.VideoCapture {
                     }
                 }
                 //////////////////////////////////////////////////////////
-                self.outputSynchronizer = AVCaptureDataOutputSynchronizer(dataOutputs: [self.videoDataOutput!, self.depthDataOutput!])
-                self.outputSynchronizer!.setDelegate(self, queue: CCCapture.depthOutputQueue)
+                //self.outputSynchronizer = AVCaptureDataOutputSynchronizer(dataOutputs: [self.videoDataOutput!, self.depthDataOutput!])
+                //self.outputSynchronizer!.setDelegate(self, queue: CCCapture.depthOutputQueue)
+            }
+            
+            if !property.metadata.isEmpty {
+                let metadataOutput = AVCaptureMetadataOutput()
+                captureSession.addOutput(metadataOutput)
+                metadataOutput.setMetadataObjectsDelegate(self, queue: CCCapture.metaDataOutputQueue)
+                
+                print(property.metadata)
+                metadataOutput.metadataObjectTypes = property.metadata
+                self.metadataOutput = metadataOutput
             }
 
             NotificationCenter.default.removeObserver(self, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
@@ -184,7 +196,7 @@ extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDel
 }
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchronizerDelegate {
     func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
-        //print(1111)
+
         if let syncedDepthData = synchronizedDataCollection.synchronizedData(for: self.depthDataOutput!) as? AVCaptureSynchronizedDepthData, !syncedDepthData.depthDataWasDropped {
             let depthData = syncedDepthData.depthData
             print(depthData)
@@ -199,3 +211,16 @@ extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchron
     }
 }
 
+extension CCCapture.VideoCapture.VideoCaptureOutput : AVCaptureMetadataOutputObjectsDelegate {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        var result: [AVMetadataObject] = metadataObjects
+        if let videoDataOutput: AVCaptureVideoDataOutput = self.videoDataOutput, let connection: AVCaptureConnection = videoDataOutput.connection(with: .video) {
+            result = []
+            for object in metadataObjects {
+                guard let object: AVMetadataObject = videoDataOutput.transformedMetadataObject(for: object, connection: connection) else { continue }
+                result.append(object)
+            }
+        }
+        self.onUpdateMetadataObjects?(result)
+    }
+}

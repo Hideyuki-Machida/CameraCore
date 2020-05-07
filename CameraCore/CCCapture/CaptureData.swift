@@ -17,13 +17,13 @@ extension CCCapture.VideoCapture {
         let sampleBuffer: CMSampleBuffer
         let captureInfo: CCCapture.VideoCapture.CaptureInfo
         let depthData: AVDepthData?
-        let metadataObjects: [AVMetadataObject]?
+        let metadataObjects: [AVMetadataObject]
         let mtlPixelFormat: MTLPixelFormat
         let outPutPixelFormatType: MCPixelFormatType
         let presentationTimeStamp: CMTime
         let captureVideoOrientation: AVCaptureVideoOrientation
 
-        internal init(sampleBuffer: CMSampleBuffer, captureInfo: CCCapture.VideoCapture.CaptureInfo, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?, mtlPixelFormat: MTLPixelFormat, outPutPixelFormatType: MCPixelFormatType, captureVideoOrientation: AVCaptureVideoOrientation) {
+        internal init(sampleBuffer: CMSampleBuffer, captureInfo: CCCapture.VideoCapture.CaptureInfo, depthData: AVDepthData?, metadataObjects: [AVMetadataObject], mtlPixelFormat: MTLPixelFormat, outPutPixelFormatType: MCPixelFormatType, captureVideoOrientation: AVCaptureVideoOrientation) {
             self.sampleBuffer = sampleBuffer
             self.captureInfo = captureInfo
             self.depthData = depthData

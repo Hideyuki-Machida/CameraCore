@@ -56,7 +56,7 @@ public extension CCVision {
             self.pipe.inference = self
         }
 
-        fileprivate func process(pixelBuffer: CVPixelBuffer, timeStamp: CMTime) {
+        fileprivate func process(pixelBuffer: CVPixelBuffer, timeStamp: CMTime, metadataObjects: [AVMetadataObject]) {
             guard
                 self.isProcess != true,
                 self.processTimeStamp != timeStamp
@@ -70,7 +70,12 @@ public extension CCVision {
             for index in self.setup.process.indices {
                 guard self.setup.process.indices.contains(index) else { continue }
                 do {
-                    try self.setup.process[index].process(pixelBuffer: pixelBuffer, timeStamp: timeStamp, userInfo: &userInfo)
+                    try self.setup.process[index].process(
+                        pixelBuffer: pixelBuffer,
+                        timeStamp: timeStamp,
+                        metadataObjects: metadataObjects,
+                        userInfo: &userInfo
+                    )
                 } catch {
                 }
              }
@@ -220,9 +225,15 @@ extension CCVision.Inference {
         }
 
         @objc private func updateDisplay() {
-            guard let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem else { return }
-            guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(currentCaptureItem.sampleBuffer) else { return }
-            self.inference?.process(pixelBuffer: pixelBuffer, timeStamp: currentCaptureItem.presentationTimeStamp)
+            guard
+                let currentCaptureItem: CCCapture.VideoCapture.CaptureData = self.currentCaptureItem,
+                let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(currentCaptureItem.sampleBuffer)
+            else { return }
+            self.inference?.process(
+                pixelBuffer: pixelBuffer,
+                timeStamp: currentCaptureItem.presentationTimeStamp,
+                metadataObjects: currentCaptureItem.metadataObjects
+            )
         }
     }
 

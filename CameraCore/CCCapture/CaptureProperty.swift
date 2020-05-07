@@ -40,6 +40,7 @@ extension CCCapture.VideoCapture {
         public var captureVideoOrientation: AVCaptureVideoOrientation?
         public var outPutPixelFormatType: MCPixelFormatType
         public var isDepthDataOutput: Bool
+        public var metadata: [AVMetadataObject.ObjectType]
         public var required: [Item]
         public var option: [Item]
         public var captureInfo: CCCapture.VideoCapture.CaptureInfo = CCCapture.VideoCapture.CaptureInfo()
@@ -53,6 +54,7 @@ extension CCCapture.VideoCapture {
             captureVideoOrientation: AVCaptureVideoOrientation? = nil,
             outPutPixelFormatType: MCPixelFormatType = MCPixelFormatType.kCV32BGRA,
             isDepthDataOutput: Bool = false,
+            metadata: [AVMetadataObject.ObjectType] = [],
             required: [Item] = [],
             option: [Item] = []
         ){
@@ -62,6 +64,7 @@ extension CCCapture.VideoCapture {
             self.captureVideoOrientation = captureVideoOrientation
             self.outPutPixelFormatType = outPutPixelFormatType
             self.isDepthDataOutput = isDepthDataOutput
+            self.metadata = metadata
             self.required = required
             self.option = option
         }
@@ -151,7 +154,14 @@ extension CCCapture.VideoCapture.Property {
 
         //////////////////////////////////////////////////////////
         // Infoを設定
-        self.captureInfo.update(device: captureDevice, deviceFormat: resultFormat, isDepthDataOutput: self.isDepthDataOutput, outPutPixelFormatType: self.outPutPixelFormatType, itemList: self.required + self.option)
+        self.captureInfo.update(
+            device: captureDevice,
+            deviceFormat: resultFormat,
+            isDepthDataOutput: self.isDepthDataOutput,
+            metadata: self.metadata,
+            outPutPixelFormatType: self.outPutPixelFormatType,
+            itemList: self.required + self.option
+        )
         //////////////////////////////////////////////////////////
     }
 

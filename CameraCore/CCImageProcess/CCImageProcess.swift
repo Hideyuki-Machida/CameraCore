@@ -10,4 +10,9 @@ import Foundation
 
 public struct CCImageProcess {
     private init() {} // このstructはnamespace用途なのでインスタンス化防止
+    
+    public enum ErrorType: Error {
+        case setup
+        case process
+    }
 }

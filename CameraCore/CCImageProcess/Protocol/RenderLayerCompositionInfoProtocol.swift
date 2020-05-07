@@ -17,7 +17,7 @@ public struct RenderLayerCompositionInfoProperty {
     internal var timeRange: CMTimeRange
     internal var percentComplete: Double
     internal var renderSize: MCSize
-    internal var metadataObjects: [AVMetadataObject]?
+    internal var metadataObjects: [AVMetadataObject]
     internal var depthData: AVDepthData?
     internal var queue: DispatchQueue
     internal var pixelFormat: MTLPixelFormat
@@ -33,7 +33,7 @@ public protocol RenderLayerCompositionInfoProtocol {
     var timeRange: CMTimeRange { get }
     var percentComplete: Double { get }
     var renderSize: MCSize { get }
-    var metadataObjects: [AVMetadataObject]? { get }
+    var metadataObjects: [AVMetadataObject] { get }
     var depthData: AVDepthData? { get }
     var queue: DispatchQueue { get }
     var pixelFormat: MTLPixelFormat { get }
@@ -48,7 +48,7 @@ extension RenderLayerCompositionInfoProtocol {
     public var timeRange: CMTimeRange { return self.__property.timeRange }
     public var percentComplete: Double { return self.__property.percentComplete }
     public var renderSize: MCSize { return self.__property.renderSize }
-    public var metadataObjects: [AVMetadataObject]? { return self.__property.metadataObjects }
+    public var metadataObjects: [AVMetadataObject] { return self.__property.metadataObjects }
     public var depthData: AVDepthData? { return self.__property.depthData }
     public var queue: DispatchQueue { return self.__property.queue }
     public var pixelFormat: MTLPixelFormat { return self.__property.pixelFormat }
@@ -58,7 +58,7 @@ extension RenderLayerCompositionInfoProtocol {
 
 public class RenderLayerCompositionInfo: RenderLayerCompositionInfoProtocol {
     public var __property: RenderLayerCompositionInfoProperty
-    public init(compositionTime: CMTime, presentationTimeStamp: CMTime, captureInfo: CCCapture.VideoCapture.CaptureInfo, timeRange: CMTimeRange, percentComplete: Double, renderSize: MCSize, metadataObjects: [AVMetadataObject]?, depthData: AVDepthData?, queue: DispatchQueue, pixelFormat: MTLPixelFormat = .bgra8Unorm, inferenceUserInfo: [ String : Any]) {
+    public init(compositionTime: CMTime, presentationTimeStamp: CMTime, captureInfo: CCCapture.VideoCapture.CaptureInfo, timeRange: CMTimeRange, percentComplete: Double, renderSize: MCSize, metadataObjects: [AVMetadataObject], depthData: AVDepthData?, queue: DispatchQueue, pixelFormat: MTLPixelFormat = .bgra8Unorm, inferenceUserInfo: [ String : Any]) {
         self.__property = RenderLayerCompositionInfoProperty(
             compositionTime: compositionTime,
             presentationTimeStamp: presentationTimeStamp,

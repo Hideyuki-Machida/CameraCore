@@ -9,10 +9,10 @@
 import Foundation
 import AVFoundation
 
-// MARK: レンダリングレイヤー protocol
+// MARK: 推論処理 protocol
 
 public protocol CCVisionInferenceProtocol {
     var id: CCImageProcess.RenderLayerId { get }
     mutating func dispose()
-    mutating func process(pixelBuffer: CVPixelBuffer, timeStamp: CMTime, userInfo: inout [String : Any]) throws
+    mutating func process(pixelBuffer: CVPixelBuffer, timeStamp: CMTime, metadataObjects: [AVMetadataObject], userInfo: inout [String : Any]) throws
 }

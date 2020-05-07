@@ -201,6 +201,8 @@ private extension CCImageProcess.ImageProcess {
     func processRenderLayer(commandBuffer: MTLCommandBuffer, source: inout CVPixelBuffer, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         // CVPixelBufferからMetal処理用にCCTextureに変換
         var sourceTexture: CCTexture = try CCTexture(pixelBuffer: source, mtlPixelFormat: renderLayerCompositionInfo.pixelFormat, planeIndex: 0)
+        // まず destinationTextureにsourceTextureをコピーする。
+        try self.textureBlitEncoder(commandBuffer: commandBuffer, source: sourceTexture, destination: &destination)
         for index in self.renderLayers.indices {
             guard self.renderLayers.indices.contains(index) else { continue }
             do {

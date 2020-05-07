@@ -38,7 +38,9 @@ extension CCCapture {
         public var onUpdateCaptureProperty: ((_ property: CCCapture.VideoCapture.Property) -> Void)?
 
         public var capture: CCCapture.VideoCapture.VideoCaptureManager?
-
+        public var depthData: AVDepthData?
+        public var metadataObjects: [AVMetadataObject] = []
+        
         public init(property: CCCapture.VideoCapture.Property) throws {
             self.property = property
 
@@ -63,6 +65,7 @@ fileprivate extension CCCapture.Camera {
     func start() {
         guard self.status != .play else { return }
         MCDebug.log("CameraCore.Camera.play")
+        self.depthData = nil
         self.capture?.play()
         self.status = .play
     }
@@ -108,8 +111,8 @@ fileprivate extension CCCapture.Camera {
             let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
                 sampleBuffer: sampleBuffer,
                 captureInfo: captureInfo,
-                depthData: depthData,
-                metadataObjects: metadataObjects,
+                depthData: self.depthData,
+                metadataObjects: self.metadataObjects,
                 mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
                 outPutPixelFormatType: captureInfo.outPutPixelFormatType,
                 captureVideoOrientation: captureVideoOrientation
@@ -130,10 +133,13 @@ fileprivate extension CCCapture.Camera {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         
         self.capture?.onUpdateDepthData = { [weak self] (depthData: AVDepthData) in
-            
-            print(CVPixelBufferGetWidth(depthData.depthDataMap))
-            print(CVPixelBufferGetHeight(depthData.depthDataMap))
-            print(depthData)
+            self?.depthData = depthData
+            //print(CVPixelBufferGetWidth(depthData.depthDataMap))
+            //print(CVPixelBufferGetHeight(depthData.depthDataMap))
+        }
+        
+        self.capture?.onUpdateMetadataObjects = { [weak self] (metadataObjects: [AVMetadataObject]) in
+            self?.metadataObjects = metadataObjects
         }
     }
 

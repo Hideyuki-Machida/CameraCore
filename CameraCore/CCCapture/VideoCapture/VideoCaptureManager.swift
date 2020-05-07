@@ -41,6 +41,15 @@ extension CCCapture.VideoCapture {
             }
         }
 
+        public var onUpdateMetadataObjects: ((_ metadataObjects: [AVMetadataObject]) -> Void)? {
+            get {
+                return self.captureOutput.onUpdateMetadataObjects
+            }
+            set {
+                self.captureOutput.onUpdateMetadataObjects = newValue
+            }
+        }
+
         
         let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue")
 

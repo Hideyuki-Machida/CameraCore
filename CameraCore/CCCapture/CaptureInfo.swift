@@ -27,6 +27,7 @@ extension CCCapture.VideoCapture {
         public private(set) var videoHDR: Bool?
         public private(set) var isSmoothAutoFocusEnabled: Bool = true
         public private(set) var depthDataOut: Bool = false
+        public private(set) var metadata: [AVMetadataObject.ObjectType] = []
 
         func updateAr() {
             self.captureSize = MCSize.init(1920, 1440)
@@ -34,11 +35,20 @@ extension CCCapture.VideoCapture {
             self.outPutPixelFormatType = MCPixelFormatType.kCV420YpCbCr8BiPlanarFullRange
         }
         
-        func update(device: AVCaptureDevice, deviceFormat: AVCaptureDevice.Format, isDepthDataOutput: Bool, outPutPixelFormatType: MCPixelFormatType, itemList: [CCCapture.VideoCapture.Property.Item]) {
+        func update(
+            device: AVCaptureDevice,
+            deviceFormat: AVCaptureDevice.Format,
+            isDepthDataOutput: Bool,
+            metadata: [AVMetadataObject.ObjectType],
+            outPutPixelFormatType: MCPixelFormatType,
+            itemList: [CCCapture.VideoCapture.Property.Item]
+        ) {
+
             self.device = device
             self.devicePosition = device.position
             self.deviceFormat = deviceFormat
             self.outPutPixelFormatType = outPutPixelFormatType
+            self.metadata = metadata
 
             //////////////////////////////////////////////////////////
             // isDepthDataOutputがtrueの場合にはdepthFormatsを取得

@@ -12,7 +12,8 @@ public struct CCCapture {
     static let videoOutputQueue: DispatchQueue = DispatchQueue(label: "CCCapture.videoOutputQueue")
     static let audioOutputQueue: DispatchQueue = DispatchQueue(label: "CCCapture.audioOutputQueue")
     static let depthOutputQueue: DispatchQueue = DispatchQueue(label: "CCCapture.depthOutputQueue")
-
+    static let metaDataOutputQueue: DispatchQueue = DispatchQueue(label: "CCCapture.metaDataOutputQueue")
+    
     private init() {} // このstructはnamespace用途なのでインスタンス化防止
 
     internal enum ErrorType: Error {

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "MetalCanvas",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/MetalCanvas",
+        "state": {
+          "branch": "spm",
+          "revision": "8c94522c3bafc21fbc214903ef968f4757b631c6",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

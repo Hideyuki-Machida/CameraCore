@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "iOS_DummyAVAssets",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/iOS_DummyAVAssets",
+        "state": {
+          "branch": "spm",
+          "revision": "6fca9fee8b58d4456c122ef08d5e3e169d7d9abc",
+          "version": null
+        }
+      },
+      {
+        "package": "MetalCanvas",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/MetalCanvas",
+        "state": {
+          "branch": "spm",
+          "revision": "8c94522c3bafc21fbc214903ef968f4757b631c6",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

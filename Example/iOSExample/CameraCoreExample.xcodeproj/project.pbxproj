@@ -20,12 +20,8 @@
 		624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */; };
 		624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */; };
 		624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */; };
-		626055FF2463FB570039825A /* CameraRoll.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 626055FE2463FB570039825A /* CameraRoll.storyboard */; };
 		627B0B0E245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */; };
-		62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */; };
 		62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926264232FEB8400D47CF0 /* ProgressViewVC.swift */; };
-		62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */; };
-		6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */; };
 		62A27093232F95B4007CCA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62A27092232F95B4007CCA7C /* Main.storyboard */; };
 		62B9936E24A8BF5500B6E242 /* CameraCore in Frameworks */ = {isa = PBXBuildFile; productRef = 62B9936D24A8BF5500B6E242 /* CameraCore */; };
 		62D8F0A6243C4514000E70B8 /* ARVideoCaptureExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D8F0A5243C4514000E70B8 /* ARVideoCaptureExampleVC.swift */; };
@@ -51,15 +47,11 @@
 		624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLMobileNetV2Layer.swift; sourceTree = "<group>"; };
 		624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLYOLOv3TinyExampleVC.swift; sourceTree = "<group>"; };
 		624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLYOLOv3TinyLayer.swift; sourceTree = "<group>"; };
-		626055FE2463FB570039825A /* CameraRoll.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CameraRoll.storyboard; sourceTree = "<group>"; };
 		627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCaptureExampleVC.swift; sourceTree = "<group>"; };
 		6292624F232FE8CF00D47CF0 /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926250232FE8CF00D47CF0 /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926255232FE90300D47CF0 /* iOS_DummyAVAssets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iOS_DummyAVAssets.framework; path = ../Carthage/Build/iOS/iOS_DummyAVAssets.framework; sourceTree = "<group>"; };
-		62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerImagePreviewVC.swift; sourceTree = "<group>"; };
 		62926264232FEB8400D47CF0 /* ProgressViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewVC.swift; sourceTree = "<group>"; };
-		62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVideoPreviewVC.swift; sourceTree = "<group>"; };
-		62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraRollManagerVC.swift; sourceTree = "<group>"; };
 		62A27092232F95B4007CCA7C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		62D8F0A5243C4514000E70B8 /* ARVideoCaptureExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARVideoCaptureExampleVC.swift; sourceTree = "<group>"; };
 		62D8F0A7243C5F45000E70B8 /* DepthVideoCaptureExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthVideoCaptureExampleVC.swift; sourceTree = "<group>"; };
@@ -125,16 +117,6 @@
 			path = ExampleVC;
 			sourceTree = "<group>";
 		};
-		624BC10E2338B74200A2D8F0 /* CameraRollManagerExample */ = {
-			isa = PBXGroup;
-			children = (
-				62926266232FEB8400D47CF0 /* CameraRollManagerVC.swift */,
-				62926265232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift */,
-				62926263232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift */,
-			);
-			path = CameraRollManagerExample;
-			sourceTree = "<group>";
-		};
 		62E34191232E9D2E005E96A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,12 +152,10 @@
 				624BC10D2338B71900A2D8F0 /* ExampleVC */,
 				6240B218243320EF00DE292E /* PlayerExample */,
 				624BC10C2338B70400A2D8F0 /* UseCoreMLExample */,
-				624BC10E2338B74200A2D8F0 /* CameraRollManagerExample */,
 				620A665B24277E1D0036BC7E /* Debugger */,
 				62926264232FEB8400D47CF0 /* ProgressViewVC.swift */,
 				62E6FAE323F80C68006E11D7 /* AudioExampleVC.swift */,
 				62A27092232F95B4007CCA7C /* Main.storyboard */,
-				626055FE2463FB570039825A /* CameraRoll.storyboard */,
 				623C540C2461738B00029586 /* Others.storyboard */,
 				62E5CA2E22901A74004D258A /* Assets.xcassets */,
 				62E5CA3022901A74004D258A /* LaunchScreen.storyboard */,
@@ -264,7 +244,6 @@
 				623C540D2461738B00029586 /* Others.storyboard in Resources */,
 				62A27093232F95B4007CCA7C /* Main.storyboard in Resources */,
 				62E5CA3222901A74004D258A /* LaunchScreen.storyboard in Resources */,
-				626055FF2463FB570039825A /* CameraRoll.storyboard in Resources */,
 				62E5CA2F22901A74004D258A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,7 +256,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				620A665F24277E420036BC7E /* DebugView.swift in Sources */,
-				6292626A232FEB8400D47CF0 /* CameraRollManagerVC.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
 				6240B21A2433214B00DE292E /* PlayerExample001VC.swift in Sources */,
 				62D8F0A8243C5F45000E70B8 /* DepthVideoCaptureExampleVC.swift in Sources */,
@@ -285,14 +263,12 @@
 				623C540B245FFC6600029586 /* FaceDetectionExampleVC.swift in Sources */,
 				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
 				62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */,
-				62926269232FEB8400D47CF0 /* CameraRollManagerVideoPreviewVC.swift in Sources */,
 				6249747E2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift in Sources */,
 				6244EB1823BB86530044C22F /* VideoCaptureView001ExampleVC.swift in Sources */,
 				62E5CA2822901A72004D258A /* AppDelegate.swift in Sources */,
 				62E6FAE423F80C68006E11D7 /* AudioExampleVC.swift in Sources */,
 				627B0B0E245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift in Sources */,
 				624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */,
-				62926267232FEB8400D47CF0 /* CameraRollManagerImagePreviewVC.swift in Sources */,
 				621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */,
 				624974802349D2EF00325650 /* CoreMLDeeplabV3Layer.swift in Sources */,
 				62D8F0A6243C4514000E70B8 /* ARVideoCaptureExampleVC.swift in Sources */,

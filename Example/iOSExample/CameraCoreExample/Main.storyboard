@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17105"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,8 +20,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uEF-Lu-UHi">
                                 <rect key="frame" x="20" y="108" width="335" height="650"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVS-AO-cUS">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="100"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVS-AO-cUS">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video撮影">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -29,8 +30,8 @@
                                             <segue destination="2Go-RN-Bov" kind="show" id="bjh-85-VuG"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRg-Uo-E2Y">
-                                        <rect key="frame" x="0.0" y="110" width="335" height="100"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRg-Uo-E2Y">
+                                        <rect key="frame" x="0.0" y="132" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video撮影 - 設定">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -39,8 +40,8 @@
                                             <segue destination="EXy-AM-FWc" kind="show" id="lXt-ld-8Pi"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Krl-zp-QEa">
-                                        <rect key="frame" x="0.0" y="220" width="335" height="100"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Krl-zp-QEa">
+                                        <rect key="frame" x="0.0" y="264" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Video再生">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -49,8 +50,8 @@
                                             <segue destination="xCo-RV-HfY" kind="show" id="TDv-LH-0rh"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EW6-07-B65">
-                                        <rect key="frame" x="0.0" y="330" width="335" height="100"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EW6-07-B65">
+                                        <rect key="frame" x="0.0" y="396" width="335" height="122"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Audio再生">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -59,18 +60,8 @@
                                             <segue destination="kEU-Wu-tOz" kind="show" id="XsA-ye-jkH"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4B-kh-CMo">
-                                        <rect key="frame" x="0.0" y="440" width="335" height="100"/>
-                                        <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
-                                        <state key="normal" title="カメラロール操作">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="v3g-yj-C4e" kind="show" id="FNt-UG-tJw"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-Q6-MmX">
-                                        <rect key="frame" x="0.0" y="550" width="335" height="100"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-Q6-MmX">
+                                        <rect key="frame" x="0.0" y="528" width="335" height="122"/>
                                         <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
                                         <state key="normal" title="その他">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -82,6 +73,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="pId-j8-BKM"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="uEF-Lu-UHi" secondAttribute="trailing" constant="20" id="Djl-SA-egM"/>
@@ -89,7 +81,6 @@
                             <constraint firstItem="uEF-Lu-UHi" firstAttribute="leading" secondItem="pId-j8-BKM" secondAttribute="leading" constant="20" id="f7J-j8-u3b"/>
                             <constraint firstItem="uEF-Lu-UHi" firstAttribute="bottom" secondItem="pId-j8-BKM" secondAttribute="bottom" constant="-20" id="gtq-Dh-71I"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="pId-j8-BKM"/>
                     </view>
                     <navigationItem key="navigationItem" id="JlX-Wy-Scc"/>
                 </viewController>
@@ -149,7 +140,7 @@
                                     </mask>
                                 </variation>
                             </mtkView>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xIM-73-ZQ4">
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xIM-73-ZQ4">
                                 <rect key="frame" x="10" y="698" width="245" height="60"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -166,7 +157,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="dt6-Fd-uYx">
                                 <rect key="frame" x="265" y="98" width="100" height="660"/>
                                 <subviews>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MfI-Tv-3kQ">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MfI-Tv-3kQ">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="101.66666666666667"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Position設定">
@@ -176,7 +167,7 @@
                                             <action selector="setPositionBtnTapAction:" destination="EXy-AM-FWc" eventType="touchUpInside" id="Eo6-FU-52k"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="toG-61-1kq">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="toG-61-1kq">
                                         <rect key="frame" x="0.0" y="111.66666666666666" width="100" height="101.66666666666666"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -187,7 +178,7 @@
                                             <action selector="setDeviceTypeBtnTapAction:" destination="EXy-AM-FWc" eventType="touchUpInside" id="KpE-kT-mGG"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QJR-Q9-pQS">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QJR-Q9-pQS">
                                         <rect key="frame" x="0.0" y="223.33333333333329" width="100" height="101.66666666666666"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="解像度設定">
@@ -197,7 +188,7 @@
                                             <action selector="setPresetFrameBtnTapAction:" destination="EXy-AM-FWc" eventType="touchUpInside" id="MgP-eD-qTx"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UpK-JL-qXU">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UpK-JL-qXU">
                                         <rect key="frame" x="0.0" y="335" width="100" height="101.66666666666669"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="FPS設定">
@@ -207,7 +198,7 @@
                                             <action selector="setFPSBtnTapAction:" destination="EXy-AM-FWc" eventType="touchUpInside" id="1ir-Rx-fgx"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bmw-IT-gnD">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bmw-IT-gnD">
                                         <rect key="frame" x="0.0" y="446.66666666666663" width="100" height="101.66666666666663"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Touch設定">
@@ -217,7 +208,7 @@
                                             <action selector="setTouchBtnTapAction:" destination="EXy-AM-FWc" eventType="touchUpInside" id="iSm-q0-giV"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LXi-Ik-Xxx">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LXi-Ik-Xxx">
                                         <rect key="frame" x="0.0" y="558.33333333333337" width="100" height="101.66666666666663"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -240,6 +231,7 @@
                                 </constraints>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="neG-pe-oaO"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FoS-fP-yzk" firstAttribute="leading" secondItem="cpw-ss-QbB" secondAttribute="leading" id="EQo-mH-1nW"/>
@@ -258,7 +250,6 @@
                             <constraint firstItem="oG8-Fo-T9C" firstAttribute="leading" secondItem="neG-pe-oaO" secondAttribute="leading" constant="10" id="vLQ-ce-Eh4"/>
                             <constraint firstAttribute="trailing" secondItem="FoS-fP-yzk" secondAttribute="trailing" id="xA7-VT-whd"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="neG-pe-oaO"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="qGs-he-Ry7"/>
@@ -325,6 +316,7 @@
                                 </variation>
                             </mtkView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="FrE-jV-uoM"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="xgV-oG-nik" firstAttribute="centerY" secondItem="FlQ-2d-Bt0" secondAttribute="centerY" id="3s3-OH-8d4"/>
@@ -334,7 +326,6 @@
                             <constraint firstAttribute="trailing" secondItem="xgV-oG-nik" secondAttribute="trailing" id="qma-Pt-Os0"/>
                             <constraint firstItem="xgV-oG-nik" firstAttribute="leading" secondItem="FlQ-2d-Bt0" secondAttribute="leading" id="zOb-aK-fsO"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="FrE-jV-uoM"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="qma-Pt-Os0"/>
@@ -371,7 +362,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utV-Ef-N3f">
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utV-Ef-N3f">
                                 <rect key="frame" x="10" y="708" width="355" height="60"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -394,7 +385,7 @@
                                             <constraint firstAttribute="height" constant="30" id="LM6-Vb-SxY"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" systemColor="linkColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="RQk-q7-wLS">
@@ -412,7 +403,7 @@
                                             <constraint firstAttribute="height" constant="30" id="VVL-CC-Fum"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" systemColor="linkColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.050000000000000003" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="WdH-fz-k9C">
@@ -427,6 +418,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="Ln8-PX-OgD"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Ln8-PX-OgD" firstAttribute="trailing" secondItem="utV-Ef-N3f" secondAttribute="trailing" constant="10" id="3Ue-fE-eET"/>
@@ -436,7 +428,6 @@
                             <constraint firstItem="utV-Ef-N3f" firstAttribute="leading" secondItem="Ln8-PX-OgD" secondAttribute="leading" constant="10" id="m5m-UF-SOi"/>
                             <constraint firstItem="jib-EW-6cf" firstAttribute="centerY" secondItem="r9X-rB-CAD" secondAttribute="centerY" id="s9b-CX-IJc"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="Ln8-PX-OgD"/>
                     </view>
                     <navigationItem key="navigationItem" title="Audio再生" id="hzV-3K-bp8"/>
                     <connections>
@@ -492,7 +483,7 @@
                                             <constraint firstAttribute="height" constant="30" id="6No-IX-N1X"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" systemColor="linkColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tqi-ti-uej">
@@ -509,6 +500,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="aiA-aM-NG7"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="SAG-xK-HFU" firstAttribute="trailing" secondItem="aiA-aM-NG7" secondAttribute="trailing" id="3Vd-LV-PiN"/>
@@ -520,7 +512,6 @@
                             <constraint firstItem="SAG-xK-HFU" firstAttribute="centerX" secondItem="e7X-8O-JF5" secondAttribute="centerX" id="njH-yz-zjy"/>
                             <constraint firstItem="SiS-Ie-zph" firstAttribute="centerX" secondItem="e7X-8O-JF5" secondAttribute="centerX" id="ofN-j1-pVv"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="aiA-aM-NG7"/>
                     </view>
                     <navigationItem key="navigationItem" title="Video再生" id="MSL-6x-Yv0"/>
                     <connections>
@@ -531,16 +522,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bTU-ia-0P5" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="238" y="831"/>
-        </scene>
-        <!--CameraRoll-->
-        <scene sceneID="b0C-Zb-gd7">
-            <objects>
-                <viewControllerPlaceholder storyboardName="CameraRoll" id="v3g-yj-C4e" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="5jG-7G-14k"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZPZ-mL-a8X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-630" y="768"/>
         </scene>
         <!--Main-->
         <scene sceneID="uat-OA-UJs">
@@ -553,4 +534,9 @@
             <point key="canvasLocation" x="-630" y="822"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

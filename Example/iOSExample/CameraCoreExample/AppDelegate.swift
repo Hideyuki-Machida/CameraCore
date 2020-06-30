@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MetalCanvas
 import CameraCore
 
 @UIApplicationMain
@@ -17,11 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-		do {
-			try CameraCore.AVModuleCore.setup()
-		} catch {
-			
-		}
+        do {
+            try CameraCore.configure() // CameraCoreセットアップ（CameraCoreを使用する際に必ず最初に呼ぶ）
+        } catch {
+            MCDebug.errorLog("CameraCore: 初期化エラー")
+        }
         return true
     }
 

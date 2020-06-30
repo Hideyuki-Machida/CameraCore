@@ -25,9 +25,6 @@ public class CCView: MTKView, CCComponentProtocol {
     public var debug: CCComponentDebug?
 
     // MARK: -
-    fileprivate let orientationManager: OrientationManager = OrientationManager()
-
-    // MARK: -
     private var _presentationTimeStamp: CMTime = CMTime()
     fileprivate(set) var presentationTimeStamp: CMTime {
         get {
@@ -132,11 +129,8 @@ extension CCView: MTKViewDelegate {
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         do {
-            // captureVideoOrientationでOrientationの変わっているdrawTextureを描画のOrientationに修正
-            let texture: CCTexture = try self.orientationManager.rotateTexture(commandBuffer: commandBuffer, source: drawTexture, colorPixelFormat: self.colorPixelFormat, captureVideoOrientation: drawTexture.captureVideoOrientation)
-
             // 描画処理
-            try self.drawUpdate(commandBuffer: commandBuffer, drawTexture: texture.texture)
+            try self.drawUpdate(commandBuffer: commandBuffer, drawTexture: drawTexture.texture)
         } catch {
             // drawの処理が完了できなかった
             self.isDraw = false
@@ -237,14 +231,6 @@ extension CCView {
                     return
                 }
 
-                /*
-                guard let commandBuffer = MCCore.commandQueue.makeCommandBuffer() else { return }
-                commandBuffer.addCompletedHandler { [weak self] (_: MTLCommandBuffer) in
-                    self?.ccview!.draw()
-                }
-
-                self.ccview!.drawUpdate(commandBuffer: commandBuffer, drawTexture: outTexture.texture)
- */
                 self.ccview?.drawTexture = outTexture
             }
             self.observations.append(observation)

@@ -8,7 +8,6 @@
 
 import AVFoundation
 import MetalCanvas
-import UIKit
 
 extension CCCapture.VideoCapture {
     public final class VideoCaptureManager {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 extension CGAffineTransform {
     public var isPortrait: Bool {
         return (self.a == 0 && self.d == 0 && (self.b == 1.0 || self.b == -1.0) && (self.c == 1.0 || self.c == -1.0))

@@ -53,7 +53,7 @@ class DepthVideoCaptureExampleVC: UIViewController {
         
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: false)
+            let imageProcess: CCImageProcess.ImageProcess = try CCImageProcess.ImageProcess()
             let depthMapLayer: DepthMapLayer = try DepthMapLayer(depthPrview: self.depthPrview)
             imageProcess.renderLayers = [ depthMapLayer ]
 

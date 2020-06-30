@@ -10,7 +10,6 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 import MetalKit
-import UIKit
 
 public class CCPlayer: NSObject, CCComponentProtocol {
     fileprivate let queue: DispatchQueue = DispatchQueue(label: "CameraCore.CCPlayer.Queue")

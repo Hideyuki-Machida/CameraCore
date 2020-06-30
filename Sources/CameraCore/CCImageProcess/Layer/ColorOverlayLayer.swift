@@ -8,7 +8,7 @@
 
 import AVFoundation
 import MetalCanvas
-import UIKit
+import CoreImage
 
 public extension CCImageProcess {
     final class ColorOverlayLayer: RenderLayerProtocol {
@@ -19,13 +19,13 @@ public extension CCImageProcess {
         private var offset: Float = 0
         private let fragmentShader: CIColorKernel
 
-        public convenience init(color: UIColor, offset: Float) throws {
+        public convenience init(color: CGColor, offset: Float) throws {
             try self.init(id: RenderLayerId(), color: color, offset: offset)
         }
 
-        public init(id: RenderLayerId, color: UIColor, offset: Float) throws {
+        public init(id: RenderLayerId, color: CGColor, offset: Float) throws {
             self.id = id
-            let color: CIColor = CIColor(cgColor: color.cgColor)
+            let color: CIColor = CIColor(cgColor: color)
             self.color = CIVector(x: color.red, y: color.green, z: color.blue)
 
             let fragmentShaderPath: URL = AssetManager.Shader.colorOverlay.url

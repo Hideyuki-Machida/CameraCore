@@ -51,7 +51,7 @@ class QRCodeCaptureExampleVC: UIViewController {
         
         do {
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: false)
+            let imageProcess: CCImageProcess.ImageProcess = try CCImageProcess.ImageProcess()
             imageProcess.renderLayers = [try QRCodeLayer()]
 
             try camera --> imageProcess --> self.drawView

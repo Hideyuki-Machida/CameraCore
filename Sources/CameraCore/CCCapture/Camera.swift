@@ -10,7 +10,6 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 import MetalKit
-import UIKit
 
 extension CCCapture {
     @objc public class Camera: NSObject, CCComponentProtocol {
@@ -22,11 +21,7 @@ extension CCCapture {
         public var debug: CCComponentDebug?
 
         
-        public fileprivate(set) var property: CCCapture.VideoCapture.Property {
-            willSet {
-                self.onUpdateCaptureProperty?(newValue)
-            }
-        }
+        public fileprivate(set) var property: CCCapture.VideoCapture.Property
 
         public var event: Event?
         public var status: Camera.Status = .setup {
@@ -34,8 +29,6 @@ extension CCCapture {
                 self.event?.onStatusChange?(newValue)
             }
         }
-
-        public var onUpdateCaptureProperty: ((_ property: CCCapture.VideoCapture.Property) -> Void)?
 
         public var capture: CCCapture.VideoCapture.VideoCaptureManager?
         public var depthData: AVDepthData?
@@ -119,9 +112,10 @@ fileprivate extension CCCapture.Camera {
             )
 
             self.pipe.currentVideoCaptureItem = currentCaptureItem
+            self.pipe.updateCaptureData()
 
             if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
-                self.pipe.outPixelPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
+                self.pipe.updateCaptureData()
 
                 // デバッグ
                 self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
@@ -131,16 +125,17 @@ fileprivate extension CCCapture.Camera {
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // AVDepthData & AVMetadataObject 取得
         self.capture?.onUpdateDepthData = { [weak self] (depthData: AVDepthData) in
             self?.depthData = depthData
-            //print(CVPixelBufferGetWidth(depthData.depthDataMap))
-            //print(CVPixelBufferGetHeight(depthData.depthDataMap))
         }
         
         self.capture?.onUpdateMetadataObjects = { [weak self] (metadataObjects: [AVMetadataObject]) in
             self?.metadataObjects = metadataObjects
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     func updateProperty(property: CCCapture.VideoCapture.Property) throws {
@@ -205,6 +200,10 @@ extension CCCapture.Camera {
 
     // MARK: - Pipe
     public class Pipe: NSObject, CCComponentPipeProtocol {
+
+        // MARK: - Queue
+        private let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCCapture.Camera.completeQueue")
+
         fileprivate var camera: CCCapture.Camera?
 
         private var _currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData?
@@ -249,7 +248,13 @@ extension CCCapture.Camera {
             }
         }
 
-        
+        func updateCaptureData() {
+            self.completeQueue.async { [weak self] in
+                guard let data: CCCapture.VideoCapture.CaptureData = self?.currentVideoCaptureItem else { return }
+                self?.outPixelPresentationTimeStamp = data.presentationTimeStamp
+            }
+        }
+
         public var outVideoCaptureData: ((_ currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
         
         fileprivate func _dispose() {

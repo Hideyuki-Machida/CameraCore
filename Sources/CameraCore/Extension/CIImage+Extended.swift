@@ -6,7 +6,7 @@
 //  Copyright © 2018年 tv.mysta. All rights reserved.
 //
 
-import UIKit
+import CoreImage
 
 extension CIImage {
 	

@@ -8,7 +8,7 @@
 
 import AVFoundation
 import MetalCanvas
-import UIKit
+import CoreImage
 
 public extension CCImageProcess {
     final class TransformLayer: RenderLayerProtocol {
@@ -16,13 +16,13 @@ public extension CCImageProcess {
         public let id: RenderLayerId
         public let customIndex: Int = 0
         public let transform: CGAffineTransform
-        public let backgroundColor: UIColor
+        public let backgroundColor: CGColor
 
-        public convenience init(transform: CGAffineTransform, backgroundColor: UIColor) {
+        public convenience init(transform: CGAffineTransform, backgroundColor: CGColor) {
             self.init(id: RenderLayerId(), transform: transform, backgroundColor: backgroundColor)
         }
 
-        public init(id: RenderLayerId, transform: CGAffineTransform, backgroundColor: UIColor) {
+        public init(id: RenderLayerId, transform: CGAffineTransform, backgroundColor: CGColor) {
             self.id = id
             self.transform = transform
             self.backgroundColor = backgroundColor
@@ -50,7 +50,7 @@ private extension CCImageProcess.TransformLayer {
         let transformImage: CIImage = image.transformed(by: self.transform)
         let croppingImage: CIImage = transformImage.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize.toCGSize()))
         guard let result: CIFilter = CIFilter(name: Blendmode.alpha.CIFilterName) else { throw RenderLayerErrorType.renderingError }
-        result.setValue(CIImage(color: CIColor(cgColor: self.backgroundColor.cgColor)), forKey: kCIInputBackgroundImageKey)
+        result.setValue(CIImage(color: CIColor(cgColor: self.backgroundColor)), forKey: kCIInputBackgroundImageKey)
         result.setValue(croppingImage, forKey: kCIInputImageKey)
         guard let croppingImage002: CIImage = result.outputImage?.cropped(to: CGRect(origin: CGPoint.zero, size: renderSize.toCGSize())) else { throw RenderLayerErrorType.renderingError }
         return croppingImage002

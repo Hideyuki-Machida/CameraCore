@@ -68,7 +68,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
-            let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: false)
+            let imageProcess: CCImageProcess.ImageProcess = try CCImageProcess.ImageProcess()
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 
             try camera --> imageProcess --> self.drawView
@@ -400,8 +400,8 @@ extension VideoCaptureView002ExampleVC {
 
         let action001: UIAlertAction = UIAlertAction(title: FilterLabel.ON.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
-            self.imageProcess?.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer]
-            //self.imageProcess?.renderLayers = [self.lutLayer]
+            //self.imageProcess?.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer]
+            self.imageProcess?.renderLayers = [self.lutLayer]
         })
 
         let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler: {

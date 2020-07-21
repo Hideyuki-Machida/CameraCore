@@ -30,12 +30,7 @@ public class CCVariable<T> {
             objc_sync_exit(self)
         }
     }
-    
-    func notice() {
-        self.callbacks.forEach { $0.callback(self.value) }
-    }
-    
-    // バインディング用のクロージャーを保持
+
     private var callbacks: [CCBindble<T>] = []
 
     init(_ value: T) {
@@ -53,6 +48,10 @@ public class CCVariable<T> {
         self.callbacks = self.callbacks.filter { $0.id != key.id }
     }
     
+    func notice() {
+        self.callbacks.forEach { $0.callback(self.value) }
+    }
+
     func dispose() {
         self.callbacks.removeAll()
     }

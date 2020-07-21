@@ -7,6 +7,15 @@
 
 import Foundation
 
+public struct CCBindble<T> {
+    fileprivate var id: String
+    fileprivate var callback: (T) -> Void
+    init(_ callback: @escaping (T) -> Void) {
+        self.id = NSUUID().uuidString
+        self.callback = callback
+    }
+}
+
 public class CCVariable<T> {
     private var _value: T
     public var value: T {
@@ -23,21 +32,33 @@ public class CCVariable<T> {
     }
     
     func dispatch() {
-        self.callbacks.forEach { $0(self.value) }
+        self.callbacks.forEach { $0.callback(self.value) }
     }
     
     // バインディング用のクロージャーを保持
-    private var callbacks: [((T) -> Void)] = []
+    private var callbacks: [CCBindble<T>] = []
 
     init(_ value: T) {
         self._value = value
     }
 
-    func bind(dataDidChange: @escaping (T) -> Void) {
-        self.callbacks.append(dataDidChange)
+    public func bind(dataDidChange: @escaping (T) -> Void) -> UnBindKey {
+        let item: CCBindble = CCBindble(dataDidChange)
+        self.callbacks.append(item)
+        return UnBindKey.init(id: item.id)
+    }
+
+    public func unBind(key: UnBindKey ) {
+        self.callbacks = self.callbacks.filter { $0.id != key.id }
     }
     
     func dispose() {
         self.callbacks.removeAll()
+    }
+}
+
+public extension CCVariable {
+    struct UnBindKey {
+        let id: String
     }
 }

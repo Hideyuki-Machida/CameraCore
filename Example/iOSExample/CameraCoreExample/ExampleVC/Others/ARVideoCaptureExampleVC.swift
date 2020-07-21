@@ -12,6 +12,7 @@ import iOS_DummyAVAssets
 import MetalCanvas
 import UIKit
 import ARKit
+import ProcessLogger_Swift
 
 @available(iOS 13.0, *)
 class ARVideoCaptureExampleVC: UIViewController {
@@ -35,7 +36,7 @@ class ARVideoCaptureExampleVC: UIViewController {
         self.debugger.triger.stop()
         self.debugger.triger.dispose()
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {
@@ -123,7 +124,7 @@ extension ARVideoCaptureExampleVC {
         }
         
         deinit {
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         /// キャッシュを消去
@@ -134,12 +135,14 @@ extension ARVideoCaptureExampleVC {
 
             guard let pixelBuffer: CVPixelBuffer = source.pixelBuffer else { return }
 
+            try self.yCbCrToRGB(commandBuffer: commandBuffer, pixelBuffer: pixelBuffer, destination: &destination, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+
+            try self.yCbCrToRGB(commandBuffer: commandBuffer, pixelBuffer: pixelBuffer, destination: &destination, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+            
             let destination = destination
             guard CVPixelBufferGetPlaneCount(pixelBuffer) >= 2 else { return }
             let w: CGFloat = CGFloat(CVPixelBufferGetWidth(pixelBuffer))
             let h: CGFloat = CGFloat(CVPixelBufferGetHeight(pixelBuffer))
-
-            print(w, h)
             
             //////////////////////////////////////////////////////////////////////////////////////////////
             // yCbCr to RGB
@@ -181,26 +184,50 @@ extension ARVideoCaptureExampleVC {
             blitEncoder.endEncoding()
 
             destination = self.canvas!.mcTexture
-             */
             //////////////////////////////////////////////////////////////////////////////////////////////
+*/
 
-            /*
             guard
-                let arFrame: ARFrame = renderLayerCompositionInfo.arFrame
+                let arFrame: ARFrame = renderLayerCompositionInfo.userInfo[ RenderLayerCompositionInfo.Key.arFrame.rawValue ] as? ARFrame
             else { throw CCImageProcess.ErrorType.process }
 
-            let alphaTexture = self.matteGenerator.generateMatte(from: arFrame, commandBuffer: commandBuffer)
+            let alphaTexture: MTLTexture = self.matteGenerator.generateMatte(from: arFrame, commandBuffer: commandBuffer)
+            //CVPixelBuffer.create(image: <#T##CGImage#>, pixelFormat: <#T##OSType#>)
+            print(CVPixelBufferGetPlaneCount(pixelBuffer))
             //let dilatedDepthTexture = self.matteGenerator.generateDilatedDepth(from: arFrame, commandBuffer: commandBuffer)
             commandBuffer.addCompletedHandler { (commandBuffer: MTLCommandBuffer) in
                 //print(alphaTexture)
                 DispatchQueue.main.async { [weak self] in
-                    self?.sorcePrview.image = UIImage.init(ciImage: CIImage(mtlTexture: destination.texture, options: nil)!)
+                    let inImage: CIImage = CIImage(mtlTexture: source.texture, options: nil)!
+                    let maskImage: CIImage = CIImage(mtlTexture: alphaTexture, options: nil)!
+                    let bgImage: CIImage = CIImage(mtlTexture: alphaTexture, options: nil)!
+                    // ブレンド
+                    let params = ["inputMaskImage": maskImage, "inputBackgroundImage": bgImage]
+                    let outImage = inImage.applyingFilter("CIBlendWithMask", parameters: params)
+
+                    self?.sorcePrview.image = UIImage.init(ciImage: outImage)
                     self?.depthPrview.image = UIImage.init(ciImage: CIImage(mtlTexture: alphaTexture, options: nil)!)
                 }
             }
- */
+
         }
         
+        func yCbCrToRGB(commandBuffer: MTLCommandBuffer, pixelBuffer: CVPixelBuffer, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
+            let destination = destination
+            guard CVPixelBufferGetPlaneCount(pixelBuffer) >= 2 else { return }
+            let w: CGFloat = CGFloat(CVPixelBufferGetWidth(pixelBuffer))
+            let h: CGFloat = CGFloat(CVPixelBufferGetHeight(pixelBuffer))
+            
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            // yCbCr to RGB
+            var textureY: MCTexture = try MCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: .r8Unorm, planeIndex: 0)
+            var textureCbCr: MCTexture = try MCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: .rg8Unorm, planeIndex: 1)
+
+            self.renderPassDescriptor.colorAttachments[0].texture = destination.texture
+            try self.yCbCrToRGBFilter.process(commandBuffer: commandBuffer, capturedImageTextureY: &textureY, capturedImageTextureCbCr: &textureCbCr, renderPassDescriptor: self.renderPassDescriptor, renderSize: CGSize(w, h))
+            //////////////////////////////////////////////////////////////////////////////////////////////
+        }
+
         func updateCanvas(size: MCSize) throws -> MCCanvas {
             guard
                 let emptyPixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: size)

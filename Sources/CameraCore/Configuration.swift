@@ -12,6 +12,7 @@ import UIKit
 import AVFoundation
 import Foundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 public class Configuration {
     public static let shared: CameraCore.Configuration = CameraCore.Configuration()
@@ -45,7 +46,7 @@ public class Configuration {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 }
 

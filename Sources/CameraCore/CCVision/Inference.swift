@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 import MetalCanvas
-
+import ProcessLogger_Swift
 
 public extension CCVision {
     class Inference: NSObject, CCComponentProtocol {
@@ -127,7 +127,7 @@ public extension CCVision {
 
         deinit {
             self.dispose()
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
         
     }

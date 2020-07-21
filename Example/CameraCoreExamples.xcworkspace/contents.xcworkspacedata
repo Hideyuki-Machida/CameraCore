@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../../ProcessLogger.Swift">
+   </FileRef>
+   <FileRef
+      location = "group:../../MetalCanvas">
+   </FileRef>
+   <FileRef
+      location = "group:..">
+   </FileRef>
+   <FileRef
+      location = "group:iOSExample/CameraCoreExample.xcodeproj">
+   </FileRef>
+</Workspace>

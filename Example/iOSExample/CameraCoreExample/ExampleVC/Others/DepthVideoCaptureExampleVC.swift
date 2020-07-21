@@ -11,6 +11,7 @@ import CameraCore
 import iOS_DummyAVAssets
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 
 //MARK: - ViewController
@@ -45,7 +46,7 @@ class DepthVideoCaptureExampleVC: UIViewController {
         self.debugger.triger.stop()
         self.debugger.triger.dispose()
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {
@@ -89,7 +90,7 @@ class DepthVideoCaptureExampleVC: UIViewController {
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             }
         } catch {
-            MCDebug.errorLog("changeDeviceAction")
+            ProcessLogger.errorLog("changeDeviceAction")
         }
 
     }
@@ -137,7 +138,7 @@ extension DepthVideoCaptureExampleVC {
         }
         
         deinit {
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         /// キャッシュを消去
@@ -145,7 +146,7 @@ extension DepthVideoCaptureExampleVC {
         }
 
         public func process(commandBuffer: MTLCommandBuffer, source: CCTexture, destination: inout CCTexture, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
-            guard let depthData: AVDepthData = renderLayerCompositionInfo.userInfo[ "depthData" ] as? AVDepthData else { throw CCImageProcess.ErrorType.process }
+            guard let depthData: AVDepthData = renderLayerCompositionInfo.userInfo[ RenderLayerCompositionInfo.Key.depthData.rawValue ] as? AVDepthData else { throw CCImageProcess.ErrorType.process }
 
             let w: CGFloat = CGFloat(CVPixelBufferGetWidth(depthData.depthDataMap))
             let h: CGFloat = CGFloat(CVPixelBufferGetHeight(depthData.depthDataMap))

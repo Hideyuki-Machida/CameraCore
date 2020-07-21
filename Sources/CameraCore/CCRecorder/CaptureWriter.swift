@@ -11,6 +11,7 @@ import CoreImage
 import Foundation
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 // モジュールテスト用
 // TODO: テスト用のためのClass。本番使用時には再設計 & レビューが必要
@@ -57,7 +58,7 @@ extension CCRecorder {
             if CaptureWriter.writer?.status == .writing {
                 CaptureWriter.writer?.cancelWriting()
             }
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         /// キャプチャーパラメータセット
@@ -177,7 +178,7 @@ extension CCRecorder {
             }
 
             if w.status == AVAssetWriter.Status.failed {
-                MCDebug.log("writer status failed")
+                ProcessLogger.log("writer status failed")
                 return
             }
 
@@ -205,7 +206,7 @@ extension CCRecorder {
             guard w.inputs.filter({ $0.mediaType == AVMediaType.video }).filter({ $0.isReadyForMoreMediaData }).count > 0 else { return }
 
             guard let pool: CVPixelBufferPool = self.pixelBufferAdaptor?.pixelBufferPool else {
-                MCDebug.errorLog("pixelBufferPool nil")
+                ProcessLogger.errorLog("pixelBufferPool nil")
                 return
             }
 
@@ -213,7 +214,7 @@ extension CCRecorder {
             let result: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &outputRenderBuffer)
 
             if result == kCVReturnError {
-                MCDebug.errorLog("CVPixelBufferPoolCreatePixelBuffer error")
+                ProcessLogger.errorLog("CVPixelBufferPoolCreatePixelBuffer error")
                 return
             }
 
@@ -270,7 +271,7 @@ extension CCRecorder {
 
                 CVPixelBufferUnlockBaseAddress(buf, CVPixelBufferLockFlags.readOnly)
             } else {
-                MCDebug.errorLog("outputRenderBuffer.pointee error")
+                ProcessLogger.errorLog("outputRenderBuffer.pointee error")
             }
         }
 

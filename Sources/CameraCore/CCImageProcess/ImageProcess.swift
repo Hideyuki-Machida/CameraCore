@@ -12,6 +12,7 @@ import Foundation
 import MetalCanvas
 import MetalPerformanceShaders
 import ARKit
+import ProcessLogger_Swift
 
 extension CCImageProcess {
     public class ImageProcess: NSObject, CCComponentProtocol {
@@ -103,7 +104,7 @@ extension CCImageProcess {
 
         deinit {
             self.dispose()
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
     }
 }
@@ -140,8 +141,8 @@ extension CCImageProcess.ImageProcess {
                 ///////////////////////////////////////////////////////////////////////////////////////////////////
                 // renderLayerCompositionInfo
                 var userInfo: [ String : Any] = self.inferenceUserInfo
-                userInfo[ "depthData" ] = captureData.depthData
-                userInfo[ "VideoCaptureData" ] = captureData
+                userInfo[ RenderLayerCompositionInfo.Key.depthData.rawValue ] = captureData.depthData
+                userInfo[ RenderLayerCompositionInfo.Key.videoCaptureData.rawValue ] = captureData
 
                 var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
                     compositionTime: CMTime(value: self.counter, timescale: captureData.captureInfo.frameRate),
@@ -157,7 +158,7 @@ extension CCImageProcess.ImageProcess {
                 try self.process(pixelBuffer: pixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
             } catch {
                 self.isProcess = false
-                MCDebug.log("CCRenderer.PostProcess: process error")
+                ProcessLogger.log("CCRenderer.PostProcess: process error")
             }
         }
     }
@@ -192,7 +193,7 @@ extension CCImageProcess.ImageProcess {
                 try self.process(pixelBuffer: pixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
             } catch {
                 self.isProcess = false
-                MCDebug.log("CCRenderer.PostProcess: process error")
+                ProcessLogger.log("CCRenderer.PostProcess: process error")
             }
         }
     }
@@ -254,7 +255,7 @@ private extension CCImageProcess.ImageProcess {
                     try self.textureBlitEncoder(commandBuffer: commandBuffer, source: destination, destination: &sourceTexture)
                 }
             } catch {
-                MCDebug.errorLog(error)
+                ProcessLogger.errorLog(error)
             }
         }
     }
@@ -460,7 +461,7 @@ extension CCImageProcess.ImageProcess {
                         percentComplete: 0.0,
                         renderSize: renderSize,
                         metadataObjects: [],
-                        userInfo: [:]
+                        userInfo: [ RenderLayerCompositionInfo.Key.arFrame.rawValue : captureData.arFrame ]
                     )
                     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -513,7 +514,7 @@ extension CCImageProcess.ImageProcess {
                 self.outTexture = outTexture
                 self.outUpdate()
             } catch {
-                MCDebug.log("CCRenderer.PostProcess: process error")
+                ProcessLogger.log("CCRenderer.PostProcess: process error")
             }
         }
 

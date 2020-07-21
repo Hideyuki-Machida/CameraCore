@@ -10,6 +10,7 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 import MetalKit
+import ProcessLogger_Swift
 
 extension CCCapture {
     @objc public class Camera: NSObject, CCComponentProtocol {
@@ -47,7 +48,7 @@ extension CCCapture {
 
         deinit {
             self.dispose()
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
     }
@@ -57,14 +58,14 @@ extension CCCapture {
 fileprivate extension CCCapture.Camera {
     func start() {
         guard self.status != .play else { return }
-        MCDebug.log("CameraCore.Camera.play")
+        ProcessLogger.log("CameraCore.Camera.play")
         self.depthData = nil
         self.capture?.play()
         self.status = .play
     }
 
     func stop() {
-        MCDebug.log("CameraCore.Camera.pause")
+        ProcessLogger.log("CameraCore.Camera.pause")
         self.capture?.stop()
         self.status = .pause
     }

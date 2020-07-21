@@ -14,12 +14,14 @@ let package = Package(
             targets: ["CameraCore"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Hideyuki-Machida/MetalCanvas", .branch("spm"))
+        .package(url: "https://github.com/Hideyuki-Machida/MetalCanvas", .branch("spm")),
+        .package(url: "https://github.com/Hideyuki-Machida/ProcessLogger.Swift", .branch("master"))
     ],
     targets: [
         .target(
             name: "CameraCore",
-            dependencies: ["MetalCanvas"]),
+            dependencies: ["MetalCanvas", "ProcessLogger.Swift"]
+        ),
         .testTarget(
             name: "CameraCoreTests",
             dependencies: ["CameraCore"]),

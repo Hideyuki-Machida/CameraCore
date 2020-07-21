@@ -9,12 +9,13 @@
 import CameraCore
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 class DebugView: UIView {
     @IBOutlet weak var label: UILabel!
 
     deinit {
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     func set(debugData: CCDebug.ComponentDebugger.Output.Data) {

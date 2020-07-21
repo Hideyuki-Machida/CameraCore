@@ -20,6 +20,8 @@
 		624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */; };
 		624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */; };
 		624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */; };
+		6250976C24C6BD9700813015 /* ProcessLogger.Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6250976B24C6BD9700813015 /* ProcessLogger.Swift */; };
+		627A9FEF24C056C60004A0C8 /* MetalCanvas in Frameworks */ = {isa = PBXBuildFile; productRef = 627A9FEE24C056C60004A0C8 /* MetalCanvas */; };
 		627B0B0E245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */; };
 		62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926264232FEB8400D47CF0 /* ProgressViewVC.swift */; };
 		62A27093232F95B4007CCA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62A27092232F95B4007CCA7C /* Main.storyboard */; };
@@ -70,6 +72,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				62B9936E24A8BF5500B6E242 /* CameraCore in Frameworks */,
+				6250976C24C6BD9700813015 /* ProcessLogger.Swift in Frameworks */,
+				627A9FEF24C056C60004A0C8 /* MetalCanvas in Frameworks */,
 				62327E1C24A4C1FF00A631A4 /* iOS_DummyAVAssets in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,6 +198,8 @@
 			packageProductDependencies = (
 				62327E1B24A4C1FF00A631A4 /* iOS_DummyAVAssets */,
 				62B9936D24A8BF5500B6E242 /* CameraCore */,
+				627A9FEE24C056C60004A0C8 /* MetalCanvas */,
+				6250976B24C6BD9700813015 /* ProcessLogger.Swift */,
 			);
 			productName = CameraCoreExample;
 			productReference = 62E5CA2422901A72004D258A /* CameraCoreExample.app */;
@@ -225,6 +231,8 @@
 			mainGroup = 62E5CA1B22901A72004D258A;
 			packageReferences = (
 				62327E1A24A4C1FF00A631A4 /* XCRemoteSwiftPackageReference "iOS_DummyAVAssets" */,
+				627A9FED24C056C60004A0C8 /* XCRemoteSwiftPackageReference "MetalCanvas" */,
+				6250976A24C6BD9700813015 /* XCRemoteSwiftPackageReference "ProcessLogger" */,
 			);
 			productRefGroup = 62E5CA2522901A72004D258A /* Products */;
 			projectDirPath = "";
@@ -477,6 +485,22 @@
 				kind = branch;
 			};
 		};
+		6250976A24C6BD9700813015 /* XCRemoteSwiftPackageReference "ProcessLogger" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Hideyuki-Machida/ProcessLogger.Swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		627A9FED24C056C60004A0C8 /* XCRemoteSwiftPackageReference "MetalCanvas" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Hideyuki-Machida/MetalCanvas";
+			requirement = {
+				branch = spm;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -484,6 +508,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 62327E1A24A4C1FF00A631A4 /* XCRemoteSwiftPackageReference "iOS_DummyAVAssets" */;
 			productName = iOS_DummyAVAssets;
+		};
+		6250976B24C6BD9700813015 /* ProcessLogger.Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6250976A24C6BD9700813015 /* XCRemoteSwiftPackageReference "ProcessLogger" */;
+			productName = ProcessLogger.Swift;
+		};
+		627A9FEE24C056C60004A0C8 /* MetalCanvas */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 627A9FED24C056C60004A0C8 /* XCRemoteSwiftPackageReference "MetalCanvas" */;
+			productName = MetalCanvas;
 		};
 		62B9936D24A8BF5500B6E242 /* CameraCore */ = {
 			isa = XCSwiftPackageProductDependency;

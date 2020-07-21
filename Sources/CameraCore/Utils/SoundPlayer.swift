@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 public final class SoundPlayer {
 	public static let shared = SoundPlayer()
@@ -117,7 +118,7 @@ public final class SoundPlayer {
 
 	deinit {
 		self.pause()
-		MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
 	}
 
 	public func play(time: Double = 0.0, deray: Double = 0.0) {
@@ -219,8 +220,8 @@ public final class SoundPlayer {
 					self?.engine.disableManualRenderingMode()
 					self?.player.stop()
 					self?.engine.stop()
-					MCDebug.log("AVAudioEngine offline rendering completed")
-					MCDebug.log("Output \(outputFile.url)")
+                    ProcessLogger.log("AVAudioEngine offline rendering completed")
+                    ProcessLogger.log("Output \(outputFile.url)")
 					
 					onConplete?(outputFile.url)
 				}
@@ -361,7 +362,7 @@ extension SoundPlayer {
 	}
 
 	@objc fileprivate func displayLinkDidRefresh() {
-		MCDebug.log("\(self.time + Float(self.offSet)) / \(self.duration)")
+        ProcessLogger.log("\(self.time + Float(self.offSet)) / \(self.duration)")
 		self.onUpdate?(self.time + Float(self.offSet))
 		if self.duration <= (self.time + Float(self.offSet)) {
 			self.pause()

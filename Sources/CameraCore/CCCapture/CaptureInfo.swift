@@ -9,6 +9,7 @@
 import AVFoundation
 import Foundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 extension CCCapture.VideoCapture {
     public class CaptureInfo {
@@ -110,22 +111,22 @@ extension CCCapture.VideoCapture {
         }
 
         func trace() {
-            MCDebug.log("----------------------------------------------------")
-            MCDebug.log("■ deviceInfo")
+            ProcessLogger.log("----------------------------------------------------")
+            ProcessLogger.log("■ deviceInfo")
             if let device: AVCaptureDevice = self.device {
-                MCDebug.log("device: \(device)")
+                ProcessLogger.log("device: \(device)")
             }
             if let deviceFormat: AVCaptureDevice.Format = self.deviceFormat {
-                MCDebug.log("deviceFormat: \(deviceFormat)")
-                MCDebug.log("videoHDR: \(deviceFormat.isVideoHDRSupported)")
+                ProcessLogger.log("deviceFormat: \(deviceFormat)")
+                ProcessLogger.log("videoHDR: \(deviceFormat.isVideoHDRSupported)")
             }
-            MCDebug.log("deviceType: \(String(describing: self.deviceType))")
-            MCDebug.log("captureSize: \(self.captureSize)")
-            MCDebug.log("frameRate: \(self.frameRate)")
-            MCDebug.log("devicePosition: \(self.devicePosition.toString)")
-            MCDebug.log("colorSpace: \(self.colorSpace.toString)")
-            MCDebug.log("isSmoothAutoFocusEnabled: \(self.isSmoothAutoFocusEnabled)")
-            MCDebug.log("----------------------------------------------------")
+            ProcessLogger.log("deviceType: \(String(describing: self.deviceType))")
+            ProcessLogger.log("captureSize: \(self.captureSize)")
+            ProcessLogger.log("frameRate: \(self.frameRate)")
+            ProcessLogger.log("devicePosition: \(self.devicePosition.toString)")
+            ProcessLogger.log("colorSpace: \(self.colorSpace.toString)")
+            ProcessLogger.log("isSmoothAutoFocusEnabled: \(self.isSmoothAutoFocusEnabled)")
+            ProcessLogger.log("----------------------------------------------------")
         }
     }
 }

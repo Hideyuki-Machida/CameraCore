@@ -9,11 +9,12 @@
 import UIKit
 import CameraCore
 import MetalCanvas
+import ProcessLogger_Swift
 
 class ProgressViewVC: UIViewController {
     @IBOutlet weak var progressLabel: UILabel!
     
     deinit {
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 }

@@ -9,6 +9,7 @@
 import UIKit
 import MetalCanvas
 import CameraCore
+import ProcessLogger_Swift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             try CameraCore.configure() // CameraCoreセットアップ（CameraCoreを使用する際に必ず最初に呼ぶ）
         } catch {
-            MCDebug.errorLog("CameraCore: 初期化エラー")
+            ProcessLogger.errorLog("CameraCore: 初期化エラー")
         }
         return true
     }

@@ -10,6 +10,7 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 extension CCCapture.VideoCapture {
     final class VideoCaptureOutput: NSObject {
@@ -31,7 +32,7 @@ extension CCCapture.VideoCapture {
         
         deinit {
             NotificationCenter.default.removeObserver(self)
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         func set(videoDevice: AVCaptureDevice, captureSession: AVCaptureSession, property: CCCapture.VideoCapture.Property) throws {
@@ -60,7 +61,7 @@ extension CCCapture.VideoCapture {
                     self.videoDataOutput = videoDataOutput
                     dataOutputs.append(videoDataOutput)
                 } else {
-                    MCDebug.errorLog("AVCaptureVideoDataOutputConnection")
+                    ProcessLogger.errorLog("AVCaptureVideoDataOutputConnection")
                     throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
                 }
             }
@@ -81,7 +82,7 @@ extension CCCapture.VideoCapture {
                         self.audioDataOutput = audioDataOutput
                         dataOutputs.append(audioDataOutput)
                     } else {
-                        MCDebug.errorLog("AVCaptureAudioDataOutputConnection")
+                        ProcessLogger.errorLog("AVCaptureAudioDataOutputConnection")
                         throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
                     }
                 }
@@ -108,7 +109,7 @@ extension CCCapture.VideoCapture {
                         self.depthDataOutput = depthDataOutput
                         dataOutputs.append(self.depthDataOutput!)
                     } else {
-                        MCDebug.errorLog("No AVCaptureDepthDataOutputConnection")
+                        ProcessLogger.errorLog("No AVCaptureDepthDataOutputConnection")
                         throw CCCapture.VideoCapture.VideoCaptureManager.ErrorType.setupError
                     }
                 }

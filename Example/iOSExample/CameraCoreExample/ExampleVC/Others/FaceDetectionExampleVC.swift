@@ -11,6 +11,7 @@ import UIKit
 import AVFoundation
 import CameraCore
 import MetalCanvas
+import ProcessLogger_Swift
 
 @available(iOS 12, *)
 class FaceDetectionExampleVC: UIViewController {
@@ -45,7 +46,7 @@ class FaceDetectionExampleVC: UIViewController {
         self.debugger.triger.stop()
         self.debugger.triger.dispose()
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {
@@ -123,7 +124,7 @@ extension FaceDetectionExampleVC {
         }
 
         deinit {
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         public func dispose() {
@@ -211,7 +212,7 @@ extension FaceDetectionExampleVC {
         }
 
         deinit {
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         /// キャッシュを消去

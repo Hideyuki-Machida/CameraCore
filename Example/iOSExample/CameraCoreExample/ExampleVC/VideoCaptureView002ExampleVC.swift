@@ -12,6 +12,7 @@ import CameraCore
 import iOS_DummyAVAssets
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 class VideoCaptureView002ExampleVC: UIViewController {
     @IBOutlet weak var recordingButton: UIButton!
@@ -46,7 +47,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
         self.debugger.triger.stop()
         self.debugger.triger.dispose()
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {
@@ -86,7 +87,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
             try self.debugger.setup.set(component: imageProcess)
             try self.debugger.setup.set(component: self.drawView)
         } catch {
-            MCDebug.errorLog("VideoCaptureView setup error")
+            ProcessLogger.errorLog("VideoCaptureView setup error")
         }
         /////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -183,7 +184,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps15))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps15.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps15.rawValue)
             }
         })
 
@@ -193,7 +194,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps24))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps24.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps24.rawValue)
             }
         })
 
@@ -203,7 +204,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps30))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps30.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps30.rawValue)
             }
         })
 
@@ -213,7 +214,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps60))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps60.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps60.rawValue)
             }
         })
 
@@ -223,7 +224,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps90))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps90.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps90.rawValue)
             }
         })
 
@@ -233,7 +234,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps120))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps120.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps120.rawValue)
             }
         })
 
@@ -243,7 +244,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .frameRate(.fps240))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(FrameRateLabel.fps240.rawValue)
+                ProcessLogger.errorLog(FrameRateLabel.fps240.rawValue)
             }
         })
 
@@ -280,7 +281,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .captureSize(.p960x540))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(ResolutionLabel.p960x540.rawValue)
+                ProcessLogger.errorLog(ResolutionLabel.p960x540.rawValue)
             }
         })
 
@@ -290,7 +291,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .captureSize(.p1280x720))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(ResolutionLabel.p1280x720.rawValue)
+                ProcessLogger.errorLog(ResolutionLabel.p1280x720.rawValue)
             }
         })
 
@@ -300,7 +301,7 @@ extension VideoCaptureView002ExampleVC {
                 try self.videoCaptureProperty.swap(property: .captureSize(.p1920x1080))
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(ResolutionLabel.p1920x1080.rawValue)
+                ProcessLogger.errorLog(ResolutionLabel.p1920x1080.rawValue)
             }
         })
 
@@ -363,7 +364,7 @@ extension VideoCaptureView002ExampleVC {
                 self.videoCaptureProperty.devicePosition = .front
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(PositionLabel.front.rawValue)
+                ProcessLogger.errorLog(PositionLabel.front.rawValue)
             }
         })
 
@@ -373,7 +374,7 @@ extension VideoCaptureView002ExampleVC {
                 self.videoCaptureProperty.devicePosition = .back
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(PositionLabel.back.rawValue)
+                ProcessLogger.errorLog(PositionLabel.back.rawValue)
             }
         })
 
@@ -444,7 +445,7 @@ extension VideoCaptureView002ExampleVC {
                 self.videoCaptureProperty.deviceType = DeviceType.builtInWideAngleCamera.item()
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(DeviceType.builtInWideAngleCamera.rawValue)
+                ProcessLogger.errorLog(DeviceType.builtInWideAngleCamera.rawValue)
             }
         })
 
@@ -454,7 +455,7 @@ extension VideoCaptureView002ExampleVC {
                 self.videoCaptureProperty.deviceType = DeviceType.builtInDualCamera.item()
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(DeviceType.builtInDualCamera.rawValue)
+                ProcessLogger.errorLog(DeviceType.builtInDualCamera.rawValue)
             }
         })
 
@@ -464,7 +465,7 @@ extension VideoCaptureView002ExampleVC {
                 self.videoCaptureProperty.deviceType = DeviceType.builtInTelephotoCamera.item()
                 try self.camera?.setup.update(property: self.videoCaptureProperty)
             } catch {
-                MCDebug.errorLog(DeviceType.builtInTelephotoCamera.rawValue)
+                ProcessLogger.errorLog(DeviceType.builtInTelephotoCamera.rawValue)
             }
         })
 

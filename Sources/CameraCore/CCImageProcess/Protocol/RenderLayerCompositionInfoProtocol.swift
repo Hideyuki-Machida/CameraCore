@@ -46,6 +46,12 @@ extension RenderLayerCompositionInfoProtocol {
 }
 
 public class RenderLayerCompositionInfo: RenderLayerCompositionInfoProtocol {
+    public enum Key: String {
+        case depthData = "depthData"
+        case videoCaptureData = "videoCaptureData"
+        case arFrame = "arFrame"
+    }
+
     public var __property: RenderLayerCompositionInfoProperty
     public init(
         compositionTime: CMTime,
@@ -55,7 +61,7 @@ public class RenderLayerCompositionInfo: RenderLayerCompositionInfoProtocol {
         renderSize: MCSize,
         metadataObjects: [AVMetadataObject],
         pixelFormat: MTLPixelFormat = .bgra8Unorm,
-        userInfo: [ String : Any]
+        userInfo: [ String : Any ]
     ) {
         self.__property = RenderLayerCompositionInfoProperty(
             compositionTime: compositionTime,

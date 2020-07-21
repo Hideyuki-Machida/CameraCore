@@ -9,6 +9,15 @@
           "revision": "6fca9fee8b58d4456c122ef08d5e3e169d7d9abc",
           "version": null
         }
+      },
+      {
+        "package": "ProcessLogger.Swift",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/ProcessLogger.Swift",
+        "state": {
+          "branch": "master",
+          "revision": "75384f054fe7fb1bb46d25291c7fdaf63da6379d",
+          "version": null
+        }
       }
     ]
   },

@@ -11,6 +11,7 @@ import CameraCore
 import iOS_DummyAVAssets
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 class PlayerExample001VC: UIViewController {
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
@@ -42,7 +43,7 @@ class PlayerExample001VC: UIViewController {
         self.observations.removeAll()
 
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {

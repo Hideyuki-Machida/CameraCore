@@ -12,6 +12,7 @@ import CameraCore
 import iOS_DummyAVAssets
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 class VideoCaptureView001ExampleVC: UIViewController {
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
@@ -38,7 +39,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
         self.inference?.triger.dispose()
         self.videoRecorder?.triger.dispose()
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {

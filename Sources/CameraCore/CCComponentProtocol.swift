@@ -8,6 +8,7 @@
 
 import Foundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 public protocol CCComponentSetupProtocol {
 }
@@ -43,8 +44,8 @@ extension CCComponentProtocol {
 }
 
 public class CCComponentDebug {
-    private var deviceDebugger: MCDebug.Device = MCDebug.Device()
-    private var framerateDebugger: MCDebug.Framerate = MCDebug.Framerate()
+    private var deviceDebugger: ProcessLogger.Device = ProcessLogger.Device()
+    private var framerateDebugger: ProcessLogger.Framerate = ProcessLogger.Framerate()
 
     private var d: [thread_basic_info] = []
     private var dooo: thread_basic_info = thread_basic_info()

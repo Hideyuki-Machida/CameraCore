@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 extension CCRecorder {
     public class VideoRecorder {
@@ -30,7 +31,7 @@ extension CCRecorder {
         
         deinit {
             self.dispose()
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
     }
 }
@@ -216,7 +217,7 @@ extension CCRecorder.VideoRecorder {
         }
 
         deinit {
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
     }

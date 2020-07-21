@@ -9,6 +9,7 @@
 import Foundation
 import MetalCanvas
 import ARKit
+import ProcessLogger_Swift
 
 @available(iOS 13.0, *)
 extension CCARCapture {
@@ -57,7 +58,7 @@ extension CCARCapture {
 
         deinit {
             self.dispose()
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
 
         func dispose() {

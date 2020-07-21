@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 public final class SoundUtils {
 	public static let shared = SoundUtils()
@@ -33,7 +34,7 @@ public final class SoundUtils {
 			
 			//self.ffmpeg(url: url)
 		} catch {
-			MCDebug.log(url)
+            ProcessLogger.log(url)
 		}
 		return 0
 	}

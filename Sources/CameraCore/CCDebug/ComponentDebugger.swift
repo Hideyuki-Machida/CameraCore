@@ -9,6 +9,7 @@
 import Foundation
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 public extension CCDebug {
     class ComponentDebugger: NSObject {
@@ -26,7 +27,7 @@ public extension CCDebug {
         private var displayLink: CADisplayLink?
         private var isDubugLoop: Bool = false
         private var startTime: TimeInterval = Date().timeIntervalSince1970
-        private var mainthredFPSDebugger: MCDebug.Framerate = MCDebug.Framerate()
+        private var mainthredFPSDebugger: ProcessLogger.Framerate = ProcessLogger.Framerate()
 
         public override init() {
             super.init()
@@ -36,7 +37,7 @@ public extension CCDebug {
         
         deinit {
             self.dispose()
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
         }
         
         fileprivate func start() {
@@ -66,8 +67,9 @@ public extension CCDebug {
         @objc private func debugLoop() {
             let currentTime: TimeInterval = Date().timeIntervalSince1970
             let mainthredFPS: Int = self.mainthredFPSDebugger.fps()
-            let usedCPU: Int = Int(MCDebug.Device.usedCPU())
-            let usedMemory: Int = Int(MCDebug.Device.usedMemory() ?? 0)
+
+            let usedCPU: Int = Int(ProcessLogger.Device.usedCPU())
+            let usedMemory: Int = Int(ProcessLogger.Device.usedMemory() ?? 0)
             let thermalState: Int = ProcessInfo.processInfo.thermalState.rawValue
             
             var compornetFPSList: [CCDebug.ComponentDebugger.Output.Data.CompornetFPS] = []

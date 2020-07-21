@@ -11,6 +11,7 @@ import CameraCore
 import iOS_DummyAVAssets
 import MetalCanvas
 import UIKit
+import ProcessLogger_Swift
 
 
 //MARK: - ViewController
@@ -43,7 +44,7 @@ class QRCodeCaptureExampleVC: UIViewController {
         self.debugger.triger.stop()
         self.debugger.triger.dispose()
         CameraCore.flush()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     override func viewDidLoad() {
@@ -107,7 +108,7 @@ final public class QRCodeLayer: RenderLayerProtocol {
     }
 
     deinit {
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
 
     /// キャッシュを消去

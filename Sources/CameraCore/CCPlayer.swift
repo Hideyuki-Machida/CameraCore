@@ -10,6 +10,7 @@ import AVFoundation
 import Foundation
 import MetalCanvas
 import MetalKit
+import ProcessLogger_Swift
 
 public class CCPlayer: NSObject, CCComponentProtocol {
     fileprivate let queue: DispatchQueue = DispatchQueue(label: "CameraCore.CCPlayer.Queue")
@@ -38,7 +39,7 @@ public class CCPlayer: NSObject, CCComponentProtocol {
     
     deinit {
         self.dispose()
-        MCDebug.deinitLog(self)
+        ProcessLogger.deinitLog(self)
     }
     
     func update(url: URL) {

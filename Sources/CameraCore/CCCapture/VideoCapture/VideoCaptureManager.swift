@@ -8,6 +8,7 @@
 
 import AVFoundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 extension CCCapture.VideoCapture {
     public final class VideoCaptureManager {
@@ -156,14 +157,14 @@ extension CCCapture.VideoCapture {
             if propertyError {
                 throw CCCapture.ErrorType.setup
             } else {
-                MCDebug.successLog("Video Capture setup")
+                ProcessLogger.successLog("Video Capture setup")
             }
             //////////////////////////////////////////////////////////
         }
 
         deinit {
             self.onUpdateSampleBuffer = nil
-            MCDebug.deinitLog(self)
+            ProcessLogger.deinitLog(self)
             guard let captureSession: AVCaptureSession = self.captureSession else { return }
             if captureSession.isRunning {
                 captureSession.stopRunning()
@@ -201,7 +202,7 @@ extension CCCapture.VideoCapture.VideoCaptureManager {
                 let torchMode: AVCaptureDevice.TorchMode = newValue ? .on : .off,
                 device.isTorchModeSupported(torchMode)
             else {
-                MCDebug.errorLog(errorMessage)
+                ProcessLogger.errorLog(errorMessage)
                 return
             }
 
@@ -210,7 +211,7 @@ extension CCCapture.VideoCapture.VideoCaptureManager {
                 device.torchMode = torchMode
                 device.unlockForConfiguration()
             } catch {
-                MCDebug.errorLog(errorMessage)
+                ProcessLogger.errorLog(errorMessage)
             }
         }
     }
@@ -225,7 +226,7 @@ extension CCCapture.VideoCapture.VideoCaptureManager {
                 self.videoDevice?.videoZoomFactor = newValue
                 self.videoDevice?.unlockForConfiguration()
             } catch {
-                MCDebug.errorLog("CCCapture.VideoCapture.VideoCaptureManager.zoom: set")
+                ProcessLogger.errorLog("CCCapture.VideoCapture.VideoCaptureManager.zoom: set")
             }
         }
     }

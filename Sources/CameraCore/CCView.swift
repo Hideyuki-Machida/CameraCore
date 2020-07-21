@@ -11,6 +11,7 @@ import Foundation
 import MetalCanvas
 import MetalKit
 import UIKit
+import ProcessLogger_Swift
 
 public class CCView: MTKView, CCComponentProtocol {
 
@@ -134,7 +135,7 @@ extension CCView: MTKViewDelegate {
         } catch {
             // drawの処理が完了できなかった
             self.isDraw = false
-            MCDebug.errorLog("CCView draw")
+            ProcessLogger.errorLog("CCView draw")
         }
     }
 }
@@ -227,7 +228,7 @@ extension CCView {
                 else { return }
 
                 if outTexture.colorPixelFormat != self.ccview?.colorPixelFormat {
-                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
                     return
                 }
 
@@ -244,7 +245,7 @@ extension CCView {
                 else { return }
 
                 if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
-                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
                     return
                 }
 
@@ -260,7 +261,7 @@ extension CCView {
                     }
 
                 } catch {
-                    MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
+                    ProcessLogger.errorLog("CCView: onUpdateCaptureData drawTexture")
                 }
 
             }
@@ -274,7 +275,7 @@ extension CCView {
                 guard let self = self else { return }
 
                 if outTexture.colorPixelFormat != self.ccview?.colorPixelFormat {
-                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
                     return
                 }
 
@@ -291,7 +292,7 @@ extension CCView {
 
                 guard let self = self else { return }
                 if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
-                    MCDebug.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                    ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
                     return
                 }
 
@@ -307,7 +308,7 @@ extension CCView {
                     }
 
                 } catch {
-                    MCDebug.errorLog("CCView: onUpdateCaptureData drawTexture")
+                    ProcessLogger.errorLog("CCView: onUpdateCaptureData drawTexture")
                 }
 
             }

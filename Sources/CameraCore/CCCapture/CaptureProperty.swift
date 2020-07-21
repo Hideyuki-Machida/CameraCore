@@ -9,6 +9,7 @@
 import AVFoundation
 import Foundation
 import MetalCanvas
+import ProcessLogger_Swift
 
 extension CCCapture.VideoCapture {
     public class Property {
@@ -87,7 +88,7 @@ extension CCCapture.VideoCapture.Property {
         @unknown default: break
         }
 
-        MCDebug.errorLog("DeviceType Error: \(deviceType) -> builtInWideAngleCamera")
+        ProcessLogger.errorLog("DeviceType Error: \(deviceType) -> builtInWideAngleCamera")
         if let device: AVCaptureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: mediaType, position: position) {
             return device
         } else if let device: AVCaptureDevice = AVCaptureDevice.default(for: mediaType) {
@@ -130,7 +131,7 @@ extension CCCapture.VideoCapture.Property {
             do {
                 resultFormats = try self.filterProperty(item: item, captureDevice: captureDevice, formats: resultFormats, required: false)
             } catch {
-                MCDebug.errorLog("Option Error: \(item)")
+                ProcessLogger.errorLog("Option Error: \(item)")
             }
         }
         //////////////////////////////////////////////////////////

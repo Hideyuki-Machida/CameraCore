@@ -31,7 +31,7 @@ public class CCVariable<T> {
         }
     }
     
-    func dispatch() {
+    func notice() {
         self.callbacks.forEach { $0.callback(self.value) }
     }
     

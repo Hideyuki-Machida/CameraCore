@@ -205,7 +205,7 @@ extension CCVision.Inference {
         fileprivate func outUpdate(userInfo: [String : Any]) {
             self.userInfo.value = userInfo
             self.completeQueue.async { [weak self] in
-                self?.userInfo.dispatch()
+                self?.userInfo.notice()
                 self?.userInfo.value.removeAll()
             }
         }

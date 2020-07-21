@@ -209,7 +209,7 @@ extension CCCapture.Camera {
         func updateCaptureData(captureItem: CCCapture.VideoCapture.CaptureData) {
             self.videoCaptureItem.value = captureItem
             self.completeQueue.async { [weak self] in
-                self?.videoCaptureItem.dispatch()
+                self?.videoCaptureItem.notice()
                 self?.videoCaptureItem.value = nil
             }
         }

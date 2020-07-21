@@ -469,7 +469,7 @@ extension CCImageProcess.ImageProcess {
         fileprivate func outUpdate(outTexture: CCTexture) {
             self.texture.value = outTexture
             self.completeQueue.async { [weak self] in
-                self?.texture.dispatch()
+                self?.texture.notice()
                 self?.texture.value = nil
             }
         }

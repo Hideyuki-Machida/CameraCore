@@ -42,6 +42,7 @@ public class CCVariable<T> {
         self._value = value
     }
 
+    @discardableResult
     public func bind(dataDidChange: @escaping (T) -> Void) -> UnBindKey {
         let item: CCBindble = CCBindble(dataDidChange)
         self.callbacks.append(item)

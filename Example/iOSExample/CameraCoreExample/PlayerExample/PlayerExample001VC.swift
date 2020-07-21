@@ -27,7 +27,6 @@ class PlayerExample001VC: UIViewController {
     )
     
     private var debuggerObservation: NSKeyValueObservation?
-    private var observations: [NSKeyValueObservation] = []
     private var player: CCPlayer = CCPlayer()
     private var imageProcess: CCImageProcess.ImageProcess?
     private var debugger: CCDebug.ComponentDebugger = CCDebug.ComponentDebugger()
@@ -39,8 +38,6 @@ class PlayerExample001VC: UIViewController {
         self.player.triger.dispose()
         self.drawView.triger.dispose()
         self.debugger.triger.dispose()
-        self.observations.forEach { $0.invalidate() }
-        self.observations.removeAll()
 
         CameraCore.flush()
         ProcessLogger.deinitLog(self)
@@ -72,17 +69,11 @@ class PlayerExample001VC: UIViewController {
             }
             self.observations.append(playerStatusObservation)
 */
-            let playerObservation: NSKeyValueObservation = self.player.event.observe(\.outProgress, options: [.new]) { [weak self] (object: CCPlayer.Event, change) in
-                guard
-                    let self = self,
-                    let progress: TimeInterval = change.newValue
-                else { return }
-
+            self.player.event.outProgress.bind() { [weak self] (progress: TimeInterval) in
                 DispatchQueue.main.async { [weak self] in
                     self?.seekBar.value = Float(progress)
                 }
             }
-            self.observations.append(playerObservation)
 
             //self.imageProcess = imageProcess
 

@@ -230,8 +230,8 @@ extension CCView {
         }
     
         func input(player: CCPlayer) throws {
-            let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
-                guard let outTexture: CCTexture = object.outTexture else { return }
+            player.pipe.outTexture.bind() { [weak self] (outTexture: CCTexture?) in
+                guard let outTexture: CCTexture = outTexture else { return }
 
                 guard let self = self else { return }
 
@@ -243,7 +243,6 @@ extension CCView {
                 self.ccview?.drawTexture.value = outTexture
 
             }
-            self.observations.append(observation)
         }
 
         @available(iOS 13.0, *)

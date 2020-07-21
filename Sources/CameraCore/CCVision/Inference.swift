@@ -21,47 +21,9 @@ public extension CCVision {
         private let inferenceProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCVision.Inference")
         private let inferenceProcessCompleteQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCVision.Inference.Complete")
 
-        private var _currentItem: CCVision.Inference.Item?
-        fileprivate var currentItem: CCVision.Inference.Item? {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._currentItem
-            }
-            set {
-                objc_sync_enter(self)
-                self._currentItem = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        private var _isProcess: Bool = false
-        fileprivate(set) var isProcess: Bool {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._isProcess
-            }
-            set {
-                objc_sync_enter(self)
-                self._isProcess = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        private var _processTimeStamp: CMTime = CMTime.zero
-        fileprivate(set) var processTimeStamp: CMTime {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._processTimeStamp
-            }
-            set {
-                objc_sync_enter(self)
-                self._processTimeStamp = newValue
-                objc_sync_exit(self)
-            }
-        }
+        fileprivate var currentItem: CCVariable<CCVision.Inference.Item?> = CCVariable(nil)
+        fileprivate(set) var isProcess: CCVariable<Bool> = CCVariable(false)
+        fileprivate(set) var processTimeStamp: CCVariable<CMTime> = CCVariable(CMTime.zero)
 
         public override init() {
             super.init()
@@ -73,12 +35,12 @@ public extension CCVision {
 
         fileprivate func process(item: Item) {
             guard
-                self.isProcess != true,
-                self.processTimeStamp != item.timeStamp
+                self.isProcess.value != true,
+                self.processTimeStamp.value != item.timeStamp
             else { /* 画像データではないBuffer */ return }
 
-            self.processTimeStamp = item.timeStamp
-            self.isProcess = true
+            self.processTimeStamp.value = item.timeStamp
+            self.isProcess.value = true
 
             var userInfo: [String : Any] = [:]
             
@@ -95,10 +57,9 @@ public extension CCVision {
                 }
              }
 
-            self.pipe.userInfo = userInfo
-            self.pipe.outTimeStamp = item.timeStamp
+            self.pipe.outUpdate(userInfo: userInfo)
             self.debug?.update()
-            self.isProcess = false
+            self.isProcess.value = false
         }
 
 
@@ -118,7 +79,7 @@ public extension CCVision {
 
         @objc private func updateDisplay() {
             guard
-                let item: CCVision.Inference.Item = self.currentItem
+                let item: CCVision.Inference.Item = self.currentItem.value
             else { return }
 
             self.process(item: item)
@@ -192,52 +153,14 @@ extension CCVision.Inference {
 extension CCVision.Inference {
     // MARK: - Pipe
     public class Pipe: NSObject, CCComponentPipeProtocol {
+        private let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCVision.Inference.Complete")
+        
         fileprivate var observations: [NSKeyValueObservation] = []
         
-        private var _currentItem: CCVision.Inference.Item?
-        fileprivate var currentItem: CCVision.Inference.Item? {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._currentItem
-            }
-            set {
-                objc_sync_enter(self)
-                self._currentItem = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        private var _userInfo: [String : Any] = [:]
-        public var userInfo: [String : Any] {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._userInfo
-            }
-            set {
-                objc_sync_enter(self)
-                self._userInfo = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        private var _outTimeStamp: CMTime = CMTime.zero
-        @objc dynamic public var outTimeStamp: CMTime {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._outTimeStamp
-            }
-            set {
-                objc_sync_enter(self)
-                self._outTimeStamp = newValue
-                objc_sync_exit(self)
-            }
-        }
-
+        //fileprivate var currentItem: CCVariable<CCVision.Inference.Item?> = CCVariable(nil)
         fileprivate var inference: CCVision.Inference?
 
+        public var userInfo: CCVariable<[String : Any]> = CCVariable([:])
 
         // MARK: - Pipe - input
 
@@ -250,7 +173,7 @@ extension CCVision.Inference {
                     let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer)
                 else { return }
 
-                self.inference?.currentItem = CCVision.Inference.Item.init(
+                self.inference?.currentItem.value = CCVision.Inference.Item.init(
                     pixelBuffer: pixelBuffer,
                     timeStamp: captureData.presentationTimeStamp,
                     metadataObjects: captureData.metadataObjects
@@ -262,26 +185,34 @@ extension CCVision.Inference {
 
         // MARK: input - CCPlayer
         func input(player: CCPlayer) throws -> CCVision.Inference {
-            let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
+            player.pipe.outTexture.bind() { [weak self] (outTexture: CCTexture?) in
                 guard
                     let self = self,
-                    let outTexture: CCTexture = object.outTexture,
+                    let outTexture: CCTexture = outTexture,
                     let pixelBuffer: CVPixelBuffer = outTexture.pixelBuffer
                 else { return }
 
-                self.inference?.currentItem = CCVision.Inference.Item.init(
+                self.inference?.currentItem.value = CCVision.Inference.Item.init(
                     pixelBuffer: pixelBuffer,
                     timeStamp: outTexture.presentationTimeStamp,
                     metadataObjects: []
                 )
             }
-            self.observations.append(observation)
 
             return self.inference!
         }
 
+        fileprivate func outUpdate(userInfo: [String : Any]) {
+            self.userInfo.value = userInfo
+            self.completeQueue.async { [weak self] in
+                self?.userInfo.dispatch()
+                self?.userInfo.value.removeAll()
+            }
+        }
+
         fileprivate func _dispose() {
             self.inference = nil
+            self.userInfo.dispose()
             self.observations.forEach { $0.invalidate() }
             self.observations.removeAll()
         }

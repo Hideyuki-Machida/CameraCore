@@ -57,7 +57,8 @@ public class CCPlayer: NSObject, CCComponentProtocol {
             name: .AVPlayerItemDidPlayToEndTime,
             object: playerItem
         )
-        self.event.status = CCPlayer.Status.ready.rawValue
+        self.event.status.value = CCPlayer.Status.ready
+        self.event.status.dispatch()
     }
 
     fileprivate func play() {
@@ -71,12 +72,14 @@ public class CCPlayer: NSObject, CCComponentProtocol {
             }
         }
         self.player.play()
-        self.event.status = CCPlayer.Status.play.rawValue
+        self.event.status.value = CCPlayer.Status.play
+        self.event.status.dispatch()
     }
     
     fileprivate func pause() {
         self.player.pause()
-        self.event.status = CCPlayer.Status.pause.rawValue
+        self.event.status.value = CCPlayer.Status.pause
+        self.event.status.dispatch()
     }
 
     public func seek(progress: Float) {
@@ -88,7 +91,8 @@ public class CCPlayer: NSObject, CCComponentProtocol {
         
         self.player.pause()
         self.player.seek(to: cmtime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-        self.event.status = CCPlayer.Status.seek.rawValue
+        self.event.status.value = CCPlayer.Status.seek
+        self.event.status.dispatch()
     }
 
     @objc private func updateDisplay() {
@@ -101,11 +105,12 @@ public class CCPlayer: NSObject, CCComponentProtocol {
         do {
             var texture: CCTexture = try CCTexture.init(pixelBuffer: pixelBuffer, planeIndex: 0)
             texture.presentationTimeStamp = currentTime
-            self.pipe.outTexture = texture
-            self.pipe.outPresentationTimeStamp = currentTime
-            self.event.outPresentationTimeStamp = currentTime
-            self.event.outProgress = currentTime.seconds / duration.seconds
-            
+            self.pipe.outUpdate(texture: texture)
+            self.event.outPresentationTimeStamp.value = currentTime
+            self.event.outProgress.value = currentTime.seconds / duration.seconds
+            self.event.outPresentationTimeStamp.dispatch()
+            self.event.outProgress.dispatch()
+
             // デバッグ
             self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
             self.debug?.update()
@@ -118,8 +123,10 @@ public class CCPlayer: NSObject, CCComponentProtocol {
     @objc private func avPlayerItemDidPlayToEndTime(_ notification: Notification) {
         let item: AVPlayerItem = notification.object as! AVPlayerItem
 
-        self.event.outProgress = 1.0
-        self.event.status = CCPlayer.Status.endTime.rawValue
+        self.event.outProgress.value = 1.0
+        self.event.outProgress.dispatch()
+        self.event.status.value = CCPlayer.Status.endTime
+        self.event.status.dispatch()
         // ループ
         item.seek(to: CMTime.zero, completionHandler: nil)
     }
@@ -197,28 +204,26 @@ extension CCPlayer {
 
     // MARK: - Pipe
     public class Pipe: NSObject, CCComponentPipeProtocol {
+        private let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCPlayer.Complete")
+
         fileprivate var player: CCPlayer?
         fileprivate var observations: [NSKeyValueObservation] = []
 
-        private var _outTexture: CCTexture?
-        public var outTexture: CCTexture? {
-            get {
-                objc_sync_enter(self)
-                let outTexture: CCTexture? = self._outTexture
-                objc_sync_exit(self)
-                return outTexture
-            }
-            set {
-                objc_sync_enter(self)
-                self._outTexture = newValue
-                objc_sync_exit(self)
-            }
-        }
+        public var outTexture: CCVariable<CCTexture?> = CCVariable(nil)
 
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
+        fileprivate func outUpdate(texture: CCTexture) {
+            self.outTexture.value = texture
+            self.completeQueue.async { [weak self] in
+                self?.outTexture.dispatch()
+                self?.outTexture.value = nil
+            }
+        }
+
         fileprivate func _dispose() {
             self.player = nil
+            self.outTexture.dispose()
             self.observations.forEach { $0.invalidate() }
             self.observations.removeAll()
         }
@@ -227,12 +232,15 @@ extension CCPlayer {
     // MARK: - Event
     public class Event: NSObject, CCComponentEventProtocol {
         fileprivate var player: CCPlayer?
-        @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
-        @objc dynamic public var outProgress: TimeInterval = TimeInterval.zero
-        @objc dynamic public var status: Int = 0
+        public var outPresentationTimeStamp: CCVariable<CMTime> = CCVariable(CMTime.zero)
+        public var outProgress: CCVariable<TimeInterval> = CCVariable(TimeInterval.zero)
+        public var status: CCVariable<CCPlayer.Status> = CCVariable(CCPlayer.Status.setup)
         
         fileprivate func _dispose() {
             self.player = nil
+            self.outPresentationTimeStamp.dispose()
+            self.outProgress.dispose()
+            self.status.dispose()
         }
     }
 }

@@ -343,10 +343,9 @@ extension CCImageProcess.ImageProcess {
 
         // MARK: input - CCVision.Inference
         func input(inference: CCVision.Inference) throws -> CCImageProcess.ImageProcess {
-            let observation: NSKeyValueObservation = inference.pipe.observe(\.outTimeStamp, options: [.new]) { [weak self] (object: CCVision.Inference.Pipe, change) in
-                self?.imageProcess?.inferenceUserInfo.value = object.userInfo
+            inference.pipe.userInfo.bind() { [weak self] (userInfo: [String : Any]) in
+                self?.imageProcess?.inferenceUserInfo.value = userInfo
             }
-            self.observations.append(observation)
             return self.imageProcess!
         }
 
@@ -354,10 +353,10 @@ extension CCImageProcess.ImageProcess {
         // MARK: input - CCPlayer
         func input(player: CCPlayer) throws -> CCImageProcess.ImageProcess {
 
-            let observation: NSKeyValueObservation = player.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCPlayer.Pipe, change) in
+            player.pipe.outTexture.bind() { [weak self] (outTexture: CCTexture?) in
                 guard
                     let self = self,
-                    let outTexture: CCTexture = object.outTexture
+                    let outTexture: CCTexture = outTexture
                 else { return }
 
                 do {
@@ -366,7 +365,7 @@ extension CCImageProcess.ImageProcess {
                         
                 }
             }
-            self.observations.append(observation)
+
             return self.imageProcess!
         }
 

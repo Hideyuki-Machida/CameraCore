@@ -46,7 +46,7 @@ class ARVideoCaptureExampleVC: UIViewController {
             let inference: CCVision.Inference = CCVision.Inference()
             let imageProcess: CCImageProcess.ImageProcess = try CCImageProcess.ImageProcess()
             let depthMapLayer: DepthMapLayer = try DepthMapLayer(sorcePrview: self.sorcePrview, depthPrview: self.depthPrview)
-            imageProcess.renderLayers = [ depthMapLayer ]
+            imageProcess.renderLayers.value = [ depthMapLayer ]
 
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 

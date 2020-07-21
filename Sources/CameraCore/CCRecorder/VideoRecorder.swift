@@ -283,20 +283,20 @@ extension CCRecorder.VideoRecorder {
         func input(camera: CCCapture.Camera) throws {
 
             //////////////////////////////////////////////////////////////////////////
-            /// updatePixelPresentationTimeStamp
-            let updatePixelPresentationTimeStampObservation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            /// update VideoCaptureData
+            camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
                 guard
                     let self = self,
                     self.videoRecorder?.isRecording == true,
-                    let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem,
+                    let captureData: CCCapture.VideoCapture.CaptureData = captureData,
                     let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer)
                 else { return }
 
                 self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: captureData.presentationTimeStamp)
             }
-            self.observations.append(updatePixelPresentationTimeStampObservation)
             //////////////////////////////////////////////////////////////////////////
 
+            /*
             //////////////////////////////////////////////////////////////////////////
             /// updateAudioPresentationTimeStamp
             let updateAudioPresentationTimeStamp: NSKeyValueObservation = camera.pipe.observe(\.outAudioPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
@@ -311,23 +311,24 @@ extension CCRecorder.VideoRecorder {
             }
             self.observations.append(updateAudioPresentationTimeStamp)
             //////////////////////////////////////////////////////////////////////////
+ */
+            
         }
 
         func input(imageProcess: CCImageProcess.ImageProcess) throws {
 
             //////////////////////////////////////////////////////////////////////////
             /// updatePixelPresentationTimeStamp
-            let observation: NSKeyValueObservation = imageProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCImageProcess.ImageProcess.Pipe, change) in
+            imageProcess.pipe.texture.bind() { [weak self] (texture: CCTexture?) in
                 guard
                     let self = self,
-                    let outTexture: CCTexture = object.outTexture,
+                    let outTexture: CCTexture = texture,
                     self.videoRecorder?.isRecording == true,
                     let pixelBuffer: CVPixelBuffer = outTexture.pixelBuffer
                 else { return }
 
                 self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: outTexture.presentationTimeStamp)
             }
-            self.observations.append(observation)
             //////////////////////////////////////////////////////////////////////////
             
         }

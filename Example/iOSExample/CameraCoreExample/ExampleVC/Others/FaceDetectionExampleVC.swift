@@ -57,7 +57,7 @@ class FaceDetectionExampleVC: UIViewController {
             let inference: CCVision.Inference = CCVision.Inference()
             let imageProcess: CCImageProcess.ImageProcess = try CCImageProcess.ImageProcess()
             inference.setup.process = [ try FaceDetectionExampleVC.FaceDetectionProcess() ]
-            imageProcess.renderLayers = [ try FaceDetectionExampleVC.FaceDetectionMapLayer() ]
+            imageProcess.renderLayers.value = [ try FaceDetectionExampleVC.FaceDetectionMapLayer() ]
 
             try camera --> imageProcess --> self.drawView
             try camera --> inference --> imageProcess

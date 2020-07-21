@@ -101,28 +101,25 @@ fileprivate extension CCCapture.Camera {
                 let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
             else { return }
 
-            // ピクセルデータ
-            let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
-                sampleBuffer: sampleBuffer,
-                captureInfo: captureInfo,
-                depthData: self.depthData,
-                metadataObjects: self.metadataObjects,
-                mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
-                outPutPixelFormatType: captureInfo.outPutPixelFormatType,
-                captureVideoOrientation: captureVideoOrientation
-            )
-
-            self.pipe.currentVideoCaptureItem = currentCaptureItem
-            self.pipe.updateCaptureData()
-
             if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
-                self.pipe.updateCaptureData()
+                // ピクセルデータ
+                let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
+                    sampleBuffer: sampleBuffer,
+                    captureInfo: captureInfo,
+                    depthData: self.depthData,
+                    metadataObjects: self.metadataObjects,
+                    mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
+                    outPutPixelFormatType: captureInfo.outPutPixelFormatType,
+                    captureVideoOrientation: captureVideoOrientation
+                )
+
+                self.pipe.updateCaptureData(captureItem: currentCaptureItem)
 
                 // デバッグ
                 self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
                 self.debug?.update()
             } else {
-                self.pipe.outAudioPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
+                //self.pipe.outAudioPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,64 +200,23 @@ extension CCCapture.Camera {
     public class Pipe: NSObject, CCComponentPipeProtocol {
 
         // MARK: - Queue
-        private let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCCapture.Camera.completeQueue")
+        fileprivate let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCCapture.Camera.completeQueue")
 
         fileprivate var camera: CCCapture.Camera?
 
-        private var _currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData?
-        public var currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData? {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._currentVideoCaptureItem
-            }
-            set {
-                objc_sync_enter(self)
-                self._currentVideoCaptureItem = newValue
-                objc_sync_exit(self)
-            }
-        }
+        public var videoCaptureItem: CCVariable<CCCapture.VideoCapture.CaptureData?> = CCVariable(nil)
 
-        private var _outPixelPresentationTimeStamp: CMTime = CMTime.zero
-        @objc dynamic public var outPixelPresentationTimeStamp: CMTime {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._outPixelPresentationTimeStamp
-            }
-            set {
-                objc_sync_enter(self)
-                self._outPixelPresentationTimeStamp = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        private var _outAudioPresentationTimeStamp: CMTime = CMTime.zero
-        @objc dynamic public var outAudioPresentationTimeStamp: CMTime {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._outAudioPresentationTimeStamp
-            }
-            set {
-                objc_sync_enter(self)
-                self._outAudioPresentationTimeStamp = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        func updateCaptureData() {
+        func updateCaptureData(captureItem: CCCapture.VideoCapture.CaptureData) {
+            self.videoCaptureItem.value = captureItem
             self.completeQueue.async { [weak self] in
-                guard let data: CCCapture.VideoCapture.CaptureData = self?.currentVideoCaptureItem else { return }
-                self?.outPixelPresentationTimeStamp = data.presentationTimeStamp
+                self?.videoCaptureItem.dispatch()
+                self?.videoCaptureItem.value = nil
             }
         }
 
-        public var outVideoCaptureData: ((_ currentVideoCaptureItem: CCCapture.VideoCapture.CaptureData) -> Void)?
-        
         fileprivate func _dispose() {
+            self.videoCaptureItem.dispose()
             self.camera = nil
         }
     }
 }
-

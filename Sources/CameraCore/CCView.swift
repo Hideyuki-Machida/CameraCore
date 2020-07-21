@@ -26,47 +26,9 @@ public class CCView: MTKView, CCComponentProtocol {
     public var debug: CCComponentDebug?
 
     // MARK: -
-    private var _presentationTimeStamp: CMTime = CMTime()
-    fileprivate(set) var presentationTimeStamp: CMTime {
-        get {
-            objc_sync_enter(self)
-            defer { objc_sync_exit(self) }
-            return self._presentationTimeStamp
-        }
-        set {
-            objc_sync_enter(self)
-            self._presentationTimeStamp = newValue
-            objc_sync_exit(self)
-        }
-    }
-
-    private var _isDraw: Bool = false
-    fileprivate(set) var isDraw: Bool {
-        get {
-            objc_sync_enter(self)
-            defer { objc_sync_exit(self) }
-            return self._isDraw
-        }
-        set {
-            objc_sync_enter(self)
-            self._isDraw = newValue
-            objc_sync_exit(self)
-        }
-    }
-
-    private var _drawTexture: CCTexture?
-    fileprivate(set) var drawTexture: CCTexture? {
-        get {
-            objc_sync_enter(self)
-            defer { objc_sync_exit(self) }
-            return self._drawTexture
-        }
-        set {
-            objc_sync_enter(self)
-            self._drawTexture = newValue
-            objc_sync_exit(self)
-        }
-    }
+    fileprivate(set) var presentationTimeStamp: CCVariable<CMTime> = CCVariable(CMTime.zero)
+    fileprivate(set) var isDraw: CCVariable<Bool> = CCVariable(false)
+    fileprivate(set) var drawTexture: CCVariable<CCTexture?> = CCVariable(nil)
 
     // MARK: - Lifecycle
     public override init(frame frameRect: CGRect, device: MTLDevice?) {
@@ -96,6 +58,7 @@ public class CCView: MTKView, CCComponentProtocol {
 
     deinit {
         self.dispose()
+        ProcessLogger.deinitLog(self)
     }
 }
 
@@ -105,9 +68,9 @@ extension CCView: MTKViewDelegate {
     public func draw(in view: MTKView) {
         ///////////////////////////////////////////////////////////////////////////////////////////
         guard
-            !self.isDraw, // draw処理が完了している
-            let drawTexture: CCTexture = self.drawTexture, // drawTextureが存在する
-            self.presentationTimeStamp != drawTexture.presentationTimeStamp, // 直前に処理を行ったpresentationTimeStampとdrawTexture.presentationTimeStampが一致しない
+            !self.isDraw.value, // draw処理が完了している
+            let drawTexture: CCTexture = self.drawTexture.value, // drawTextureが存在する
+        self.presentationTimeStamp.value != drawTexture.presentationTimeStamp, // 直前に処理を行ったpresentationTimeStampとdrawTexture.presentationTimeStampが一致しない
             let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() // MTLCommandBufferを生成
         else { return }
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +79,7 @@ extension CCView: MTKViewDelegate {
         // 処理判定用のフラグセット
         commandBuffer.addCompletedHandler { [weak self] (_: MTLCommandBuffer) in
             // drawの処理が完了
-            self?.isDraw = false
+            self?.isDraw.value = false
 
             // 処理完了のイベント発行
             //self?.event?.onUpdateComplete?()
@@ -125,8 +88,8 @@ extension CCView: MTKViewDelegate {
             self?.debug?.update()
         }
 
-        self.isDraw = true
-        self.presentationTimeStamp = drawTexture.presentationTimeStamp
+        self.isDraw.value = true
+        self.presentationTimeStamp.value = drawTexture.presentationTimeStamp
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         do {
@@ -134,7 +97,7 @@ extension CCView: MTKViewDelegate {
             try self.drawUpdate(commandBuffer: commandBuffer, drawTexture: drawTexture.texture)
         } catch {
             // drawの処理が完了できなかった
-            self.isDraw = false
+            self.isDraw.value = false
             ProcessLogger.errorLog("CCView draw")
         }
     }
@@ -180,7 +143,7 @@ fileprivate extension CCView {
         self.setup._dispose()
         self.triger._dispose()
         self.pipe._dispose()
-        self.isDraw = false
+        self.isDraw.value = false
         NotificationCenter.default.removeObserver(self)
     }
 }
@@ -221,10 +184,10 @@ extension CCView {
         }
 
         func input(imageProcess: CCImageProcess.ImageProcess) throws {
-            let observation: NSKeyValueObservation = imageProcess.pipe.observe(\.outPresentationTimeStamp, options: [.new]) { [weak self] (object: CCImageProcess.ImageProcess.Pipe, change) in
+            imageProcess.pipe.texture.bind() { [weak self] (texture: CCTexture?) in
                 guard
                     let self = self,
-                    let outTexture: CCTexture = object.outTexture
+                    let outTexture: CCTexture = texture
                 else { return }
 
                 if outTexture.colorPixelFormat != self.ccview?.colorPixelFormat {
@@ -232,16 +195,15 @@ extension CCView {
                     return
                 }
 
-                self.ccview?.drawTexture = outTexture
+                self.ccview?.drawTexture.value = outTexture
             }
-            self.observations.append(observation)
         }
 
         func input(camera: CCCapture.Camera) throws {
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
                 guard
                     let self = self,
-                    let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem
+                    let captureData: CCCapture.VideoCapture.CaptureData = captureData
                 else { return }
 
                 if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
@@ -257,7 +219,7 @@ extension CCView {
                     drawTexture.presetSize = captureData.captureInfo.presetSize
 
                     DispatchQueue.main.async { [weak self] in
-                        self?.ccview?.drawTexture = drawTexture
+                        self?.ccview?.drawTexture.value = drawTexture
                     }
 
                 } catch {
@@ -265,7 +227,6 @@ extension CCView {
                 }
 
             }
-            self.observations.append(observation)
         }
     
         func input(player: CCPlayer) throws {
@@ -279,7 +240,7 @@ extension CCView {
                     return
                 }
 
-                self.ccview?.drawTexture = outTexture
+                self.ccview?.drawTexture.value = outTexture
 
             }
             self.observations.append(observation)
@@ -304,7 +265,7 @@ extension CCView {
                     drawTexture.presetSize = captureData.captureInfo.presetSize
 
                     DispatchQueue.main.async { [weak self] in
-                        self?.ccview?.drawTexture = drawTexture
+                        self?.ccview?.drawTexture.value = drawTexture
                     }
 
                 } catch {

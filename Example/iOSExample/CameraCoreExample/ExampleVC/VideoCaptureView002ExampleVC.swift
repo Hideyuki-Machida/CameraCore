@@ -402,12 +402,12 @@ extension VideoCaptureView002ExampleVC {
         let action001: UIAlertAction = UIAlertAction(title: FilterLabel.ON.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
             //self.imageProcess?.renderLayers = [self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer, self.lutLayer]
-            self.imageProcess?.renderLayers = [self.lutLayer]
+            self.imageProcess?.renderLayers.value = [self.lutLayer]
         })
 
         let action002: UIAlertAction = UIAlertAction(title: FilterLabel.OFF.rawValue, style: UIAlertAction.Style.default, handler: {
             (_: UIAlertAction!) -> Void in
-            self.imageProcess?.renderLayers = []
+            self.imageProcess?.renderLayers.value = []
         })
 
         let cancel: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: {

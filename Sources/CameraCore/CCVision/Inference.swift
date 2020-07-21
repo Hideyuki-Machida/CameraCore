@@ -243,10 +243,10 @@ extension CCVision.Inference {
 
         // MARK: input - CCCapture.Camera
         func input(camera: CCCapture.Camera) throws -> CCVision.Inference {
-            let observation: NSKeyValueObservation = camera.pipe.observe(\.outPixelPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
+            camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
                 guard
                     let self = self,
-                    let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem,
+                    let captureData: CCCapture.VideoCapture.CaptureData = captureData,
                     let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer)
                 else { return }
 
@@ -257,7 +257,6 @@ extension CCVision.Inference {
                 )
             }
 
-            self.observations.append(observation)
             return self.inference!
         }
 

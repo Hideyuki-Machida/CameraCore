@@ -33,7 +33,6 @@ class QRCodeCaptureExampleVC: UIViewController {
     private var camera: CCCapture.Camera?
     private var imageProcess: CCImageProcess.ImageProcess?
     private var debugger: CCDebug.ComponentDebugger = CCDebug.ComponentDebugger()
-    private var debuggerObservation: NSKeyValueObservation?
 
     @IBOutlet weak var drawView: CCView!
 
@@ -85,10 +84,9 @@ extension QRCodeCaptureExampleVC {
             let debugView: DebugView = Bundle.main.loadNibNamed("DebugView", owner: self, options: nil)?.first as! DebugView
             self.view.addSubview(debugView)
 
-            self.debuggerObservation?.invalidate()
-            self.debuggerObservation = self.debugger.outPut.observe(\.onUpdate, options: [.new]) { (debuggerOutput: CCDebug.ComponentDebugger.Output, _) in
+            self.debugger.outPut.data.bind() { (data: CCDebug.ComponentDebugger.Output.Data) in
                 DispatchQueue.main.async {
-                    debugView.set(debugData: debuggerOutput.data)
+                    debugView.set(debugData: data)
                 }
             }
 

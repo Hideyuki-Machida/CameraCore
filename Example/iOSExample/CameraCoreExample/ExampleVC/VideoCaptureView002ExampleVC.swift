@@ -24,8 +24,6 @@ class VideoCaptureView002ExampleVC: UIViewController {
     private var debugger: CCDebug.ComponentDebugger = CCDebug.ComponentDebugger()
     private var lutLayer: CCImageProcess.LutLayer!
 
-    private var debuggerObservation: NSKeyValueObservation?
-    
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
         isAudioDataOutput: true,
@@ -490,10 +488,9 @@ extension VideoCaptureView002ExampleVC {
             let debugView: DebugView = Bundle.main.loadNibNamed("DebugView", owner: self, options: nil)?.first as! DebugView
             self.view.addSubview(debugView)
 
-            self.debuggerObservation?.invalidate()
-            self.debuggerObservation = self.debugger.outPut.observe(\.onUpdate, options: [.new]) { [weak self] (debuggerOutput: CCDebug.ComponentDebugger.Output, _) in
-                DispatchQueue.main.async { [weak self] in
-                    debugView.set(debugData: debuggerOutput.data)
+            self.debugger.outPut.data.bind() { (data: CCDebug.ComponentDebugger.Output.Data) in
+                DispatchQueue.main.async {
+                    debugView.set(debugData: data)
                 }
             }
 

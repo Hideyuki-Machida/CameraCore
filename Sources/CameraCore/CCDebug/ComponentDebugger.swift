@@ -80,7 +80,7 @@ public extension CCDebug {
                 compornetFPSList.append(CCDebug.ComponentDebugger.Output.Data.CompornetFPS(name: name, fps: fps))
             }
 
-            self.outPut.data = CCDebug.ComponentDebugger.Output.Data(
+            self.outPut.data.value = CCDebug.ComponentDebugger.Output.Data(
                 time: Int(currentTime - self.startTime),
                 mainthredFPS: mainthredFPS,
                 compornetFPSList: compornetFPSList,
@@ -94,7 +94,7 @@ public extension CCDebug {
                 guard let self = self else { return }
             }
              */
-            self.outPut.onUpdate += 1 % 100
+            self.outPut.data.notice()
         }
 
         @objc private func updateDisplay() {
@@ -108,6 +108,7 @@ fileprivate extension CCDebug.ComponentDebugger {
     func dispose() {
         self.stop()
         self.list = []
+        self.outPut._dispose()
         self.displayLink?.invalidate()
         self.setup._dispose()
         self.triger._dispose()
@@ -178,8 +179,11 @@ public extension CCDebug.ComponentDebugger {
             }
         }
 
-        public var data: CCDebug.ComponentDebugger.Output.Data = Data()
-        @objc public dynamic var onUpdate: Int = 0
+        public var data: CCVariable<CCDebug.ComponentDebugger.Output.Data> = CCVariable(Data())
+        
+        fileprivate func _dispose() {
+            self.data.dispose()
+        }
     }
 }
 

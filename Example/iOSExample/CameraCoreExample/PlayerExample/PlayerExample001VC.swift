@@ -25,8 +25,7 @@ class PlayerExample001VC: UIViewController {
             .colorSpace(AVCaptureColorSpace.P3_D65),
         ]
     )
-    
-    private var debuggerObservation: NSKeyValueObservation?
+
     private var player: CCPlayer = CCPlayer()
     private var imageProcess: CCImageProcess.ImageProcess?
     private var debugger: CCDebug.ComponentDebugger = CCDebug.ComponentDebugger()
@@ -34,7 +33,6 @@ class PlayerExample001VC: UIViewController {
     @IBOutlet weak var seekBar: UISlider!
     
     deinit {
-        self.debuggerObservation?.invalidate()
         self.player.triger.dispose()
         self.drawView.triger.dispose()
         self.debugger.triger.dispose()
@@ -115,10 +113,9 @@ extension PlayerExample001VC {
             let debugView: DebugView = Bundle.main.loadNibNamed("DebugView", owner: self, options: nil)?.first as! DebugView
             self.view.addSubview(debugView)
 
-            self.debuggerObservation?.invalidate()
-            self.debuggerObservation = self.debugger.outPut.observe(\.onUpdate, options: [.new]) { [weak self] (debuggerOutput: CCDebug.ComponentDebugger.Output, _) in
-                DispatchQueue.main.async { [weak self] in
-                    debugView.set(debugData: debuggerOutput.data)
+            self.debugger.outPut.data.bind() { (data: CCDebug.ComponentDebugger.Output.Data) in
+                DispatchQueue.main.async {
+                    debugView.set(debugData: data)
                 }
             }
 

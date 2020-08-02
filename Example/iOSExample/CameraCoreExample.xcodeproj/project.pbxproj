@@ -10,6 +10,11 @@
 		620A665F24277E420036BC7E /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620A665C24277E420036BC7E /* DebugView.swift */; };
 		620A666024277E420036BC7E /* DebugView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 620A665D24277E420036BC7E /* DebugView.xib */; };
 		621FDAF52338A3F20034A1D9 /* UseCoreMLExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */; };
+		6220755024D6B05300705BE2 /* MetalCanvas in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 627A9FEE24C056C60004A0C8 /* MetalCanvas */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6220755224D6B05500705BE2 /* ProcessLogger.Swift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6250976B24C6BD9700813015 /* ProcessLogger.Swift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6220755524D6B0C600705BE2 /* GraphicsLibs.Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */; };
+		6220755624D6B12B00705BE2 /* CameraCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 62B9936D24A8BF5500B6E242 /* CameraCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6220755724D6B12D00705BE2 /* GraphicsLibs.Swift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		62327E1C24A4C1FF00A631A4 /* iOS_DummyAVAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 62327E1B24A4C1FF00A631A4 /* iOS_DummyAVAssets */; };
 		623C540B245FFC6600029586 /* FaceDetectionExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623C540A245FFC6600029586 /* FaceDetectionExampleVC.swift */; };
 		623C540D2461738B00029586 /* Others.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 623C540C2461738B00029586 /* Others.storyboard */; };
@@ -34,6 +39,23 @@
 		62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E5CB2522904BD3004D258A /* VideoCaptureView002ExampleVC.swift */; };
 		62E6FAE423F80C68006E11D7 /* AudioExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E6FAE323F80C68006E11D7 /* AudioExampleVC.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6220755124D6B05300705BE2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6220755724D6B12D00705BE2 /* GraphicsLibs.Swift in Embed Frameworks */,
+				6220755024D6B05300705BE2 /* MetalCanvas in Embed Frameworks */,
+				6220755224D6B05500705BE2 /* ProcessLogger.Swift in Embed Frameworks */,
+				6220755624D6B12B00705BE2 /* CameraCore in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		620A665C24277E420036BC7E /* DebugView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
@@ -72,6 +94,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				62B9936E24A8BF5500B6E242 /* CameraCore in Frameworks */,
+				6220755524D6B0C600705BE2 /* GraphicsLibs.Swift in Frameworks */,
 				6250976C24C6BD9700813015 /* ProcessLogger.Swift in Frameworks */,
 				627A9FEF24C056C60004A0C8 /* MetalCanvas in Frameworks */,
 				62327E1C24A4C1FF00A631A4 /* iOS_DummyAVAssets in Frameworks */,
@@ -189,6 +212,7 @@
 				62E5CA2022901A72004D258A /* Sources */,
 				62E5CA2122901A72004D258A /* Frameworks */,
 				62E5CA2222901A72004D258A /* Resources */,
+				6220755124D6B05300705BE2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -200,6 +224,7 @@
 				62B9936D24A8BF5500B6E242 /* CameraCore */,
 				627A9FEE24C056C60004A0C8 /* MetalCanvas */,
 				6250976B24C6BD9700813015 /* ProcessLogger.Swift */,
+				6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */,
 			);
 			productName = CameraCoreExample;
 			productReference = 62E5CA2422901A72004D258A /* CameraCoreExample.app */;
@@ -233,6 +258,7 @@
 				62327E1A24A4C1FF00A631A4 /* XCRemoteSwiftPackageReference "iOS_DummyAVAssets" */,
 				627A9FED24C056C60004A0C8 /* XCRemoteSwiftPackageReference "MetalCanvas" */,
 				6250976A24C6BD9700813015 /* XCRemoteSwiftPackageReference "ProcessLogger" */,
+				6220755324D6B0C600705BE2 /* XCRemoteSwiftPackageReference "GraphicsLibs" */,
 			);
 			productRefGroup = 62E5CA2522901A72004D258A /* Products */;
 			projectDirPath = "";
@@ -477,6 +503,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6220755324D6B0C600705BE2 /* XCRemoteSwiftPackageReference "GraphicsLibs" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Hideyuki-Machida/GraphicsLibs.Swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		62327E1A24A4C1FF00A631A4 /* XCRemoteSwiftPackageReference "iOS_DummyAVAssets" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Hideyuki-Machida/iOS_DummyAVAssets";
@@ -504,6 +538,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6220755324D6B0C600705BE2 /* XCRemoteSwiftPackageReference "GraphicsLibs" */;
+			productName = GraphicsLibs.Swift;
+		};
 		62327E1B24A4C1FF00A631A4 /* iOS_DummyAVAssets */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 62327E1A24A4C1FF00A631A4 /* XCRemoteSwiftPackageReference "iOS_DummyAVAssets" */;

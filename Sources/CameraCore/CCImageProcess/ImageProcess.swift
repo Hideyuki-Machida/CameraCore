@@ -458,7 +458,7 @@ extension CCImageProcess.ImageProcess {
             // 描画用テクスチャを生成
             guard
                 Float(self.outTexture?.size.w ?? 0) != captureSize.w,
-                let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: captureSize),
+                let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: CGSize.init(CGFloat(captureSize.w), CGFloat(captureSize.h))),
                 var tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: mtlPixelFormat, planeIndex: 0)
             else { throw self.errorType }
             self.outTexture = tex

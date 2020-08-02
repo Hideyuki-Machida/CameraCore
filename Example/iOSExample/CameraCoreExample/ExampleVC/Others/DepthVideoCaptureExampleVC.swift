@@ -106,13 +106,13 @@ extension DepthVideoCaptureExampleVC {
             guard let self = self else { return }
             let debugView: DebugView = Bundle.main.loadNibNamed("DebugView", owner: self, options: nil)?.first as! DebugView
             self.view.addSubview(debugView)
-
+/*
             self.debugger.outPut.data.bind() { (data: CCDebug.ComponentDebugger.Output.Data) in
                 DispatchQueue.main.async {
                     debugView.set(debugData: data)
                 }
             }
-
+*/
         }
     }
 }

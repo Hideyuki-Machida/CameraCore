@@ -148,7 +148,7 @@ extension ARVideoCaptureExampleVC {
             var textureCbCr: MCTexture = try MCTexture(pixelBuffer: source.pixelBuffer!, mtlPixelFormat: .rg8Unorm, planeIndex: 1)
 
             self.renderPassDescriptor.colorAttachments[0].texture = destination.texture
-            try self.yCbCrToRGBFilter.process(commandBuffer: commandBuffer, capturedImageTextureY: &textureY, capturedImageTextureCbCr: &textureCbCr, renderPassDescriptor: self.renderPassDescriptor, renderSize: CGSize(w, h))
+            //try self.yCbCrToRGBFilter.process(commandBuffer: commandBuffer, capturedImageTextureY: &textureY, capturedImageTextureCbCr: &textureCbCr, renderPassDescriptor: self.renderPassDescriptor, renderSize: CGSize(w, h))
             //////////////////////////////////////////////////////////////////////////////////////////////
 
             //////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,13 +222,13 @@ extension ARVideoCaptureExampleVC {
             var textureCbCr: MCTexture = try MCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: .rg8Unorm, planeIndex: 1)
 
             self.renderPassDescriptor.colorAttachments[0].texture = destination.texture
-            try self.yCbCrToRGBFilter.process(commandBuffer: commandBuffer, capturedImageTextureY: &textureY, capturedImageTextureCbCr: &textureCbCr, renderPassDescriptor: self.renderPassDescriptor, renderSize: CGSize(w, h))
+            //try self.yCbCrToRGBFilter.process(commandBuffer: commandBuffer, capturedImageTextureY: &textureY, capturedImageTextureCbCr: &textureCbCr, renderPassDescriptor: self.renderPassDescriptor, renderSize: CGSize(w, h))
             //////////////////////////////////////////////////////////////////////////////////////////////
         }
 
         func updateCanvas(size: MCSize) throws -> MCCanvas {
             guard
-                let emptyPixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: size)
+                let emptyPixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: CGSize.init(CGFloat(size.w), CGFloat(size.h)))
             else { throw CCImageProcess.ErrorType.process }
             var destinationTexture: CCTexture = try CCTexture(pixelBuffer: emptyPixelBuffer, planeIndex: 0)
             let canvas = try MCCanvas(destination: &destinationTexture, orthoType: .center)

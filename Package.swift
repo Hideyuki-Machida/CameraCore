@@ -11,6 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "CameraCore",
+            type: .dynamic,
             targets: ["CameraCore"]),
     ],
     dependencies: [

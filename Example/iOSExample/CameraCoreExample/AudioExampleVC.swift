@@ -47,15 +47,15 @@ class AudioExampleVC: UIViewController {
             self.audioEngine = CCAudio.AudioEngine()
             self.audioPlayer = try CCAudio.AudioPlayer(url: audioUrl)
             self.audioPlayer.volume = 0.05
-            self.audioMic = try CCAudio.Mic()
-            self.audioMic.volume = 1.0
+            //self.audioMic = try CCAudio.Mic()
+            //self.audioMic.volume = 1.0
 
-            
             try self.audioEngine --> self.audioPlayer
-            try self.audioEngine --> self.audioMic
-            try self.audioEngine --> self.videoRecorder
-            try self.audioEngine --> self.audioRecorder
-            try self.audioEngine.start()
+            //try self.audioEngine --> self.audioMic
+            //try self.audioEngine --> self.videoRecorder
+            //try self.audioEngine --> self.audioRecorder
+            try self.audioEngine.triger.start()
+
         } catch {
             print("error")
         }
@@ -66,7 +66,7 @@ class AudioExampleVC: UIViewController {
         super.viewDidAppear(animated)
         do {
             self.camera?.triger.start()
-            try self.audioPlayer?.play()
+            try self.audioPlayer?.triger.play()
         } catch {
             print("error")
         }

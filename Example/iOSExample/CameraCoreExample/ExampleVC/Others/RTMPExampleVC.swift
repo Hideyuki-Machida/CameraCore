@@ -132,8 +132,8 @@ class RTMPExampleVC: UIViewController {
             }
             
             try self.audioEngine --> self.audioPlayer
-            try self.audioEngine.start()
-            try self.audioPlayer.play()
+            try self.audioEngine.triger.start()
+            try self.audioPlayer.triger.play()
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////

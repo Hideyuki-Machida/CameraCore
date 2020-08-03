@@ -12,13 +12,12 @@ import Foundation
 extension CCAudio {
     public class AudioPlayer {
         // MARK: - CCComponentProtocol
-        public let setup: CCAudio.AudioEngine.Setup = CCAudio.AudioEngine.Setup()
-        public let triger: CCAudio.AudioEngine.Triger = CCAudio.AudioEngine.Triger()
-        public let pipe: CCAudio.AudioEngine.Pipe = CCAudio.AudioEngine.Pipe()
+        public let setup: CCAudio.AudioPlayer.Setup = CCAudio.AudioPlayer.Setup()
+        public let triger: CCAudio.AudioPlayer.Triger = CCAudio.AudioPlayer.Triger()
+        public let pipe: CCAudio.AudioPlayer.Pipe = CCAudio.AudioPlayer.Pipe()
         public var debug: CCComponentDebug?
 
         let audioFile: AVAudioFile
-        var audioEngine: AVAudioEngine = AVAudioEngine()
         let player: AVAudioPlayerNode = AVAudioPlayerNode()
 
         public var volume: Float {
@@ -32,21 +31,23 @@ extension CCAudio {
 
         public init(url: URL) throws {
             self.audioFile = try AVAudioFile(forReading: url)
-            self.audioEngine.attach(self.player)
-            let mainMixer: AVAudioMixerNode = self.audioEngine.mainMixerNode
 
-            self.audioEngine.connect(player, to: mainMixer, format: audioFile.processingFormat)
+            self.setup.audioPlayer = self
+            self.triger.audioPlayer = self
+            self.pipe.audioPlayer = self
         }
     }
 }
 
 
-public extension CCAudio.AudioPlayer {
+fileprivate extension CCAudio.AudioPlayer {
     func play() throws {
+        guard self.pipe.audioEngine?.engine.isRunning == true else { return }
+
         let sampleRate: Double = self.audioFile.fileFormat.sampleRate
         let length: AVAudioFramePosition = self.audioFile.length
         let duration = Double(length) / sampleRate
-        var output = self.audioEngine.outputNode
+        //var output = self.audioEngine.outputNode
         
         /*
         var reverb = AVAudioUnitReverb()
@@ -92,9 +93,9 @@ public extension CCAudio.AudioPlayer {
 
     func dispose() {
         self.player.pause()
-        //self.setup._dispose()
-        //self.triger._dispose()
-        //self.pipe._dispose()
+        self.setup._dispose()
+        self.triger._dispose()
+        self.pipe._dispose()
     }
 }
 
@@ -136,6 +137,7 @@ public extension CCAudio.AudioPlayer {
         // MARK: - Queue
         fileprivate let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCAudio.AudioPlayer.completeQueue")
 
+        fileprivate var audioEngine: CCAudio.AudioEngine?
         fileprivate var audioPlayer: CCAudio.AudioPlayer?
 
         fileprivate func _dispose() {
@@ -143,22 +145,12 @@ public extension CCAudio.AudioPlayer {
         }
         
         func input(audioEngine: inout CCAudio.AudioEngine) throws -> CCAudio.AudioPlayer {
-            let audioEngine: AVAudioEngine = audioEngine.engine
-            audioEngine.attach(self.audioPlayer!.player)
+            audioEngine.engine.attach(self.audioPlayer!.player)
+            let mainMixer: AVAudioMixerNode = audioEngine.engine.mainMixerNode
+            audioEngine.engine.connect(self.audioPlayer!.player, to: mainMixer, format: self.audioPlayer!.audioFile.processingFormat)
+            self.audioEngine = audioEngine
 
-            let mainMixer: AVAudioMixerNode = audioEngine.mainMixerNode
-
-            audioEngine.connect(self.audioPlayer!.player, to: mainMixer, format: self.audioPlayer!.audioFile.processingFormat)
             return self.audioPlayer!
         }
-    }
-
-    func pipe(audioEngine: inout AVAudioEngine) throws -> CCAudio.AudioPlayer {
-        self.audioEngine = audioEngine
-        self.audioEngine.attach(self.player)
-        let mainMixer: AVAudioMixerNode = self.audioEngine.mainMixerNode
-
-        self.audioEngine.connect(player, to: mainMixer, format: audioFile.processingFormat)
-        return self
     }
 }

@@ -111,8 +111,8 @@ public func --> (imageRecognition: CCVision.ImageRecognition, view: CCView) thro
 
 @discardableResult
 public func --> (audioEngine: CCAudio.AudioEngine, audioPlayer: CCAudio.AudioPlayer) throws -> CCAudio.AudioPlayer {
-    var audioEngine: AVAudioEngine = audioEngine.engine
-    return try audioPlayer.pipe(audioEngine: &audioEngine)
+    var audioEngine: CCAudio.AudioEngine = audioEngine
+    return try audioPlayer.pipe.input(audioEngine: &audioEngine)
 }
 
 @discardableResult

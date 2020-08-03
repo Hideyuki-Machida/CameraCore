@@ -26,12 +26,14 @@ extension CCAudio {
                 self?.pipe.updateCaptureData(captureItem: buffer)
             }
 
+            self.setup.audioEngine = self
+            self.triger.audioEngine = self
             self.pipe.audioEngine = self
         }
     }
 }
 
-public extension CCAudio.AudioEngine {
+fileprivate extension CCAudio.AudioEngine {
     func start() throws {
         try self.engine.start()
     }

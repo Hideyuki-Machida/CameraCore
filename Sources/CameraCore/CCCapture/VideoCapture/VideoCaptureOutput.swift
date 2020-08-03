@@ -95,7 +95,8 @@ extension CCCapture.VideoCapture {
                 let depthDataOutput: AVCaptureDepthDataOutput = AVCaptureDepthDataOutput()
                 if captureSession.canAddOutput(depthDataOutput) {
                     captureSession.addOutput(depthDataOutput)
-                    depthDataOutput.isFilteringEnabled = true
+                    //depthDataOutput.isFilteringEnabled = true
+                    depthDataOutput.isFilteringEnabled = false
                     depthDataOutput.setDelegate(self, callbackQueue: CCCapture.depthOutputQueue)
                     if let connection: AVCaptureConnection = depthDataOutput.connection(with: .depthData) {
                         connection.isEnabled = true

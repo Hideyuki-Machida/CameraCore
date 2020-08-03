@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="unK-84-qMX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17140" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="QOW-DK-Dgf">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17115"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,8 +19,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mRX-hy-AlK">
                                 <rect key="frame" x="20" y="108" width="374" height="734"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5r6-U9-RBY">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="176"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5r6-U9-RBY">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="139"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="FaceDetection">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -29,8 +29,8 @@
                                             <segue destination="Vnd-Ym-65T" kind="show" id="x88-66-dEV"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DHz-vs-7VQ">
-                                        <rect key="frame" x="0.0" y="186" width="374" height="176"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DHz-vs-7VQ">
+                                        <rect key="frame" x="0.0" y="149" width="374" height="138.5"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="ARVideo">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -39,8 +39,8 @@
                                             <segue destination="unK-84-qMX" kind="show" id="NHO-Nd-2pu"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MkI-E2-oL0">
-                                        <rect key="frame" x="0.0" y="372" width="374" height="176"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MkI-E2-oL0">
+                                        <rect key="frame" x="0.0" y="297.5" width="374" height="139"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Depthカメラ">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -49,8 +49,8 @@
                                             <segue destination="NSc-y9-1dI" kind="show" id="BLh-w3-lbo"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pbt-CX-BLQ">
-                                        <rect key="frame" x="0.0" y="558" width="374" height="176"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pbt-CX-BLQ">
+                                        <rect key="frame" x="0.0" y="446.5" width="374" height="138.5"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="QRコードカメラ">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -59,9 +59,20 @@
                                             <segue destination="U08-Nk-VOV" kind="show" id="w4A-in-uWv"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vpc-bd-zwz">
+                                        <rect key="frame" x="0.0" y="595" width="374" height="139"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="RTMP配信 with HaishinKit">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="vG8-ne-WLR" kind="show" id="peq-I0-btR"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="yJz-bL-yRE"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="mRX-hy-AlK" firstAttribute="leading" secondItem="yJz-bL-yRE" secondAttribute="leading" constant="20" id="fhh-lN-akN"/>
@@ -69,7 +80,6 @@
                             <constraint firstAttribute="trailing" secondItem="mRX-hy-AlK" secondAttribute="trailing" constant="20" id="pCL-Nd-Iiu"/>
                             <constraint firstItem="mRX-hy-AlK" firstAttribute="bottom" secondItem="yJz-bL-yRE" secondAttribute="bottom" constant="-20" id="zla-r2-1jX"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="yJz-bL-yRE"/>
                     </view>
                     <navigationItem key="navigationItem" id="7iN-fl-B8q"/>
                 </viewController>
@@ -145,6 +155,7 @@
                                 </constraints>
                             </stackView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="fVF-jc-VCv"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fc9-Dv-lHH" firstAttribute="leading" secondItem="fVF-jc-VCv" secondAttribute="leading" id="1T3-ex-mez"/>
@@ -154,7 +165,6 @@
                             <constraint firstItem="BPJ-fh-VKr" firstAttribute="leading" secondItem="fVF-jc-VCv" secondAttribute="leading" id="nco-mA-DT5"/>
                             <constraint firstItem="fc9-Dv-lHH" firstAttribute="centerX" secondItem="3YY-Xs-zyi" secondAttribute="centerX" id="uZU-DK-G3c"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="fVF-jc-VCv"/>
                     </view>
                     <navigationItem key="navigationItem" title="ARVideo" id="0YL-19-LLD"/>
                     <connections>
@@ -210,13 +220,13 @@
                                     <constraint firstAttribute="height" constant="320" id="BVW-D9-NgO"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qp3-ic-1as">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qp3-ic-1as">
                                 <rect key="frame" x="200" y="736" width="194" height="60"/>
                                 <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Cqr-bW-wMS"/>
                                 </constraints>
-                                <state key="normal" title="閉じる">
+                                <state key="normal" title="カメラ切り替え">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -224,6 +234,7 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="hz1-ek-0y2"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="6Nr-lj-l3k" firstAttribute="centerY" secondItem="6PX-6T-XrL" secondAttribute="centerY" id="5Bh-Ht-czj"/>
@@ -238,7 +249,6 @@
                             <constraint firstItem="6Nr-lj-l3k" firstAttribute="leading" secondItem="6PX-6T-XrL" secondAttribute="leading" id="rXN-Cb-JrA"/>
                             <constraint firstItem="hz1-ek-0y2" firstAttribute="bottom" secondItem="TLr-kB-klM" secondAttribute="bottom" constant="46" id="rhH-4F-0Z2"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="hz1-ek-0y2"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="fsQ-dC-mhM"/>
@@ -266,7 +276,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xld-42-iBd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1469.5652173913045" y="133.92857142857142"/>
+            <point key="canvasLocation" x="80" y="805"/>
         </scene>
         <!--FaceDetection-->
         <scene sceneID="8wu-ri-qg1">
@@ -305,6 +315,7 @@
                                 </variation>
                             </mtkView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="uBZ-0k-YT7"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="PWt-dh-4ae" firstAttribute="leading" secondItem="hXg-eC-AMG" secondAttribute="leading" id="NrW-f7-3dZ"/>
@@ -314,7 +325,6 @@
                             <constraint firstItem="PWt-dh-4ae" firstAttribute="centerY" secondItem="hXg-eC-AMG" secondAttribute="centerY" id="Zd0-cY-6uQ"/>
                             <constraint firstAttribute="trailing" secondItem="PWt-dh-4ae" secondAttribute="trailing" id="axs-T6-aK3"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="uBZ-0k-YT7"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="NrW-f7-3dZ"/>
@@ -380,6 +390,7 @@
                                 </variation>
                             </mtkView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="rZv-PS-dky"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="yg8-xE-ULz" secondAttribute="trailing" id="3is-cD-OHi"/>
@@ -389,7 +400,6 @@
                             <constraint firstItem="yg8-xE-ULz" firstAttribute="leading" secondItem="rCt-Yh-fvz" secondAttribute="leading" id="oaR-hx-C9t"/>
                             <constraint firstItem="rZv-PS-dky" firstAttribute="trailing" secondItem="yg8-xE-ULz" secondAttribute="trailing" id="vbR-nS-06C"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="rZv-PS-dky"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="3is-cD-OHi"/>
@@ -416,7 +426,100 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qr6-Lc-NFu" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2168" y="133"/>
+            <point key="canvasLocation" x="767" y="805"/>
+        </scene>
+        <!--RTMP配信-->
+        <scene sceneID="w1X-dz-ZqZ">
+            <objects>
+                <viewController id="vG8-ne-WLR" customClass="RTMPExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="X5v-A0-6ev">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="0Xf-MQ-F9J" customClass="CCView" customModule="CameraCore">
+                                <rect key="frame" x="0.0" y="80" width="414" height="736"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="0Xf-MQ-F9J" secondAttribute="height" multiplier="9:16" id="YbM-CM-wxZ"/>
+                                    <constraint firstAttribute="width" secondItem="0Xf-MQ-F9J" secondAttribute="height" multiplier="16:9" id="lII-tC-xu2"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="lII-tC-xu2"/>
+                                        <exclude reference="YbM-CM-wxZ"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="lII-tC-xu2"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="lII-tC-xu2"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="YbM-CM-wxZ"/>
+                                    </mask>
+                                </variation>
+                            </mtkView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4IX-7r-B2F">
+                                <rect key="frame" x="20" y="782" width="374" height="60"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="zct-ZZ-B80"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="配信開始">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="connectTapAction:" destination="vG8-ne-WLR" eventType="touchUpInside" id="WOP-zJ-4K4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="TPe-Yw-mML"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="leading" secondItem="X5v-A0-6ev" secondAttribute="leading" id="DqA-yI-0wl"/>
+                            <constraint firstItem="TPe-Yw-mML" firstAttribute="trailing" secondItem="0Xf-MQ-F9J" secondAttribute="trailing" id="Ehq-Dc-Kyb"/>
+                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="centerY" secondItem="X5v-A0-6ev" secondAttribute="centerY" id="Npg-YW-lxH"/>
+                            <constraint firstItem="4IX-7r-B2F" firstAttribute="leading" secondItem="TPe-Yw-mML" secondAttribute="leading" constant="20" id="cpo-dz-h3m"/>
+                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="centerX" secondItem="X5v-A0-6ev" secondAttribute="centerX" id="dHU-QZ-MXL"/>
+                            <constraint firstItem="TPe-Yw-mML" firstAttribute="bottom" secondItem="4IX-7r-B2F" secondAttribute="bottom" constant="20" id="hZn-rp-7PV"/>
+                            <constraint firstAttribute="trailing" secondItem="0Xf-MQ-F9J" secondAttribute="trailing" id="oLb-KE-Qhg"/>
+                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="leading" secondItem="TPe-Yw-mML" secondAttribute="leading" id="u7m-3n-vQT"/>
+                            <constraint firstItem="TPe-Yw-mML" firstAttribute="trailing" secondItem="4IX-7r-B2F" secondAttribute="trailing" constant="20" id="yfu-SD-7Qh"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="DqA-yI-0wl"/>
+                                <exclude reference="oLb-KE-Qhg"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="DqA-yI-0wl"/>
+                                <include reference="oLb-KE-Qhg"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="DqA-yI-0wl"/>
+                                <include reference="oLb-KE-Qhg"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="RTMP配信" id="N6F-MU-C4n"/>
+                    <connections>
+                        <outlet property="connectButton" destination="4IX-7r-B2F" id="ZH0-IQ-p2e"/>
+                        <outlet property="drawView" destination="0Xf-MQ-F9J" id="LZW-Qe-qpg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C9Z-nu-kOy" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="80" y="1485"/>
         </scene>
     </scenes>
 </document>

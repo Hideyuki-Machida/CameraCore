@@ -153,7 +153,7 @@ extension ARVideoCaptureExampleVC {
 
             //////////////////////////////////////////////////////////////////////////////////////////////
             var mat: MCGeom.Matrix4x4 = MCGeom.Matrix4x4()
-            mat.rotateX(radians: 1.0 * Float.pi)
+            //mat.rotateX(radians: 1.0 * Float.pi)
             self.canvas = try self.updateCanvas(size: MCSize.init(w: h, h: w))
 
             try self.canvas?.draw(commandBuffer: commandBuffer, objects: [

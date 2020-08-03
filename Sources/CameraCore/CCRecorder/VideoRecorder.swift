@@ -38,10 +38,12 @@ extension CCRecorder {
 
 extension CCRecorder.VideoRecorder {
     func pipe(audioEngine: CCAudio.AudioEngine) throws {
+        /*
         audioEngine.onUpdateSampleBuffer = { (sampleBuffer: CMSampleBuffer) in
             guard self.isRecording == true else { return }
             self.captureWriter.setSampleBuffer(sampleBuffer: sampleBuffer)
         }
+ */
     }
 }
 

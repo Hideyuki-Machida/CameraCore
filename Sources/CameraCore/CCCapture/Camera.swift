@@ -27,13 +27,13 @@ extension CCCapture {
         public var event: Event?
         public var status: Camera.Status = .setup {
             willSet {
-                self.event?.onStatusChange?(newValue)
+                self.event?.onStatusChange.value = newValue
             }
         }
 
         public var capture: CCCapture.VideoCapture.VideoCaptureManager?
-        public var depthData: AVDepthData?
-        public var metadataObjects: [AVMetadataObject] = []
+        public var depthData: CCVariable<AVDepthData?> = CCVariable(nil)
+        public var metadataObjects: CCVariable<[AVMetadataObject]> = CCVariable([])
         
         public init(property: CCCapture.VideoCapture.Property) throws {
             self.property = property
@@ -59,7 +59,7 @@ fileprivate extension CCCapture.Camera {
     func start() {
         guard self.status != .play else { return }
         ProcessLogger.log("CameraCore.Camera.play")
-        self.depthData = nil
+        self.depthData.value = nil
         self.capture?.play()
         self.status = .play
     }
@@ -106,8 +106,8 @@ fileprivate extension CCCapture.Camera {
                 let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
                     sampleBuffer: sampleBuffer,
                     captureInfo: captureInfo,
-                    depthData: self.depthData,
-                    metadataObjects: self.metadataObjects,
+                    depthData: self.depthData.value,
+                    metadataObjects: self.metadataObjects.value,
                     mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
                     outPutPixelFormatType: captureInfo.outPutPixelFormatType,
                     captureVideoOrientation: captureVideoOrientation
@@ -127,11 +127,11 @@ fileprivate extension CCCapture.Camera {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // AVDepthData & AVMetadataObject 取得
         self.capture?.onUpdateDepthData = { [weak self] (depthData: AVDepthData) in
-            self?.depthData = depthData
+            self?.depthData.value = depthData
         }
         
         self.capture?.onUpdateMetadataObjects = { [weak self] (metadataObjects: [AVMetadataObject]) in
-            self?.metadataObjects = metadataObjects
+            self?.metadataObjects.value = metadataObjects
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
@@ -153,8 +153,8 @@ extension CCCapture.Camera {
     }
 
     public class Event: NSObject {
-        public var onStatusChange: ((_ status: CCCapture.Camera.Status) -> Void)?
-        public var onUpdate: ((_ captureData: CCCapture.VideoCapture.CaptureData) -> Void)?
+        public var onStatusChange: CCVariable<CCCapture.Camera.Status?> = CCVariable(nil)
+        public var onUpdate: CCVariable<CCCapture.VideoCapture.CaptureData?> = CCVariable(nil)
     }
 }
 

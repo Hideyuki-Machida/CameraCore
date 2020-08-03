@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "GraphicsLibs.Swift",
-        "repositoryURL": "https://github.com/Hideyuki-Machida/GraphicsLibs.Swift",
+        "package": "HaishinKit",
+        "repositoryURL": "https://github.com/shogo4405/HaishinKit.swift",
         "state": {
-          "branch": "master",
-          "revision": "3c15665dc345917c5bc6aba7b922ff67407bef71",
-          "version": null
+          "branch": null,
+          "revision": "b06c689b75de73ccc9a3a4a41539a9b7cd068e17",
+          "version": "1.0.10"
         }
       },
       {
@@ -17,6 +17,15 @@
           "branch": "spm",
           "revision": "6fca9fee8b58d4456c122ef08d5e3e169d7d9abc",
           "version": null
+        }
+      },
+      {
+        "package": "Logboard",
+        "repositoryURL": "https://github.com/shogo4405/Logboard.git",
+        "state": {
+          "branch": null,
+          "revision": "af6911d218fce6ddef5aa451acd4933dfcc124b6",
+          "version": "2.1.3"
         }
       }
     ]

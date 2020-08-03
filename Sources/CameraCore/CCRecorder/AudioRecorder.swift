@@ -47,6 +47,7 @@ public extension CCRecorder.AudioRecorder {
 
 extension CCRecorder.AudioRecorder {
     func pipe(audioEngine: CCAudio.AudioEngine) throws {
+        /*
         audioEngine.onUpdatePCMBuffer = { [weak self] (pcmBuffer: AVAudioPCMBuffer) in
             guard self?.isRecording == true else { return }
             do {
@@ -55,5 +56,6 @@ extension CCRecorder.AudioRecorder {
                 
             }
         }
+ */
     }
 }

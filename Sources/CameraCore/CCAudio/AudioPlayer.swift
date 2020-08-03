@@ -11,6 +11,12 @@ import Foundation
 
 extension CCAudio {
     public class AudioPlayer {
+        // MARK: - CCComponentProtocol
+        public let setup: CCAudio.AudioEngine.Setup = CCAudio.AudioEngine.Setup()
+        public let triger: CCAudio.AudioEngine.Triger = CCAudio.AudioEngine.Triger()
+        public let pipe: CCAudio.AudioEngine.Pipe = CCAudio.AudioEngine.Pipe()
+        public var debug: CCComponentDebug?
+
         let audioFile: AVAudioFile
         var audioEngine: AVAudioEngine = AVAudioEngine()
         let player: AVAudioPlayerNode = AVAudioPlayerNode()
@@ -40,7 +46,6 @@ public extension CCAudio.AudioPlayer {
         let sampleRate: Double = self.audioFile.fileFormat.sampleRate
         let length: AVAudioFramePosition = self.audioFile.length
         let duration = Double(length) / sampleRate
-        print(duration)
         var output = self.audioEngine.outputNode
         
         /*
@@ -63,28 +68,91 @@ public extension CCAudio.AudioPlayer {
             //self.audioEngine.stop()
         }
 
-        self.player.installTap(onBus: 0, bufferSize: 4096, format: nil) { (a: AVAudioPCMBuffer, t: AVAudioTime) in
+        self.player.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] (a: AVAudioPCMBuffer, t: AVAudioTime) in
             a.audioBufferList
-            guard let nodeTime: AVAudioTime = self.player.lastRenderTime else { return }
-            guard let playerTime: AVAudioTime = self.player.playerTime(forNodeTime: t) else { return }
+            guard
+                let self = self,
+                let nodeTime: AVAudioTime = self.player.lastRenderTime,
+                let playerTime: AVAudioTime = self.player.playerTime(forNodeTime: t)
+            else { return }
+
             let currentTime = (Double(playerTime.sampleTime) / sampleRate)
             if currentTime >= duration {
                 self.player.stop()
             }
-            print(currentTime)
+            //print(currentTime)
         }
 
         self.player.play()
     }
-    /*
-    func hasNothingMethod(frameCount: AVAudioFrameCount, bufferList: UnsafeMutablePointer<AudioBufferList>, status: UnsafeMutablePointer<OSStatus>?) -> AVAudioEngineManualRenderingStatus {
-        print(11111)
+
+    func pause() {
+        self.player.pause()
     }
- */
+
+    func dispose() {
+        self.player.pause()
+        //self.setup._dispose()
+        //self.triger._dispose()
+        //self.pipe._dispose()
+    }
 }
 
+public extension CCAudio.AudioPlayer {
 
-extension CCAudio.AudioPlayer {
+    // MARK: - Setup
+    class Setup: CCComponentSetupProtocol {
+        fileprivate var audioPlayer: CCAudio.AudioPlayer?
+
+        fileprivate func _dispose() {
+            self.audioPlayer = nil
+        }
+    }
+
+    // MARK: - Triger
+    class Triger: CCComponentTrigerProtocol {
+        fileprivate var audioPlayer: CCAudio.AudioPlayer?
+        
+        public func play() throws {
+            try self.audioPlayer?.play()
+        }
+
+        public func pause() {
+            self.audioPlayer?.pause()
+        }
+
+        public func dispose() {
+            self.audioPlayer?.dispose()
+        }
+
+        fileprivate func _dispose() {
+            self.audioPlayer = nil
+        }
+    }
+
+    // MARK: - Pipe
+    class Pipe: NSObject, CCComponentPipeProtocol {
+
+        // MARK: - Queue
+        fileprivate let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCAudio.AudioPlayer.completeQueue")
+
+        fileprivate var audioPlayer: CCAudio.AudioPlayer?
+
+        fileprivate func _dispose() {
+            self.audioPlayer = nil
+        }
+        
+        func input(audioEngine: inout CCAudio.AudioEngine) throws -> CCAudio.AudioPlayer {
+            let audioEngine: AVAudioEngine = audioEngine.engine
+            audioEngine.attach(self.audioPlayer!.player)
+
+            let mainMixer: AVAudioMixerNode = audioEngine.mainMixerNode
+
+            audioEngine.connect(self.audioPlayer!.player, to: mainMixer, format: self.audioPlayer!.audioFile.processingFormat)
+            return self.audioPlayer!
+        }
+    }
+
     func pipe(audioEngine: inout AVAudioEngine) throws -> CCAudio.AudioPlayer {
         self.audioEngine = audioEngine
         self.audioEngine.attach(self.player)

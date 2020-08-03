@@ -15,6 +15,7 @@
 		6220755524D6B0C600705BE2 /* GraphicsLibs.Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */; };
 		6220755624D6B12B00705BE2 /* CameraCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 62B9936D24A8BF5500B6E242 /* CameraCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6220755724D6B12D00705BE2 /* GraphicsLibs.Swift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6220756124D6BC4D00705BE2 /* Binarization.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6220756024D6BC4D00705BE2 /* Binarization.metal */; };
 		62327E1C24A4C1FF00A631A4 /* iOS_DummyAVAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 62327E1B24A4C1FF00A631A4 /* iOS_DummyAVAssets */; };
 		623C540B245FFC6600029586 /* FaceDetectionExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623C540A245FFC6600029586 /* FaceDetectionExampleVC.swift */; };
 		623C540D2461738B00029586 /* Others.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 623C540C2461738B00029586 /* Others.storyboard */; };
@@ -26,6 +27,9 @@
 		624BC1152338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */; };
 		624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */; };
 		6250976C24C6BD9700813015 /* ProcessLogger.Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6250976B24C6BD9700813015 /* ProcessLogger.Swift */; };
+		625DB2C724D6D2EB00458E85 /* Mask.metal in Sources */ = {isa = PBXBuildFile; fileRef = 625DB2C624D6D2EB00458E85 /* Mask.metal */; };
+		625DB2CA24D7ECE600458E85 /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 625DB2C924D7ECE600458E85 /* HaishinKit */; };
+		625DB2CC24D7EF7000458E85 /* RTMPExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DB2CB24D7EF7000458E85 /* RTMPExampleVC.swift */; };
 		627A9FEF24C056C60004A0C8 /* MetalCanvas in Frameworks */ = {isa = PBXBuildFile; productRef = 627A9FEE24C056C60004A0C8 /* MetalCanvas */; };
 		627B0B0E245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */; };
 		62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926264232FEB8400D47CF0 /* ProgressViewVC.swift */; };
@@ -62,6 +66,7 @@
 		620A665D24277E420036BC7E /* DebugView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebugView.xib; sourceTree = "<group>"; };
 		620E8B06233F6DD300168140 /* CoreMLHelpers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreMLHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		621FDAF42338A3F20034A1D9 /* UseCoreMLExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLExampleVC.swift; sourceTree = "<group>"; };
+		6220756024D6BC4D00705BE2 /* Binarization.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Binarization.metal; sourceTree = "<group>"; };
 		623C540A245FFC6600029586 /* FaceDetectionExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionExampleVC.swift; sourceTree = "<group>"; };
 		623C540C2461738B00029586 /* Others.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Others.storyboard; sourceTree = "<group>"; };
 		6240B2192433214B00DE292E /* PlayerExample001VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerExample001VC.swift; sourceTree = "<group>"; };
@@ -71,6 +76,8 @@
 		624BC1102338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLMobileNetV2Layer.swift; sourceTree = "<group>"; };
 		624BC1142338BA4E00A2D8F0 /* UseCoreMLYOLOv3TinyExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCoreMLYOLOv3TinyExampleVC.swift; sourceTree = "<group>"; };
 		624BC1162338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLYOLOv3TinyLayer.swift; sourceTree = "<group>"; };
+		625DB2C624D6D2EB00458E85 /* Mask.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Mask.metal; sourceTree = "<group>"; };
+		625DB2CB24D7EF7000458E85 /* RTMPExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPExampleVC.swift; sourceTree = "<group>"; };
 		627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCaptureExampleVC.swift; sourceTree = "<group>"; };
 		6292624F232FE8CF00D47CF0 /* CameraCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CameraCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62926250232FE8CF00D47CF0 /* MetalCanvas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MetalCanvas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +104,7 @@
 				6220755524D6B0C600705BE2 /* GraphicsLibs.Swift in Frameworks */,
 				6250976C24C6BD9700813015 /* ProcessLogger.Swift in Frameworks */,
 				627A9FEF24C056C60004A0C8 /* MetalCanvas in Frameworks */,
+				625DB2CA24D7ECE600458E85 /* HaishinKit in Frameworks */,
 				62327E1C24A4C1FF00A631A4 /* iOS_DummyAVAssets in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,6 +206,9 @@
 				62D8F0A7243C5F45000E70B8 /* DepthVideoCaptureExampleVC.swift */,
 				62D8F0A5243C4514000E70B8 /* ARVideoCaptureExampleVC.swift */,
 				627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */,
+				625DB2CB24D7EF7000458E85 /* RTMPExampleVC.swift */,
+				6220756024D6BC4D00705BE2 /* Binarization.metal */,
+				625DB2C624D6D2EB00458E85 /* Mask.metal */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -225,6 +236,7 @@
 				627A9FEE24C056C60004A0C8 /* MetalCanvas */,
 				6250976B24C6BD9700813015 /* ProcessLogger.Swift */,
 				6220755424D6B0C600705BE2 /* GraphicsLibs.Swift */,
+				625DB2C924D7ECE600458E85 /* HaishinKit */,
 			);
 			productName = CameraCoreExample;
 			productReference = 62E5CA2422901A72004D258A /* CameraCoreExample.app */;
@@ -259,6 +271,7 @@
 				627A9FED24C056C60004A0C8 /* XCRemoteSwiftPackageReference "MetalCanvas" */,
 				6250976A24C6BD9700813015 /* XCRemoteSwiftPackageReference "ProcessLogger" */,
 				6220755324D6B0C600705BE2 /* XCRemoteSwiftPackageReference "GraphicsLibs" */,
+				625DB2C824D7ECE600458E85 /* XCRemoteSwiftPackageReference "HaishinKit" */,
 			);
 			productRefGroup = 62E5CA2522901A72004D258A /* Products */;
 			projectDirPath = "";
@@ -291,11 +304,14 @@
 			files = (
 				620A665F24277E420036BC7E /* DebugView.swift in Sources */,
 				62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */,
+				625DB2CC24D7EF7000458E85 /* RTMPExampleVC.swift in Sources */,
 				6240B21A2433214B00DE292E /* PlayerExample001VC.swift in Sources */,
+				625DB2C724D6D2EB00458E85 /* Mask.metal in Sources */,
 				62D8F0A8243C5F45000E70B8 /* DepthVideoCaptureExampleVC.swift in Sources */,
 				624BC1112338B7AF00A2D8F0 /* CoreMLMobileNetV2Layer.swift in Sources */,
 				623C540B245FFC6600029586 /* FaceDetectionExampleVC.swift in Sources */,
 				624BC1172338BA6200A2D8F0 /* CoreMLYOLOv3TinyLayer.swift in Sources */,
+				6220756124D6BC4D00705BE2 /* Binarization.metal in Sources */,
 				62E5CB3222904BD3004D258A /* VideoCaptureView002ExampleVC.swift in Sources */,
 				6249747E2349D2DB00325650 /* UseCoreMLDeeplabV3ExampleVC.swift in Sources */,
 				6244EB1823BB86530044C22F /* VideoCaptureView001ExampleVC.swift in Sources */,
@@ -527,6 +543,14 @@
 				kind = branch;
 			};
 		};
+		625DB2C824D7ECE600458E85 /* XCRemoteSwiftPackageReference "HaishinKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shogo4405/HaishinKit.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.10;
+			};
+		};
 		627A9FED24C056C60004A0C8 /* XCRemoteSwiftPackageReference "MetalCanvas" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Hideyuki-Machida/MetalCanvas";
@@ -552,6 +576,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6250976A24C6BD9700813015 /* XCRemoteSwiftPackageReference "ProcessLogger" */;
 			productName = ProcessLogger.Swift;
+		};
+		625DB2C924D7ECE600458E85 /* HaishinKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 625DB2C824D7ECE600458E85 /* XCRemoteSwiftPackageReference "HaishinKit" */;
+			productName = HaishinKit;
 		};
 		627A9FEE24C056C60004A0C8 /* MetalCanvas */ = {
 			isa = XCSwiftPackageProductDependency;

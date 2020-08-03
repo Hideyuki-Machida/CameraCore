@@ -24,8 +24,6 @@ class RTMPExampleVC: UIViewController {
     enum RTMP: String {
         case url = "rtmpURL"
         case streamKey = "streamKey"
-        //case url = "rtmp://mliveorigin.dmc.nico/named_input"
-        //case streamKey = "nicolive.Uproduction_user16415686.XjKnbCZLSxmV1bKXr6jaIA"
     }
 
     enum VideoBitrate: Int {

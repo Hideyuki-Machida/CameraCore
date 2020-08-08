@@ -46,7 +46,7 @@ public class CCPlayer: NSObject, CCComponentProtocol {
         let avAsset: AVAsset = AVAsset(url: url)
         let playerItem: AVPlayerItem = AVPlayerItem(asset: avAsset)
 
-        self.player.actionAtItemEnd = .none
+        //self.player.actionAtItemEnd = .none
         self.player.replaceCurrentItem(with: playerItem)
         //playerItem.add(self.output)
         self.player.currentItem?.add(self.output)

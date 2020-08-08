@@ -47,9 +47,14 @@ class PlayerExample001VC: UIViewController {
         //let url: URL = iOS_DummyAVAssets.AssetManager.VideoAsset.portrait002.url
         //let url: URL = URL(string: "https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8")!
         //let url: URL = URL(string: "https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8")!
-        let url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8")!
+        //let url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8")!
         //let url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")!
-        
+        //let url: URL = URL(string: "http://infinite-set.heteml.jp/hls/h264_256/playlist.m3u8")!
+        //let url: URL = URL(string: "http://infinite-set.heteml.jp/hls/h265_256/output.m3u8")!
+        //let url: URL = URL(string: "http://infinite-set.heteml.jp/hls/h265_256_ts/output.m3u8")!
+        //let url: URL = URL(string: "http://infinite-set.heteml.jp/hls/h264_256_fmp4/output.m3u8")!
+        //let url: URL = URL(string: "http://infinite-set.heteml.jp/hls/h265_256.mp4")!
+        let url: URL = URL(string: "http://infinite-set.heteml.jp/hls/h265_256_fmp4/stream.m3u8")!
         
         //let imageProcess: CCImageProcess.ImageProcess = CCImageProcess.ImageProcess(isDisplayLink: true)
         do {

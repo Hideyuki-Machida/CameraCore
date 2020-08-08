@@ -30,6 +30,7 @@
 		625DB2C724D6D2EB00458E85 /* Mask.metal in Sources */ = {isa = PBXBuildFile; fileRef = 625DB2C624D6D2EB00458E85 /* Mask.metal */; };
 		625DB2CA24D7ECE600458E85 /* HaishinKit in Frameworks */ = {isa = PBXBuildFile; productRef = 625DB2C924D7ECE600458E85 /* HaishinKit */; };
 		625DB2CC24D7EF7000458E85 /* RTMPExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DB2CB24D7EF7000458E85 /* RTMPExampleVC.swift */; };
+		625DB2CD24D94E1500458E85 /* iOS_DummyAVAssets in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 62327E1B24A4C1FF00A631A4 /* iOS_DummyAVAssets */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		627A9FEF24C056C60004A0C8 /* MetalCanvas in Frameworks */ = {isa = PBXBuildFile; productRef = 627A9FEE24C056C60004A0C8 /* MetalCanvas */; };
 		627B0B0E245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627B0B0D245EBEE1006AAD60 /* QRCodeCaptureExampleVC.swift */; };
 		62926268232FEB8400D47CF0 /* ProgressViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62926264232FEB8400D47CF0 /* ProgressViewVC.swift */; };
@@ -51,6 +52,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				625DB2CD24D94E1500458E85 /* iOS_DummyAVAssets in Embed Frameworks */,
 				6220755724D6B12D00705BE2 /* GraphicsLibs.Swift in Embed Frameworks */,
 				6220755024D6B05300705BE2 /* MetalCanvas in Embed Frameworks */,
 				6220755224D6B05500705BE2 /* ProcessLogger.Swift in Embed Frameworks */,
@@ -460,7 +462,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UETCN89GVG;
+				DEVELOPMENT_TEAM = G9427V36B7;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS";
 				INFOPLIST_FILE = CameraCoreExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -480,7 +482,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UETCN89GVG;
+				DEVELOPMENT_TEAM = G9427V36B7;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS";
 				INFOPLIST_FILE = CameraCoreExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

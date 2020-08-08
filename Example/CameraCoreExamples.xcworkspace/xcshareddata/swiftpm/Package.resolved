@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "GraphicsLibs.Swift",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/GraphicsLibs.Swift",
+        "state": {
+          "branch": "master",
+          "revision": "89c002dae842675d13cfe752e36bc771f282b88e",
+          "version": null
+        }
+      },
+      {
         "package": "HaishinKit",
         "repositoryURL": "https://github.com/shogo4405/HaishinKit.swift",
         "state": {
@@ -11,21 +20,30 @@
         }
       },
       {
-        "package": "iOS_DummyAVAssets",
-        "repositoryURL": "https://github.com/Hideyuki-Machida/iOS_DummyAVAssets",
-        "state": {
-          "branch": "spm",
-          "revision": "6fca9fee8b58d4456c122ef08d5e3e169d7d9abc",
-          "version": null
-        }
-      },
-      {
         "package": "Logboard",
         "repositoryURL": "https://github.com/shogo4405/Logboard.git",
         "state": {
           "branch": null,
           "revision": "af6911d218fce6ddef5aa451acd4933dfcc124b6",
           "version": "2.1.3"
+        }
+      },
+      {
+        "package": "MetalCanvas",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/MetalCanvas",
+        "state": {
+          "branch": "spm",
+          "revision": "0eaac7f226672c31ade80e2b4ac99a3e3db9ff66",
+          "version": null
+        }
+      },
+      {
+        "package": "ProcessLogger.Swift",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/ProcessLogger.Swift",
+        "state": {
+          "branch": "master",
+          "revision": "fa8e1ce7e599f8e4b3cb54f5e7119153e6c9e32e",
+          "version": null
         }
       }
     ]

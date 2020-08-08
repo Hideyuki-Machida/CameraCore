@@ -14,7 +14,7 @@ let package = Package(
             targets: ["CameraCore"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Hideyuki-Machida/MetalCanvas", .branch("spm")),
+        .package(url: "https://github.com/Hideyuki-Machida/MetalCanvas", .branch("master")),
         .package(url: "https://github.com/Hideyuki-Machida/ProcessLogger.Swift", .branch("master")),
         .package(url: "https://github.com/Hideyuki-Machida/GraphicsLibs.Swift", .branch("master"))
 

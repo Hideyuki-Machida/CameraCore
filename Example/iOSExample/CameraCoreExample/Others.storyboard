@@ -20,7 +20,7 @@
                                 <rect key="frame" x="20" y="108" width="374" height="734"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5r6-U9-RBY">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="139"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="176"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="FaceDetection">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -30,7 +30,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DHz-vs-7VQ">
-                                        <rect key="frame" x="0.0" y="149" width="374" height="138.5"/>
+                                        <rect key="frame" x="0.0" y="186" width="374" height="176"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="ARVideo">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,7 +40,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MkI-E2-oL0">
-                                        <rect key="frame" x="0.0" y="297.5" width="374" height="139"/>
+                                        <rect key="frame" x="0.0" y="372" width="374" height="176"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Depthカメラ">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -50,23 +50,13 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pbt-CX-BLQ">
-                                        <rect key="frame" x="0.0" y="446.5" width="374" height="138.5"/>
+                                        <rect key="frame" x="0.0" y="558" width="374" height="176"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="QRコードカメラ">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <segue destination="U08-Nk-VOV" kind="show" id="w4A-in-uWv"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vpc-bd-zwz">
-                                        <rect key="frame" x="0.0" y="595" width="374" height="139"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="RTMP配信 with HaishinKit">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="vG8-ne-WLR" kind="show" id="peq-I0-btR"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -427,99 +417,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qr6-Lc-NFu" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="767" y="805"/>
-        </scene>
-        <!--RTMP配信-->
-        <scene sceneID="w1X-dz-ZqZ">
-            <objects>
-                <viewController id="vG8-ne-WLR" customClass="RTMPExampleVC" customModule="CameraCoreExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="X5v-A0-6ev">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="30" translatesAutoresizingMaskIntoConstraints="NO" id="0Xf-MQ-F9J" customClass="CCView" customModule="CameraCore">
-                                <rect key="frame" x="0.0" y="80" width="414" height="736"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="0Xf-MQ-F9J" secondAttribute="height" multiplier="9:16" id="YbM-CM-wxZ"/>
-                                    <constraint firstAttribute="width" secondItem="0Xf-MQ-F9J" secondAttribute="height" multiplier="16:9" id="lII-tC-xu2"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="lII-tC-xu2"/>
-                                        <exclude reference="YbM-CM-wxZ"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="lII-tC-xu2"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="lII-tC-xu2"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="YbM-CM-wxZ"/>
-                                    </mask>
-                                </variation>
-                            </mtkView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4IX-7r-B2F">
-                                <rect key="frame" x="20" y="782" width="374" height="60"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="zct-ZZ-B80"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <state key="normal" title="配信開始">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="connectTapAction:" destination="vG8-ne-WLR" eventType="touchUpInside" id="WOP-zJ-4K4"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="TPe-Yw-mML"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="leading" secondItem="X5v-A0-6ev" secondAttribute="leading" id="DqA-yI-0wl"/>
-                            <constraint firstItem="TPe-Yw-mML" firstAttribute="trailing" secondItem="0Xf-MQ-F9J" secondAttribute="trailing" id="Ehq-Dc-Kyb"/>
-                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="centerY" secondItem="X5v-A0-6ev" secondAttribute="centerY" id="Npg-YW-lxH"/>
-                            <constraint firstItem="4IX-7r-B2F" firstAttribute="leading" secondItem="TPe-Yw-mML" secondAttribute="leading" constant="20" id="cpo-dz-h3m"/>
-                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="centerX" secondItem="X5v-A0-6ev" secondAttribute="centerX" id="dHU-QZ-MXL"/>
-                            <constraint firstItem="TPe-Yw-mML" firstAttribute="bottom" secondItem="4IX-7r-B2F" secondAttribute="bottom" constant="20" id="hZn-rp-7PV"/>
-                            <constraint firstAttribute="trailing" secondItem="0Xf-MQ-F9J" secondAttribute="trailing" id="oLb-KE-Qhg"/>
-                            <constraint firstItem="0Xf-MQ-F9J" firstAttribute="leading" secondItem="TPe-Yw-mML" secondAttribute="leading" id="u7m-3n-vQT"/>
-                            <constraint firstItem="TPe-Yw-mML" firstAttribute="trailing" secondItem="4IX-7r-B2F" secondAttribute="trailing" constant="20" id="yfu-SD-7Qh"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="DqA-yI-0wl"/>
-                                <exclude reference="oLb-KE-Qhg"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=compact-widthClass=compact">
-                            <mask key="constraints">
-                                <include reference="DqA-yI-0wl"/>
-                                <include reference="oLb-KE-Qhg"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=compact-widthClass=regular">
-                            <mask key="constraints">
-                                <include reference="DqA-yI-0wl"/>
-                                <include reference="oLb-KE-Qhg"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <navigationItem key="navigationItem" title="RTMP配信" id="N6F-MU-C4n"/>
-                    <connections>
-                        <outlet property="connectButton" destination="4IX-7r-B2F" id="ZH0-IQ-p2e"/>
-                        <outlet property="drawView" destination="0Xf-MQ-F9J" id="LZW-Qe-qpg"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="C9Z-nu-kOy" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="80" y="1485"/>
         </scene>
     </scenes>
 </document>

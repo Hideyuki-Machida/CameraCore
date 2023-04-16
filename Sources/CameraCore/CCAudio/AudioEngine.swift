@@ -14,7 +14,7 @@ extension CCAudio {
 
         // MARK: - CCComponentProtocol
         public let setup: CCAudio.AudioEngine.Setup = CCAudio.AudioEngine.Setup()
-        public let triger: CCAudio.AudioEngine.Triger = CCAudio.AudioEngine.Triger()
+        public let trigger: CCAudio.AudioEngine.Trigger = CCAudio.AudioEngine.Trigger()
         public let pipe: CCAudio.AudioEngine.Pipe = CCAudio.AudioEngine.Pipe()
         public var debug: CCComponentDebug?
 
@@ -28,7 +28,7 @@ extension CCAudio {
             }
 
             self.setup.audioEngine = self
-            self.triger.audioEngine = self
+            self.trigger.audioEngine = self
             self.pipe.audioEngine = self
         }
     }
@@ -46,7 +46,7 @@ fileprivate extension CCAudio.AudioEngine {
     func dispose() {
         self.engine.stop()
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
     }
 }
@@ -62,8 +62,8 @@ public extension CCAudio.AudioEngine {
         }
     }
 
-    // MARK: - Triger
-    class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    class Trigger: CCComponentTriggerProtocol {
         fileprivate var audioEngine: CCAudio.AudioEngine?
         
         public func start() throws {

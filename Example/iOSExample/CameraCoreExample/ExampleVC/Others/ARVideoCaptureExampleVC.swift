@@ -29,11 +29,11 @@ class ARVideoCaptureExampleVC: UIViewController {
 
 
     deinit {
-        self.camera.triger.dispose()
-        self.drawView.triger.dispose()
-        self.imageProcess?.triger.dispose()
-        self.debugger.triger.stop()
-        self.debugger.triger.dispose()
+        self.camera.trigger.dispose()
+        self.drawView.trigger.dispose()
+        self.imageProcess?.trigger.dispose()
+        self.debugger.trigger.stop()
+        self.debugger.trigger.dispose()
         CameraCore.flush()
         ProcessLogger.deinitLog(self)
     }
@@ -62,7 +62,7 @@ class ARVideoCaptureExampleVC: UIViewController {
             self.imageProcess = imageProcess
             self.depthMapLayer = depthMapLayer
 
-            self.camera.triger.start()
+            self.camera.trigger.start()
             try self.debugger.setup.set(component: self.camera)
             try self.debugger.setup.set(component: imageProcess)
             try self.debugger.setup.set(component: self.drawView)
@@ -72,7 +72,7 @@ class ARVideoCaptureExampleVC: UIViewController {
         }
 
         self.setDebuggerView()
-        self.debugger.triger.start()
+        self.debugger.trigger.start()
     }
 }
 

@@ -20,7 +20,7 @@ public extension CCDebug {
         fileprivate let writeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCDebug.ComponentDebugger.writeQueue")
 
         public let setup: CCDebug.ComponentDebugger.Setup = CCDebug.ComponentDebugger.Setup()
-        public let triger: CCDebug.ComponentDebugger.Triger = CCDebug.ComponentDebugger.Triger()
+        public let trigger: CCDebug.ComponentDebugger.Trigger = CCDebug.ComponentDebugger.Trigger()
 
         fileprivate var list: [CCComponentProtocol] = []
         
@@ -32,7 +32,7 @@ public extension CCDebug {
         public override init() {
             super.init()
             self.setup.debugger = self
-            self.triger.debugger = self
+            self.trigger.debugger = self
         }
         
         deinit {
@@ -111,7 +111,7 @@ fileprivate extension CCDebug.ComponentDebugger {
         self.outPut._dispose()
         self.displayLink?.invalidate()
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
     }
 }
 
@@ -131,8 +131,8 @@ extension CCDebug.ComponentDebugger {
         }
     }
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var debugger: CCDebug.ComponentDebugger?
 
         public func start() {

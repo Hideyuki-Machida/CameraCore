@@ -33,9 +33,9 @@ class PlayerExample001VC: UIViewController {
     @IBOutlet weak var seekBar: UISlider!
     
     deinit {
-        self.player.triger.dispose()
-        self.drawView.triger.dispose()
-        self.debugger.triger.dispose()
+        self.player.trigger.dispose()
+        self.drawView.trigger.dispose()
+        self.debugger.trigger.dispose()
 
         CameraCore.flush()
         ProcessLogger.deinitLog(self)
@@ -84,7 +84,7 @@ class PlayerExample001VC: UIViewController {
             try self.debugger.setup.set(component: self.player)
             try self.debugger.setup.set(component: self.drawView)
 
-            self.debugger.triger.start()
+            self.debugger.trigger.start()
             self.setDebuggerView()
         } catch {
             
@@ -94,21 +94,21 @@ class PlayerExample001VC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.player.triger.play()
+        self.player.trigger.play()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        self.player.triger.pause()
+        self.player.trigger.pause()
     }
 
     
     @IBAction func seek(_ sender: UISlider) {
-        self.player.triger.seek(progress: sender.value)
+        self.player.trigger.seek(progress: sender.value)
     }
     @IBAction func seekOut(_ sender: UISlider) {
-        self.player.triger.play()
+        self.player.trigger.play()
     }
 }
 

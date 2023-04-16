@@ -13,7 +13,7 @@ extension CCAudio {
     public class AudioPlayer {
         // MARK: - CCComponentProtocol
         public let setup: CCAudio.AudioPlayer.Setup = CCAudio.AudioPlayer.Setup()
-        public let triger: CCAudio.AudioPlayer.Triger = CCAudio.AudioPlayer.Triger()
+        public let trigger: CCAudio.AudioPlayer.Trigger = CCAudio.AudioPlayer.Trigger()
         public let pipe: CCAudio.AudioPlayer.Pipe = CCAudio.AudioPlayer.Pipe()
         public var debug: CCComponentDebug?
 
@@ -33,7 +33,7 @@ extension CCAudio {
             self.audioFile = try AVAudioFile(forReading: url)
 
             self.setup.audioPlayer = self
-            self.triger.audioPlayer = self
+            self.trigger.audioPlayer = self
             self.pipe.audioPlayer = self
         }
     }
@@ -94,7 +94,7 @@ fileprivate extension CCAudio.AudioPlayer {
     func dispose() {
         self.player.pause()
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
     }
 }
@@ -110,8 +110,8 @@ public extension CCAudio.AudioPlayer {
         }
     }
 
-    // MARK: - Triger
-    class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    class Trigger: CCComponentTriggerProtocol {
         fileprivate var audioPlayer: CCAudio.AudioPlayer?
         
         public func play() throws {

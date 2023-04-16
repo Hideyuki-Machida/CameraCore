@@ -38,12 +38,12 @@ class FaceDetectionExampleVC: UIViewController {
     @IBOutlet weak var drawView: CCView!
 
     deinit {
-        self.camera?.triger.dispose()
-        self.inference?.triger.dispose()
-        self.imageProcess?.triger.dispose()
-        self.drawView.triger.dispose()
-        self.debugger.triger.stop()
-        self.debugger.triger.dispose()
+        self.camera?.trigger.dispose()
+        self.inference?.trigger.dispose()
+        self.imageProcess?.trigger.dispose()
+        self.drawView.trigger.dispose()
+        self.debugger.trigger.stop()
+        self.debugger.trigger.dispose()
         CameraCore.flush()
         ProcessLogger.deinitLog(self)
     }
@@ -61,7 +61,7 @@ class FaceDetectionExampleVC: UIViewController {
             try camera --> imageProcess --> self.drawView
             try camera --> inference --> imageProcess
 
-            camera.triger.start()
+            camera.trigger.start()
 
             self.camera = camera
             self.inference = inference
@@ -77,7 +77,7 @@ class FaceDetectionExampleVC: UIViewController {
         }
 
         self.setDebuggerView()
-        self.debugger.triger.start()
+        self.debugger.trigger.start()
     }
 }
 

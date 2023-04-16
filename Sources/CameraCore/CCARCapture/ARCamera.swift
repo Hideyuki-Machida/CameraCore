@@ -33,7 +33,7 @@ extension CCARCapture {
 
         // MARK: - CCComponentProtocol
         public let setup: CCARCapture.cARCamera.Setup = CCARCapture.cARCamera.Setup()
-        public let triger: CCARCapture.cARCamera.Triger = CCARCapture.cARCamera.Triger()
+        public let trigger: CCARCapture.cARCamera.Trigger = CCARCapture.cARCamera.Trigger()
         public let pipe: CCARCapture.cARCamera.Pipe = CCARCapture.cARCamera.Pipe()
         public var debug: CCComponentDebug?
 
@@ -47,7 +47,7 @@ extension CCARCapture {
             super.init()
             
             self.setup.camera = self
-            self.triger.camera = self
+            self.trigger.camera = self
             self.pipe.camera = self
         }
         
@@ -63,7 +63,7 @@ extension CCARCapture {
 
         func dispose() {
             self.setup._dispose()
-            self.triger._dispose()
+            self.trigger._dispose()
             self.pipe._dispose()
         }
     }
@@ -105,8 +105,8 @@ extension CCARCapture.cARCamera {
         }
     }
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var camera: CCARCapture.cARCamera?
 
         public func start() {

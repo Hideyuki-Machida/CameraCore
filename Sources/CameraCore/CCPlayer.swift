@@ -16,7 +16,7 @@ public class CCPlayer: NSObject, CCComponentProtocol {
     fileprivate let queue: DispatchQueue = DispatchQueue(label: "CameraCore.CCPlayer.Queue")
 
     public let setup: CCPlayer.Setup = CCPlayer.Setup()
-    public let triger: CCPlayer.Triger = CCPlayer.Triger()
+    public let trigger: CCPlayer.Trigger = CCPlayer.Trigger()
     public let pipe: CCPlayer.Pipe = CCPlayer.Pipe()
     public let event: CCPlayer.Event = CCPlayer.Event()
     public var debug: CCComponentDebug?
@@ -39,7 +39,7 @@ public class CCPlayer: NSObject, CCComponentProtocol {
         }
 
         self.setup.player = self
-        self.triger.player = self
+        self.trigger.player = self
         self.pipe.player = self
         self.event.player = self
     }
@@ -156,7 +156,7 @@ fileprivate extension CCPlayer {
         self.player.pause()
         self.isLoop = false
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
         self.event._dispose()
         NotificationCenter.default.removeObserver(self)
@@ -194,8 +194,8 @@ extension CCPlayer {
         }
     }
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var player: CCPlayer?
 
         public func play() {

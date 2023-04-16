@@ -14,7 +14,7 @@ import ProcessLogger_Swift
 public extension CCVision {
     class Inference: NSObject, CCComponentProtocol {
         public let setup: CCVision.Inference.Setup = CCVision.Inference.Setup()
-        public let triger: CCVision.Inference.Triger = CCVision.Inference.Triger()
+        public let trigger: CCVision.Inference.Trigger = CCVision.Inference.Trigger()
         public let pipe: CCVision.Inference.Pipe = CCVision.Inference.Pipe()
         public var debug: CCComponentDebug?
 
@@ -29,7 +29,7 @@ public extension CCVision {
             super.init()
             self.isLoop = false
             self.setup.inference = self
-            self.triger.inference = self
+            self.trigger.inference = self
             self.pipe.inference = self
         }
 
@@ -97,7 +97,7 @@ public extension CCVision {
 fileprivate extension CCVision.Inference {
     func dispose() {
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
     }
 }
@@ -126,8 +126,8 @@ extension CCVision.Inference {
         }
     }
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var inference: CCVision.Inference?
 
         public func start() {

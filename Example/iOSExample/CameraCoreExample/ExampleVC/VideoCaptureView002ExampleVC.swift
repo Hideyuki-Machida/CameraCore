@@ -38,13 +38,13 @@ class VideoCaptureView002ExampleVC: UIViewController {
     )
 
     deinit {
-        self.camera?.triger.stop()
-        self.camera?.triger.dispose()
-        self.imageProcess?.triger.dispose()
-        self.videoRecorder?.triger.dispose()
-        self.drawView.triger.dispose()
-        self.debugger.triger.stop()
-        self.debugger.triger.dispose()
+        self.camera?.trigger.stop()
+        self.camera?.trigger.dispose()
+        self.imageProcess?.trigger.dispose()
+        self.videoRecorder?.trigger.dispose()
+        self.drawView.trigger.dispose()
+        self.debugger.trigger.stop()
+        self.debugger.trigger.dispose()
         CameraCore.flush()
         ProcessLogger.deinitLog(self)
     }
@@ -77,9 +77,9 @@ class VideoCaptureView002ExampleVC: UIViewController {
             try microphone --> videoRecorder
 
             camera.event = event
-            camera.triger.start()
+            camera.trigger.start()
             
-            try microphone.triger.start()
+            try microphone.trigger.start()
 
             self.camera = camera
             self.imageProcess = imageProcess
@@ -95,21 +95,21 @@ class VideoCaptureView002ExampleVC: UIViewController {
         /////////////////////////////////////////////////////////////////////////////////////////////
         
         self.setDebuggerView()
-        self.debugger.triger.start()
+        self.debugger.trigger.start()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // VideoCaptureViewのキャプチャスタート
-        self.camera?.triger.start()
+        self.camera?.trigger.start()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         // VideoCaptureViewのキャプチャ停止
-        self.camera?.triger.stop()
+        self.camera?.trigger.stop()
     }
 
     override func didReceiveMemoryWarning() {
@@ -143,7 +143,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
     @IBAction func recordingTapAction(_ sender: Any) {
 
         if self.videoRecorder?.isRecording == true {
-            self.videoRecorder?.triger.stop()
+            self.videoRecorder?.trigger.stop()
             self.recordingButton.setTitle("撮影開始", for: UIControl.State.normal)
         } else {
             let filePath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/" + "recordingVideo" + NSUUID().uuidString + ".mp4"
@@ -159,7 +159,7 @@ class VideoCaptureView002ExampleVC: UIViewController {
                     videoCodecType: Settings.VideoCodec.hevc
                 )
                 try self.videoRecorder?.setup.setup(parameter: parameter)
-                self.videoRecorder?.triger.start()
+                self.videoRecorder?.trigger.start()
                 self.recordingButton.setTitle("撮影ストップ", for: UIControl.State.normal)
             } catch {}
         }

@@ -13,7 +13,7 @@ import ProcessLogger_Swift
 public protocol CCComponentSetupProtocol {
 }
 
-public protocol CCComponentTrigerProtocol {
+public protocol CCComponentTriggerProtocol {
 }
 
 public protocol CCComponentPipeProtocol: NSObjectProtocol {
@@ -25,7 +25,7 @@ public protocol CCComponentEventProtocol: NSObjectProtocol {
 
 public protocol CCComponentProtocol: NSObjectProtocol {
     //var setup: CCComponentSetupProtocol { get }
-    //var triger: CCComponentTrigerProtocol { get }
+    //var trigger: CCComponentTrigerProtocol { get }
     //var pipe: CCComponentPipeProtocol { get }
     
     var debug: CCComponentDebug? { get set }

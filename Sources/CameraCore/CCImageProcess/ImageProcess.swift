@@ -20,7 +20,7 @@ extension CCImageProcess {
 
         // MARK: - CCComponentProtocol
         public let setup: CCImageProcess.ImageProcess.Setup = CCImageProcess.ImageProcess.Setup()
-        public let triger: CCImageProcess.ImageProcess.Triger = CCImageProcess.ImageProcess.Triger()
+        public let trigger: CCImageProcess.ImageProcess.Trigger = CCImageProcess.ImageProcess.Trigger()
         public let pipe: CCImageProcess.ImageProcess.Pipe = CCImageProcess.ImageProcess.Pipe()
         public var debug: CCComponentDebug?
 
@@ -51,7 +51,7 @@ extension CCImageProcess {
             super.init()
             //try self.pipe.updateOutTexture(captureSize: captureSize, mtlPixelFormat: MTLPixelFormat.bgra8Unorm)
             self.setup.imageProcess = self
-            self.triger.imageProcess = self
+            self.trigger.imageProcess = self
             self.pipe.imageProcess = self
         }
 
@@ -235,7 +235,7 @@ private extension CCImageProcess.ImageProcess {
 fileprivate extension CCImageProcess.ImageProcess {
     func dispose() {
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
 
         for index in self.renderLayers.value.indices {
@@ -258,9 +258,9 @@ extension CCImageProcess.ImageProcess {
 }
 
 
-// MARK: - Triger
+// MARK: - Trigger
 extension CCImageProcess.ImageProcess {
-    public class Triger: CCComponentTrigerProtocol {
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var imageProcess: CCImageProcess.ImageProcess?
 
         public func dispose() {

@@ -18,7 +18,7 @@ extension CCCapture {
 
         // MARK: - CCComponentProtocol
         public let setup: CCCapture.Camera.Setup = CCCapture.Camera.Setup()
-        public let triger: CCCapture.Camera.Triger = CCCapture.Camera.Triger()
+        public let trigger: CCCapture.Camera.Trigger = CCCapture.Camera.Trigger()
         public let pipe: CCCapture.Camera.Pipe = CCCapture.Camera.Pipe()
         public var debug: CCComponentDebug?
 
@@ -44,7 +44,7 @@ extension CCCapture {
             try self.setupProperty(property: property)
             
             self.setup.camera = self
-            self.triger.camera = self
+            self.trigger.camera = self
             self.pipe.camera = self
         }
 
@@ -77,7 +77,7 @@ fileprivate extension CCCapture.Camera {
         self.status = .setup
         self.capture = nil
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
     }
 }
@@ -91,7 +91,6 @@ fileprivate extension CCCapture.Camera {
             let capture: CCCapture.VideoCapture.VideoCaptureManager = try CCCapture.VideoCapture.VideoCaptureManager(property: property)
             self.capture = capture
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-            //self.capture?.onUpdateSampleBuffer = { [weak self] (sampleBuffer: CMSampleBuffer, captureVideoOrientation: AVCaptureVideoOrientation, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
             capture.sampleBuffer.sink(receiveValue: { [weak self] (item: CCCapture.VideoCapture.VideoCaptureOutput.Item) in
                 guard
                     let self = self,
@@ -202,8 +201,8 @@ extension CCCapture.Camera {
         }
     }
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var camera: CCCapture.Camera?
         
         public func start() {

@@ -35,9 +35,9 @@ class VideoCaptureView001ExampleVC: UIViewController {
     @IBOutlet weak var drawView: CCView!
     
     deinit {
-        self.camera?.triger.dispose()
-        self.drawView.triger.dispose()
-        self.videoRecorder?.triger.dispose()
+        self.camera?.trigger.dispose()
+        self.drawView.trigger.dispose()
+        self.videoRecorder?.trigger.dispose()
         CameraCore.flush()
         ProcessLogger.deinitLog(self)
     }
@@ -50,7 +50,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
             try camera --> self.drawView
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
             try camera --> videoRecorder
-            camera.triger.start()
+            camera.trigger.start()
             self.camera = camera
             self.videoRecorder = videoRecorder
         } catch {
@@ -62,7 +62,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
     @IBAction func recordingTapAction(_ sender: Any) {
 
         if self.videoRecorder?.isRecording == true {
-            self.videoRecorder?.triger.stop()
+            self.videoRecorder?.trigger.stop()
             self.recordingButton.setTitle("撮影開始", for: UIControl.State.normal)
         } else {
             let filePath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/" + "recordingVideo" + NSUUID().uuidString + ".mp4"
@@ -78,7 +78,7 @@ class VideoCaptureView001ExampleVC: UIViewController {
                     videoCodecType: Settings.VideoCodec.hevc
                 )
                 try self.videoRecorder?.setup.setup(parameter: parameter)
-                self.videoRecorder?.triger.start()
+                self.videoRecorder?.trigger.start()
                 self.recordingButton.setTitle("撮影ストップ", for: UIControl.State.normal)
             } catch {}
         }

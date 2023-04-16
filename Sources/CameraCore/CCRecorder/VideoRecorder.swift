@@ -19,7 +19,7 @@ extension CCRecorder {
 
     public class VideoRecorder {
         public let setup: CCRecorder.VideoRecorder.Setup = CCRecorder.VideoRecorder.Setup()
-        public let triger: CCRecorder.VideoRecorder.Triger = CCRecorder.VideoRecorder.Triger()
+        public let trigger: CCRecorder.VideoRecorder.Trigger = CCRecorder.VideoRecorder.Trigger()
         public let pipe: CCRecorder.VideoRecorder.Pipe = CCRecorder.VideoRecorder.Pipe()
 
 
@@ -28,7 +28,7 @@ extension CCRecorder {
 
         public init() throws {
             self.setup.videoRecorder = self
-            self.triger.videoRecorder = self
+            self.trigger.videoRecorder = self
             self.pipe.videoRecorder = self
         }
         
@@ -173,7 +173,7 @@ extension CCRecorder.VideoRecorder {
 fileprivate extension CCRecorder.VideoRecorder {
     func dispose() {
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
         NotificationCenter.default.removeObserver(self)
     }
@@ -196,8 +196,8 @@ extension CCRecorder.VideoRecorder {
     }
 
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var videoRecorder: CCRecorder.VideoRecorder?
 
         public func start() {

@@ -54,7 +54,7 @@ class AudioExampleVC: UIViewController {
             //try self.audioEngine --> self.audioMic
             //try self.audioEngine --> self.videoRecorder
             //try self.audioEngine --> self.audioRecorder
-            try self.audioEngine.triger.start()
+            try self.audioEngine.trigger.start()
 
         } catch {
             print("error")
@@ -65,8 +65,8 @@ class AudioExampleVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         do {
-            self.camera?.triger.start()
-            try self.audioPlayer?.triger.play()
+            self.camera?.trigger.start()
+            try self.audioPlayer?.trigger.play()
         } catch {
             print("error")
         }
@@ -93,7 +93,7 @@ extension AudioExampleVC {
     func videoRecording() {
         if self.videoRecorder.isRecording {
             self.recordingButton.setTitle("撮影開始", for: UIControl.State.normal)
-            self.videoRecorder.triger.stop()
+            self.videoRecorder.trigger.stop()
         } else {
             let filePath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/" + "recordingVideo" + NSUUID().uuidString + ".mp4"
 
@@ -109,7 +109,7 @@ extension AudioExampleVC {
                 )
 
                 try self.videoRecorder.setup.setup(parameter: param)
-                self.videoRecorder.triger.start()
+                self.videoRecorder.trigger.start()
                 self.recordingButton.setTitle("撮影ストップ", for: UIControl.State.normal)
             } catch {}
         }

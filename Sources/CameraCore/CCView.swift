@@ -22,7 +22,7 @@ public class CCView: MTKView, CCComponentProtocol {
 
     // MARK: - CCComponentProtocol
     public let setup: CCView.Setup = CCView.Setup()
-    public let triger: CCView.Triger = CCView.Triger()
+    public let trigger: CCView.Trigger = CCView.Trigger()
     public let pipe: CCView.Pipe = CCView.Pipe()
     public var debug: CCComponentDebug?
 
@@ -46,7 +46,7 @@ public class CCView: MTKView, CCComponentProtocol {
         self.delegate = self
 
         self.setup.ccview = self
-        self.triger.ccview = self
+        self.trigger.ccview = self
         self.pipe.ccview = self
 
         self.framebufferOnly = false
@@ -142,7 +142,7 @@ private extension CCView {
 fileprivate extension CCView {
     func dispose() {
         self.setup._dispose()
-        self.triger._dispose()
+        self.trigger._dispose()
         self.pipe._dispose()
         self.isDraw.value = false
         NotificationCenter.default.removeObserver(self)
@@ -158,8 +158,8 @@ extension CCView {
         }
     }
 
-    // MARK: - Triger
-    public class Triger: CCComponentTrigerProtocol {
+    // MARK: - Trigger
+    public class Trigger: CCComponentTriggerProtocol {
         fileprivate var ccview: CCView?
 
         public func dispose() {

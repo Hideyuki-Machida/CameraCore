@@ -13,11 +13,10 @@ import MetalCanvas
 import MetalPerformanceShaders
 import ARKit
 import ProcessLogger_Swift
+import Combine
 
 extension CCImageProcess {
     public class ImageProcess: NSObject, CCComponentProtocol {
-
-        private let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCImageProcess.ImageProcess.process")
 
         // MARK: - CCComponentProtocol
         public let setup: CCImageProcess.ImageProcess.Setup = CCImageProcess.ImageProcess.Setup()
@@ -26,8 +25,6 @@ extension CCImageProcess {
         public var debug: CCComponentDebug?
 
         fileprivate let errorType: CCImageProcess.ErrorType = CCImageProcess.ErrorType.render
-        fileprivate let hasMPS: Bool = MPSSupportsMTLDevice(MCCore.device)
-        fileprivate let filter: MPSImageLanczosScale = MPSImageLanczosScale(device: MCCore.device)
         fileprivate var counter: CMTimeValue = 0
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,17 +32,24 @@ extension CCImageProcess {
 
         public var renderLayers: CCVariable<[RenderLayerProtocol]> = CCVariable([])
 
-        fileprivate(set) var isProcess: CCVariable<Bool> = CCVariable(false)
         fileprivate(set) var processTimeStamp: CCVariable<CMTime> = CCVariable(CMTime.zero)
         fileprivate(set) var inferenceUserInfo: CCVariable<[ String : Any]> = CCVariable([ : ])
+
+        private let outTexture: CurrentValueSubject<CCTexture, Error>
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         fileprivate(set) var captureSize: Settings.PresetSize = Settings.PresetSize.p1280x720
 
         public init(captureSize: MCSize = MCSize(1.0, 1.0)) throws {
+            guard
+                let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: CGSize(CGFloat(captureSize.w), CGFloat(captureSize.h))),
+                let tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: MTLPixelFormat.bgra8Unorm, planeIndex: 0)
+            else { throw self.errorType }
+
+            self.outTexture = CurrentValueSubject<CCTexture, Error>(tex)
             super.init()
-            try self.pipe.updateOutTexture(captureSize: captureSize, mtlPixelFormat: MTLPixelFormat.bgra8Unorm)
+            //try self.pipe.updateOutTexture(captureSize: captureSize, mtlPixelFormat: MTLPixelFormat.bgra8Unorm)
             self.setup.imageProcess = self
             self.triger.imageProcess = self
             self.pipe.imageProcess = self
@@ -61,21 +65,22 @@ extension CCImageProcess {
 
 extension CCImageProcess.ImageProcess {
     func update(renderLayers: [RenderLayerProtocol]) {
-        self.imageProcessQueue.async { [weak self] in
+        self.renderLayers.value = renderLayers
+        /*
+        CCImageProcess.imageProcessQueue.async { [weak self] in
             self?.renderLayers.value = renderLayers
         }
+         */
     }
 
     func process(captureData: CCCapture.VideoCapture.CaptureData) {
         guard
-            self.isProcess.value != true,
             self.processTimeStamp.value != captureData.presentationTimeStamp,
             let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer)
         else { /* 画像データではないBuffer */ return }
 
         let presentationTimeStamp: CMTime = captureData.presentationTimeStamp
         self.processTimeStamp.value = presentationTimeStamp
-        self.isProcess.value = true
 
         //////////////////////////////////////////////////////////
         // renderSize
@@ -84,66 +89,58 @@ extension CCImageProcess.ImageProcess {
         let renderSize: MCSize = MCSize(w: width, h: height)
         //////////////////////////////////////////////////////////
 
-        self.imageProcessQueue.async { [weak self] in
-            guard let self = self else { return }
-            do {
-                ///////////////////////////////////////////////////////////////////////////////////////////////////
-                // renderLayerCompositionInfo
-                var userInfo: [ String : Any] = self.inferenceUserInfo.value
-                userInfo[ RenderLayerCompositionInfo.Key.depthData.rawValue ] = captureData.depthData
-                userInfo[ RenderLayerCompositionInfo.Key.videoCaptureData.rawValue ] = captureData
+        do {
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // renderLayerCompositionInfo
+            var userInfo: [ String : Any] = self.inferenceUserInfo.value
+            userInfo[ RenderLayerCompositionInfo.Key.depthData.rawValue ] = captureData.depthData
+            userInfo[ RenderLayerCompositionInfo.Key.videoCaptureData.rawValue ] = captureData
 
-                var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
-                    compositionTime: CMTime(value: self.counter, timescale: captureData.captureInfo.frameRate),
-                    presentationTimeStamp: captureData.presentationTimeStamp,
-                    timeRange: CMTimeRange.zero,
-                    percentComplete: 0.0,
-                    renderSize: renderSize,
-                    metadataObjects: captureData.metadataObjects,
-                    userInfo: userInfo
-                )
-                ///////////////////////////////////////////////////////////////////////////////////////////////////
+            var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
+                compositionTime: CMTime(value: self.counter, timescale: captureData.captureInfo.frameRate),
+                presentationTimeStamp: captureData.presentationTimeStamp,
+                timeRange: CMTimeRange.zero,
+                percentComplete: 0.0,
+                renderSize: renderSize,
+                metadataObjects: captureData.metadataObjects,
+                userInfo: userInfo
+            )
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-                try self.process(pixelBuffer: pixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-            } catch {
-                self.isProcess.value = false
-                ProcessLogger.log("CCRenderer.PostProcess: process error")
-            }
+            try self.process(pixelBuffer: pixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+        } catch {
+            ProcessLogger.log("CCRenderer.PostProcess: process error")
         }
+
     }
 
     func process(texture: CCTexture) throws {
         guard
-            self.isProcess.value != true,
+            //self.isProcess.value != true,
             self.processTimeStamp.value != texture.presentationTimeStamp,
             let pixelBuffer: CVPixelBuffer = texture.pixelBuffer
         else { /* 画像データではないBuffer */ return }
         
         let presentationTimeStamp: CMTime = texture.presentationTimeStamp
         self.processTimeStamp.value = presentationTimeStamp
-        self.isProcess.value = true
 
-        self.imageProcessQueue.async { [weak self] in
-            guard let self = self else { return }
-            do {
-                ///////////////////////////////////////////////////////////////////////////////////////////////////
-                // renderLayerCompositionInfo
-                var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
-                    compositionTime: CMTime(value: self.counter, timescale: 60),
-                    presentationTimeStamp: texture.presentationTimeStamp,
-                    timeRange: CMTimeRange.zero,
-                    percentComplete: 0.0,
-                    renderSize: texture.size,
-                    metadataObjects: [],
-                    userInfo: self.inferenceUserInfo.value
-                )
-                ///////////////////////////////////////////////////////////////////////////////////////////////////
+        do {
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // renderLayerCompositionInfo
+            var renderLayerCompositionInfo: RenderLayerCompositionInfo = RenderLayerCompositionInfo(
+                compositionTime: CMTime(value: self.counter, timescale: 60),
+                presentationTimeStamp: texture.presentationTimeStamp,
+                timeRange: CMTimeRange.zero,
+                percentComplete: 0.0,
+                renderSize: texture.size,
+                metadataObjects: [],
+                userInfo: self.inferenceUserInfo.value
+            )
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-                try self.process(pixelBuffer: pixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
-            } catch {
-                self.isProcess.value = false
-                ProcessLogger.log("CCRenderer.PostProcess: process error")
-            }
+            try self.process(pixelBuffer: pixelBuffer, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+        } catch {
+            ProcessLogger.log("CCRenderer.PostProcess: process error")
         }
     }
 
@@ -152,16 +149,16 @@ extension CCImageProcess.ImageProcess {
 private extension CCImageProcess.ImageProcess {
     func process(pixelBuffer: CVPixelBuffer, renderLayerCompositionInfo: inout RenderLayerCompositionInfo) throws {
         var pixelBuffer: CVPixelBuffer = pixelBuffer
-        guard var outTexture: CCTexture = self.pipe.outTexture else { throw self.errorType }
+        var outTexture: CCTexture = self.outTexture.value
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // outTexture
         let renderSize: MCSize = renderLayerCompositionInfo.renderSize
         if outTexture.size != renderSize {
-            outTexture = try self.pipe.updateOutTexture(captureSize: renderSize, mtlPixelFormat: MTLPixelFormat.bgra8Unorm)
+            outTexture = try self.updateOutTexture(captureSize: renderSize, mtlPixelFormat: MTLPixelFormat.bgra8Unorm)
+            self.outTexture.send(outTexture)
         }
         outTexture.presentationTimeStamp = renderLayerCompositionInfo.presentationTimeStamp
-        //outTexture.captureVideoOrientation =
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         self.counter += 1
@@ -170,20 +167,28 @@ private extension CCImageProcess.ImageProcess {
         // process
         guard let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() else { throw self.errorType }
         commandBuffer.label = "@CommandBuffer: CCImageProcess.ImageProcess.process: \(outTexture.presentationTimeStamp.value)"
-        defer {
-            commandBuffer.commit()
-        }
-
-        commandBuffer.addCompletedHandler { [weak self] _ in
-            guard let self = self else { return }
-            self.pipe.outUpdate(outTexture: outTexture)
-            self.debug?.update()
-            self.isProcess.value = false
-        }
-
         try self.processRenderLayer(commandBuffer: commandBuffer, source: &pixelBuffer, destination: &outTexture, renderLayerCompositionInfo: &renderLayerCompositionInfo)
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+        self.pipe.outTexture.send(outTexture)
+        self.debug?.update()
+    }
+    
+    @discardableResult
+    func updateOutTexture(captureSize: MCSize, mtlPixelFormat: MTLPixelFormat) throws -> CCTexture {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // 描画用テクスチャを生成
+        guard
+            Float(self.outTexture.value.size.w) != captureSize.w,
+            let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: CGSize.init(CGFloat(captureSize.w), CGFloat(captureSize.h))),
+            let tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: mtlPixelFormat, planeIndex: 0)
+        else { throw self.errorType }
+        return tex
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
+
 }
 
 private extension CCImageProcess.ImageProcess {
@@ -272,12 +277,10 @@ extension CCImageProcess.ImageProcess {
 // MARK: - Pipe
 extension CCImageProcess.ImageProcess {
     public class Pipe: NSObject, CCComponentPipeProtocol {
-
-        private let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRenderer.PostProcess.Complete")
-
         fileprivate var counter: CMTimeValue = 0
         fileprivate let errorType: CCImageProcess.ErrorType = CCImageProcess.ErrorType.render
 
+        /*
         private var _currentCaptureItem: CCCapture.VideoCapture.CaptureData?
         fileprivate(set) var currentCaptureItem: CCCapture.VideoCapture.CaptureData? {
             get {
@@ -291,29 +294,21 @@ extension CCImageProcess.ImageProcess {
                 objc_sync_exit(self)
             }
         }
-
-        private var _outTexture: CCTexture?
-        public var outTexture: CCTexture? {
-            get {
-                objc_sync_enter(self)
-                defer { objc_sync_exit(self) }
-                return self._outTexture
-            }
-            set {
-                objc_sync_enter(self)
-                self._outTexture = newValue
-                objc_sync_exit(self)
-            }
-        }
-
-        public var texture: CCVariable<CCTexture?> = CCVariable(nil)
-
+         */
+        public let outTexture: PassthroughSubject<CCTexture, Error> = PassthroughSubject<CCTexture, Error>()
+        //public let texture: PassthroughSubject<CCTexture, Error>
+        
         fileprivate var imageProcess: CCImageProcess.ImageProcess?
         fileprivate var observations: [NSKeyValueObservation] = []
-
+        fileprivate var cancellableBag: [AnyCancellable] = []
+        
+        override init() {
+            super.init()
+        }
+        
         fileprivate func _dispose() {
             self.imageProcess = nil
-            self.texture.dispose()
+            //self.texture.dispose()
             self.observations.forEach { $0.invalidate() }
             self.observations.removeAll()
         }
@@ -323,19 +318,22 @@ extension CCImageProcess.ImageProcess {
 
         // MARK: input - CCCapture.Camera
         func input(camera: CCCapture.Camera) throws -> CCImageProcess.ImageProcess {
-            camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
-                guard
-                    let self = self,
-                    let captureData: CCCapture.VideoCapture.CaptureData = captureData
-                else { return }
-
+            camera.pipe.videoCaptureItem.sink { completion in
+                switch completion {
+                case .finished:
+                    print("Received finished")
+                case .failure(let error):
+                    print("Received error: \(error)")
+                }
+            } receiveValue: { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
+                guard let self = self else { return }
                 if (self.imageProcess?.renderLayers.value.isEmpty ?? true) {
                     // レンダーレイヤーが無い
                     self.passThrough(captureData: captureData)
                 } else {
                     self.imageProcess?.process(captureData: captureData)
                 }
-            }
+            }.store(in: &self.cancellableBag)
 
             return self.imageProcess!
         }
@@ -360,7 +358,7 @@ extension CCImageProcess.ImageProcess {
                 else { return }
 
                 do {
-                    try self.imageProcess?.process(texture: outTexture)
+                    //try self.imageProcess?.process(texture: outTexture)
                 } catch {
                         
                 }
@@ -371,14 +369,14 @@ extension CCImageProcess.ImageProcess {
 
 
         // MARK: input - CCARCapture.cARCamera
-        @available(iOS 13.0, *)
         func input(camera: CCARCapture.cARCamera) throws -> CCImageProcess.ImageProcess {
+            /*
             try self.updateOutTexture(captureSize: MCSize.init(1440, 1080), mtlPixelFormat: MTLPixelFormat.bgra8Unorm)
             let observation: NSKeyValueObservation = camera.pipe.observe(\.ouTimeStamp, options: [.new]) { [weak self] (object: CCARCapture.cARCamera.Pipe, change) in
                 guard
                     let self = self,
                     let captureData: CCARCapture.CaptureData = object.captureData,
-                    var outTexture: CCTexture = self.outTexture
+                    var outTexture: CCTexture = self.outTexture.values
                 else { return }
 
                 do {
@@ -412,7 +410,7 @@ extension CCImageProcess.ImageProcess {
                     commandBuffer.addCompletedHandler { [weak self] _ in
                         guard let self = self else { return }
                         //self.isProcess = false
-                        self.completeQueue.async { [weak self] in
+                        CCImageProcess.completeQueue.async { [weak self] in
                             guard let self = self else { return }
                             outTexture.presentationTimeStamp = captureData.presentationTimeStamp
                             outTexture.captureVideoOrientation = captureData.captureVideoOrientation
@@ -433,6 +431,7 @@ extension CCImageProcess.ImageProcess {
             }
 
             self.observations.append(observation)
+             */
             return self.imageProcess!
         }
 
@@ -446,31 +445,9 @@ extension CCImageProcess.ImageProcess {
                 outTexture.presentationTimeStamp = captureData.presentationTimeStamp
                 outTexture.captureVideoOrientation = captureData.captureVideoOrientation
                 outTexture.presetSize = captureData.captureInfo.presetSize
-                self.outUpdate(outTexture: outTexture)
+                self.outTexture.send(outTexture)
             } catch {
                 ProcessLogger.log("CCRenderer.PostProcess: process error")
-            }
-        }
-
-        @discardableResult
-        fileprivate func updateOutTexture(captureSize: MCSize, mtlPixelFormat: MTLPixelFormat) throws -> CCTexture {
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-            // 描画用テクスチャを生成
-            guard
-                Float(self.outTexture?.size.w ?? 0) != captureSize.w,
-                let pixelBuffer: CVPixelBuffer = CVPixelBuffer.create(size: CGSize.init(CGFloat(captureSize.w), CGFloat(captureSize.h))),
-                var tex: CCTexture = try? CCTexture(pixelBuffer: pixelBuffer, mtlPixelFormat: mtlPixelFormat, planeIndex: 0)
-            else { throw self.errorType }
-            self.outTexture = tex
-            return tex
-            ///////////////////////////////////////////////////////////////////////////////////////////////////
-        }
-        
-        fileprivate func outUpdate(outTexture: CCTexture) {
-            self.texture.value = outTexture
-            self.completeQueue.async { [weak self] in
-                self?.texture.notice()
-                self?.texture.value = nil
             }
         }
 

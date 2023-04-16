@@ -20,13 +20,14 @@ class VideoCaptureView002ExampleVC: UIViewController {
 
     private var camera: CCCapture.Camera?
     private var imageProcess: CCImageProcess.ImageProcess?
+    private var microphone: CCAudio.Microphone?
     private var videoRecorder: CCRecorder.VideoRecorder?
     private var debugger: CCDebug.ComponentDebugger = CCDebug.ComponentDebugger()
     private var lutLayer: CCImageProcess.LutLayer!
 
     var videoCaptureProperty = CCCapture.VideoCapture.Property(
         devicePosition: AVCaptureDevice.Position.back,
-        isAudioDataOutput: true,
+        isAudioDataOutput: false,
         required: [
             .captureSize(Settings.PresetSize.p1280x720),
             .frameRate(Settings.PresetFrameRate.fps30),
@@ -68,17 +69,21 @@ class VideoCaptureView002ExampleVC: UIViewController {
             // VideoCapturePropertyをセット
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             let imageProcess: CCImageProcess.ImageProcess = try CCImageProcess.ImageProcess()
+            let microphone: CCAudio.Microphone = try CCAudio.Microphone()
             let videoRecorder: CCRecorder.VideoRecorder = try CCRecorder.VideoRecorder()
 
             try camera --> imageProcess --> self.drawView
             try imageProcess --> videoRecorder
-            try camera --> videoRecorder
+            try microphone --> videoRecorder
 
             camera.event = event
             camera.triger.start()
+            
+            try microphone.triger.start()
 
             self.camera = camera
             self.imageProcess = imageProcess
+            self.microphone = microphone
             self.videoRecorder = videoRecorder
 
             try self.debugger.setup.set(component: camera)

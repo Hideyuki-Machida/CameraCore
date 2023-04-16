@@ -21,9 +21,11 @@ public class CCPlayer: NSObject, CCComponentProtocol {
     public let event: CCPlayer.Event = CCPlayer.Event()
     public var debug: CCComponentDebug?
 
+    private var timeObserverToken: Any?
+    
     private var displayLink: CADisplayLink?
     private var isLoop: Bool = false
-    private let player: AVPlayer = AVPlayer()
+    private var player: AVPlayer = AVPlayer()
     private let output: AVPlayerItemVideoOutput = {
         let attributes = [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA]
         return AVPlayerItemVideoOutput(pixelBufferAttributes: attributes)
@@ -31,6 +33,11 @@ public class CCPlayer: NSObject, CCComponentProtocol {
 
     public override init() {
         super.init()
+
+        if let timeObserverToken = self.timeObserverToken {
+            self.player.removeTimeObserver(timeObserverToken)
+        }
+
         self.setup.player = self
         self.triger.player = self
         self.pipe.player = self
@@ -43,14 +50,32 @@ public class CCPlayer: NSObject, CCComponentProtocol {
     }
     
     func update(url: URL) {
-        let avAsset: AVAsset = AVAsset(url: url)
+        let avAsset: AVURLAsset = AVURLAsset(url: url)
         let playerItem: AVPlayerItem = AVPlayerItem(asset: avAsset)
+        self.player = AVPlayer(playerItem: playerItem)
+        
+        let time: CMTime = CMTime(seconds: 1.0 / 120.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        self.timeObserverToken = self.player.addPeriodicTimeObserver(forInterval: time, queue: self.queue) { [weak self] (time: CMTime) in
+            self?.updatePlayerTime(time: time)
+        }
+        playerItem.observe(\.status, options: [.initial, .new], changeHandler: { [weak self](item: AVPlayerItem, status: NSKeyValueObservedChange<AVPlayerItem.Status>) in
+            print("value", status)
+            switch status.newValue {
+            case .readyToPlay: print("readyToPlay")
+            case .failed: print("failed")
+            case .unknown:  print("unknown")
+            case .some(_): print("some")
+            case .none: print("none")
+            }
+        })
+
 
         //self.player.actionAtItemEnd = .none
-        self.player.replaceCurrentItem(with: playerItem)
         //playerItem.add(self.output)
+        self.player.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
         self.player.currentItem?.add(self.output)
 
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(avPlayerItemDidPlayToEndTime),
@@ -63,14 +88,6 @@ public class CCPlayer: NSObject, CCComponentProtocol {
 
     fileprivate func play() {
         self.isLoop = true
-        self.queue.async { [weak self] in
-            guard let self = self else { return }
-            self.displayLink = CADisplayLink(target: self, selector: #selector(self.updateDisplay))
-            self.displayLink?.add(to: RunLoop.current, forMode: RunLoop.Mode.default)
-            while self.isLoop {
-                RunLoop.current.run(until: Date(timeIntervalSinceNow: 1.0 / 60.0))
-            }
-        }
         self.player.play()
         self.event.status.value = CCPlayer.Status.play
         self.event.status.notice()
@@ -95,9 +112,8 @@ public class CCPlayer: NSObject, CCComponentProtocol {
         self.event.status.notice()
     }
 
-    @objc private func updateDisplay() {
+    private func updatePlayerTime(time currentTime: CMTime) {
         guard
-            let currentTime: CMTime = self.player.currentItem?.currentTime(),
             let duration: CMTime = self.player.currentItem?.duration,
             self.output.hasNewPixelBuffer(forItemTime: currentTime),
             let pixelBuffer: CVPixelBuffer = self.output.copyPixelBuffer(forItemTime: currentTime, itemTimeForDisplay: nil)
@@ -118,7 +134,7 @@ public class CCPlayer: NSObject, CCComponentProtocol {
             
         }
     }
-    
+        
     /// 再生が終了したときの処理
     @objc private func avPlayerItemDidPlayToEndTime(_ notification: Notification) {
         let item: AVPlayerItem = notification.object as! AVPlayerItem
@@ -127,6 +143,7 @@ public class CCPlayer: NSObject, CCComponentProtocol {
         self.event.outProgress.notice()
         self.event.status.value = CCPlayer.Status.endTime
         self.event.status.notice()
+
         // ループ
         item.seek(to: CMTime.zero, completionHandler: nil)
     }

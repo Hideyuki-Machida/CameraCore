@@ -166,6 +166,7 @@ extension CCVision.Inference {
 
         // MARK: input - CCCapture.Camera
         func input(camera: CCCapture.Camera) throws -> CCVision.Inference {
+            /*
             camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
                 guard
                     let self = self,
@@ -179,7 +180,7 @@ extension CCVision.Inference {
                     metadataObjects: captureData.metadataObjects
                 )
             }
-
+*/
             return self.inference!
         }
 

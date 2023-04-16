@@ -11,9 +11,15 @@ import Foundation
 import MetalCanvas
 import UIKit
 import ProcessLogger_Swift
+import Combine
 
 extension CCCapture.VideoCapture {
     final class VideoCaptureOutput: NSObject {
+        public struct Item {
+            var sampleBuffer: CMSampleBuffer
+            var devicePosition: AVCaptureVideoOrientation
+        }
+
         fileprivate let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.DepthQueue")
 
         fileprivate(set) var videoDataOutput: AVCaptureVideoDataOutput?
@@ -25,9 +31,13 @@ extension CCCapture.VideoCapture {
 
         fileprivate(set) var captureVideoOrientation: AVCaptureVideoOrientation?
 
-        var onUpdateSampleBuffer: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
-        var onUpdateDepthData: ((_ depthData: AVDepthData) -> Void)?
-        var onUpdateMetadataObjects: ((_ metadataObjects: [AVMetadataObject]) -> Void)?
+        public var sampleBuffer = PassthroughSubject<CCCapture.VideoCapture.VideoCaptureOutput.Item, Never>()
+        public var depthData = PassthroughSubject<AVDepthData, Never>()
+        public var metadataObjects = PassthroughSubject<[AVMetadataObject], Never>()
+        
+        //var onUpdateSampleBuffer: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)?
+        //var onUpdateDepthData: ((_ depthData: AVDepthData) -> Void)?
+        //var onUpdateMetadataObjects: ((_ metadataObjects: [AVMetadataObject]) -> Void)?
 
         
         deinit {
@@ -189,12 +199,13 @@ private extension CCCapture.VideoCapture.VideoCaptureOutput {
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
-        self.onUpdateSampleBuffer?(sampleBuffer, connection.videoOrientation, nil, nil)
+        //self.onUpdateSampleBuffer.send(sampleBuffer)
+        self.sampleBuffer.send(Item.init(sampleBuffer: sampleBuffer, devicePosition: connection.videoOrientation))
     }
 }
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDepthDataOutputDelegate {
     func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
-        self.onUpdateDepthData?(depthData)
+        self.depthData.send(depthData)
     }
 }
 extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchronizerDelegate {
@@ -209,7 +220,8 @@ extension CCCapture.VideoCapture.VideoCaptureOutput: AVCaptureDataOutputSynchron
             let videoSampleBuffer = syncedVideoData.sampleBuffer
             print("video")
             guard let connection: AVCaptureConnection = self.videoDataOutput?.connection(with: .video) else { return }
-            self.onUpdateSampleBuffer?(videoSampleBuffer, connection.videoOrientation, nil, nil)
+            //self.onUpdateSampleBuffer?(videoSampleBuffer, connection.videoOrientation, nil, nil)
+            self.sampleBuffer.send(Item.init(sampleBuffer: videoSampleBuffer, devicePosition: connection.videoOrientation))
         }
     }
 }
@@ -224,6 +236,6 @@ extension CCCapture.VideoCapture.VideoCaptureOutput : AVCaptureMetadataOutputObj
                 result.append(object)
             }
         }
-        self.onUpdateMetadataObjects?(result)
+        self.metadataObjects.send(result)
     }
 }

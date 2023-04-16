@@ -37,7 +37,7 @@ class AudioExampleVC: UIViewController {
     override func viewDidLoad() {
         do {
             self.videoRecorder = try CCRecorder.VideoRecorder()
-            self.audioRecorder = try CCRecorder.AudioRecorder()
+            //self.audioRecorder = try CCRecorder.AudioRecorder()
 
             let camera: CCCapture.Camera = try CCCapture.Camera(property: self.videoCaptureProperty)
             self.camera = camera

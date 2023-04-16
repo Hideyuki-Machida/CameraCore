@@ -11,6 +11,7 @@ import Foundation
 import MetalCanvas
 import MetalKit
 import ProcessLogger_Swift
+import Combine
 
 extension CCCapture {
     @objc public class Camera: NSObject, CCComponentProtocol {
@@ -34,6 +35,7 @@ extension CCCapture {
         public var capture: CCCapture.VideoCapture.VideoCaptureManager?
         public var depthData: CCVariable<AVDepthData?> = CCVariable(nil)
         public var metadataObjects: CCVariable<[AVMetadataObject]> = CCVariable([])
+        fileprivate var cancellableBag: [AnyCancellable] = []
         
         public init(property: CCCapture.VideoCapture.Property) throws {
             self.property = property
@@ -86,46 +88,70 @@ fileprivate extension CCCapture.Camera {
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         do {
-            self.capture = try CCCapture.VideoCapture.VideoCaptureManager(property: property)
+            let capture: CCCapture.VideoCapture.VideoCaptureManager = try CCCapture.VideoCapture.VideoCaptureManager(property: property)
+            self.capture = capture
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            //self.capture?.onUpdateSampleBuffer = { [weak self] (sampleBuffer: CMSampleBuffer, captureVideoOrientation: AVCaptureVideoOrientation, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
+            capture.sampleBuffer.sink(receiveValue: { [weak self] (item: CCCapture.VideoCapture.VideoCaptureOutput.Item) in
+                guard
+                    let self = self,
+                    let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
+                else { return }
+
+                if CMSampleBufferGetImageBuffer(item.sampleBuffer) != nil {
+                    // ピクセルデータ
+                    let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
+                        sampleBuffer: item.sampleBuffer,
+                        captureInfo: captureInfo,
+                        depthData: self.depthData.value,
+                        metadataObjects: self.metadataObjects.value,
+                        mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
+                        outPutPixelFormatType: captureInfo.outPutPixelFormatType,
+                        captureVideoOrientation: item.devicePosition
+                    )
+
+                    self.pipe.videoCaptureItem.send(currentCaptureItem)
+
+                    // デバッグ
+                    self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
+                    self.debug?.update()
+                } else {
+                    let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
+                        sampleBuffer: item.sampleBuffer,
+                        captureInfo: captureInfo,
+                        depthData: nil,
+                        metadataObjects: self.metadataObjects.value,
+                        mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
+                        outPutPixelFormatType: captureInfo.outPutPixelFormatType,
+                        captureVideoOrientation: item.devicePosition
+                    )
+
+                    self.pipe.audioCaptureItem.send(currentCaptureItem)
+                }
+            }).store(in: &self.cancellableBag)
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // AVDepthData & AVMetadataObject 取得
+            var depthData: PassthroughSubject<AVDepthData, Never> {
+                get {
+                    return capture.depthData
+                }
+            }
+            var metadataObjects: PassthroughSubject<[AVMetadataObject], Never> {
+                get {
+                    return capture.metadataObjects
+                }
+            }
+
         } catch {
             self.capture = nil
             throw CCCapture.ErrorType.setup
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        self.capture?.onUpdateSampleBuffer = { [weak self] (sampleBuffer: CMSampleBuffer, captureVideoOrientation: AVCaptureVideoOrientation, depthData: AVDepthData?, metadataObjects: [AVMetadataObject]?) in
 
-            guard
-                let self = self,
-                let captureInfo: CCCapture.VideoCapture.CaptureInfo = self.capture?.property.captureInfo
-            else { return }
-
-            if CMSampleBufferGetImageBuffer(sampleBuffer) != nil {
-                // ピクセルデータ
-                let currentCaptureItem: CCCapture.VideoCapture.CaptureData = CCCapture.VideoCapture.CaptureData(
-                    sampleBuffer: sampleBuffer,
-                    captureInfo: captureInfo,
-                    depthData: self.depthData.value,
-                    metadataObjects: self.metadataObjects.value,
-                    mtlPixelFormat: MTLPixelFormat.bgra8Unorm,
-                    outPutPixelFormatType: captureInfo.outPutPixelFormatType,
-                    captureVideoOrientation: captureVideoOrientation
-                )
-
-                self.pipe.updateCaptureData(captureItem: currentCaptureItem)
-
-                // デバッグ
-                self.debug?.update(thred: Thread.current, queue: CCCapture.videoOutputQueue)
-                self.debug?.update()
-            } else {
-                //self.pipe.outAudioPresentationTimeStamp = currentCaptureItem.presentationTimeStamp
-            }
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        // AVDepthData & AVMetadataObject 取得
+        /*
         self.capture?.onUpdateDepthData = { [weak self] (depthData: AVDepthData) in
             self?.depthData.value = depthData
         }
@@ -133,6 +159,7 @@ fileprivate extension CCCapture.Camera {
         self.capture?.onUpdateMetadataObjects = { [weak self] (metadataObjects: [AVMetadataObject]) in
             self?.metadataObjects.value = metadataObjects
         }
+         */
         ///////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -204,18 +231,17 @@ extension CCCapture.Camera {
 
         fileprivate var camera: CCCapture.Camera?
 
-        public var videoCaptureItem: CCVariable<CCCapture.VideoCapture.CaptureData?> = CCVariable(nil)
+        //public var videoCaptureItem: PassthroughSubject<CCCapture.VideoCapture.CaptureData?, Error>
+        //public var audioCaptureItem: CCCapture.VideoCapture.CaptureData?
+        public let videoCaptureItem: PassthroughSubject<CCCapture.VideoCapture.CaptureData, Error> = PassthroughSubject<CCCapture.VideoCapture.CaptureData, Error>()
+        public let audioCaptureItem: PassthroughSubject<CCCapture.VideoCapture.CaptureData, Error> = PassthroughSubject<CCCapture.VideoCapture.CaptureData, Error>()
 
-        func updateCaptureData(captureItem: CCCapture.VideoCapture.CaptureData) {
-            self.videoCaptureItem.value = captureItem
-            self.completeQueue.async { [weak self] in
-                self?.videoCaptureItem.notice()
-                self?.videoCaptureItem.value = nil
-            }
+        override init() {
+            super.init()
         }
 
         fileprivate func _dispose() {
-            self.videoCaptureItem.dispose()
+            //self.videoCaptureItem.dispose()
             self.camera = nil
         }
     }

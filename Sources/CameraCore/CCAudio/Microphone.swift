@@ -1,21 +1,20 @@
 //
-//  AudioEngine.swift
-//  CameraCore
+//  File.swift
+//  
 //
-//  Created by hideyuki machida on 2020/02/16.
-//  Copyright © 2020 hideyuki machida. All rights reserved.
+//  Created by hideyuki machida on 2022/02/08.
 //
 
-import AVFoundation
 import Foundation
+import AVFoundation
 
 extension CCAudio {
-    public class AudioEngine {
+    public class Microphone {
 
         // MARK: - CCComponentProtocol
-        public let setup: CCAudio.AudioEngine.Setup = CCAudio.AudioEngine.Setup()
-        public let triger: CCAudio.AudioEngine.Triger = CCAudio.AudioEngine.Triger()
-        public let pipe: CCAudio.AudioEngine.Pipe = CCAudio.AudioEngine.Pipe()
+        public let setup: CCAudio.Microphone.Setup = CCAudio.Microphone.Setup()
+        public let triger: CCAudio.Microphone.Triger = CCAudio.Microphone.Triger()
+        public let pipe: CCAudio.Microphone.Pipe = CCAudio.Microphone.Pipe()
         public var debug: CCComponentDebug?
 
         public let engine: AVAudioEngine = AVAudioEngine()
@@ -34,7 +33,7 @@ extension CCAudio {
     }
 }
 
-fileprivate extension CCAudio.AudioEngine {
+fileprivate extension CCAudio.Microphone {
     func start() throws {
         try self.engine.start()
     }
@@ -51,11 +50,11 @@ fileprivate extension CCAudio.AudioEngine {
     }
 }
 
-public extension CCAudio.AudioEngine {
+public extension CCAudio.Microphone {
 
     // MARK: - Setup
     class Setup: CCComponentSetupProtocol {
-        fileprivate var audioEngine: CCAudio.AudioEngine?
+        fileprivate var audioEngine: CCAudio.Microphone?
 
         fileprivate func _dispose() {
             self.audioEngine = nil
@@ -64,7 +63,7 @@ public extension CCAudio.AudioEngine {
 
     // MARK: - Triger
     class Triger: CCComponentTrigerProtocol {
-        fileprivate var audioEngine: CCAudio.AudioEngine?
+        fileprivate var audioEngine: CCAudio.Microphone?
         
         public func start() throws {
             try self.audioEngine?.start()
@@ -89,7 +88,7 @@ public extension CCAudio.AudioEngine {
         // MARK: - Queue
         fileprivate let completeQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCAudio.AudioEngine.completeQueue")
 
-        fileprivate var audioEngine: CCAudio.AudioEngine?
+        fileprivate var audioEngine: CCAudio.Microphone?
 
         @Published public var audioCaptureSampleBuffer: CMSampleBuffer?
 

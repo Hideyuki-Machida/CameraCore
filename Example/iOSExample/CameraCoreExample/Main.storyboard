@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17140" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6jT-SE-80k">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17115"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -315,11 +315,28 @@
                                     </mask>
                                 </variation>
                             </mtkView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kVU-aE-qw9">
+                                <rect key="frame" x="20" y="698" width="335" height="60"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.2110650986" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="aw4-iB-DfE"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="撮影開始">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="recordingTapAction:" destination="2Go-RN-Bov" eventType="touchUpInside" id="cmW-gJ-vUV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="FrE-jV-uoM"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="xgV-oG-nik" firstAttribute="centerY" secondItem="FlQ-2d-Bt0" secondAttribute="centerY" id="3s3-OH-8d4"/>
+                            <constraint firstItem="FrE-jV-uoM" firstAttribute="trailing" secondItem="kVU-aE-qw9" secondAttribute="trailing" constant="20" id="8Sy-sh-fJt"/>
+                            <constraint firstItem="kVU-aE-qw9" firstAttribute="bottom" secondItem="FrE-jV-uoM" secondAttribute="bottom" constant="-20" id="DWY-Rz-d4W"/>
+                            <constraint firstItem="kVU-aE-qw9" firstAttribute="leading" secondItem="FrE-jV-uoM" secondAttribute="leading" constant="20" id="S0D-Gl-ALR"/>
                             <constraint firstItem="xgV-oG-nik" firstAttribute="leading" secondItem="FrE-jV-uoM" secondAttribute="leading" id="d3f-S7-IM2"/>
                             <constraint firstItem="xgV-oG-nik" firstAttribute="centerX" secondItem="FlQ-2d-Bt0" secondAttribute="centerX" id="hsH-S4-HsM"/>
                             <constraint firstItem="FrE-jV-uoM" firstAttribute="trailing" secondItem="xgV-oG-nik" secondAttribute="trailing" id="o5c-Lr-Xqz"/>
@@ -348,6 +365,7 @@
                     <navigationItem key="navigationItem" title="Video撮影" id="MKi-I1-jqD"/>
                     <connections>
                         <outlet property="drawView" destination="xgV-oG-nik" id="9us-Od-BS6"/>
+                        <outlet property="recordingButton" destination="kVU-aE-qw9" id="aWb-YG-P22"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="spm-62-Co0" sceneMemberID="firstResponder"/>

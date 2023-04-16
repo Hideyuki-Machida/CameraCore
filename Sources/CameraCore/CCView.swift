@@ -12,6 +12,7 @@ import MetalCanvas
 import MetalKit
 import UIKit
 import ProcessLogger_Swift
+import Combine
 
 public class CCView: MTKView, CCComponentProtocol {
 
@@ -70,7 +71,7 @@ extension CCView: MTKViewDelegate {
         guard
             !self.isDraw.value, // draw処理が完了している
             let drawTexture: CCTexture = self.drawTexture.value, // drawTextureが存在する
-        self.presentationTimeStamp.value != drawTexture.presentationTimeStamp, // 直前に処理を行ったpresentationTimeStampとdrawTexture.presentationTimeStampが一致しない
+            self.presentationTimeStamp.value != drawTexture.presentationTimeStamp, // 直前に処理を行ったpresentationTimeStampとdrawTexture.presentationTimeStampが一致しない
             let commandBuffer: MTLCommandBuffer = MCCore.commandQueue.makeCommandBuffer() // MTLCommandBufferを生成
         else { return }
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -174,6 +175,7 @@ extension CCView {
     public class Pipe: NSObject, CCComponentPipeProtocol {
         fileprivate var ccview: CCView?
         fileprivate var observations: [NSKeyValueObservation] = []
+        fileprivate var cancellableBag: [AnyCancellable] = []
 
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
@@ -183,12 +185,26 @@ extension CCView {
             self.observations.removeAll()
         }
 
+        public func update(texture: CCTexture) throws {
+
+            if texture.colorPixelFormat != self.ccview?.colorPixelFormat {
+                ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
+                return
+            }
+
+            self.ccview?.drawTexture.value = texture
+        }
+
         func input(imageProcess: CCImageProcess.ImageProcess) throws {
-            imageProcess.pipe.texture.bind() { [weak self] (texture: CCTexture?) in
-                guard
-                    let self = self,
-                    let outTexture: CCTexture = texture
-                else { return }
+            imageProcess.pipe.outTexture.sink { completion in
+                switch completion {
+                case .finished:
+                    print("Received finished")
+                case .failure(let error):
+                    print("Received error: \(error)")
+                }
+            } receiveValue: { [weak self] (outTexture: CCTexture) in
+                guard let self = self else { return }
 
                 if outTexture.colorPixelFormat != self.ccview?.colorPixelFormat {
                     ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
@@ -196,16 +212,19 @@ extension CCView {
                 }
 
                 self.ccview?.drawTexture.value = outTexture
-            }
+            }.store(in: &self.cancellableBag)
         }
 
         func input(camera: CCCapture.Camera) throws {
-            camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
-                guard
-                    let self = self,
-                    let captureData: CCCapture.VideoCapture.CaptureData = captureData
-                else { return }
-
+            camera.pipe.videoCaptureItem.sink { completion in
+                switch completion {
+                case .finished:
+                    print("Received finished")
+                case .failure(let error):
+                    print("Received error: \(error)")
+                }
+            } receiveValue: { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
+                guard let self = self else { return }
                 if captureData.mtlPixelFormat != self.ccview?.colorPixelFormat {
                     ProcessLogger.errorLog("CCView: onUpdateCaptureData colorPixelFormat")
                     return
@@ -225,8 +244,7 @@ extension CCView {
                 } catch {
                     ProcessLogger.errorLog("CCView: onUpdateCaptureData drawTexture")
                 }
-
-            }
+            }.store(in: &self.cancellableBag)
         }
     
         func input(player: CCPlayer) throws {
@@ -245,7 +263,6 @@ extension CCView {
             }
         }
 
-        @available(iOS 13.0, *)
         func input(camera: CCARCapture.cARCamera) throws {
             let observation: NSKeyValueObservation = camera.pipe.observe(\.ouTimeStamp, options: [.new]) { [weak self] (object: CCARCapture.cARCamera.Pipe, change) in
                 guard let captureData: CCARCapture.CaptureData = object.captureData else { return }

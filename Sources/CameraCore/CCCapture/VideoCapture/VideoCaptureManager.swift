@@ -9,6 +9,7 @@
 import AVFoundation
 import MetalCanvas
 import ProcessLogger_Swift
+import Combine
 
 extension CCCapture.VideoCapture {
     public final class VideoCaptureManager {
@@ -23,6 +24,23 @@ extension CCCapture.VideoCapture {
 
         var property: CCCapture.VideoCapture.Property = CCCapture.VideoCapture.Property()
 
+        var sampleBuffer: PassthroughSubject<CCCapture.VideoCapture.VideoCaptureOutput.Item, Never> {
+            get {
+                return self.captureOutput.sampleBuffer
+            }
+        }
+        var depthData: PassthroughSubject<AVDepthData, Never> {
+            get {
+                return self.captureOutput.depthData
+            }
+        }
+        var metadataObjects: PassthroughSubject<[AVMetadataObject], Never> {
+            get {
+                return self.captureOutput.metadataObjects
+            }
+        }
+
+        /*
         public var onUpdateSampleBuffer: ((_ sampleBuffer: CMSampleBuffer, _ captureVideoOrientation: AVCaptureVideoOrientation, _ depthData: AVDepthData?, _ metadataObjects: [AVMetadataObject]?) -> Void)? {
             get {
                 return self.captureOutput.onUpdateSampleBuffer
@@ -49,7 +67,7 @@ extension CCCapture.VideoCapture {
                 self.captureOutput.onUpdateMetadataObjects = newValue
             }
         }
-
+         */
         
         let sessionQueue: DispatchQueue = DispatchQueue(label: "MetalCanvas.VideoCapture.Queue")
 
@@ -163,7 +181,7 @@ extension CCCapture.VideoCapture {
         }
 
         deinit {
-            self.onUpdateSampleBuffer = nil
+            //self.onUpdateSampleBuffer = nil
             ProcessLogger.deinitLog(self)
             guard let captureSession: AVCaptureSession = self.captureSession else { return }
             if captureSession.isRunning {

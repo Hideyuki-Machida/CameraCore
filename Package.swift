@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "CameraCore",
     platforms: [
-        .iOS(.v11),
+        .iOS(.v13),
     ],
     products: [
         .library(
@@ -27,5 +27,6 @@ let package = Package(
         .testTarget(
             name: "CameraCoreTests",
             dependencies: ["CameraCore"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )

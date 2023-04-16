@@ -59,7 +59,6 @@ public func --> (camera: CCCapture.Camera, view: CCView) throws {
     try view.pipe.input(camera: camera)
 }
 
-@available(iOS 13.0, *)
 public func --> (camera: CCARCapture.cARCamera, view: CCView) throws {
     try view.pipe.input(camera: camera)
 }
@@ -84,9 +83,12 @@ public func --> (imageProcess: CCImageProcess.ImageProcess, videoRecorder: CCRec
 }
 
 public func --> (audioEngine: CCAudio.AudioEngine, videoRecorder: CCRecorder.VideoRecorder) throws {
-    try videoRecorder.pipe(audioEngine: audioEngine)
+    try videoRecorder.pipe.input(audioEngine: audioEngine)
 }
 
+public func --> (microphone: CCAudio.Microphone, videoRecorder: CCRecorder.VideoRecorder) throws {
+    try videoRecorder.pipe.input(microphone: microphone)
+}
 
 
 

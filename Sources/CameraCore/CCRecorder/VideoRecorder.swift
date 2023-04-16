@@ -11,14 +11,17 @@ import AVFoundation
 import MetalCanvas
 import UIKit
 import ProcessLogger_Swift
+import Combine
 
 extension CCRecorder {
+    //static let queue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRecorder.VideoRecorder", attributes: DispatchQueue.Attributes.concurrent)
+    static let queue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRecorder.VideoRecorder")
+
     public class VideoRecorder {
         public let setup: CCRecorder.VideoRecorder.Setup = CCRecorder.VideoRecorder.Setup()
         public let triger: CCRecorder.VideoRecorder.Triger = CCRecorder.VideoRecorder.Triger()
         public let pipe: CCRecorder.VideoRecorder.Pipe = CCRecorder.VideoRecorder.Pipe()
 
-        fileprivate let imageProcessQueue: DispatchQueue = DispatchQueue(label: "CameraCore.CCRecorder.VideoRecorder", attributes: DispatchQueue.Attributes.concurrent)
 
         var captureWriter: CaptureWriter = CaptureWriter()
         public var isRecording: Bool = false
@@ -36,64 +39,6 @@ extension CCRecorder {
     }
 }
 
-extension CCRecorder.VideoRecorder {
-    func pipe(audioEngine: CCAudio.AudioEngine) throws {
-        /*
-        audioEngine.onUpdateSampleBuffer = { (sampleBuffer: CMSampleBuffer) in
-            guard self.isRecording == true else { return }
-            self.captureWriter.setSampleBuffer(sampleBuffer: sampleBuffer)
-        }
- */
-    }
-}
-
-/*
-extension CCRecorder {
-    public class VideoRecorder {
-        public var isRecording: Bool {
-            get {
-                return CCRecorder.CaptureWriter.isWriting
-            }
-        }
-
-        public init() throws {
-        }
-    }
-}
-
-public extension CCRecorder.VideoRecorder {
-    func setup(parameter: CCRecorder.CaptureWriter.Parameter) {
-        CCRecorder.CaptureWriter.setup(parameter)
-    }
-
-    func start() {
-        CCRecorder.CaptureWriter.start()
-    }
-    
-    func stop() {
-        CCRecorder.CaptureWriter.finish { (success: Bool, url: URL) in
-            print(success)
-        }
-    }
-}
-
-extension CCRecorder.VideoRecorder {
-    func pipe(camera: CCCapture.Camera) throws {
-        camera.onUpdateCaptureData = { (currentCaptureItem: CCCapture.VideoCapture.CaptureData) in
-            guard CCRecorder.CaptureWriter.isWriting == true else { return }
-            CCRecorder.CaptureWriter.addCaptureSampleBuffer(sampleBuffer: currentCaptureItem.sampleBuffer)
-        }
-    }
-
-    func pipe(audioEngine: CCAudio.AudioEngine) throws {
-        audioEngine.onUpdateSampleBuffer = { (sampleBuffer: CMSampleBuffer) in
-            guard CCRecorder.CaptureWriter.isWriting == true else { return }
-            //CCRecorder.CaptureWriter.addCaptureSampleBuffer(sampleBuffer: sampleBuffer)
-            CCRecorder.CaptureWriter.addAudioBuffer(sampleBuffer)
-        }
-    }
-}
-*/
 extension CCRecorder.VideoRecorder {
     class CaptureWriter {
         var writer: AVAssetWriter?
@@ -256,13 +201,19 @@ extension CCRecorder.VideoRecorder {
         fileprivate var videoRecorder: CCRecorder.VideoRecorder?
 
         public func start() {
-            self.videoRecorder?.isRecording = true
-            self.videoRecorder?.captureWriter.start()
+            CCRecorder.queue.async { [weak self] in
+                guard let self = self else { return }
+                self.videoRecorder?.captureWriter.start()
+                self.videoRecorder?.isRecording = true
+            }
         }
 
         public func stop() {
-            self.videoRecorder?.isRecording = false
-            self.videoRecorder?.captureWriter.stop()
+            CCRecorder.queue.async { [weak self] in
+                guard let self = self else { return }
+                self.videoRecorder?.captureWriter.stop()
+                self.videoRecorder?.isRecording = false
+            }
         }
 
         public func dispose() {
@@ -279,59 +230,118 @@ extension CCRecorder.VideoRecorder {
     public class Pipe: NSObject, CCComponentPipeProtocol {
         fileprivate var videoRecorder: CCRecorder.VideoRecorder?
         fileprivate var observations: [NSKeyValueObservation] = []
+        fileprivate var cancellableBag: [AnyCancellable] = []
 
         @objc dynamic public var outPresentationTimeStamp: CMTime = CMTime.zero
 
+        func set(audioPCMBuffer: AVAudioPCMBuffer, audioTime: AVAudioTime) {
+            CCRecorder.queue.async { [weak self] in
+                guard let buffer: CMSampleBuffer = CMSampleBuffer.create(audioPCMBuffer: audioPCMBuffer, audioTime: audioTime) else { return }
+                //self?.videoRecorder?.captureWriter.setAudioBuffer(sampleBuffer: sampleBuffer)
+            }
+        }
+        
         func input(camera: CCCapture.Camera) throws {
-
             //////////////////////////////////////////////////////////////////////////
             /// update VideoCaptureData
-            camera.pipe.videoCaptureItem.bind() { [weak self] (captureData: CCCapture.VideoCapture.CaptureData?) in
-                guard
-                    let self = self,
-                    self.videoRecorder?.isRecording == true,
-                    let captureData: CCCapture.VideoCapture.CaptureData = captureData,
-                    let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer)
-                else { return }
 
-                self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: captureData.presentationTimeStamp)
-            }
-            //////////////////////////////////////////////////////////////////////////
+            camera.pipe.videoCaptureItem
+                .receive(on: CCRecorder.queue)
+                .sink { completion in
+                    switch completion {
+                        case .finished:
+                            print("Received finished")
+                        case .failure(let error):
+                            print("Received error: \(error)")
+                        }
+                } receiveValue: { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
+                    guard
+                        let self = self,
+                        self.videoRecorder?.isRecording == true,
+                        let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(captureData.sampleBuffer)
+                    else { return }
 
-            /*
-            //////////////////////////////////////////////////////////////////////////
-            /// updateAudioPresentationTimeStamp
-            let updateAudioPresentationTimeStamp: NSKeyValueObservation = camera.pipe.observe(\.outAudioPresentationTimeStamp, options: [.new]) { [weak self] (object: CCCapture.Camera.Pipe, change) in
-                guard
-                    let self = self,
-                    self.videoRecorder?.isRecording == true,
-                    let captureData: CCCapture.VideoCapture.CaptureData = object.currentVideoCaptureItem,
-                    CMSampleBufferGetImageBuffer(captureData.sampleBuffer) == nil
-                else { return }
+                    self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: captureData.presentationTimeStamp)
+                }.store(in: &self.cancellableBag)
 
-                self.videoRecorder?.captureWriter.setAudioBuffer(sampleBuffer: captureData.sampleBuffer)
-            }
-            self.observations.append(updateAudioPresentationTimeStamp)
             //////////////////////////////////////////////////////////////////////////
- */
-            
+            camera.pipe.audioCaptureItem
+                .receive(on: CCRecorder.queue)
+                .sink { completion in
+                    switch completion {
+                        case .finished:
+                            print("Received finished")
+                        case .failure(let error):
+                            print("Received error: \(error)")
+                        }
+                } receiveValue: { [weak self] (captureData: CCCapture.VideoCapture.CaptureData) in
+                    guard
+                        let self = self,
+                        self.videoRecorder?.isRecording == true
+                    else { return }
+
+                    self.videoRecorder?.captureWriter.setAudioBuffer(sampleBuffer: captureData.sampleBuffer)
+                }.store(in: &self.cancellableBag)
         }
 
         func input(imageProcess: CCImageProcess.ImageProcess) throws {
+            imageProcess.pipe.outTexture
+                .receive(on: CCRecorder.queue)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        print("Received finished")
+                    case .failure(let error):
+                        print("Received error: \(error)")
+                    }
+                } receiveValue: { [weak self] (outTexture: CCTexture) in
+                    guard
+                        let self = self,
+                        self.videoRecorder?.isRecording == true,
+                        let pixelBuffer: CVPixelBuffer = outTexture.pixelBuffer
+                    else { return }
 
+                    self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: outTexture.presentationTimeStamp)
+                }.store(in: &self.cancellableBag)
+        }
+
+        func input(audioEngine: CCAudio.AudioEngine) throws {
+            /*
             //////////////////////////////////////////////////////////////////////////
             /// updatePixelPresentationTimeStamp
-            imageProcess.pipe.texture.bind() { [weak self] (texture: CCTexture?) in
-                guard
-                    let self = self,
-                    let outTexture: CCTexture = texture,
-                    self.videoRecorder?.isRecording == true,
-                    let pixelBuffer: CVPixelBuffer = outTexture.pixelBuffer
-                else { return }
+            audioEngine.pipe.$audioCaptureSampleBuffer
+                .receive(on: CCRecorder.queue)
+                .compactMap{$0}
+                .sink { [weak self] (sampleBuffer: CMSampleBuffer) in
+                    guard
+                        let self = self,
+                        self.videoRecorder?.isRecording == true
+                    else { return }
 
-                self.videoRecorder?.captureWriter.setPixelBuffer(pixelBuffer: pixelBuffer, presentationTimeStamp: outTexture.presentationTimeStamp)
-            }
+                    self.videoRecorder?.captureWriter.setAudioBuffer(sampleBuffer: sampleBuffer)
+            }.store(in: &self.cancellableBag)
             //////////////////////////////////////////////////////////////////////////
+             */
+            
+        }
+
+        func input(microphone: CCAudio.Microphone) throws {
+            /*
+            //////////////////////////////////////////////////////////////////////////
+            /// updatePixelPresentationTimeStamp
+            microphone.pipe.$audioCaptureSampleBuffer
+                .receive(on: CCRecorder.queue)
+                .compactMap{$0}
+                .sink { [weak self] (sampleBuffer: CMSampleBuffer) in
+                    guard
+                        let self = self,
+                        self.videoRecorder?.isRecording == true
+                    else { return }
+
+                    self.videoRecorder?.captureWriter.setAudioBuffer(sampleBuffer: sampleBuffer)
+            }.store(in: &self.cancellableBag)
+            //////////////////////////////////////////////////////////////////////////
+             */
             
         }
 

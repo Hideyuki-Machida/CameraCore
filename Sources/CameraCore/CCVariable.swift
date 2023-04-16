@@ -33,7 +33,7 @@ public class CCVariable<T> {
 
     private var callbacks: [CCBindble<T>] = []
 
-    init(_ value: T) {
+    public init(_ value: T) {
         self._value = value
     }
 
@@ -48,11 +48,11 @@ public class CCVariable<T> {
         self.callbacks = self.callbacks.filter { $0.id != key.id }
     }
     
-    func notice() {
+    public func notice() {
         self.callbacks.forEach { $0.callback(self.value) }
     }
 
-    func dispose() {
+    public func dispose() {
         self.callbacks.removeAll()
     }
 }

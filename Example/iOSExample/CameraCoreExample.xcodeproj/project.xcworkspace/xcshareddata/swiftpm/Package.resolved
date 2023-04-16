@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "iOS_DummyAVAssets",
+        "repositoryURL": "https://github.com/Hideyuki-Machida/iOS_DummyAVAssets",
+        "state": {
+          "branch": "spm",
+          "revision": "262bd80a4714065491074284b1102fd2594486f2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
